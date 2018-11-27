@@ -6,3 +6,76 @@ todo 트위치 방송 성장, 유튜브, 아프리카
 4. 도네
 5. 돈을벌어서 캐릭터를 사면 플레이할 수 있음
 6. 3:3이면 플레이어가 가진 캐릭터 몇번째든 골라서. 상성. 
+
+
+스마트폰 통계
+http://kosis.kr/statHtml/statHtml.do?orgId=127&tblId=DT_12019_2015_003&vw_cd=MT_OTITLE&list_id=110_12019_011&scrId=&seqNo=&lang_mode=ko&obj_var_id=&itm_id=&conn_path=E1
+
+스마트폰 이용용도
+학생, 20대 --> 게임, 방송, sns
+
+동영상 미디어, sns 급성장 : http://techm.kr/bbs/board.php?bo_table=article&wr_id=5130
+
+게임방송이 흥하는 이유
+고수의 게임 공략법을 엿보고 싶은 욕구에 인터넷이 날개를 달아줬다. 
+아프리카TV·트위치TV·유튜브 등 인터넷 개인방송 플랫폼에서 매일 수십만 명 이상이 게임방송을 시청하고 있다. 
+아프리카TV의 전체 트래픽 중에서 게임방송의 비율은 65%에 달한다.
+게임 전문 인터넷방송 플랫폼인 트위치TV의 통계 분석 사이트 ‘트위치트래커’에 따르면, 세계 트위치 시청자(하루 평균 기준)는 2012년 10만1775명에서 올해 101만8183명으로 10배 증가했다. 게임 전문 조사 기업 ‘수퍼데이터’는 지난해 세계 게임 영상 시청자가 6억6500만명에 이른 것으로 추정했다
+출처 : http://economychosun.com/client/news/view.php?boardName=C00&t_num=13605534
+
+
+트위치 vs 아프리카 
+트위치 사용자 ↑ 링크에 사진있음
+http://www.ggilbo.com/news/articleView.html?idxno=457985
+
+트위치 인기 by http://www.thisisgame.com/webzine/news/nboard/4/?n=88005&utm_source=naver&utm_medium=outlink&utm_campaign=thisisgame&utm_content=88005&nogate
+
+· 평균적으로 백만 명이 넘는 사람들이 그 어떤 순간에도 트위치를 활용한다.
+
+ 
+
+· 매일 약 50만명의 스트리머가 트위치에서 방송한다.
+
+ 
+
+· 2018 년에 235,000 명 이상의 제휴 회원이 탄생했고, 6,800 명 이상이 파트너십 프로그램에 들어왔다.
+
+ 
+
+· 2018 년에만 180 억 개가 넘는 메시지가 채팅 및 귓속말로 전송됐다.
+
+ 
+
+· 팬들은 올해 8500 만 건의 응원하기(Cheers)와 구독을 통해 자기가 좋아하는 스트리머들을 지원했다.
+
+ 
+
+· 트위치에서 가장 기억에 남는 순간을 보여주기 위해 올해 1 억 5 천만 개 이상의 클립이 제작되었다
+
+시밀러웹조사결과
+https://www.similarweb.com/website/twitch.tv
+게임, 비디오게임 분야 1등
+
+미디어 플랫폼의 인기. 
+
+넷플릭스, 유튜브 --> 전세계 인터넷 트래픽의 1/4 출처: http://www.cctvnews.co.kr/news/articleView.html?idxno=89644
+유튜브
+1분에 430만건의 뷰
+넷플릭스 1분에 26만 뷰
+
+유튜브 라이브도 있고, 아프리카도 있지만 트위치가 게임스트리밍 선두를달리는 이유
+http://it.donga.com/28070/
+
+--> 여기에 게임업계가 성공을 위해 트위치의 스트리머와 협업 많이 하는거 나와있음. 
+트위치랑 연동하는 게임 많음. esport 포함. http://www.thisisgame.com/webzine/news/nboard/225/?n=80242&utm_source=naver&utm_medium=outlink&utm_campaign=thisisgame&utm_content=80242&nogate
+
+우리가 트위치에서보기 좋은 게임을 만드는거 
+게임 분야도 마찬가지라고 했다.
+ 과거엔 직접 하는 게임만 상품성이 있었다면, 현재 어린 세대는 ‘보는 게임’도 그 못지않게 즐긴다. 
+트위치TV, 아프리카TV의 상승세, 각종 e스포츠 관람 문화가 대표적이다. 
+관중의 상당수를 여성, 어린 학생들이 차지하기 시작했다는 것은 중요한 트렌드 변화다. 
+“밀레니얼 세대의 소비 움직임을 보면 기존 소비 계층과 분명 다른 시그널이 있다. 그런 부분이 잘 반영됐는지 굉장히 집중해서 보고 있다”고 말했다. 
+http://www.ddaily.co.kr/news/article.html?no=175276
+보는게임의 인기 지스타에서 확인: http://game.mk.co.kr/view.php?year=2018&no=730504
+
+보는게임 - esports http://biz.khan.co.kr/khan_art_view.html?artid=201811222039005&code=930507
