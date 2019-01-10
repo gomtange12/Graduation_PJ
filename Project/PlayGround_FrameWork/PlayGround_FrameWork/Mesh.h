@@ -127,7 +127,58 @@ public:
 	CCubeMeshTextured(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
 	virtual ~CCubeMeshTextured();
 };
+class CNormalMesh : public CMesh
+{
+public:
+	CNormalMesh(ID3D12Device* pd3dDevice);
 
+	~CNormalMesh();
+
+	void Release();
+
+	XMVECTOR CalculateTriAngleTangent(XMFLOAT2* pd3dxvTexCoords, UINT nIndex0, UINT nIndex1, UINT nIndex2);
+
+	XMVECTOR CalculateTriAngleTangent(UINT nIndex0, UINT nIndex1, UINT nIndex2);
+
+	void SetAverageVertexTangent(XMVECTOR *pd3dxvTangents, int nPrimitives, int nOffset, bool bStrip);
+
+	void SetTriAngleListVertexTangent(XMVECTOR *pd3dxvTangents);
+
+	void CalculateVertexTangent(XMVECTOR *pd3dxvTangents);
+
+
+protected:
+
+	XMFLOAT2				*m_pTexCoords = nullptr;
+	XMFLOAT3				*m_pNormals = nullptr;
+	XMFLOAT3				*m_pTangents = nullptr;
+	D3D12_VERTEX_BUFFER_VIEW			*m_pd3dTangentBuffer = nullptr;
+
+};
+class CMeshIlluminated : public CNormalMesh
+{
+public:
+	CMeshIlluminated(ID3D12Device *pd3dDevice);
+	virtual ~CMeshIlluminated();
+
+protected:
+	D3D12_VERTEX_BUFFER_VIEW					*m_pd3dNormalBuffer;
+
+public:
+	XMVECTOR& CalculateTriAngleNormal(UINT nIndex0, UINT nIndex1, UINT nIndex2);
+	void SetTriAngleListVertexNormal(XMVECTOR *pd3dxvNormals);
+	void SetAverageVertexNormal(XMVECTOR *pd3dxvNormals, int nPrimitives, int nOffset, bool bStrip);
+	void CalculateVertexNormal(XMVECTOR *pd3dxvNormals);
+};
+class CMeshTexturedIlluminated : public CMeshIlluminated
+{
+public:
+	CMeshTexturedIlluminated(ID3D12Device *pd3dDevice);
+	virtual ~CMeshTexturedIlluminated();
+
+protected:
+	D3D12_VERTEX_BUFFER_VIEW					*m_pd3dTexCoordBuffer;
+};
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class CAirplaneMeshDiffused : public CMesh

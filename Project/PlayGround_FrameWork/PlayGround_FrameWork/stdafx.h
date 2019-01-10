@@ -8,14 +8,23 @@
 #define WIN32_LEAN_AND_MEAN             // 거의 사용되지 않는 내용은 Windows 헤더에서 제외합니다.
 // Windows 헤더 파일:
 #include <windows.h>
+//using namespace std;
 
 // C의 런타임 헤더 파일입니다.
+//#include <iostream>
+#include <string>
+#include <tchar.h>
+#include <iomanip>
+#include <fstream>
+#include <fbxsdk.h>
+#pragma comment(lib,"libfbxsdk-md.lib")
+
+
+
 #include <stdlib.h>
 #include <malloc.h>
-#include <tchar.h>
 #include <math.h>
 
-#include <string>
 #include <shellapi.h>
 
 #include <d3d12.h>
@@ -37,7 +46,6 @@
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;
-
 using Microsoft::WRL::ComPtr;
 
 #define FRAME_BUFFER_WIDTH		640

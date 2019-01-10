@@ -4,7 +4,7 @@
 
 #include "stdafx.h"
 #include "Scene.h"
-
+#include "FBXLoader.h"
 CScene::CScene()
 {
 }
@@ -18,6 +18,8 @@ CScene::~CScene()
 void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
+
+	FBXModelLoader tempfbx("Jeni.fbx", 10.0f, false);
 
 	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
 	XMFLOAT4 xmf4Color(0.0f, 0.0f, 0.4f, 0.3f);
