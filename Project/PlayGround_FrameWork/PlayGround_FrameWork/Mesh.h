@@ -60,6 +60,7 @@ public:
 class CMesh
 {
 public:
+	CMesh();
     CMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
     virtual ~CMesh();
 
@@ -130,6 +131,8 @@ public:
 class CNormalMesh : public CMesh
 {
 public:
+	CNormalMesh();
+
 	CNormalMesh(ID3D12Device* pd3dDevice);
 
 	~CNormalMesh();
