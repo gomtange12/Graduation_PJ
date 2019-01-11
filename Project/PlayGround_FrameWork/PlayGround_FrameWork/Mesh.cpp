@@ -5,6 +5,10 @@
 #include "stdafx.h"
 #include "Mesh.h"
 
+CMesh::CMesh()
+{
+}
+
 CMesh::CMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 }
@@ -658,4 +662,13 @@ CTexturedRectMesh::CTexturedRectMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 
 CTexturedRectMesh::~CTexturedRectMesh()
 {
+}
+
+CNormalMesh::CNormalMesh()
+{
+}
+
+CNormalMesh::CNormalMesh(ID3D12Device * pd3dDevice)
+{
+
 }

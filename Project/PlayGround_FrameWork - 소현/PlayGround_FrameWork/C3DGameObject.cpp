@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "C3DGameObject.h"
-#include "stdafx.h"
 #include "Object.h"
 #include "Shader.h"
-
+#include "Mesh.h"
 C3DGameObject::C3DGameObject()
 {
 }
