@@ -19,7 +19,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 
 #ifdef _WITH_TEXT_MESH
 	//CMesh *pUfoMesh = new CMesh(pd3dDevice, pd3dCommandList, L"UFO.txt");
-	CMesh *pUfoMesh = new CMesh(pd3dDevice, pd3dCommandList, L"SM_DeadTrunk.txt");
+	CMesh *pUfoMesh = new CMesh(pd3dDevice, pd3dCommandList, L"Mirahi.txt");
 #else
 	CMesh *pUfoMesh = new CMesh(pd3dDevice, pd3dCommandList, L"UFO.bin");
 #endif
