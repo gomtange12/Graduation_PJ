@@ -21,6 +21,7 @@ public:
 	D3DXVECTOR3		pos;
 	D3DXVECTOR3		normal;
 	D3DXVECTOR2		uv;
+
 	D3DXVECTOR4		Weight;
 	D3DXVECTOR4		Indices;
 };
@@ -31,9 +32,11 @@ private:
 	bool				m_hasNormal;
 	bool				m_hasUv;
 	bool				m_ByControlPoint;
-	bool				m_hasTangent;
+
 	unsigned int		m_nIndices;
 	unsigned int		m_nVertices;
+
+	bool					m_hasTangent;
 
 	vector<VertexData>	m_VertexContainer;
 	vector<UINT>		m_IndexContainer;
@@ -43,7 +46,6 @@ public:
 		:m_hasNormal(false),
 		m_hasUv(false),
 		m_ByControlPoint(true),
-		m_hasTangent(false),
 		m_nIndices(0),
 		m_nVertices(0) {}
 	~MeshData() {}
@@ -51,24 +53,22 @@ public:
 	std::vector<VertexData>&	GetMeshData() { return m_VertexContainer; }
 	std::vector<UINT>&			GetIndexData() { return m_IndexContainer; }
 
-
 	int							GetVertexCount() const { return m_nVertices; }
 	int							GetIndexCount() const { return m_nIndices; }
 
-	bool						GetTangent() const { return m_hasTangent; }
 	bool						GetNormal() const{ return m_hasNormal; }
 	bool						GetUV() const { return m_hasUv; }
 	bool						GetByControlPoint() const { return m_ByControlPoint; }
+	bool						GetTangent()	const { return m_hasTangent; }
+
 
 	void						SetVertexCount(unsigned int count) { m_nVertices = count; }
 	void						SetIndexCount(unsigned int count) { m_nIndices = count; }
 
-	void						SetTangent(bool hasTangent) { m_hasNormal = hasTangent; }
 	void						SetNormal(bool hasNormal) { m_hasNormal = hasNormal; }
 	void						SetUV(bool hasUV) { m_hasUv = hasUV; }
 	void						SetByControlPoint(bool byControlPoint) { m_ByControlPoint = byControlPoint; }
-
-	void						MakeTangent();
+	void						SetTangent(bool hasTangent)	{ m_hasTangent = hasTangent; }
 };
 
 class KeyFrameData
@@ -124,7 +124,7 @@ private:
 
 	FbxTime								m_tStart;
 	FbxTime								m_tEnd;
-	FbxLongLong							m_tAnimLength;
+	FbxLongLong						m_tAnimLength;
 
 	std::map<int, KeyVertexContainer>	m_mapControlPoint;
 	std::vector<BoneData>				m_SkeletonContainer;

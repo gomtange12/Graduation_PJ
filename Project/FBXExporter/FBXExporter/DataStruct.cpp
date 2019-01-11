@@ -71,7 +71,3 @@ SkinnedData::SkinnedData()
 SkinnedData::~SkinnedData()
 {
 }
-
-void MeshData::MakeTangent()
-{
-}

@@ -7,7 +7,7 @@
 Exporter::Exporter()
 : m_iMeshCount(0), mHasAnimationData(false)
 {
-	m_exSkinnedContainer.resize(2);	
+	m_exSkinnedContainer.resize(20);	
 }
 
 
@@ -64,18 +64,17 @@ bool Exporter::ExportMeshData(FbxMesh* pMesh)
 	FbxLayerElementArrayTemplate<int>* pMaterialIndices = NULL;
 	FbxGeometryElementNormal* vertexNormal = nullptr;
 	FbxGeometryElementUV* vertexUV = nullptr;
-	//여기 추가
-	FbxGeometryElementTangent* vertexTangent = nullptr;
-	FbxGeometryElement::EMappingMode eTangentMappingMode = FbxGeometryElement::eNone;
 
+	//FbxGeometryElementTangent* vertexTangent = nullptr;
 
 	FbxGeometryElement::EMappingMode eNormalMappingMode = FbxGeometryElement::eNone;
 	FbxGeometryElement::EMappingMode eUVMappingMode = FbxGeometryElement::eNone;
 	FbxGeometryElement::EReferenceMode eNormalReferenceMode;
 
+	FbxGeometryElement::EMappingMode eTangentMappingMode = FbxGeometryElement::eNone;
+
 	vMeshData.SetNormal(pMesh->GetElementNormalCount() > 0);
 	vMeshData.SetUV(pMesh->GetElementUVCount() > 0);
-	vMeshData.SetTangent(pMesh->GetElementTangent() > 0);
 
 	if (vMeshData.GetNormal())
 	{
@@ -103,16 +102,15 @@ bool Exporter::ExportMeshData(FbxMesh* pMesh)
 			vMeshData.SetByControlPoint(false);
 		}
 	}
-	//여기
-	if (vMeshData.GetTangent())	//tan																				
-	{
-		eTangentMappingMode = pMesh->GetElementTangent(0)->GetMappingMode();
-		if (eTangentMappingMode == FbxGeometryElement::eNone)
-		{
-			vMeshData.SetTangent(false);
-		}
-		
-	}
+	//if (vMeshData.GetTangent())
+	//{
+	//	vertexTangent = pMesh->GetElementTangent(0);
+	//	eTangentMappingMode = vertexTangent->GetMappingMode();
+	//	if (eTangentMappingMode == FbxGeometryElement::eNone)
+	//		vMeshData.SetTangent(false);
+	//	if (vMeshData.GetTangent() && eTangentMappingMode != FbxGeometryElement::eByControlPoint)
+	//		vMeshData.SetByControlPoint(false);
+	//}
 
 	const int polygonCount = pMesh->GetPolygonCount();
 	int polygonVertexCount = 0;
@@ -131,9 +129,9 @@ bool Exporter::ExportMeshData(FbxMesh* pMesh)
 	const FbxVector4* pControlPoints = pMesh->GetControlPoints();
 	FbxVector4 currVertex;
 	FbxVector4 currNormal;
-	FbxVector4 currTangent;
-
 	FbxVector2 currUV;
+
+	//FbxVector4 currTangent;
 
 	FbxStringList UVNames;
 	pMesh->GetUVSetNames(UVNames);
@@ -168,12 +166,11 @@ bool Exporter::ExportMeshData(FbxMesh* pMesh)
 					{
 					case FbxGeometryElement::eDirect:
 						pMesh->GetPolygonVertexNormal(polygonIndex, vertexIndex, currNormal);
-						
 						currVertexData.normal.x = static_cast<float>(currNormal[0]);
 						currVertexData.normal.y = static_cast<float>(currNormal[1]);
 						currVertexData.normal.z = static_cast<float>(currNormal[2]);
 
-						
+
 						break;
 
 					case FbxGeometryElement::eIndexToDirect:
@@ -190,8 +187,6 @@ bool Exporter::ExportMeshData(FbxMesh* pMesh)
 					}
 
 				}
-
-				
 				if (vMeshData.GetUV())
 				{
 					bool UnmappedUV;
@@ -291,11 +286,15 @@ bool Exporter::ExportSkinnedData(FbxMesh* pMesh)
 
 			string boneName = lCluster->GetLink()->GetName();
 			int boneIndex = FindBoneIndexUsingName(boneName, m_iMeshCount);
+			
 			FbxAMatrix geometryTransform = GetGeometry(pMesh->GetNode());
 
-			ExportkeyVertexInfo(lCluster, lCluster->GetControlPointIndicesCount(), boneIndex);
-			ExportBoneOffsetMatrix(lCluster, geometryTransform, boneIndex);
-			ExportTimeTransformMatrix(pMesh->GetNode(), lCluster, geometryTransform, boneIndex);
+			if (boneIndex >= 0)
+			{
+				ExportkeyVertexInfo(lCluster, lCluster->GetControlPointIndicesCount(), boneIndex);
+				ExportBoneOffsetMatrix(lCluster, geometryTransform, boneIndex);
+				ExportTimeTransformMatrix(pMesh->GetNode(), lCluster, geometryTransform, boneIndex);
+			}
 		}
 
 	}
@@ -332,17 +331,16 @@ void Exporter::ExportBoneOffsetMatrix(FbxCluster* pCluster, FbxAMatrix& globalPo
 	finalOffsetMatrix = reflectionMatrix * offsetMatrix * reflectionMatrix;
 
 	auto skinnedIter = m_exSkinnedContainer.begin() + m_iMeshCount;
-
+	
+	//cout << "사이즈 : " << skinnedIter->GetSkeleton().size() << ", Index : " << currBoneIndex << endl;
 	skinnedIter->GetSkeleton()[currBoneIndex].SetOffsetMatrix(finalOffsetMatrix);
-
 }
 bool Exporter::ExportAnimationNameAndLength(int index)
 {
 	FbxAnimStack* currAnimStack = Converter::Instance()->GetScene()->FindMember<FbxAnimStack>(m_sAnimationNames[index]->Buffer());
 	if (currAnimStack == NULL)
-	{
 		return false;
-	}
+
 	FbxString animStackName = currAnimStack->GetName();
 
 	m_exSkinnedContainer[index].SetAnimationName(animStackName.Buffer());
@@ -432,6 +430,7 @@ void Exporter::ExportBoneHierarchy(FbxNode* currNode, int myIndex, int parentInd
 		ExportBoneHierarchy(currNode->GetChild(i), m_exSkinnedContainer[0].GetSkeleton().size(), myIndex);
 	}
 }
+
 int Exporter::FindBoneIndexUsingName(const string& boneName, int meshIndex)
 {
 	m_pSkinnedIterator = m_exSkinnedContainer.begin() + meshIndex;
@@ -450,8 +449,6 @@ int Exporter::FindBoneIndexUsingName(const string& boneName, int meshIndex)
 	}
 
 	return -2;
-
-
 }
 void Exporter::TransferkeyVertexInfo(FbxMesh* pMesh)
 {
@@ -564,6 +561,7 @@ void Exporter::WriteVertexData(ofstream& fout, int meshID)
 			 << vertex.uv.x << ' ' << vertex.uv.y << endl; 
 	} 
 }
+
 void Exporter::WriteSkinnedVertexData(ofstream& fout, int meshID)
 {
 	for (auto vertex : m_exMeshContainer[meshID].GetMeshData())
@@ -639,18 +637,14 @@ void Exporter::WriteTimeTransformMatrix(ofstream& fout, int meshID)
 	{
 		fout << to_string(boneCnt) << ' ' << bone.GetBoneAnimation().size() << endl;
 		
-
 		for (auto frame : bone.GetBoneAnimation())
-		{
-			
+		{		
 			WriteConvertTransformMatrix(fout, frame); // TSQ 저장
 		}
 
 		boneCnt++;
 	}
 	//fout << '}' << endl;
-
-
 }
 void Exporter::WriteBoneHierarchy(ofstream& fout, int meshID)
 {
@@ -661,9 +655,8 @@ void Exporter::WriteBoneHierarchy(ofstream& fout, int meshID)
 		fout << bone.GetParentIndex() << endl;
 		cnt++;
 	}
-	 
-
 }
+
 void Exporter::WriteAllData(const string& fileName)
 {
 	ofstream fout(fileName);
@@ -674,7 +667,7 @@ void Exporter::WriteAllData(const string& fileName)
 		exit(EXIT_FAILURE);
 	}
 	  
-	for (int i = 0; i < m_iMeshCount; ++i)// 오리지널 익스포터
+	for (int i = 0; i < m_iMeshCount; ++i)
 	{
 		/// Mesh Data Export
 		cout << "[" << i + 1 << "]-> " << " Mesh Data Recording ..." << endl;
@@ -685,7 +678,6 @@ void Exporter::WriteAllData(const string& fileName)
 		fout << GetIndexSkinnedData(i).GetSkeleton().size() << endl;
 		fout << Converter::Instance()->GetScene()->GetSrcObjectCount<FbxAnimStack>() << endl;
 		 
-
 		fout << "[ VERTEX_DATA ]" << endl;
 
 		if (mHasAnimationData)
@@ -696,41 +688,102 @@ void Exporter::WriteAllData(const string& fileName)
 		fout << "[ INDEX_DATA ]" << endl; 
 		WriteIndexData(fout, i);
 		cout << "[" << i + 1 << "]-> " << " Mesh Data Success !!" << endl;
+		
+
 		if (mHasAnimationData)
 		{
-			/// BoneHierarchy Data Export									
+			// BoneHierarchy Data Export									
 			cout << "[" << i + 1 << "]-> " << " Bone Hierarchy Data Recording ..." << endl;
-
 			fout << "[ BONE_HIERARCHY ]" << endl;
-
 			WriteBoneHierarchy(fout, i);
-
 			cout << "[" << i + 1 << "]-> " << " Bone Hierarchy  Data Success !!" << endl;
 
-
-			/// OffsetMatrix Data Export 
+			// OffsetMatrix Data Export 
 			cout << "[" << i + 1 << "]-> " << " Offset Matrix Data Recording ..." << endl;
-
 			fout << "[ OFFSET_MATRIX ]" << endl;
-
 			WriteOffsetMatrix(fout, i);
-
 			cout << "[" << i + 1 << "]-> " << " Offset Matrix Data Success !!" << endl;
 
 
-			/// Time t TransformMatrix Data Export 
+			// Time t TransformMatrix Data Export 
 			cout << "[" << i + 1 << "]-> " << " Time t Transform Matrix Data Recording ..." << endl;
-
 			fout << "[ ANIMATION_CLIPS ]" << endl;
-
 			WriteTimeTransformMatrix(fout, i);
-
 			cout << "[" << i + 1 << "]-> " << " Time t Transform Matrix Data Success !!" << endl;
 		}
 	}
 
-	
 	fout.close();
+}
 
+void Exporter::WritePositionsData(ofstream& out, int meshID)
+{
+	for (auto vertex : m_exMeshContainer[meshID].GetMeshData())
+		out << vertex.pos.x << ' ' << vertex.pos.z << ' ' << vertex.pos.y << ' ';
+	out << endl;
+}
 
+void	Exporter::WriteTextureCoordsData(ofstream& out, int meshID)
+{
+	for (auto vertex : m_exMeshContainer[meshID].GetMeshData())
+		out << vertex.uv.x << ' ' << vertex.uv.y << ' ';
+	out << endl;
+}
+
+void Exporter::WriteNormalsData(ofstream& out, int meshID)
+{
+	for (auto vertex : m_exMeshContainer[meshID].GetMeshData())
+		out << vertex.normal.x << ' ' << vertex.normal.z << ' ' << vertex.normal.y << ' ';
+	out << endl;
+}
+
+void Exporter::WriteIndicesData(ofstream& out, int meshID)
+{
+	int cnt = 1;
+
+	int triangleCount = m_exMeshContainer[meshID].GetIndexCount() / 3;
+	for (int i = 0; i < triangleCount; ++i)
+	{
+		out << m_exMeshContainer[meshID].GetIndexData()[i * 3] << ' '
+			<< m_exMeshContainer[meshID].GetIndexData()[i * 3 + 2] << ' '
+			<< m_exMeshContainer[meshID].GetIndexData()[i * 3 + 1] << ' ';
+	}
+	out << endl;
+}
+
+void Exporter::WriteNewData(const string& fileName)
+{
+	ofstream out(fileName, ios::binary);
+
+	if (!out)
+	{
+		cerr << fileName << "File Load Error!" << endl;
+		exit(EXIT_FAILURE);
+	}
+
+	for (int i = 0; i < m_iMeshCount; ++i)
+	{
+		// Mesh Data Export
+		cout << "[" << i + 1 << "]-> " << " Mesh Data Recording ..." << endl;
+
+		// 정점 개수 출력
+		//out << "<Mesh>:" << ' ' << GetIndexMeshData(i).GetMeshData().size() << endl;
+		// 위치 개수 + 데이터 출력
+		//out << "<Positions>:" << ' ' << GetIndexMeshData(i).GetMeshData().size() << ' ';
+		out << "<Vertices>:" << ' ' << GetIndexMeshData(i).GetMeshData().size() << ' ';
+		WritePositionsData(out, i);
+		// Normal 개수 + 데이터 출력
+		out << "<Normals>:" << ' ' << GetIndexMeshData(i).GetMeshData().size() << ' ';
+		WriteNormalsData(out, i);
+		// UV 개수 + 데이터 출력
+		out << "<TextureCoords>:" << ' ' << GetIndexMeshData(i).GetMeshData().size() << ' ';
+		WriteTextureCoordsData(out, i);
+		// 인덱스 개수 + 데이터 출력
+		out << "<Indices>:" << ' ' << GetIndexMeshData(i).GetIndexCount() << ' ';
+		WriteIndicesData(out, i);
+		// 끝
+		//out << "</Mesh>";
+
+		cout << "[" << i + 1 << "]-> " << " Mesh Data Success !!" << endl;
+	}
 }

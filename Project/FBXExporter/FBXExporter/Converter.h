@@ -6,10 +6,10 @@ class Converter
 {
 private:
 	string				m_FileName;
-	int					m_Stat;
+	int						m_Stat;
 	
-	FbxScene*			m_pScene;
-	FbxManager*			m_pManager;
+	FbxScene*		m_pScene;
+	FbxManager*	m_pManager;
 
 	Exporter*			m_pExporter;
 

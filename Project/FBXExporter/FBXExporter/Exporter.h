@@ -4,7 +4,7 @@
 class Exporter
 {
 private:
-	vector<MeshData>				 m_exMeshContainer;
+	vector<MeshData>					 m_exMeshContainer;
 	vector<MeshData>::iterator		 m_pMeshIterator;
 
 	vector<SkinnedData>				 m_exSkinnedContainer;
@@ -13,7 +13,7 @@ private:
 	FbxArray<FbxString*>			 m_sAnimationNames;
 
 	unsigned int					 m_iMeshCount;
-	bool							 mHasAnimationData;
+	bool								mHasAnimationData;
 public:
 	Exporter();
 	~Exporter();
@@ -43,14 +43,21 @@ public:
 	void							TransferkeyVertexInfo(FbxMesh* pMesh);
 
 	void							WriteVertexData(ofstream& fout, int meshID);
+
 	void							WriteSkinnedVertexData(ofstream& fout, int meshID);
 	void							WriteIndexData(ofstream& fout, int meshID);
 	void							WriteBoneHierarchy(ofstream& fout, int meshID);
 	void							WriteOffsetMatrix(ofstream& fout, int meshID);
 	void							WriteTimeTransformMatrix(ofstream& fout, int meshID);
 	void							WriteConvertTransformMatrix(ofstream& fout, KeyFrameData& mtx);
-	void							WriteAllData(const string& fileName);
 
+	void							WriteAllData(const string& fileName);
+	
+	void WritePositionsData(ofstream& out, int meshID);
+	void	WriteTextureCoordsData(ofstream& out, int meshID);
+	void WriteNormalsData(ofstream& out, int meshID);
+	void WriteIndicesData(ofstream& out, int meshID);
+	void WriteNewData(const string& fileName);
 };
 
 
