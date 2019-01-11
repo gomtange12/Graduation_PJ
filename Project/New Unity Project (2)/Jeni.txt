@@ -1,6 +1,6 @@
 <Frame>: 0 0 Jeni
-	<Transform>: -1.352979 -4.255008 -4.313679 0 0 0 1 1 1 0 0 0 1  
-	<TransformMatrix>: 1 0 0 0 0 1 0 0 0 0 1 0 -1.352979 -4.255008 -4.313679 1  
+	<Transform>: 1.05 -0.19 -7.59 0 0 0 1 1 1 0 0 0 1  
+	<TransformMatrix>: 1 0 0 0 0 1 0 0 0 0 1 0 1.05 -0.19 -7.59 1  
 	<Children>: 2
 		<Frame>: 1 0 Girl_Body_Geo
 			<Transform>: 0 0 0 2.504478E-06 0 0 1 1 1 2.185569E-08 0 0 1  
@@ -21,19 +21,19 @@
 			<Materials>: 1
 				<Material>: 0
 					<AlbedoColor>: 1 1 1 1
-					<EmissiveColor>: 0 0 0 0
+					<EmissiveColor>: 0 0 0 1
 					<SpecularColor>: 0 0 0 0
-					<Glossiness>: 0
+					<Glossiness>: 0.5
 					<Smoothness>: 0
 					<Metallic>: 0
-					<SpecularHighlight>: 0
-					<GlossyReflection>: 0
+					<SpecularHighlight>: 1
+					<GlossyReflection>: 1
 					<AlbedoMap>: Jeni_diffuse
 					<SpecularMap>: null
 					<MetallicMap>: null
 					<NormalMap>: null
 					<EmissionMap>: null
-					<DetailAlbedoMap>: null
+					<DetailAlbedoMap>: Jeni_diffuse
 					<DetailNormalMap>: null
 			</Materials>
 			<Children>: 0
