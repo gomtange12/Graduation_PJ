@@ -338,7 +338,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 {
 	m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
 
-	CGameObject *pGameObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/EvilbearA.bin", NULL, true);
+	CGameObject *pGameObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/FemaleSwordsman_A.bin", NULL, true);
 	SetChild(pGameObject);
 
 
@@ -411,12 +411,12 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	int z = (int)(xmf3PlayerPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
-	if (xmf3PlayerPosition.y < fHeight)
+	if (xmf3PlayerPosition.y - MIRA_HEIGHT < fHeight)
 	{
 		XMFLOAT3 xmf3PlayerVelocity = GetVelocity();
 		xmf3PlayerVelocity.y = 0.0f;
 		SetVelocity(xmf3PlayerVelocity);
-		xmf3PlayerPosition.y = fHeight;
+		xmf3PlayerPosition.y = fHeight + MIRA_HEIGHT;
 		SetPosition(xmf3PlayerPosition);
 	}
 }
@@ -429,9 +429,9 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
-	if (xmf3CameraPosition.y <= fHeight)
+	if (xmf3CameraPosition.y - MIRA_HEIGHT <= fHeight)
 	{
-		xmf3CameraPosition.y = fHeight;
+		xmf3CameraPosition.y = fHeight + MIRA_HEIGHT;
 		m_pCamera->SetPosition(xmf3CameraPosition);
 		if (m_pCamera->GetMode() == THIRD_PERSON_CAMERA)
 		{
