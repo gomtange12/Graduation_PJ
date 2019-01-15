@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\sohyun\downloads\labproject07-9-5(animation)</FILEPATH>
+      <FILENAME>d3dx12.h</FILENAME>
+      <LINE>1549</LINE>
+      <COLUMN>35</COLUMN>
+    </SFA>
+    <DEFECTCODE>26451</DEFECTCODE>
+    <DESCRIPTION>Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2).</DESCRIPTION>
+    <FUNCTION>CD3DX12_GPU_DESCRIPTOR_HANDLE::Offset</FUNCTION>
+    <DECORATED>?Offset@CD3DX12_GPU_DESCRIPTOR_HANDLE@@QAEAAU1@HI@Z</DECORATED>
+    <FUNCLINE>1547</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\sohyun\downloads\labproject07-9-5(animation)</FILEPATH>
+      <FILENAME>d3dx12.h</FILENAME>
+      <LINE>1588</LINE>
+      <COLUMN>52</COLUMN>
+    </SFA>
+    <DEFECTCODE>26451</DEFECTCODE>
+    <DESCRIPTION>Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2).</DESCRIPTION>
+    <FUNCTION>CD3DX12_GPU_DESCRIPTOR_HANDLE::InitOffsetted</FUNCTION>
+    <DECORATED>?InitOffsetted@CD3DX12_GPU_DESCRIPTOR_HANDLE@@SAXAAUD3D12_GPU_DESCRIPTOR_HANDLE@@ABU2@HI@Z</DECORATED>
+    <FUNCLINE>1586</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+</DEFECTS>
