@@ -410,13 +410,13 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	XMFLOAT3 xmf3PlayerPosition = GetPosition();
 	int z = (int)(xmf3PlayerPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
-	float fHeight = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
-	if (xmf3PlayerPosition.y - MIRA_HEIGHT < fHeight)
+	float fHeight = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) +0.f;
+	if (xmf3PlayerPosition.y - MIRA_HEIGHT < fHeight) //여기: 미라 Y값이 터레인 높이보다 낮으면
 	{
 		XMFLOAT3 xmf3PlayerVelocity = GetVelocity();
 		xmf3PlayerVelocity.y = 0.0f;
 		SetVelocity(xmf3PlayerVelocity);
-		xmf3PlayerPosition.y = fHeight + MIRA_HEIGHT;
+		xmf3PlayerPosition.y = fHeight + MIRA_CAMHEIGHT;
 		SetPosition(xmf3PlayerPosition);
 	}
 }
@@ -425,18 +425,22 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 {
 	CHeightMapTerrain *pTerrain = (CHeightMapTerrain *)m_pCameraUpdatedContext;
 	XMFLOAT3 xmf3Scale = pTerrain->GetScale();
+	XMFLOAT3 xmf3CameraYPosition = m_pCamera->GetPosition();
+
 	XMFLOAT3 xmf3CameraPosition = m_pCamera->GetPosition();
 	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
-	if (xmf3CameraPosition.y - MIRA_HEIGHT <= fHeight)
+	if (xmf3CameraPosition.y <= fHeight)
 	{
-		xmf3CameraPosition.y = fHeight + MIRA_HEIGHT;
+		xmf3CameraPosition.y = fHeight + MIRA_CAMHEIGHT;
 		m_pCamera->SetPosition(xmf3CameraPosition);
 		if (m_pCamera->GetMode() == THIRD_PERSON_CAMERA)
 		{
 			CThirdPersonCamera *p3rdPersonCamera = (CThirdPersonCamera *)m_pCamera;
 			p3rdPersonCamera->SetLookAt(GetPosition());
+			//p3rdPersonCamera->SetLookAtPosition(GetPO));
+
 		}
 	}
 }
