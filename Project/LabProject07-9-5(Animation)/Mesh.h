@@ -5,7 +5,13 @@
 #pragma once
 
 class CGameObject;
-
+struct MeshToObject
+{
+	ID3D12Resource					*pd3dcbBoneTransforms = NULL;
+	CGameObject						**ppSkinningBoneFrameCaches = NULL;
+	XMFLOAT4X4						*pcbxmf4x4BoneTransforms = NULL;
+	int								nSkinningBonesForObject = 0;
+};
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 #define VERTEXT_POSITION				0x0001
@@ -231,16 +237,14 @@ public:
 	char							(*m_ppstrSkinningBoneNames)[64];
 	XMFLOAT4X4						*m_pxmf4x4BindPoseBoneOffsets = NULL; 
 
-	CGameObject						**m_ppSkinningBoneFrameCaches = NULL;
 
 	ID3D12Resource					*m_pd3dcbBoneOffsets = NULL;
 	XMFLOAT4X4						*m_pcbxmf4x4BoneOffsets = NULL;
 
-	ID3D12Resource					*m_pd3dcbBoneTransforms = NULL;
-	XMFLOAT4X4						*m_pcbxmf4x4BoneTransforms = NULL;
+	
 
 public:
-	void LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile);
+	MeshToObject LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile);
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);

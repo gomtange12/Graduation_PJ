@@ -628,23 +628,19 @@ void CSkinnedMesh::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12Graphic
 	m_pd3dcbBoneOffsets = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 	m_pd3dcbBoneOffsets->Map(0, NULL, (void **)&m_pcbxmf4x4BoneOffsets);
 
-	m_pd3dcbBoneTransforms = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
-	m_pd3dcbBoneTransforms->Map(0, NULL, (void **)&m_pcbxmf4x4BoneTransforms);
+	
 }
 
 void CSkinnedMesh::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 {
-	if (m_pd3dcbBoneOffsets && m_pd3dcbBoneTransforms)
+	if (m_pd3dcbBoneOffsets)
 	{
 		D3D12_GPU_VIRTUAL_ADDRESS d3dcbBoneOffsetsGpuVirtualAddress = m_pd3dcbBoneOffsets->GetGPUVirtualAddress();
 		pd3dCommandList->SetGraphicsRootConstantBufferView(11, d3dcbBoneOffsetsGpuVirtualAddress); //Skinned Bone Offsets
-		D3D12_GPU_VIRTUAL_ADDRESS d3dcbBoneTransformsGpuVirtualAddress = m_pd3dcbBoneTransforms->GetGPUVirtualAddress();
-		pd3dCommandList->SetGraphicsRootConstantBufferView(12, d3dcbBoneTransformsGpuVirtualAddress); //Skinned Bone Transforms
-
+		
 		for (int i = 0; i < m_nSkinningBones; i++)
 		{
 			XMStoreFloat4x4(&m_pcbxmf4x4BoneOffsets[i], XMMatrixTranspose(XMLoadFloat4x4(&m_pxmf4x4BindPoseBoneOffsets[i])));
-			XMStoreFloat4x4(&m_pcbxmf4x4BoneTransforms[i], XMMatrixTranspose(XMLoadFloat4x4(&m_ppSkinningBoneFrameCaches[i]->m_xmf4x4World)));
 		}
 	}
 }
@@ -652,7 +648,6 @@ void CSkinnedMesh::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandL
 void CSkinnedMesh::ReleaseShaderVariables()
 {
 	if (m_pd3dcbBoneOffsets) m_pd3dcbBoneOffsets->Release();
-	if (m_pd3dcbBoneTransforms) m_pd3dcbBoneTransforms->Release();
 }
 
 void CSkinnedMesh::ReleaseUploadBuffers()
@@ -666,15 +661,15 @@ void CSkinnedMesh::ReleaseUploadBuffers()
 	m_pd3dBoneWeightUploadBuffer = NULL;
 }
 
-void CSkinnedMesh::LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile)
+MeshToObject CSkinnedMesh::LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile)
 {
 	char pstrToken[64] = { '\0' };
 	BYTE nStrLength = 0;
-
+	CGameObject objForSKinning = NULL;
 	UINT nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
 	nReads = (UINT)::fread(m_pstrSkinnedMeshName, sizeof(char), nStrLength, pInFile);
 	m_pstrSkinnedMeshName[nStrLength] = '\0';
-
+	MeshToObject tempData;
 	for ( ; ; )
 	{
 		nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
@@ -692,18 +687,19 @@ void CSkinnedMesh::LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12Graphics
 		}
 		else if (!strcmp(pstrToken, "<BoneNames>:"))
 		{
+			//¿©±â¸¦ ¹Ù²Þ
 			nReads = (UINT)::fread(&m_nSkinningBones, sizeof(int), 1, pInFile);
+			tempData.nSkinningBonesForObject = m_nSkinningBones;
 			if (m_nSkinningBones > 0)
 			{
 				m_ppstrSkinningBoneNames = new char[m_nSkinningBones][64];
-				m_ppSkinningBoneFrameCaches = new CGameObject*[m_nSkinningBones];
+				tempData.ppSkinningBoneFrameCaches = new CGameObject*[m_nSkinningBones];
 				for (int i = 0; i < m_nSkinningBones; i++)
 				{
 					nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
 					nReads = (UINT)::fread(m_ppstrSkinningBoneNames[i], sizeof(char), nStrLength, pInFile);
 					m_ppstrSkinningBoneNames[i][nStrLength] = '\0';
-
-					m_ppSkinningBoneFrameCaches[i] = NULL;
+					tempData.ppSkinningBoneFrameCaches[i] = NULL;
 				}
 			}
 		}
@@ -746,6 +742,7 @@ void CSkinnedMesh::LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12Graphics
 			break;
 		}
 	}
+	return tempData;
 }
 
 void CSkinnedMesh::OnPreRender(ID3D12GraphicsCommandList *pd3dCommandList, void *pContext)

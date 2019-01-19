@@ -257,6 +257,8 @@ public:
 	void AdvanceTime(float fElapsedTime, CAnimationCallbackHandler *pCallbackHandler);
 };
 
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class CGameObject
@@ -274,6 +276,13 @@ public:
     virtual ~CGameObject();
 
 public:
+
+	//FOR ANIMATION
+	CGameObject						**m_ppSkinningBoneFrameCaches = NULL;
+	int								m_nSkinningBonesForObject = 0;
+	ID3D12Resource					*m_pd3dcbBoneTransforms = NULL;
+	XMFLOAT4X4						*m_pcbxmf4x4BoneTransforms = NULL;
+
 	char							m_pstrFrameName[64];
 
 	CMesh							*m_pMesh = NULL;
