@@ -232,6 +232,11 @@ protected:
 	D3D12_VERTEX_BUFFER_VIEW		m_d3dBoneWeightBufferView;
 
 public:
+	CGameObject						**m_ppSkinningBoneFrameCaches = NULL;
+	int								m_nSkinningBonesForObject = 0;
+	ID3D12Resource					*m_pd3dcbBoneTransforms = NULL;
+	XMFLOAT4X4						*m_pcbxmf4x4BoneTransforms = NULL;
+
 	int								m_nSkinningBones = 0; 
 
 	char							(*m_ppstrSkinningBoneNames)[64];
@@ -244,7 +249,7 @@ public:
 	
 
 public:
-	MeshToObject LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile);
+	void LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile);
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
