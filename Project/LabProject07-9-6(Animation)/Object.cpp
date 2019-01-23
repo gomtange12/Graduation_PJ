@@ -325,7 +325,16 @@ void CAnimationSet::SetPosition(float fTrackPosition)
 			break;
 		}
 		case ANIMATION_TYPE_ONCE:
-			
+//#ifdef _WITH_ANIMATION_INTERPOLATION			
+//			//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //원래꺼
+//		  // m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
+//			//m_fPosition = fmod(fTrackPosition, m_fLength); if (m_fPosition < 0) m_fPosition += m_fLength;
+//			//m_fPosition = fTrackPosition - int(fTrackPosition / m_fLength) * m_fLength;
+//#else
+//			m_nCurrentKey++;
+//			if (m_nCurrentKey >= m_nKeyFrameTransforms) m_nCurrentKey = 0;
+//#endif
+			//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //원래꺼
 
 			break;
 		case ANIMATION_TYPE_PINGPONG:
@@ -985,7 +994,7 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			nReads = (UINT)::fread(pGameObject->m_pstrFrameName, sizeof(char), nStrLength, pInFile);
 			pGameObject->m_pstrFrameName[nStrLength] = '\0';
 		}
-		else if (!strcmp(pstrToken, "<Transform>:"))
+		else if (!strcmp(pstrToken, "<Transform>:")) //이거랑 투페어런트가 안읽히면 쌀알만큼 작아짐
 		{
 			XMFLOAT3 xmf3Position, xmf3Rotation, xmf3Scale;
 			XMFLOAT4 xmf4Rotation;
