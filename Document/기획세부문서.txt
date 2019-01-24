@@ -5,6 +5,28 @@
 1. IDLE
 2. RUN
 3. JUMP
-
+4. Death
+5. HIT impact 
+Idle : Sword And Shield Idle - Look around
+jump : Sword And Shield Jump - running jump
+Run:Sword And Shield run
+Death:Sword And Shield Death - Falling Back 
+HIT impact : Sword And Shield Impact
 캐릭터 별 애니메이션
 1. 평타
+
+
+- 드럼
+드럼 평타 - 한손에 들고 샤샥해서 단검마냥 찌르게 - STABBING
+드럼 스킬 - 애니메이션 보고 결정
+
+- 기타
+기타 평타 - 휘두르기
+기타 스킬 - 방패던져서 
+
+- 베이스
+평타 - 기타와 같지만 둔탁한 느낌으로
+스킬 - 믹사모 파워 업 스킬 사용 후 공속, 뎀지 쎄짐
+
+- 키보드 
+평타 - 기타와 비슷 단 이펙트를 따로 넣을것
