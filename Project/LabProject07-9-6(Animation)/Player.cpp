@@ -66,7 +66,7 @@ void CPlayer::Move(DWORD dwDirection, float fDistance, bool bUpdateVelocity)
 		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, -fDistance);
 		if (dwDirection & DIR_JUMP)
 		{
-			//m_pAnimationController=>seta
+			static bool IsJump = true;
 		}
 
 		Move(xmf3Shift, bUpdateVelocity);
