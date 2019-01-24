@@ -1,0 +1,15 @@
+공용 애니메이션
+1. idle
+2. run
+3. jump
+4. Death
+5. HIT impact 
+=========
+1. attack
+
+mixamo
+Idle : Sword And Shield Idle - Look around
+jump : Sword And Shield Jump - running jump
+Run:Sword And Shield run
+Death:Sword And Shield Death - Falling Back 
+HIT impact : Sword And Shield Impact
