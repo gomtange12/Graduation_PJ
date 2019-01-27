@@ -409,7 +409,7 @@ void CGameFramework::BuildObjects()
 #ifdef _WITH_TERRAIN_PLAYER
 	CTerrainPlayer *pPlayer = new CTerrainPlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	pPlayer->SetPosition(XMFLOAT3(380.0f, m_pScene->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
-	pPlayer->SetScale(XMFLOAT3(5.0f, 5.0f, 5.0f));
+	pPlayer->SetScale(XMFLOAT3(15.0f,15.0f,15.0f));
 #else
 	CAirplanePlayer *pPlayer = new CAirplanePlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), NULL);
 	pPlayer->SetPosition(XMFLOAT3(425.0f, 240.0f, 640.0f));
