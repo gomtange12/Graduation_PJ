@@ -34,7 +34,7 @@ protected:
 	LPVOID						m_pCameraUpdatedContext = NULL;
 
 	CCamera						*m_pCamera = NULL;
-
+	//이넘만들기
 public:
 	CPlayer();
 	virtual ~CPlayer();

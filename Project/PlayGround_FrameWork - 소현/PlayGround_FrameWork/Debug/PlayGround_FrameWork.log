@@ -1,2 +1,108 @@
-﻿  MyStruct.cpp
-  PlayGround_FrameWork.vcxproj -> C:\Users\Sohyun\Desktop\졸작\Project\PlayGround_FrameWork - 소현\Debug\PlayGround_FrameWork.exe
+﻿  stdafx.cpp
+  C3DGameObject.cpp
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.h(87): error C2039: 'GetType': 'CMesh'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.h(5): note: 'CMesh' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(17): error C2084: 'C3DGameObject::C3DGameObject(void)' 함수에 이미 본문이 있습니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(6): note: '{ctor}'의 이전 정의를 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(23): error C2264: 'C3DGameObject::C3DGameObject': 함수 정의 또는 선언에 오류가 있습니다. 함수가 호출되지 않습니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(33): error C2084: 'C3DGameObject::~C3DGameObject(void)' 함수에 이미 본문이 있습니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(11): note: '{dtor}'의 이전 정의를 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(90): error C2664: 'CMaterial::CMaterial(const CMaterial &)': 인수 1을(를) 'int'에서 'const CMaterial &'(으)로 변환할 수 없습니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(90): note: 원인: 'int'에서 'const CMaterial'(으)로 변환할 수 없습니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(90): note: 소스 형식을 가져올 수 있는 생성자가 없거나 생성자 오버로드 확인이 모호합니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(136): error C2039: 'UpdateShaderVariable': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(288): error C2039: 'm_nTextures': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(290): error C2039: 'm_ppTextures': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(292): error C2039: 'm_ppstrTextureNames': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(292): error C2039: 'm_ppTextures': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(328): error C2664: 'CMaterial::CMaterial(const CMaterial &)': 인수 1을(를) 'int'에서 'const CMaterial &'(으)로 변환할 수 없습니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(328): note: 원인: 'int'에서 'const CMaterial'(으)로 변환할 수 없습니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(328): note: 소스 형식을 가져올 수 있는 생성자가 없거나 생성자 오버로드 확인이 모호합니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(336): error C2039: 'm_xmf4AlbedoColor': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(340): error C2039: 'm_xmf4EmissiveColor': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(344): error C2039: 'm_xmf4SpecularColor': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(348): error C2039: 'm_fGlossiness': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(352): error C2039: 'm_fSmoothness': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(356): error C2039: 'm_fSpecularHighlight': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(360): error C2039: 'm_fMetallic': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(364): error C2039: 'm_fGlossyReflection': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(368): error C2039: 'LoadTextureFromFile': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(368): error C2065: 'MATERIAL_ALBEDO_MAP': 선언되지 않은 식별자입니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(368): error C2039: 'm_ppstrTextureNames': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(368): error C2039: 'm_ppTextures': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(372): error C2039: 'LoadTextureFromFile': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(372): error C2065: 'MATERIAL_SPECULAR_MAP': 선언되지 않은 식별자입니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(372): error C2039: 'm_ppstrTextureNames': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(372): error C2039: 'm_ppTextures': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(376): error C2039: 'LoadTextureFromFile': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(376): error C2065: 'MATERIAL_NORMAL_MAP': 선언되지 않은 식별자입니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(376): error C2039: 'm_ppstrTextureNames': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(376): error C2039: 'm_ppTextures': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(380): error C2039: 'LoadTextureFromFile': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(380): error C2065: 'MATERIAL_METALLIC_MAP': 선언되지 않은 식별자입니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(380): error C2039: 'm_ppstrTextureNames': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(380): error C2039: 'm_ppTextures': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(384): error C2039: 'LoadTextureFromFile': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(384): error C2065: 'MATERIAL_EMISSION_MAP': 선언되지 않은 식별자입니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(384): error C2039: 'm_ppstrTextureNames': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(384): error C2039: 'm_ppTextures': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(388): error C2039: 'LoadTextureFromFile': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(388): error C2065: 'MATERIAL_DETAIL_ALBEDO_MAP': 선언되지 않은 식별자입니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(388): error C2039: 'm_ppstrTextureNames': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(388): error C2039: 'm_ppTextures': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(392): error C2039: 'LoadTextureFromFile': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(392): error C2065: 'MATERIAL_DETAIL_NORMAL_MAP': 선언되지 않은 식별자입니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(392): error C2039: 'm_ppstrTextureNames': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(392): error C2039: 'm_ppTextures': 'CMaterial'의 멤버가 아닙니다.
+  c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\object.h(78): note: 'CMaterial' 선언을 참조하십시오.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(420): error C2264: 'C3DGameObject::C3DGameObject': 함수 정의 또는 선언에 오류가 있습니다. 함수가 호출되지 않습니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(444): error C2065: 'CStandardMesh': 선언되지 않은 식별자입니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(444): error C2065: 'pMesh': 선언되지 않은 식별자입니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(444): error C2061: 구문 오류: 식별자 'CStandardMesh'
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(445): error C2065: 'pMesh': 선언되지 않은 식별자입니다.
+c:\users\sohyun\desktop\졸작\project\playground_framework - 소현\playground_framework\c3dgameobject.cpp(446): error C2065: 'pMesh': 선언되지 않은 식별자입니다.
+  Camera.cpp
+  DDSTextureLoader12.cpp
+  GameFramework.cpp
+  Mesh.cpp
+  MyStruct.cpp
+  Object.cpp
+  Player.cpp
+  PlayGround_FrameWork.cpp
+  Scene.cpp
+  Shader.cpp
+  Timer.cpp
+  코드를 생성하고 있습니다...
