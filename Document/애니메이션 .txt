@@ -10,6 +10,6 @@
 mixamo
 Idle : Sword And Shield Idle - Look around
 jump : Sword And Shield Jump - running jump
-Run:Sword And Shield run
+Run:Sword And Shield run(¿Ã∞≈æ»µ )
 Death:Sword And Shield Death - Falling Back 
 HIT impact : Sword And Shield Impact
