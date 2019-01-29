@@ -12,4 +12,4 @@
   WICTextureLoader12.cpp
   코드를 생성하고 있습니다...
 Player.obj : error LNK2019: __imp__PlaySoundW@12 외부 기호(참조 위치: "public: virtual void __thiscall CSoundCallbackHandler::HandleCallback(void *)" (?HandleCallback@CSoundCallbackHandler@@UAEXPAX@Z) 함수)에서 확인하지 못했습니다.
-C:\Users\blueb\Documents\카카오톡 받은 파일\LabProject07-9-6(Animation)\Debug\LabProject07-9-6(Animation).exe : fatal error LNK1120: 1개의 확인할 수 없는 외부 참조입니다.
+C:\Users\blueb\Documents\GitHub\Graduation_PJ\Project\천기\LabProject07-9-6(Animation)\Debug\LabProject07-9-6(Animation).exe : fatal error LNK1120: 1개의 확인할 수 없는 외부 참조입니다.
