@@ -66,7 +66,7 @@ void CPlayer::Move(DWORD dwDirection, float fDistance, bool bUpdateVelocity)
 		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, -fDistance);
 		if (dwDirection & DIR_JUMP)
 		{
-			static bool IsJump = true;
+			SetPlayerState(PlayerState::JUMP);
 		}
 
 		Move(xmf3Shift, bUpdateVelocity);
@@ -175,7 +175,20 @@ void CPlayer::Update(float fTimeElapsed)
 	if (fDeceleration > fLength) fDeceleration = fLength;
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 
-	SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
+	switch (GetPlayerState())
+	{
+	case IDLE:
+		SetTrackAnimationSet(0, IDLE);
+		break;
+	case RUN:
+		SetTrackAnimationSet(0, RUN);
+		break;
+	
+	case JUMP:
+		SetTrackAnimationSet(0, JUMP);
+		break;
+	}
+	//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 	//SetTrackAnimationSet(0, 2);
 
 }
@@ -382,7 +395,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Sound/Footstep03.wav"));
 #endif
 	CAnimationCallbackHandler *pAnimationCallbackHandler = new CSoundCallbackHandler();
-	m_pAnimationController->SetAnimationCallbackHandler(3, pAnimationCallbackHandler);
+	m_pAnimationController->SetAnimationCallbackHandler(1, pAnimationCallbackHandler);
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	

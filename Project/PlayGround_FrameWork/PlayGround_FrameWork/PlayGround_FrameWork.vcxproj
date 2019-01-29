@@ -151,8 +151,6 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DDSTextureLoader12.h" />
-    <ClInclude Include="FBXLoader.h" />
-    <ClInclude Include="FBXSingleMesh.h" />
     <ClInclude Include="GameFramework.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Object.h" />
@@ -168,8 +166,6 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp" />
-    <ClCompile Include="FBXLoader.cpp" />
-    <ClCompile Include="FBXSingleMesh.cpp" />
     <ClCompile Include="GameFramework.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Object.cpp" />

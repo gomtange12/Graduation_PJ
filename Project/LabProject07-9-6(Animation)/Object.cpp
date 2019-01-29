@@ -306,8 +306,11 @@ void *CAnimationSet::GetCallbackData()
 	return(NULL);
 }
 
-void CAnimationSet::SetPosition(float fTrackPosition)
+void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 {
+	float maxLength = m_fLength - 0.18f;
+	float fPosition = 0.0f;
+
 	m_fPosition = fTrackPosition;
 	switch (m_nType)
 	{
@@ -325,17 +328,14 @@ void CAnimationSet::SetPosition(float fTrackPosition)
 			break;
 		}
 		case ANIMATION_TYPE_ONCE:
-//#ifdef _WITH_ANIMATION_INTERPOLATION			
-//			//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //¿ø·¡²¨
-//		  // m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
-//			//m_fPosition = fmod(fTrackPosition, m_fLength); if (m_fPosition < 0) m_fPosition += m_fLength;
-//			//m_fPosition = fTrackPosition - int(fTrackPosition / m_fLength) * m_fLength;
-//#else
-//			m_nCurrentKey++;
-//			if (m_nCurrentKey >= m_nKeyFrameTransforms) m_nCurrentKey = 0;
-//#endif
-			//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //¿ø·¡²¨
-
+			m_fPosition = fminf(oncePosition, maxLength);
+			if (m_fPosition >= maxLength)
+			{
+				//CPlayer::SetPlayerState(IDLE);
+				m_fPosition = 0.0f;
+				oncePosition = 0.0f;					
+				
+			}
 			break;
 		case ANIMATION_TYPE_PINGPONG:
 			break;
@@ -520,8 +520,12 @@ void CAnimationController::AdvanceTime(float fTimeElapsed)
 		for (int i = 0; i < m_pAnimationSets->m_nAnimationFrames; i++) m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = Matrix4x4::Zero();
 		for (int j = 0; j < m_nAnimationTracks; j++)
 		{
+			
 			m_pAnimationTracks[j].m_fPosition += (fTimeElapsed * m_pAnimationTracks[j].m_fSpeed);
-			m_pAnimationTracks[j].m_pAnimationSet->SetPosition(m_pAnimationTracks[j].m_fPosition);
+			CAnimationSet *pAnimationSet = m_pAnimationTracks[j].m_pAnimationSet;
+			pAnimationSet->m_fPosition += (fTimeElapsed * m_pAnimationTracks[j].m_fSpeed);
+
+			m_pAnimationTracks[j].m_pAnimationSet->SetPosition(m_pAnimationTracks[j].m_fPosition, pAnimationSet->m_fPosition);
 			if (m_pAnimationTracks[j].m_bEnable)
 			{
 				for (int i = 0; i < m_pAnimationSets->m_nAnimationFrames; i++)

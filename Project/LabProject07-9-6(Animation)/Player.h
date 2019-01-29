@@ -35,10 +35,14 @@ protected:
 
 	CCamera						*m_pCamera = NULL;
 	//이넘만들기
+	
+	int m_PlayerState = PlayerState::IDLE;
 public:
+
 	CPlayer();
 	virtual ~CPlayer();
-
+	int GetPlayerState() { return m_PlayerState; }
+	void SetPlayerState(PlayerState state) { m_PlayerState = state; }
 	XMFLOAT3 GetPosition() { return(m_xmf3Position); }
 	XMFLOAT3 GetLookVector() { return(m_xmf3Look); }
 	XMFLOAT3 GetUpVector() { return(m_xmf3Up); }
@@ -83,6 +87,8 @@ public:
 	virtual CCamera *ChangeCamera(DWORD nNewCameraMode, float fTimeElapsed) { return(NULL); }
 	virtual void OnPrepareRender();
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera = NULL);
+
+	
 };
 
 class CAirplanePlayer : public CPlayer

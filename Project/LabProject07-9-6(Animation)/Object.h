@@ -224,7 +224,8 @@ public:
 	CAnimationCallbackHandler 		*m_pAnimationCallbackHandler = NULL;
 
 public:
-	void SetPosition(float fTrackPosition);
+	void SetPosition(float& fTrackPosition, float& oncePosition);
+
 
 	XMFLOAT4X4 GetSRT(int nFrame);
 

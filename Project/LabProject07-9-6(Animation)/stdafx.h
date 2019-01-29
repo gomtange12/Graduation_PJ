@@ -72,8 +72,7 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 enum PlayerState {
 	IDLE,
 	RUN,
-	JUMP,
-	DASH
+	JUMP
 };
 
 #define RANDOM_COLOR			XMFLOAT4(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX))

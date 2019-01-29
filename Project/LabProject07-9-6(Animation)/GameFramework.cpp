@@ -452,7 +452,12 @@ void CGameFramework::ProcessInput()
 		if (pKeysBuffer[VK_RIGHT] & 0xF0) dwDirection |= DIR_RIGHT;
 		if (pKeysBuffer[VK_PRIOR] & 0xF0) dwDirection |= DIR_UP;
 		if (pKeysBuffer[VK_NEXT] & 0xF0) dwDirection |= DIR_DOWN;
-		if (pKeysBuffer[VK_SPACE] & 0xF0) dwDirection |= DIR_JUMP;
+		if (pKeysBuffer[VK_SPACE] & 0xF0)
+		{
+			dwDirection |= DIR_JUMP;
+
+			m_pPlayer->SetPlayerState(JUMP);
+		}
 
 
 		float cxDelta = 0.0f, cyDelta = 0.0f;

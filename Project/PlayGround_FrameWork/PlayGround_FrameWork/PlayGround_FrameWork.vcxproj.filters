@@ -99,12 +99,6 @@
     <ClInclude Include="Scene.h">
       <Filter>소스 파일\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="FBXLoader.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="FBXSingleMesh.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameFramework.cpp">
@@ -139,12 +133,6 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>소스 파일\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="FBXLoader.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="FBXSingleMesh.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

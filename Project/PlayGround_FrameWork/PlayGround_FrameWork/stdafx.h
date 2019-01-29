@@ -17,7 +17,7 @@
 #include <iomanip>
 #include <fstream>
 #include <fbxsdk.h>
-#pragma comment(lib,"libfbxsdk-md.lib")
+//#pragma comment(lib,"libfbxsdk-md.lib")
 
 
 
