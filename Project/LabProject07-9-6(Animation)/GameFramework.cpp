@@ -456,7 +456,7 @@ void CGameFramework::ProcessInput()
 		{
 			dwDirection |= DIR_JUMP;
 
-			m_pPlayer->SetPlayerState(JUMP);
+			m_pPlayer->SetPlayerState(CPlayer::PlayerState::JUMP);
 		}
 
 

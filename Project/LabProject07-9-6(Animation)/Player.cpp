@@ -8,6 +8,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CPlayer
+int CPlayer::m_PlayerState = CTerrainPlayer::PlayerState::IDLE;
 
 CPlayer::CPlayer()
 {
@@ -30,6 +31,7 @@ CPlayer::CPlayer()
 
 	m_pPlayerUpdatedContext = NULL;
 	m_pCameraUpdatedContext = NULL;
+	m_PlayerState = PlayerState::IDLE;
 }
 
 CPlayer::~CPlayer()
@@ -175,8 +177,11 @@ void CPlayer::Update(float fTimeElapsed)
 	if (fDeceleration > fLength) fDeceleration = fLength;
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 
-	switch (GetPlayerState())
+	switch (m_PlayerState)
 	{
+	default:
+		SetTrackAnimationSet(0, IDLE);
+		break;
 	case IDLE:
 		SetTrackAnimationSet(0, IDLE);
 		break;
@@ -186,6 +191,9 @@ void CPlayer::Update(float fTimeElapsed)
 	
 	case JUMP:
 		SetTrackAnimationSet(0, JUMP);
+		
+		//SetTrackAnimationSet(0, IDLE);
+
 		break;
 	}
 	//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
@@ -376,7 +384,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 {
 	m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
 
-	CLoadedModelInfo *pAngrybotModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/BassIdle.bin", NULL, true);
+	CLoadedModelInfo *pAngrybotModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);
 	
 	SetChild(pAngrybotModel->m_pModelRootObject, true);
 	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);

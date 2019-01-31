@@ -36,8 +36,15 @@ protected:
 	CCamera						*m_pCamera = NULL;
 	//이넘만들기
 	
-	int m_PlayerState = PlayerState::IDLE;
 public:
+	//static int m_PlayerState;
+	//const enum eState { IDLE = 0, WALKFRONT, RUNFAST, RUNBACKWARD, ATTACK, DIGGING /*땅 파기*/, ICE, NOTYET /*미정*/ };
+	static enum PlayerState {
+		IDLE,
+		RUN,
+		JUMP
+	};
+	static int m_PlayerState;
 
 	CPlayer();
 	virtual ~CPlayer();

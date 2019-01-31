@@ -187,6 +187,8 @@ public:
 
 class CAnimationSet
 {
+	//int 							m_nType = ANIMATION_TYPE_LOOP; //Once, Loop, PingPong
+
 public:
 	CAnimationSet();
 	~CAnimationSet();
@@ -214,7 +216,7 @@ public:
 #endif
 
 	float 							m_fPosition = 0.0f;
-    int 							m_nType = ANIMATION_TYPE_LOOP; //Once, Loop, PingPong
+    int 							m_nType = ANIMATION_TYPE_ONCE; //Once, Loop, PingPong
 
 	int								m_nCurrentKey = -1;
 
@@ -225,7 +227,8 @@ public:
 
 public:
 	void SetPosition(float& fTrackPosition, float& oncePosition);
-
+	void SetAnimationType(int n) { m_nType = n; }
+	int GetAnimationType() { return m_nType; }
 
 	XMFLOAT4X4 GetSRT(int nFrame);
 
@@ -234,6 +237,7 @@ public:
 	void SetAnimationCallbackHandler(CAnimationCallbackHandler *pCallbackHandler);
 
 	void *GetCallbackData();
+	CPlayer* m_pPlayer = NULL;
 };
 
 class CAnimationSets
@@ -255,6 +259,7 @@ public:
 
 	int								m_nAnimationSets = 0;
 	CAnimationSet					*m_pAnimationSets = NULL;
+public:
 
 public:
 	void SetCallbackKeys(int nAnimationSet, int nCallbackKeys);
@@ -366,6 +371,7 @@ public:
     virtual ~CGameObject();
 
 public:
+	//static int m_ObjectState;
 	char							m_pstrFrameName[64];
 
 	CMesh							*m_pMesh = NULL;

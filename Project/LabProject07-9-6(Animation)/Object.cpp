@@ -308,7 +308,7 @@ void *CAnimationSet::GetCallbackData()
 
 void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 {
-	float maxLength = m_fLength - 0.18f;
+	float maxLength = m_fLength-0.18f;
 	float fPosition = 0.0f;
 
 	m_fPosition = fTrackPosition;
@@ -318,7 +318,8 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 		{
 #ifdef _WITH_ANIMATION_INTERPOLATION			
 			m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]); //원래꺼
-		   // m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
+		  
+			// m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
 			//m_fPosition = fmod(fTrackPosition, m_fLength); if (m_fPosition < 0) m_fPosition += m_fLength;
 			//m_fPosition = fTrackPosition - int(fTrackPosition / m_fLength) * m_fLength;
 #else
@@ -328,14 +329,17 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			break;
 		}
 		case ANIMATION_TYPE_ONCE:
-			m_fPosition = fminf(oncePosition, maxLength);
+			m_fPosition = fmin(oncePosition, maxLength);
 			if (m_fPosition >= maxLength)
 			{
-				//CPlayer::SetPlayerState(IDLE);
 				m_fPosition = 0.0f;
-				oncePosition = 0.0f;					
-				
+				oncePosition = 0.0f;
+				maxLength = 0.0f;
 			}
+			//CPlayer::m_PlayerState = CPlayer::PlayerState::IDLE;
+			//CPlayer::SetPlayerState(IDLE);
+			//m_pPlayer->SetPlayerState(m_pPlayer->PlayerState::IDLE);
+
 			break;
 		case ANIMATION_TYPE_PINGPONG:
 			break;
@@ -514,23 +518,50 @@ void CAnimationController::SetAnimationSets(CAnimationSets *pAnimationSets)
 
 void CAnimationController::AdvanceTime(float fTimeElapsed) 
 {
-	m_fTime += fTimeElapsed; 
+	//m_fTime += fTimeElapsed; 
+	//if (m_pAnimationSets && m_pAnimationTracks)
+	//{
+	//	for (int i = 0; i < m_pAnimationSets->m_nAnimationFrames; i++) m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = Matrix4x4::Zero();
+	//	for (int j = 0; j < m_nAnimationTracks; j++)
+	//	{
+	//		
+	//		m_pAnimationTracks[j].m_fPosition += (fTimeElapsed * m_pAnimationTracks[j].m_fSpeed);
+	//		CAnimationSet *pAnimationSet = m_pAnimationTracks[j].m_pAnimationSet;
+	//		pAnimationSet->m_fPosition += (fTimeElapsed * m_pAnimationTracks[j].m_fSpeed);
+
+	//		m_pAnimationTracks[j].m_pAnimationSet->SetPosition(m_pAnimationTracks[j].m_fPosition, pAnimationSet->m_fPosition);
+	//		if (m_pAnimationTracks[j].m_bEnable)
+	//		{
+	//			for (int i = 0; i < m_pAnimationSets->m_nAnimationFrames; i++)
+	//			{
+	//				m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i);//Matrix4x4::Add(m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent, Matrix4x4::Scale(m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i), m_pAnimationTracks[j].m_fWeight));
+
+	//				//m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = Matrix4x4::Add(m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent, Matrix4x4::Scale(m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i), m_pAnimationTracks[j].m_fWeight));
+	//			}
+	//		}
+	//	}
+	//}
+	m_fTime += fTimeElapsed;
 	if (m_pAnimationSets && m_pAnimationTracks)
 	{
-		for (int i = 0; i < m_pAnimationSets->m_nAnimationFrames; i++) m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = Matrix4x4::Zero();
-		for (int j = 0; j < m_nAnimationTracks; j++)
+		for (int i = 0; i < m_pAnimationSets->m_nAnimationFrames; i++)
 		{
-			
-			m_pAnimationTracks[j].m_fPosition += (fTimeElapsed * m_pAnimationTracks[j].m_fSpeed);
+			m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = Matrix4x4::Zero();
+		}
+		for (int j = 0; j < m_nAnimationTracks; j++)											//애니메이션 트랙만큼 루프
+		{
+
+			m_pAnimationTracks[j].m_fPosition += (fTimeElapsed * m_pAnimationTracks[j].m_fSpeed);		//각 애니메이션 트랙의 속도와 게임 경과시간을 곱해서 해당 애니메이션이 어느 시간대를 가리키는지 정해야한다.
+
 			CAnimationSet *pAnimationSet = m_pAnimationTracks[j].m_pAnimationSet;
 			pAnimationSet->m_fPosition += (fTimeElapsed * m_pAnimationTracks[j].m_fSpeed);
-
 			m_pAnimationTracks[j].m_pAnimationSet->SetPosition(m_pAnimationTracks[j].m_fPosition, pAnimationSet->m_fPosition);
+			//m_pAnimationTracks[j].m_pAnimationSet->m_fLength;
 			if (m_pAnimationTracks[j].m_bEnable)
 			{
 				for (int i = 0; i < m_pAnimationSets->m_nAnimationFrames; i++)
 				{
-					m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = Matrix4x4::Add(m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent, Matrix4x4::Scale(m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i), m_pAnimationTracks[j].m_fWeight));
+					m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i);//Matrix4x4::Add(m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent, Matrix4x4::Scale(m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i), m_pAnimationTracks[j].m_fWeight));
 				}
 			}
 		}
@@ -1128,7 +1159,15 @@ CAnimationSets *CGameObject::LoadAnimationFromFile(FILE *pInFile, CGameObject *p
 			nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
 			nReads = (UINT)::fread(pAnimationSet->m_pstrName, sizeof(char), nStrLength, pInFile);
 			pAnimationSet->m_pstrName[nStrLength] = '\0';
+			if (!strcmp(pAnimationSet->m_pstrName, "Idle"))
+			{
+				pAnimationSet->m_nType = ANIMATION_TYPE_LOOP;
+			}
+			else
+			{
+				pAnimationSet->m_nType = ANIMATION_TYPE_ONCE;
 
+			}
 			nReads = (UINT)::fread(&pAnimationSet->m_fLength, sizeof(float), 1, pInFile);
 			nReads = (UINT)::fread(&pAnimationSet->m_nFramesPerSecond, sizeof(int), 1, pInFile);
 
