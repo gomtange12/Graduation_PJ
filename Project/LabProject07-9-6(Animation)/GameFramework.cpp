@@ -446,7 +446,12 @@ void CGameFramework::ProcessInput()
 	if (!bProcessedByScene)
 	{
 		DWORD dwDirection = 0;
-		if (pKeysBuffer[VK_UP] & 0xF0) dwDirection |= DIR_FORWARD;
+		if (pKeysBuffer[VK_UP] & 0xF0)
+		{
+			dwDirection |= DIR_FORWARD;
+			//m_pPlayer->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
+
+		}
 		if (pKeysBuffer[VK_DOWN] & 0xF0) dwDirection |= DIR_BACKWARD;
 		if (pKeysBuffer[VK_LEFT] & 0xF0) dwDirection |= DIR_LEFT;
 		if (pKeysBuffer[VK_RIGHT] & 0xF0) dwDirection |= DIR_RIGHT;
@@ -457,8 +462,10 @@ void CGameFramework::ProcessInput()
 			dwDirection |= DIR_JUMP;
 
 			m_pPlayer->SetPlayerState(CPlayer::PlayerState::JUMP);
-		}
+			m_pPlayer->m_pAnimationController->SetTrackPosition(0, 0);
 
+		}
+		
 
 		float cxDelta = 0.0f, cyDelta = 0.0f;
 		POINT ptCursorPos;

@@ -334,7 +334,7 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			{
 				m_fPosition = 0.0f;
 				oncePosition = 0.0f;
-				maxLength = 0.0f;
+				//maxLength = 0.0f;
 			}
 			//CPlayer::m_PlayerState = CPlayer::PlayerState::IDLE;
 			//CPlayer::SetPlayerState(IDLE);

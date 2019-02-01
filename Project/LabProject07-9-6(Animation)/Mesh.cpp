@@ -8,6 +8,7 @@
 
 CMesh::CMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
+	//SetOOBB(m_xmf3AABBCenter,m_xmf3AABBExtents,)
 }
 
 CMesh::~CMesh()
