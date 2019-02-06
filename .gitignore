@@ -4,3 +4,9 @@ Project/LabProject07-9-5(Animation)/.vs/LabProject07-9-5(Animation)/v15/.suo
 *.db
 *.pch
 *.obj
+*.tlog
+*.pdb
+*.idb
+*.res
+*.log
+*.ilk
