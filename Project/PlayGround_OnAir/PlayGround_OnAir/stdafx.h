@@ -38,6 +38,8 @@ using namespace std;
 #ifdef _DEBUG
 #include <dxgidebug.h>
 #endif
+#include "SingleTon.h"
+#include "CPlayerManager.h"
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -70,6 +72,8 @@ extern ID3D12Resource *CreateBufferResource(ID3D12Device *pd3dDevice, ID3D12Grap
 extern ID3D12Resource *CreateTextureResourceFromDDSFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, wchar_t *pszFileName, ID3D12Resource **ppd3dUploadBuffer, D3D12_RESOURCE_STATES d3dResourceStates = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, wchar_t *pszFileName, ID3D12Resource **ppd3dUploadBuffer, D3D12_RESOURCE_STATES d3dResourceStates = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
+#define PLAYER	 CPlayerManager::GetInstance()
+#define FRAMEWORK	 CGameFramework::GetInstance()
 
 
 #define RANDOM_COLOR			XMFLOAT4(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX))

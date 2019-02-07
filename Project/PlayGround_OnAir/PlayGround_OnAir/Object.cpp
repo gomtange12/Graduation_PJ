@@ -338,7 +338,7 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			}
 			//CPlayer::m_PlayerState = CPlayer::PlayerState::IDLE;
 			//CPlayer::SetPlayerState(IDLE);
-			//m_pPlayer->SetPlayerState(m_pPlayer->PlayerState::IDLE);
+			//PLAYER->GetPlayer()->SetPlayerState(PLAYER->GetPlayer()->PlayerState::IDLE);
 
 			break;
 		case ANIMATION_TYPE_PINGPONG:

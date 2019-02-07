@@ -7,7 +7,7 @@
 #include "Player.h"
 #include "Scene.h"
 
-class CGameFramework
+class CGameFramework //: public CSingleTonBase<CGameFramework>
 {
 public:
 	CGameFramework();
@@ -81,7 +81,7 @@ private:
 	CGameTimer					m_GameTimer;
 
 	CScene						*m_pScene = NULL;
-	CPlayer						*m_pPlayer = NULL;
+	//CPlayer						*m_pPlayer = NULL;
 	CCamera						*m_pCamera = NULL;
 
 	POINT						m_ptOldCursorPos;
