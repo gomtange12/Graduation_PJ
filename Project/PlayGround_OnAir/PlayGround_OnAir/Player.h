@@ -13,10 +13,10 @@
 class CPlayer : public CGameObject
 {
 protected:
-	XMFLOAT3					m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	XMFLOAT3					m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);
-	XMFLOAT3					m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	XMFLOAT3					m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	XMFLOAT3					m_xmf3Position;// = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	XMFLOAT3					m_xmf3Right;// = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	XMFLOAT3					m_xmf3Up;// = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	XMFLOAT3					m_xmf3Look;// = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 	XMFLOAT3					m_xmf3Scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
 
@@ -33,26 +33,27 @@ protected:
 	LPVOID						m_pPlayerUpdatedContext = NULL;
 	LPVOID						m_pCameraUpdatedContext = NULL;
 
-	CCamera						*m_pCamera = NULL;
+	//CCamera						*m_pCamera = NULL;
 	//이넘만들기
 	
+	std::shared_ptr<CCamera>	m_pCamera;
+
 public:
-	//static int m_PlayerState;
-	//const enum eState { IDLE = 0, WALKFRONT, RUNFAST, RUNBACKWARD, ATTACK, DIGGING /*땅 파기*/, ICE, NOTYET /*미정*/ };
-	static enum PlayerState {
-		IDLE,
-		RUN,
-		JUMP
-	};
-	static int m_PlayerState;
+	std::shared_ptr<CCamera> GetCamera() { return(m_pCamera); }
+	virtual void SetCamera(std::shared_ptr<CCamera> pCamera) { m_pCamera = pCamera; }
+
+	
+	int m_PlayerState = IDLE;
 
 	CPlayer();
+	CPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+
 	virtual ~CPlayer();
 	int GetPlayerState() { return m_PlayerState; }
 	void SetPlayerState(PlayerState state) { m_PlayerState = state; }
 	XMFLOAT3 GetPosition() { return(m_xmf3Position); }
 	XMFLOAT3 GetLookVector() { return(m_xmf3Look); }
-	XMFLOAT3 GetUpVector() { return(m_xmf3Up); }
+	XMFLOAT3 GetUpVector() { return(XMFLOAT3(0, 1, 0)); }
 	XMFLOAT3 GetRightVector() { return(m_xmf3Right); }
 
 	void SetFriction(float fFriction) { m_fFriction = fFriction; }
@@ -69,8 +70,8 @@ public:
 	float GetPitch() const { return(m_fPitch); }
 	float GetRoll() const { return(m_fRoll); }
 
-	CCamera *GetCamera() { return(m_pCamera); }
-	void SetCamera(CCamera *pCamera) { m_pCamera = pCamera; }
+	/*CCamera *GetCamera() { return(m_pCamera); }
+	void SetCamera(CCamera *pCamera) { m_pCamera = pCamera; }*/
 
 	void Move(ULONG nDirection, float fDistance, bool bVelocity = false);
 	void Move(const XMFLOAT3& xmf3Shift, bool bVelocity = false);
@@ -89,11 +90,12 @@ public:
 	virtual void ReleaseShaderVariables();
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 
-	CCamera *OnChangeCamera(DWORD nNewCameraMode, DWORD nCurrentCameraMode);
+	//CCamera *OnChangeCamera(DWORD nNewCameraMode, DWORD nCurrentCameraMode);
+	std::shared_ptr<CCamera>  OnChangeCamera(DWORD nNewCameraMode, DWORD nCurrentCameraMode);
 
-	virtual CCamera *ChangeCamera(DWORD nNewCameraMode, float fTimeElapsed) { return(NULL); }
+	virtual std::shared_ptr<CCamera> ChangeCamera(DWORD nNewCameraMode, float fTimeElapsed);
 	virtual void OnPrepareRender();
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera = NULL);
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
 
 	
 };
@@ -112,7 +114,7 @@ private:
 	virtual void Animate(float fTimeElapsed);
 
 public:
-	virtual CCamera *ChangeCamera(DWORD nNewCameraMode, float fTimeElapsed);
+	virtual std::shared_ptr<CCamera> ChangeCamera(DWORD nNewCameraMode, float fTimeElapsed);
 	virtual void OnPrepareRender();
 };
 
@@ -133,7 +135,7 @@ public:
 	virtual ~CTerrainPlayer();
 
 public:
-	virtual CCamera *ChangeCamera(DWORD nNewCameraMode, float fTimeElapsed);
+	virtual std::shared_ptr<CCamera> ChangeCamera(DWORD nNewCameraMode, float fTimeElapsed);
 
 	virtual void OnPlayerUpdateCallback(float fTimeElapsed);
 	virtual void OnCameraUpdateCallback(float fTimeElapsed);

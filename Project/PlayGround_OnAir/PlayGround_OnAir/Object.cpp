@@ -308,15 +308,15 @@ void *CAnimationSet::GetCallbackData()
 
 void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 {
-	float maxLength = m_fLength-0.18f;
-	float fPosition = 0.0f;
-
-	m_fPosition = fTrackPosition;
+	
+	maxLength = m_fLength - 0.18f;
+	//fPosition = 0.0f;
 	switch (m_nType)
 	{
 		case ANIMATION_TYPE_LOOP:
 		{
-#ifdef _WITH_ANIMATION_INTERPOLATION			
+#ifdef _WITH_ANIMATION_INTERPOLATION	
+			m_fPosition = fTrackPosition;
 			m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]); //원래꺼
 		  
 			// m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
@@ -329,12 +329,17 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			break;
 		}
 		case ANIMATION_TYPE_ONCE:
-			m_fPosition = fmin(oncePosition, maxLength);
+			//m_fPosition = fTrackPosition;
+			m_fPosition += 0.0018;
+			//m_fPosition += fDelta * speed; 프레임 고정시
 			if (m_fPosition >= maxLength)
 			{
-				m_fPosition = 0.0f;
+ 				m_fPosition = 0.0f;
+				//fPosition = 0.0f;
+				
 				oncePosition = 0.0f;
 				//maxLength = 0.0f;
+ 				PLAYER->GetPlayer()->SetPlayerState(IDLE);
 			}
 			//CPlayer::m_PlayerState = CPlayer::PlayerState::IDLE;
 			//CPlayer::SetPlayerState(IDLE);
@@ -534,13 +539,15 @@ void CAnimationController::AdvanceTime(float fTimeElapsed)
 	//		{
 	//			for (int i = 0; i < m_pAnimationSets->m_nAnimationFrames; i++)
 	//			{
-	//				m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i);//Matrix4x4::Add(m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent, Matrix4x4::Scale(m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i), m_pAnimationTracks[j].m_fWeight));
+	//				//m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i);//Matrix4x4::Add(m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent, Matrix4x4::Scale(m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i), m_pAnimationTracks[j].m_fWeight));
 
-	//				//m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = Matrix4x4::Add(m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent, Matrix4x4::Scale(m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i), m_pAnimationTracks[j].m_fWeight));
+	//				m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = Matrix4x4::Add(m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent, Matrix4x4::Scale(m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i), m_pAnimationTracks[j].m_fWeight));
 	//			}
 	//		}
 	//	}
 	//}
+
+
 	m_fTime += fTimeElapsed;
 	if (m_pAnimationSets && m_pAnimationTracks)
 	{
@@ -555,13 +562,15 @@ void CAnimationController::AdvanceTime(float fTimeElapsed)
 
 			CAnimationSet *pAnimationSet = m_pAnimationTracks[j].m_pAnimationSet;
 			pAnimationSet->m_fPosition += (fTimeElapsed * m_pAnimationTracks[j].m_fSpeed);
-			m_pAnimationTracks[j].m_pAnimationSet->SetPosition(m_pAnimationTracks[j].m_fPosition, pAnimationSet->m_fPosition);
 			//m_pAnimationTracks[j].m_pAnimationSet->m_fLength;
+			m_pAnimationTracks[j].m_pAnimationSet->SetPosition(m_pAnimationTracks[j].m_fPosition, pAnimationSet->m_fPosition);
 			if (m_pAnimationTracks[j].m_bEnable)
 			{
 				for (int i = 0; i < m_pAnimationSets->m_nAnimationFrames; i++)
 				{
 					m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i);//Matrix4x4::Add(m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent, Matrix4x4::Scale(m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i), m_pAnimationTracks[j].m_fWeight));
+
+					//m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent = m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i);//Matrix4x4::Add(m_pAnimationSets->m_ppAnimationFrameCaches[i]->m_xmf4x4ToParent, Matrix4x4::Scale(m_pAnimationTracks[j].m_pAnimationSet->GetSRT(i), m_pAnimationTracks[j].m_fWeight));
 				}
 			}
 		}
@@ -712,7 +721,7 @@ void CGameObject::Animate(float fTimeElapsed)
 	if (m_pChild) m_pChild->Animate(fTimeElapsed);
 }
 
-void CGameObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera)
+void CGameObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera>pCamera)
 {
 	OnPrepareRender();
 
@@ -1159,7 +1168,7 @@ CAnimationSets *CGameObject::LoadAnimationFromFile(FILE *pInFile, CGameObject *p
 			nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
 			nReads = (UINT)::fread(pAnimationSet->m_pstrName, sizeof(char), nStrLength, pInFile);
 			pAnimationSet->m_pstrName[nStrLength] = '\0';
-			if (!strcmp(pAnimationSet->m_pstrName, "Idle"))
+			if (!strcmp(pAnimationSet->m_pstrName, "Idle") || !strcmp(pAnimationSet->m_pstrName, "idle"))
 			{
 				pAnimationSet->m_nType = ANIMATION_TYPE_LOOP;
 			}
@@ -1336,7 +1345,7 @@ CSkyBox::~CSkyBox()
 {
 }
 
-void CSkyBox::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera)
+void CSkyBox::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera)
 {
 	XMFLOAT3 xmf3CameraPos = pCamera->GetPosition();
 	SetPosition(xmf3CameraPos.x, xmf3CameraPos.y, xmf3CameraPos.z);

@@ -46,7 +46,7 @@ protected:
 
 public:
 	CCamera();
-	CCamera(CCamera *pCamera);
+	CCamera(std::shared_ptr<CCamera> pCamera);
 	virtual ~CCamera();
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
@@ -77,7 +77,7 @@ public:
 	XMFLOAT3& GetLookAtPosition() { return(m_xmf3LookAtWorld); }
 
 	XMFLOAT3& GetRightVector() { return(m_xmf3Right); }
-	XMFLOAT3& GetUpVector() { return(m_xmf3Up); }
+	XMFLOAT3& GetUpVector() { return(XMFLOAT3(0,1,0)); }
 	XMFLOAT3& GetLookVector() { return(m_xmf3Look); }
 
 	float& GetPitch() { return(m_fPitch); }
@@ -98,14 +98,14 @@ public:
 
 	virtual void Move(const XMFLOAT3& xmf3Shift) { m_xmf3Position.x += xmf3Shift.x; m_xmf3Position.y += xmf3Shift.y; m_xmf3Position.z += xmf3Shift.z; }
 	virtual void Rotate(float fPitch = 0.0f, float fYaw = 0.0f, float fRoll = 0.0f) { }
-	virtual void Update(XMFLOAT3& xmf3LookAt, float fTimeElapsed) { }
-	virtual void SetLookAt(XMFLOAT3& xmf3LookAt) { }
+	virtual void Update(XMFLOAT3& xmf3LookAt, float fTimeElapsed);
+	virtual void SetLookAt(XMFLOAT3& xmf3LookAt);
 };
 
 class CSpaceShipCamera : public CCamera
 {
 public:
-	CSpaceShipCamera(CCamera *pCamera);
+	CSpaceShipCamera(std::shared_ptr<CCamera> pCamera);
 	virtual ~CSpaceShipCamera() { }
 
 	virtual void Rotate(float fPitch = 0.0f, float fYaw = 0.0f, float fRoll = 0.0f);
@@ -114,7 +114,7 @@ public:
 class CFirstPersonCamera : public CCamera
 {
 public:
-	CFirstPersonCamera(CCamera *pCamera);
+	CFirstPersonCamera(std::shared_ptr<CCamera> pCamera);
 	virtual ~CFirstPersonCamera() { }
 
 	virtual void Rotate(float fPitch = 0.0f, float fYaw = 0.0f, float fRoll = 0.0f);
@@ -123,7 +123,7 @@ public:
 class CThirdPersonCamera : public CCamera
 {
 public:
-	CThirdPersonCamera(CCamera *pCamera);
+	CThirdPersonCamera( std::shared_ptr<CCamera> pCamera);
 	virtual ~CThirdPersonCamera() { }
 
 	virtual void Update(XMFLOAT3& xmf3LookAt, float fTimeElapsed);

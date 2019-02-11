@@ -77,7 +77,7 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 
 
 #define RANDOM_COLOR			XMFLOAT4(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX))
-
+#define FPS_PERSECOND 60
 #define EPSILON					1.0e-10f
 #define MIRAHEIGHT				10
 inline bool IsZero(float fValue) { return((fabsf(fValue) < EPSILON)); }
@@ -86,7 +86,11 @@ inline bool IsZero(float fValue, float fEpsilon) { return((fabsf(fValue) < fEpsi
 inline bool IsEqual(float fA, float fB, float fEpsilon) { return(::IsZero(fA - fB, fEpsilon)); }
 inline float InverseSqrt(float fValue) { return 1.0f / sqrtf(fValue); }
 inline void Swap(float *pfS, float *pfT) { float fTemp = *pfS; *pfS = *pfT; *pfT = fTemp; }
-
+enum PlayerState {
+	IDLE,
+	RUN,
+	JUMP
+};
 namespace Vector3
 {
 	inline XMFLOAT3 XMVectorToFloat3(XMVECTOR& xmvVector)

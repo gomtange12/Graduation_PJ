@@ -186,7 +186,10 @@
 #include "stdafx.h"
 #include "PlayGround_OnAir.h"
 #include "GameFramework.h"
-
+float m_eTime = 0.0f;
+float m_CurrentTime = 0.0f;
+float m_PrevTime = 0.0f;
+float m_eActine = 0.0f;
 #define MAX_LOADSTRING 100
 
 HINSTANCE						ghAppInstance;
@@ -229,7 +232,16 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 		}
 		else
 		{
-			gGameFramework.FrameAdvance();
+			m_CurrentTime = timeGetTime();
+			
+			m_eTime = m_CurrentTime - m_PrevTime;
+			m_eActine += m_eTime;
+			if (m_eActine > 1 / FPS_PERSECOND)
+			{
+				gGameFramework.FrameAdvance();
+				m_eActine = 0.f;
+			}
+			m_PrevTime = m_CurrentTime;
 		}
 	}
 	gGameFramework.OnDestroy();

@@ -40,6 +40,7 @@ public:
 	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
+	
 
 private:
 	HINSTANCE					m_hInstance;
@@ -82,7 +83,7 @@ private:
 
 	CScene						*m_pScene = NULL;
 	//CPlayer						*m_pPlayer = NULL;
-	CCamera						*m_pCamera = NULL;
+	shared_ptr<CCamera>					m_pCamera = NULL;
 
 	POINT						m_ptOldCursorPos;
 

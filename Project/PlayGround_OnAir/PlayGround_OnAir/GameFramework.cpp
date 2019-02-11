@@ -464,8 +464,8 @@ void CGameFramework::ProcessInput()
 		{
 			dwDirection |= DIR_JUMP;
 
-			PLAYER->GetPlayer()->SetPlayerState(CPlayer::PlayerState::JUMP);
-			PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
+			PLAYER->GetPlayer()->SetPlayerState(JUMP);
+			//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
 
 		}
 		
