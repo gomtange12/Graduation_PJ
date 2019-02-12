@@ -4,7 +4,7 @@
 #include "Player.h"
 CPlayerManager::CPlayerManager()
 {
-	
+	m_pPlayer = nullptr;
 
 }
 

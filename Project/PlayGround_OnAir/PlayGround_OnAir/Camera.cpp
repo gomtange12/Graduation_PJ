@@ -47,6 +47,7 @@ CCamera::CCamera(std::shared_ptr<CCamera> pCamera)
 		m_fTimeLag = 0.0f;
 		m_xmf3LookAtWorld = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		m_nMode = 0x00;
+		//Rotate(51, 1, 1);
 		//m_pPlayer = ;
 	}
 }
@@ -286,6 +287,7 @@ CThirdPersonCamera::CThirdPersonCamera(std::shared_ptr<CCamera> pCamera) : CCame
 	m_nMode = THIRD_PERSON_CAMERA;
 	if (pCamera)
 	{
+		//Rotate(0, 0, 0);
 		if (pCamera->GetMode() == SPACESHIP_CAMERA)
 		{
 			m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);

@@ -309,17 +309,18 @@ void *CAnimationSet::GetCallbackData()
 void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 {
 	
-	maxLength = m_fLength - 0.18f;
+	maxLength = m_fLength;// -0.18f;
 	//fPosition = 0.0f;
+	float m_fLooftoOnce = 0.f;
 	switch (m_nType)
 	{
 		case ANIMATION_TYPE_LOOP:
 		{
 #ifdef _WITH_ANIMATION_INTERPOLATION	
 			m_fPosition = fTrackPosition;
-			m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]); //원래꺼
+			 m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]); //원래꺼
 		  
-			// m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
+			 //m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
 			//m_fPosition = fmod(fTrackPosition, m_fLength); if (m_fPosition < 0) m_fPosition += m_fLength;
 			//m_fPosition = fTrackPosition - int(fTrackPosition / m_fLength) * m_fLength;
 #else
@@ -330,13 +331,15 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 		}
 		case ANIMATION_TYPE_ONCE:
 			//m_fPosition = fTrackPosition;
+			//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //원래꺼
 			m_fPosition += 0.0018;
-			//m_fPosition += fDelta * speed; 프레임 고정시
+
+			//sol) m_fPosition += fDelta * speed; 프레임 고정시
 			if (m_fPosition >= maxLength)
 			{
  				m_fPosition = 0.0f;
 				//fPosition = 0.0f;
-				
+				//fTrackPosition = 0.f;
 				oncePosition = 0.0f;
 				//maxLength = 0.0f;
  				PLAYER->GetPlayer()->SetPlayerState(IDLE);
