@@ -44,6 +44,10 @@
 //	SetCameraUpdatedContext(pContext);
 //}
 
+void CPlayer::MakeCamera()
+{
+}
+
 CPlayer::CPlayer()
 {
 
@@ -51,7 +55,7 @@ CPlayer::CPlayer()
 
 CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
-	//m_pCamera = std::make_shared<CCamera>();
+	m_pCamera = std::make_shared<CCamera>();
 	//m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
 
 	//m_pCamera = ChangeCamera(/*SPACESHIP_CAMERA*/THIRD_PERSON_CAMERA, 0.0f);
@@ -77,10 +81,11 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	m_pPlayerUpdatedContext = NULL;
 	m_pCameraUpdatedContext = NULL;
 	m_PlayerState = PlayerState::IDLE;
-	/*CreateShaderVariables(pd3dDevice, pd3dCommandList);
+
+	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
 	SetPlayerUpdatedContext(pContext);
-	SetCameraUpdatedContext(pContext);*/
+	SetCameraUpdatedContext(pContext);
 }
 
 CPlayer::~CPlayer()
@@ -126,14 +131,17 @@ void CPlayer::Move(DWORD dwDirection, float fDistance, bool bUpdateVelocity)
 
 void CPlayer::Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity)
 {
-	if (bUpdateVelocity)
+	if (PLAYER->GetPlayer()!=nullptr)
 	{
-		m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
-	}
-	else
-	{
-		m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
-		m_pCamera->Move(xmf3Shift);
+		if (bUpdateVelocity)
+		{
+			m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
+		}
+		else
+		{
+			m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
+			m_pCamera->Move(xmf3Shift);
+		}
 	}
 }
 
@@ -215,12 +223,15 @@ void CPlayer::Update(float fTimeElapsed)
 
 	if (m_pPlayerUpdatedContext) OnPlayerUpdateCallback(fTimeElapsed);
 	
-	DWORD nCurrentCameraMode = m_pCamera->GetMode();
-	if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->Update(m_xmf3Position, fTimeElapsed);
-	if (m_pCameraUpdatedContext) OnCameraUpdateCallback(fTimeElapsed);
-	if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->SetLookAt(m_xmf3Position);
-	m_pCamera->RegenerateViewMatrix();
-	m_pCamera = ChangeCamera(/*SPACESHIP_CAMERA*/THIRD_PERSON_CAMERA, 0.0f);
+	if (PLAYER->GetPlayer())
+	{
+		DWORD nCurrentCameraMode = m_pCamera->GetMode();
+		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->Update(m_xmf3Position, fTimeElapsed);
+		if (m_pCameraUpdatedContext) OnCameraUpdateCallback(fTimeElapsed);
+		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->SetLookAt(m_xmf3Position);
+		m_pCamera->RegenerateViewMatrix();
+		m_pCamera = ChangeCamera(/*SPACESHIP_CAMERA*/THIRD_PERSON_CAMERA, 0.0f);
+	}
 
 	//m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 
@@ -341,7 +352,8 @@ std::shared_ptr<CCamera> CPlayer::ChangeCamera(DWORD nNewCameraMode, float fTime
 		SetMaxVelocityY(20.0f);
 		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
 		m_pCamera->SetTimeLag(0.25f);
-		m_pCamera->SetOffset(XMFLOAT3(0.0f, 15.0f, -10.0f));
+		m_pCamera->Rotate(0, -50, 0);
+		m_pCamera->SetOffset(XMFLOAT3(0.0f, 55.0f, -10.0f));
 		m_pCamera->SetPosition(Vector3::Add(m_xmf3Position, m_pCamera->GetOffset()));
 		m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 		m_pCamera->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
@@ -507,7 +519,8 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	m_fPitch = 0.0f;
 	m_fRoll = 0.0f;
 	m_fYaw = 0.0f;*/
-	//m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
+	if (this!=nullptr)
+		m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
 
 	CLoadedModelInfo *pAngrybotModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);
 	
@@ -530,10 +543,14 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	CAnimationCallbackHandler *pAnimationCallbackHandler = new CSoundCallbackHandler();
 	m_pAnimationController->SetAnimationCallbackHandler(1, pAnimationCallbackHandler);
 
+	if (PLAYER->GetPlayer())
+	{
+
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	
 	SetPlayerUpdatedContext(pContext);
 	SetCameraUpdatedContext(pContext);
+	}
 
 	if (pAngrybotModel) delete pAngrybotModel;
 }
@@ -580,6 +597,7 @@ std::shared_ptr<CCamera> CTerrainPlayer::ChangeCamera(DWORD nNewCameraMode, floa
 			m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
 			m_pCamera->SetTimeLag(0.25f);
 			m_pCamera->SetOffset(XMFLOAT3(0.0f, 20.0f, -50.0f));
+			//m_pCamera->Rotate(0, 0, 0);
 			m_pCamera->SetPosition(Vector3::Add(m_xmf3Position, m_pCamera->GetOffset()));
 			m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 			m_pCamera->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
