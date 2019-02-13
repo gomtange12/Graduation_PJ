@@ -90,6 +90,7 @@ public:
 	CMaterial(int nTextures);
 	virtual ~CMaterial();
 
+	
 private:
 	int								m_nReferences = 0;
 
@@ -337,6 +338,8 @@ public:
 	ID3D12Resource					**m_ppd3dcbBoneTransforms = NULL;
 	XMFLOAT4X4						**m_ppcbxmf4x4BoneTransforms = NULL;
 
+	
+
 public:
 	void SetSkinnedMesh(int nIndex, CSkinnedMesh *pSkinnedMesh) { m_ppSkinnedMeshes[nIndex] = pSkinnedMesh; }
 
@@ -446,6 +449,16 @@ public:
 	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, char *pstrFileName, CShader *pShader, bool bHasAnimation);
 
 	static void PrintFrameInfo(CGameObject *pGameObject, CGameObject *pParent);
+
+
+	//¼öÁ¤
+public:
+	BoundingOrientedBox		m_xmOOBB;
+	BoundingOrientedBox		m_xmOOBBTransformed;
+
+	void SetOOBB(XMFLOAT3& xmCenter, XMFLOAT3& xmExtents, XMFLOAT4& xmOrientation) {
+		m_xmOOBBTransformed = m_xmOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation);
+	}
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
