@@ -251,7 +251,7 @@ CFirstPersonCamera::CFirstPersonCamera(std::shared_ptr<CCamera> pCamera) : CCame
 
 void CFirstPersonCamera::Rotate(float x, float y, float z)
 {
-	if (x != 0.0f)
+	if (PLAYER->GetPlayer() && x != 0.0f)
 	{
 		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Right), XMConvertToRadians(x));
 		m_xmf3Look = Vector3::TransformNormal(m_xmf3Look, xmmtxRotate);

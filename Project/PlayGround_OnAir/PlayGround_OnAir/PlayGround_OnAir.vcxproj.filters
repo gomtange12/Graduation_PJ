@@ -16,6 +16,9 @@
     <Filter Include="헤더 파일\PlayerManager">
       <UniqueIdentifier>{a4826e22-21b3-4acf-8be6-b3f2c10d8bb3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\NewFilter1">
+      <UniqueIdentifier>{013eab81-5931-4f51-8bd4-a150b7178a7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -69,6 +72,12 @@
     <ClInclude Include="SingleTon.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="CState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CInputManager.h">
+      <Filter>소스 파일\NewFilter1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -112,6 +121,12 @@
     </ClCompile>
     <ClCompile Include="CPlayerManager.cpp">
       <Filter>헤더 파일\PlayerManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CInputManager.cpp">
+      <Filter>소스 파일\NewFilter1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

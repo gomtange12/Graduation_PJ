@@ -42,7 +42,7 @@ public:
 	std::shared_ptr<CCamera> GetCamera() { return(m_pCamera); }
 	virtual void SetCamera(std::shared_ptr<CCamera> pCamera) { m_pCamera = pCamera; }
 
-	void MakeCamera();
+	
 	int m_PlayerState = IDLE;
 
 	CPlayer();
@@ -53,7 +53,7 @@ public:
 	void SetPlayerState(PlayerState state) { m_PlayerState = state; }
 	XMFLOAT3 GetPosition() { return(m_xmf3Position); }
 	XMFLOAT3 GetLookVector() { return(m_xmf3Look); }
-	XMFLOAT3 GetUpVector() { return(XMFLOAT3(0, 1, 0)); }
+	XMFLOAT3 GetUpVector() { return(m_xmf3Up); }
 	XMFLOAT3 GetRightVector() { return(m_xmf3Right); }
 
 	void SetFriction(float fFriction) { m_fFriction = fFriction; }

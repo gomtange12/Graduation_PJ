@@ -74,6 +74,8 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 
 #define PLAYER	 CPlayerManager::GetInstance()
 #define FRAMEWORK	 CGameFramework::GetInstance()
+#define INPUTMANAGER	 CGameFramework::GetInstance()
+
 
 
 #define RANDOM_COLOR			XMFLOAT4(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX))
@@ -89,7 +91,17 @@ inline void Swap(float *pfS, float *pfT) { float fTemp = *pfS; *pfS = *pfT; *pfT
 enum PlayerState {
 	IDLE,
 	RUN,
-	JUMP
+	JUMP,
+	DEATH,
+	STUN,
+	HIT,
+	JUMPROLL,
+	RUN_JUMP_ATTAK,
+	KICK,
+	ATTACK,
+	HAPPY,
+	SAD,
+	BACK_RUN
 };
 namespace Vector3
 {

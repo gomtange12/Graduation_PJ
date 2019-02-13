@@ -232,16 +232,16 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 		}
 		else
 		{
-			m_CurrentTime = timeGetTime();
+			/*m_CurrentTime = timeGetTime(); 
 			
 			m_eTime = m_CurrentTime - m_PrevTime;
 			m_eActine += m_eTime;
 			if (m_eActine > 1 / FPS_PERSECOND)
-			{
+			{*/
 				gGameFramework.FrameAdvance();
-				m_eActine = 0.f;
+				/*m_eActine = 0.f;
 			}
-			m_PrevTime = m_CurrentTime;
+			m_PrevTime = m_CurrentTime;*/
 		}
 	}
 	gGameFramework.OnDestroy();
