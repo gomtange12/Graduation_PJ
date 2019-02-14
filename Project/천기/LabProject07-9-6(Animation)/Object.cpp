@@ -642,6 +642,11 @@ CGameObject *CGameObject::GetRootSkinnedGameObject()
 void CGameObject::UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent)
 {
 	m_xmf4x4World = (pxmf4x4Parent) ? Matrix4x4::Multiply(m_xmf4x4ToParent, *pxmf4x4Parent) : m_xmf4x4ToParent;
+	
+	//수정
+	m_xmOOBB.Transform(m_xmOOBB, XMLoadFloat4x4(&m_xmf4x4World));
+	XMStoreFloat4(&m_xmOOBB.Orientation, XMQuaternionNormalize(XMLoadFloat4(&m_xmOOBB.Orientation)));
+	//
 
 	if (m_pSibling) m_pSibling->UpdateTransform(pxmf4x4Parent);
 	if (m_pChild) m_pChild->UpdateTransform(&m_xmf4x4World);
@@ -1000,14 +1005,9 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			CStandardMesh *pMesh = new CStandardMesh(pd3dDevice, pd3dCommandList);
 			
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
-			nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
-			nReads = (UINT)::fread(pstrToken, sizeof(char), nStrLength, pInFile);
-			pstrToken[nStrLength] = '\0';
-
-			if (!strcmp(pstrToken, "keytar"))
-			{
-				nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
-			}
+			//수정
+			pGameObject->SetOOBB(pMesh->GetOOBBCenter(), pMesh->GetOOBBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+			// 크기 조정해줘야함 무기 크기만큼
 			pGameObject->SetMesh(pMesh);
 		}
 		else if (!strcmp(pstrToken, "<SkinningInfo>:"))
@@ -1411,6 +1411,8 @@ void CAngrybotObject::OnPrepareAnimate()
 void CAngrybotObject::Animate(float fTimeElapsed)
 {
 	CGameObject::Animate(fTimeElapsed);
+
+	
 }
 
 

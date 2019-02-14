@@ -454,11 +454,11 @@ public:
 	//¼öÁ¤
 public:
 	BoundingOrientedBox		m_xmOOBB;
-	BoundingOrientedBox		m_xmOOBBTransformed;
 
 	void SetOOBB(XMFLOAT3& xmCenter, XMFLOAT3& xmExtents, XMFLOAT4& xmOrientation) {
-		m_xmOOBBTransformed = m_xmOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation);
+		m_xmOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation);
 	}
+	//
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

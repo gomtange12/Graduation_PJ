@@ -435,7 +435,6 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 	nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
 	nReads = (UINT)::fread(m_pstrMeshName, sizeof(char), nStrLength, pInFile);
 	m_pstrMeshName[nStrLength] = '\0';
-	
 
 	for ( ; ; )
 	{
@@ -447,7 +446,13 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 		{
 			nReads = (UINT)::fread(&m_xmf3AABBCenter, sizeof(XMFLOAT3), 1, pInFile);
 			nReads = (UINT)::fread(&m_xmf3AABBExtents, sizeof(XMFLOAT3), 1, pInFile);
-		
+			
+			//¼öÁ¤
+			if (!strcmp(m_pstrMeshName, "keytar"))
+			{
+				m_xmf3OOBBCenter = m_xmf3AABBCenter;
+				m_xmf3OOBBExtents = m_xmf3AABBExtents;
+			}
 		}
 		else if (!strcmp(pstrToken, "<Positions>:"))
 		{
@@ -591,6 +596,7 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 				}
 			}
 		}
+		
 		else if (!strcmp(pstrToken, "</Mesh>"))
 		{
 			break;
