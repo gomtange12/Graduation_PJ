@@ -1005,9 +1005,13 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			CStandardMesh *pMesh = new CStandardMesh(pd3dDevice, pd3dCommandList);
 			
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
+
 			//수정
-			pGameObject->SetOOBB(pMesh->GetOOBBCenter(), pMesh->GetOOBBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
-			// 크기 조정해줘야함 무기 크기만큼
+			if (!strcmp(pstrToken, "keytar"))  //기타오브젝트인걸 어케알지?
+			{
+				pGameObject->SetOOBB(pMesh->GetOOBBCenter(), pMesh->GetOOBBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+				// 크기 조정해줘야함 무기 크기만큼
+			}
 			pGameObject->SetMesh(pMesh);
 		}
 		else if (!strcmp(pstrToken, "<SkinningInfo>:"))

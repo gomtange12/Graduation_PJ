@@ -62,6 +62,10 @@ public:
     void Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera=NULL);
 
 	void ReleaseUploadBuffers();
+	
+	//¼öÁ¤
+	void CheckObjectByObjectCollisions();
+	//
 
 	CPlayer								*m_pPlayer = NULL;
 

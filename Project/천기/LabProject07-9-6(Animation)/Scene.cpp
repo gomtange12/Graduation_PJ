@@ -577,3 +577,41 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera
 	for (int i = 0; i < m_nShaders; i++) if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 }
 
+void CheckObjectByObjectCollisions() {
+	/*for (int i = 0; i < m_nObjects; i++) m_ppObjects[i]->m_pObjectCollided = NULL;
+
+	for (int i = 0; i < m_nObjects; i++)
+	{
+		for (int j = (i + 1); j < m_nObjects; j++)
+		{
+			if (m_ppObjects[i]->m_bActive == true) {
+				if (m_ppObjects[i]->m_xmOOBB.Intersects(m_ppObjects[j]->m_xmOOBB))
+				{
+					m_ppObjects[j]->m_pObjectCollided = m_ppObjects[i];
+				}
+				if (m_pBossObject->m_xmOOBB.Intersects(m_ppObjects[i]->m_xmOOBB))
+				{
+					m_pBossObject->m_pObjectCollided = m_ppObjects[j];
+					m_ppObjects[j]->m_pObjectCollided = m_pBossObject;
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < m_nObjects; i++)
+	{
+		if (m_ppObjects[i]->m_bActive == true) {
+			if (m_ppObjects[i]->m_pObjectCollided)
+			{
+				XMFLOAT3 xmf3MovingDirection = m_ppObjects[i]->m_xmf3MovingDirection;
+				float fMovingSpeed = m_ppObjects[i]->m_fMovingSpeed;
+				m_ppObjects[i]->m_xmf3MovingDirection = m_ppObjects[i]->m_pObjectCollided->m_xmf3MovingDirection;
+				m_ppObjects[i]->m_fMovingSpeed = m_ppObjects[i]->m_pObjectCollided->m_fMovingSpeed;
+				m_ppObjects[i]->m_pObjectCollided->m_xmf3MovingDirection = xmf3MovingDirection;
+				m_ppObjects[i]->m_pObjectCollided->m_fMovingSpeed = fMovingSpeed;
+				m_ppObjects[i]->m_pObjectCollided->m_pObjectCollided = NULL;
+				m_ppObjects[i]->m_pObjectCollided = NULL;
+			}
+		}
+	}*/
+}

@@ -452,6 +452,7 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 			{
 				m_xmf3OOBBCenter = m_xmf3AABBCenter;
 				m_xmf3OOBBExtents = m_xmf3AABBExtents;
+
 			}
 		}
 		else if (!strcmp(pstrToken, "<Positions>:"))
