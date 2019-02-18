@@ -424,7 +424,7 @@ void CStandardMesh::ReleaseUploadBuffers()
 	m_pd3dBiTangentUploadBuffer = NULL;
 }
 
-void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile)
+void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile, CGameObject *pGameObject)
 {
 	char pstrToken[64] = { '\0' };
 	BYTE nStrLength = 0;
@@ -446,14 +446,15 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 		{
 			nReads = (UINT)::fread(&m_xmf3AABBCenter, sizeof(XMFLOAT3), 1, pInFile);
 			nReads = (UINT)::fread(&m_xmf3AABBExtents, sizeof(XMFLOAT3), 1, pInFile);
-			
-			//수정
+			//pGameObject->SetOOBB(m_xmf3AABBCenter, m_xmf3AABBExtents, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+			// 수정
+			// 무기마다 설정값이 다르니까 따로 if문 만들어 줘야함
 			if (!strcmp(m_pstrMeshName, "keytar"))
 			{
-				m_xmf3OOBBCenter = m_xmf3AABBCenter;
-				m_xmf3OOBBExtents = m_xmf3AABBExtents;
-
+				//m_xmf3AABBExtents.y + 20; //테스트용
+				pGameObject->SetOOBB(m_xmf3AABBCenter, m_xmf3AABBExtents, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 			}
+			
 		}
 		else if (!strcmp(pstrToken, "<Positions>:"))
 		{

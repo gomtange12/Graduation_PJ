@@ -546,6 +546,7 @@ void CScene::AnimateObjects(float fTimeElapsed)
 		m_pLights[1].m_xmf3Position = m_pPlayer->GetPosition();
 		m_pLights[1].m_xmf3Direction = m_pPlayer->GetLookVector();
 	}
+	CheckObjectByObjectCollisions();
 }
 
 void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera)
@@ -573,45 +574,15 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera
 			m_ppGameObjects[i]->Render(pd3dCommandList, pCamera);
 		}
 	}
-
 	for (int i = 0; i < m_nShaders; i++) if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
+	
 }
 
-void CheckObjectByObjectCollisions() {
-	/*for (int i = 0; i < m_nObjects; i++) m_ppObjects[i]->m_pObjectCollided = NULL;
-
-	for (int i = 0; i < m_nObjects; i++)
+//수정
+void CScene::CheckObjectByObjectCollisions() {
+	//체크는되는듯한데 왜 중단점이 안되지?
+	if (m_pPlayer->m_xmOOBB.Intersects(m_ppGameObjects[0]->m_xmOOBB))
 	{
-		for (int j = (i + 1); j < m_nObjects; j++)
-		{
-			if (m_ppObjects[i]->m_bActive == true) {
-				if (m_ppObjects[i]->m_xmOOBB.Intersects(m_ppObjects[j]->m_xmOOBB))
-				{
-					m_ppObjects[j]->m_pObjectCollided = m_ppObjects[i];
-				}
-				if (m_pBossObject->m_xmOOBB.Intersects(m_ppObjects[i]->m_xmOOBB))
-				{
-					m_pBossObject->m_pObjectCollided = m_ppObjects[j];
-					m_ppObjects[j]->m_pObjectCollided = m_pBossObject;
-				}
-			}
-		}
+		m_ppGameObjects[0]->SetPosition(0, 0, 0);
 	}
-
-	for (int i = 0; i < m_nObjects; i++)
-	{
-		if (m_ppObjects[i]->m_bActive == true) {
-			if (m_ppObjects[i]->m_pObjectCollided)
-			{
-				XMFLOAT3 xmf3MovingDirection = m_ppObjects[i]->m_xmf3MovingDirection;
-				float fMovingSpeed = m_ppObjects[i]->m_fMovingSpeed;
-				m_ppObjects[i]->m_xmf3MovingDirection = m_ppObjects[i]->m_pObjectCollided->m_xmf3MovingDirection;
-				m_ppObjects[i]->m_fMovingSpeed = m_ppObjects[i]->m_pObjectCollided->m_fMovingSpeed;
-				m_ppObjects[i]->m_pObjectCollided->m_xmf3MovingDirection = xmf3MovingDirection;
-				m_ppObjects[i]->m_pObjectCollided->m_fMovingSpeed = fMovingSpeed;
-				m_ppObjects[i]->m_pObjectCollided->m_pObjectCollided = NULL;
-				m_ppObjects[i]->m_pObjectCollided = NULL;
-			}
-		}
-	}*/
 }
