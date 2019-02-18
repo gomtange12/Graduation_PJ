@@ -53,8 +53,9 @@ CPlayer::CPlayer()
 
 CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
+	//if(PLAYER->GetPlayer()!=NULL)
 	m_pCamera = std::make_shared<CCamera>();
-	
+	//m_pCamera->Rotate(90, 0, 0);
 	//m_pCamera = ChangeCamera(/*SPACESHIP_CAMERA*/THIRD_PERSON_CAMERA, 0.0f);
 	//11m_pCamera->SetMode(THIRD_PERSON_CAMERA);
 	//m_pCamera->GenerateProjectionMatrix()
@@ -168,7 +169,7 @@ void CPlayer::Rotate(float x, float y, float z)
 			if (m_fRoll > +20.0f) { z -= (m_fRoll - 20.0f); m_fRoll = +20.0f; }
 			if (m_fRoll < -20.0f) { z -= (m_fRoll + 20.0f); m_fRoll = -20.0f; }
 		}
-		m_pCamera->Rotate(x, y, z);
+		m_pCamera->Rotate(x, y,z);
 		if (y != 0.0f)
 		{
 			XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Up), XMConvertToRadians(y));
@@ -282,6 +283,24 @@ std::shared_ptr<CCamera> CPlayer::OnChangeCamera(DWORD nNewCameraMode, DWORD nCu
 		break;
 	case THIRD_PERSON_CAMERA:
 		pNewCamera = std::make_shared<CThirdPersonCamera>(m_pCamera);
+		//pNewCamera->Rotate(-90, 0, 0);
+
+		SetFriction(250.0f);
+		SetGravity(XMFLOAT3(0.0f, -250.0f, 0.0f));
+		SetMaxVelocityXZ(300.0f);
+		SetMaxVelocityY(400.0f);
+		//pNewCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
+		pNewCamera->SetTimeLag(0.25f);
+		pNewCamera->SetOffset(XMFLOAT3(-3.0f, 100.0f, -15.0f));
+		//pNewCamera->Rotate(0, 90, 0);
+		//pNewCamera->SetLookAt(m_xmf3Position);
+		pNewCamera->SetPosition(Vector3::Add(m_xmf3Position, m_pCamera->GetOffset()));
+		//pNewCamera->Rotate(-90, 0, 0);
+		pNewCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
+		pNewCamera->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
+		pNewCamera->SetScissorRect(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
+		//pNewCamera->Rotate(-90, 0, 0);
+		//pNewCamera->Update();
 		break;
 	}
 	if (nCurrentCameraMode == SPACESHIP_CAMERA)
@@ -301,7 +320,13 @@ std::shared_ptr<CCamera> CPlayer::OnChangeCamera(DWORD nNewCameraMode, DWORD nCu
 		m_xmf3Up = m_pCamera->GetUpVector();
 		m_xmf3Look = m_pCamera->GetLookVector();
 	}
-
+	/*else if ((nNewCameraMode == THIRD_PERSON_CAMERA) && m_pCamera)
+	{
+		m_xmf3Right = m_pCamera->GetRightVector();
+		m_xmf3Up = m_pCamera->GetUpVector();
+		m_xmf3Look = m_pCamera->GetLookVector();
+		m_xmf3Position.y = m_pCamera->GetPosition().y + 500;
+	}*/
 	if (pNewCamera)
 	{
 		pNewCamera->SetMode(nNewCameraMode);
@@ -365,7 +390,7 @@ std::shared_ptr<CCamera> CPlayer::ChangeCamera(DWORD nNewCameraMode, float fTime
 		SetMaxVelocityY(400.0f);
 		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
 		m_pCamera->SetTimeLag(0.25f);
-		m_pCamera->SetOffset(XMFLOAT3(0.0f, 150.0f, -15.0f));
+		m_pCamera->SetOffset(XMFLOAT3(0.0f, 10.0f, -15.0f));
 		m_pCamera->SetPosition(Vector3::Add(m_xmf3Position, m_pCamera->GetOffset()));
 		m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 		m_pCamera->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
@@ -531,8 +556,13 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	m_fPitch = 0.0f;
 	m_fRoll = 0.0f;
 	m_fYaw = 0.0f;*/
-	if (this!=nullptr)
-		m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
+	if (this != nullptr)
+	{
+		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
+		//m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
+
+	}
+
 
 	CLoadedModelInfo *pAngrybotModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);
 	
@@ -571,6 +601,7 @@ CTerrainPlayer::~CTerrainPlayer()
 
 std::shared_ptr<CCamera> CTerrainPlayer::ChangeCamera(DWORD nNewCameraMode, float fTimeElapsed)
 {
+	//if(PLAYER->GetPlayer()!=NULL)
 	DWORD nCurrentCameraMode = (m_pCamera) ? m_pCamera->GetMode() : 0x00;
 	if (nCurrentCameraMode == nNewCameraMode) return(m_pCamera);
 	switch (nNewCameraMode)
@@ -606,9 +637,17 @@ std::shared_ptr<CCamera> CTerrainPlayer::ChangeCamera(DWORD nNewCameraMode, floa
 			SetMaxVelocityY(400.0f);
 			m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
 			m_pCamera->SetTimeLag(0.25f);
-			m_pCamera->SetOffset(XMFLOAT3(0.0f, 20.0f, -50.0f));
+			m_pCamera->SetOffset(XMFLOAT3(0.0f, 10.0f, -50.0f));
 			//m_pCamera->Rotate(0, 0, 0);
+			//if(PLAYER->GetPlayer()==NULL)
+			
 			m_pCamera->SetPosition(Vector3::Add(m_xmf3Position, m_pCamera->GetOffset()));
+		//	m_pCamera->SetPosition(PLAYER->GetPlayer()->GetPosition());
+			//m_pCamera->SetYPosition(PLAYER->GetPlayer()->GetPosition().y + 500);
+			//m_pCamera->SetPosition(
+			//else if (PLAYER->GetPlayer() != NULL)
+			//m_pCamera->SetPosition(m_xmf3Position);
+			//m_pCamera->SetYPosition(m_xmf3Position.y + 1000);
 			m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 			m_pCamera->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
 			m_pCamera->SetScissorRect(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
@@ -647,6 +686,7 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 	CHeightMapTerrain *pTerrain = (CHeightMapTerrain *)m_pCameraUpdatedContext;
 	XMFLOAT3 xmf3Scale = pTerrain->GetScale();
 	XMFLOAT3 xmf3CameraPosition = m_pCamera->GetPosition();
+	//xmf3CameraPosition.y += 500;
 	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;

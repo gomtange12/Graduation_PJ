@@ -420,6 +420,7 @@ void CGameFramework::BuildObjects()
 
 	//m_pScene->m_pPlayer = m_pPlayer;// = pPlayer;// = PLAYER->GetInstance()->GetPlayer();
 	m_pCamera = PLAYER->GetPlayer()->GetCamera();
+	//m_pCamera->SetMode(THIRD_PERSON_CAMERA);
 
 	m_pd3dCommandList->Close();
 	ID3D12CommandList *ppd3dCommandLists[] = { m_pd3dCommandList };

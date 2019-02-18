@@ -410,8 +410,10 @@ public:
 	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, CMaterial *pMaterial);
 
 	virtual void ReleaseUploadBuffers();
-
+	
 	XMFLOAT3 GetPosition();
+	//float	GetYPosition(){return }
+	//void SetYPosition() {position}
 	XMFLOAT3 GetLook();
 	XMFLOAT3 GetUp();
 	XMFLOAT3 GetRight();
