@@ -171,6 +171,9 @@ void CPlayer::Update(float fTimeElapsed)
 	if (fDeceleration > fLength) fDeceleration = fLength;
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 
+
+	
+
 	SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 }
 
