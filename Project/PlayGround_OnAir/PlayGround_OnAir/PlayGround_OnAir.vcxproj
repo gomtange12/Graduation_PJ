@@ -150,7 +150,9 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CInputManager.h" />
     <ClInclude Include="CPlayerManager.h" />
+    <ClInclude Include="CSceneManager.h" />
     <ClInclude Include="CState.h" />
+    <ClInclude Include="CTempScene.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DDSTextureLoader12.h" />
     <ClInclude Include="GameFramework.h" />
@@ -171,7 +173,9 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CInputManager.cpp" />
     <ClCompile Include="CPlayerManager.cpp" />
+    <ClCompile Include="CSceneManager.cpp" />
     <ClCompile Include="CState.cpp" />
+    <ClCompile Include="CTempScene.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp" />
     <ClCompile Include="GameFramework.cpp" />
     <ClCompile Include="Mesh.cpp" />

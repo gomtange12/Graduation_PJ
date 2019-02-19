@@ -74,7 +74,9 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 
 #define PLAYER	 CPlayerManager::GetInstance()
 #define FRAMEWORK	 CGameFramework::GetInstance()
-#define INPUTMANAGER	 CGameFramework::GetInstance()
+#define INPUTMANAGER	 CInputManager::GetInstance()
+#define SCENEMANAGER	 CSceneManager::GetInstance()
+
 
 
 
@@ -102,6 +104,12 @@ enum PlayerState {
 	HAPPY,
 	SAD,
 	BACK_RUN
+};
+enum SceneState {
+	LOADING,
+	MENU,
+	INGAME,
+	GAMEOVER
 };
 namespace Vector3
 {

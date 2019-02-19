@@ -16,8 +16,11 @@
     <Filter Include="헤더 파일\PlayerManager">
       <UniqueIdentifier>{a4826e22-21b3-4acf-8be6-b3f2c10d8bb3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\NewFilter1">
+    <Filter Include="소스 파일\InputManager">
       <UniqueIdentifier>{013eab81-5931-4f51-8bd4-a150b7178a7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\SceneManager">
+      <UniqueIdentifier>{86703a7b-99d0-40cd-8d8c-8a1ac5adb1bb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -76,7 +79,13 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="CInputManager.h">
-      <Filter>소스 파일\NewFilter1</Filter>
+      <Filter>소스 파일\InputManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneManager.h">
+      <Filter>소스 파일\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CTempScene.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -126,7 +135,13 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CInputManager.cpp">
-      <Filter>소스 파일\NewFilter1</Filter>
+      <Filter>소스 파일\InputManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneManager.cpp">
+      <Filter>소스 파일\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CTempScene.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
