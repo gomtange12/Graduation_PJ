@@ -32,7 +32,7 @@ protected:
 	XMFLOAT3						m_xmf3LookAtWorld;
 	XMFLOAT3						m_xmf3Offset;
 	float           				m_fTimeLag;
-
+	
 	XMFLOAT4X4						m_xmf4x4View;
 	XMFLOAT4X4						m_xmf4x4Projection;
 
@@ -84,6 +84,11 @@ public:
 	float& GetPitch() { return(m_fPitch); }
 	float& GetRoll() { return(m_fRoll); }
 	float& GetYaw() { return(m_fYaw); }
+	void SetPitch(float pitch) { m_fPitch = pitch; }
+	void SetRoll(float roll) { m_fRoll = roll; }
+	void SetYaw(float yaw) { m_fYaw = yaw; }
+
+	//void SetCameraRotate(float fPitch, float  fYaw, float fRoll);
 
 	void SetOffset(XMFLOAT3 xmf3Offset) { m_xmf3Offset = xmf3Offset; }
 //	void SetOffset(XMFLOAT3 xmf3Offset) { m_xmf3Offset = xmf3Offset; m_xmf3Position.x += xmf3Offset.x; m_xmf3Position.y += xmf3Offset.y; m_xmf3Position.z += xmf3Offset.z; }
@@ -98,7 +103,7 @@ public:
 	D3D12_RECT GetScissorRect() { return(m_d3dScissorRect); }
 
 	virtual void Move(const XMFLOAT3& xmf3Shift) { m_xmf3Position.x += xmf3Shift.x; m_xmf3Position.y += xmf3Shift.y; m_xmf3Position.z += xmf3Shift.z; }
-	virtual void Rotate(float fPitch = 0.0f, float fYaw = 0.0f, float fRoll = 0.0f);
+	virtual void Rotate(float fPitch = 0.0f, float fYaw = 0.0f, float fRoll = 0.0f) {};
 	virtual void Update(XMFLOAT3& xmf3LookAt, float fTimeElapsed);
 	virtual void SetLookAt(XMFLOAT3& xmf3LookAt);
 };

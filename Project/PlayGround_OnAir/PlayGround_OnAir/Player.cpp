@@ -227,9 +227,9 @@ void CPlayer::Update(float fTimeElapsed)
 	if (PLAYER->GetPlayer()!=nullptr)
 	{
 		DWORD nCurrentCameraMode = m_pCamera->GetMode();
-		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->Update(m_xmf3Position, fTimeElapsed);
+		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->Update(PLAYER->GetPlayer()->GetPosition(), fTimeElapsed);
 		if (m_pCameraUpdatedContext) OnCameraUpdateCallback(fTimeElapsed);
-		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->SetLookAt(m_xmf3Position);
+		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->SetLookAt(PLAYER->GetPlayer()->GetPosition());
 		//m_pCamera = ChangeCamera(/*SPACESHIP_CAMERA*/THIRD_PERSON_CAMERA, 0.0f);
 		m_pCamera->RegenerateViewMatrix();
 	}
@@ -289,11 +289,16 @@ std::shared_ptr<CCamera> CPlayer::OnChangeCamera(DWORD nNewCameraMode, DWORD nCu
 		SetGravity(XMFLOAT3(0.0f, -250.0f, 0.0f));
 		SetMaxVelocityXZ(300.0f);
 		SetMaxVelocityY(400.0f);
+		
 		//pNewCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
 		pNewCamera->SetTimeLag(0.25f);
-		pNewCamera->SetOffset(XMFLOAT3(-3.0f, 100.0f, -15.0f));
+		pNewCamera->SetOffset(XMFLOAT3(-3.0f, 80.0f, -55.0f));
+		//pNewCamera->SetLookAtPosition(m_xmf3Position);
+		//pNewCamera->SET
 		//pNewCamera->Rotate(0, 90, 0);
 		//pNewCamera->SetLookAt(m_xmf3Position);
+		//pNewCamera->SetCameraRotate(0, 90, 0);
+		//pNewCamera->SetLookAt(m_xmf3Up);
 		pNewCamera->SetPosition(Vector3::Add(m_xmf3Position, m_pCamera->GetOffset()));
 		//pNewCamera->Rotate(-90, 0, 0);
 		pNewCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
@@ -302,7 +307,7 @@ std::shared_ptr<CCamera> CPlayer::OnChangeCamera(DWORD nNewCameraMode, DWORD nCu
 		//pNewCamera->Rotate(-90, 0, 0);
 		//pNewCamera->Update();
 		break;
-	}
+	}	
 	if (nCurrentCameraMode == SPACESHIP_CAMERA)
 	{
 		m_xmf3Right = Vector3::Normalize(XMFLOAT3(m_xmf3Right.x, 0.0f, m_xmf3Right.z));
@@ -559,6 +564,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	if (this != nullptr)
 	{
 		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
+		m_pCamera->SetLookAt(m_xmf3Position);
 		//m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
 
 	}
