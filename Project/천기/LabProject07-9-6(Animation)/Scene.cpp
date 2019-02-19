@@ -122,7 +122,6 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
 	m_ppGameObjects[0]->SetPosition(400.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
 	m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);
-	//m_ppGameObjects[0]->m_pMesh->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.00f, 0.01f, 0.01f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 
 	m_ppGameObjects[1] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppGameObjects[1]->SetChild(pAngrybotModel->m_pModelRootObject, true);
@@ -547,14 +546,14 @@ void CScene::AnimateObjects(float fTimeElapsed)
 		m_pLights[1].m_xmf3Position = m_pPlayer->GetPosition();
 		m_pLights[1].m_xmf3Direction = m_pPlayer->GetLookVector();
 	}
-	
+	CheckObjectByObjectCollisions();
 }
 
 void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera)
 {
 	if (m_pd3dGraphicsRootSignature) pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 	if (m_pd3dCbvSrvDescriptorHeap) pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-	
+
 	pCamera->SetViewportsAndScissorRects(pd3dCommandList);
 	pCamera->UpdateShaderVariables(pd3dCommandList);
 
@@ -577,15 +576,13 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera
 	}
 	for (int i = 0; i < m_nShaders; i++) if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 	
-
 }
 
 //수정
-void CScene::CheckObjectByObjectCollisions()
-{
-	if (m_ppGameObjects[0]) {
-		if (m_pPlayer->m_pMesh->m_xmOOBB.Contains(m_ppGameObjects[0]->m_pMesh->m_xmOOBB))
-			m_pPlayer->SetPosition(XMFLOAT3(900.0f, 900.0f, 900.0f));
+void CScene::CheckObjectByObjectCollisions() {
+	//체크는되는듯한데 왜 중단점이 안되지?
+	if (m_pPlayer->m_xmOOBB.Intersects(m_ppGameObjects[0]->m_xmOOBB))
+	{
+		m_ppGameObjects[0]->SetPosition(0, 0, 0);
 	}
-	
 }

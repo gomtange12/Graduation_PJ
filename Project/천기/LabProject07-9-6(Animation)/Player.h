@@ -124,6 +124,5 @@ public:
 
 	virtual void OnPlayerUpdateCallback(float fTimeElapsed);
 	virtual void OnCameraUpdateCallback(float fTimeElapsed);
-	//virtual void Animate(float fTimeElapsed);
 };
 
