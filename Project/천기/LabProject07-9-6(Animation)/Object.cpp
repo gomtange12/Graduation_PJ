@@ -594,6 +594,7 @@ void CGameObject::SetMesh(CMesh *pMesh)
 {
 	if (m_pMesh) m_pMesh->Release();
 	m_pMesh = pMesh;
+	
 	if (m_pMesh) m_pMesh->AddRef();
 }
 
@@ -643,9 +644,11 @@ void CGameObject::UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent)
 {
 	m_xmf4x4World = (pxmf4x4Parent) ? Matrix4x4::Multiply(m_xmf4x4ToParent, *pxmf4x4Parent) : m_xmf4x4ToParent;
 
-
+	
 	if (m_pSibling) m_pSibling->UpdateTransform(pxmf4x4Parent);
 	if (m_pChild) m_pChild->UpdateTransform(&m_xmf4x4World);
+
+
 }
 
 void CGameObject::SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet)
@@ -665,13 +668,13 @@ void CGameObject::Animate(float fTimeElapsed)
 	if (m_pSibling) m_pSibling->Animate(fTimeElapsed);
 	if (m_pChild) m_pChild->Animate(fTimeElapsed);
 
+
 	//수정
 	if (m_pMesh) {
 		m_pMesh->m_xmOOBB.Transform(m_pMesh->m_xmOOBB, XMLoadFloat4x4(&m_xmf4x4World));
-		XMStoreFloat4(&m_pMesh->m_xmOOBB.Orientation,
-			XMQuaternionNormalize(XMLoadFloat4(&m_pMesh->m_xmOOBB.Orientation)));
+		XMStoreFloat4(&m_pMesh->m_xmOOBB.Orientation, XMQuaternionNormalize(XMLoadFloat4(&m_pMesh->m_xmOOBB.Orientation)));
 	}
-
+	//
 }
 
 void CGameObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera)
@@ -1009,7 +1012,9 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			CStandardMesh *pMesh = new CStandardMesh(pd3dDevice, pd3dCommandList);
 			
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile, pGameObject);
-
+			//수정
+			pMesh->SetOOBB(pMesh->GetAABBCenter(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+			
 			pGameObject->SetMesh(pMesh);
 		}
 		else if (!strcmp(pstrToken, "<SkinningInfo>:"))
@@ -1024,6 +1029,11 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
 			nReads = (UINT)::fread(pstrToken, sizeof(char), nStrLength, pInFile); //<Mesh>:
 			pSkinnedMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile, pGameObject);
+
+
+			//수정
+			//pSkinnedMesh->SetOOBB(pSkinnedMesh->GetAABBCenter(), pSkinnedMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+			pSkinnedMesh->SetOOBB(pSkinnedMesh->GetAABBCenter(), XMFLOAT3(100.1f, 100.1f, 100.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 
 			pGameObject->SetMesh(pSkinnedMesh);
 		}

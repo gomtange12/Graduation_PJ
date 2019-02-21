@@ -122,7 +122,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
 	m_ppGameObjects[0]->SetPosition(400.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
 	m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);
-	//m_ppGameObjects[0]->m_pMesh->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.00f, 0.01f, 0.01f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+	//m_ppGameObjects[0]->m_pMesh->SetOOBB(XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 
 	m_ppGameObjects[1] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppGameObjects[1]->SetChild(pAngrybotModel->m_pModelRootObject, true);
@@ -583,9 +583,20 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera
 //¼öÁ¤
 void CScene::CheckObjectByObjectCollisions()
 {
-	if (m_ppGameObjects[0]) {
-		if (m_pPlayer->m_pMesh->m_xmOOBB.Contains(m_ppGameObjects[0]->m_pMesh->m_xmOOBB))
-			m_pPlayer->SetPosition(XMFLOAT3(900.0f, 900.0f, 900.0f));
+	
+	ContainmentType containType = m_pPlayer->m_xmOOBB.Contains(m_ppGameObjects[0]->m_xmOOBB);
+	switch (containType)
+	{
+	case DISJOINT:
+		break;
+	case INTERSECTS:
+		m_pPlayer->SetPosition(XMFLOAT3(900.0f, 900.0f, 900.0f));
+		
+		break;
+	case CONTAINS:
+		
+		break;
 	}
+	
 	
 }

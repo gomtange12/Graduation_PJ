@@ -410,7 +410,7 @@ void CGameFramework::BuildObjects()
 	CTerrainPlayer *pPlayer = new CTerrainPlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	pPlayer->SetPosition(XMFLOAT3(380.0f, m_pScene->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	pPlayer->SetScale(XMFLOAT3(20.0f, 20.f, 20.0f));
-	//pPlayer->m_pMesh->SetOOBB(pPlayer->GetPosition(), XMFLOAT3(0.01f, 0.01f, 0.01f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+
 #else
 	CAirplanePlayer *pPlayer = new CAirplanePlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), NULL);
 	pPlayer->SetPosition(XMFLOAT3(425.0f, 240.0f, 640.0f));
@@ -488,7 +488,7 @@ void CGameFramework::AnimateObjects()
 	m_pPlayer->Animate(fTimeElapsed);
 	m_pPlayer->UpdateTransform(NULL);
 
-	if (m_pScene && m_pPlayer) m_pScene->CheckObjectByObjectCollisions();
+	if (m_pScene) m_pScene->CheckObjectByObjectCollisions();
 }
 
 void CGameFramework::WaitForGpuComplete()

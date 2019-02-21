@@ -78,11 +78,11 @@ public:
 	UINT GetType() { return(m_nType); }
 
 	//¼öÁ¤
-	XMFLOAT3 GetOOBBCenter() {
-		return m_xmf3OOBBCenter;
+	XMFLOAT3 GetAABBCenter() {
+		return m_xmf3AABBCenter;
 	};
-	XMFLOAT3 GetOOBBExtents() {
-		return m_xmf3OOBBExtents;
+	XMFLOAT3 GetAABBExtents() {
+		return m_xmf3AABBExtents;
 	};
 	//
 
@@ -102,7 +102,7 @@ public:
 
 	void SetOOBB(XMFLOAT3& xmCenter, XMFLOAT3& xmExtents, XMFLOAT4& xmOrientation)
 	{
-		m_xmOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation); 
+		m_xmOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation);
 	}
 	//
 };

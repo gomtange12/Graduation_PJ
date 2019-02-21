@@ -447,14 +447,7 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 			nReads = (UINT)::fread(&m_xmf3AABBCenter, sizeof(XMFLOAT3), 1, pInFile);
 			nReads = (UINT)::fread(&m_xmf3AABBExtents, sizeof(XMFLOAT3), 1, pInFile);
 			
-			// 수정
-			this->SetOOBB(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(4.0f, 4.0f, 4.0f), XMFLOAT4(0.f, 0.f, 0.f, 0.1f));
-			
-			// 무기마다 설정값이 다르니까 따로 if문 만들어 줘야함
-			if (!strcmp(m_pstrMeshName, "keytar"))
-			{
-				this->SetOOBB(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(4.0f, 4.0f, 4.0f), XMFLOAT4(0.f, 0.f, 0.f, 0.1f));
-			}
+
 		}
 		else if (!strcmp(pstrToken, "<Positions>:"))
 		{
