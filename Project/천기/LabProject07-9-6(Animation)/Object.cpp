@@ -642,6 +642,20 @@ CGameObject *CGameObject::GetRootSkinnedGameObject()
 void CGameObject::UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent)
 {
 	m_xmf4x4World = (pxmf4x4Parent) ? Matrix4x4::Multiply(m_xmf4x4ToParent, *pxmf4x4Parent) : m_xmf4x4ToParent;
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+
+	if (m_pSibling) m_pSibling->UpdateTransform(pxmf4x4Parent);
+	if (m_pChild) m_pChild->UpdateTransform(&m_xmf4x4World);
+
+	//수정
+	if (m_pMesh) {
+		m_xmOOBB.Transform(m_xmOOBB, XMLoadFloat4x4(&m_xmf4x4World));
+		XMStoreFloat4(&m_xmOOBB.Orientation, XMQuaternionNormalize(XMLoadFloat4(&m_xmOOBB.Orientation)));
+	}
+	
+=======
 	
 	//수정
 	m_xmOOBB.Transform(m_xmOOBB, XMLoadFloat4x4(&m_xmf4x4World));
@@ -650,6 +664,17 @@ void CGameObject::UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent)
 
 	if (m_pSibling) m_pSibling->UpdateTransform(pxmf4x4Parent);
 	if (m_pChild) m_pChild->UpdateTransform(&m_xmf4x4World);
+>>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
+=======
+	
+	//수정
+	m_xmOOBB.Transform(m_xmOOBB, XMLoadFloat4x4(&m_xmf4x4World));
+	XMStoreFloat4(&m_xmOOBB.Orientation, XMQuaternionNormalize(XMLoadFloat4(&m_xmOOBB.Orientation)));
+	//
+
+	if (m_pSibling) m_pSibling->UpdateTransform(pxmf4x4Parent);
+	if (m_pChild) m_pChild->UpdateTransform(&m_xmf4x4World);
+>>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
 }
 
 void CGameObject::SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet)
@@ -668,6 +693,13 @@ void CGameObject::Animate(float fTimeElapsed)
 
 	if (m_pSibling) m_pSibling->Animate(fTimeElapsed);
 	if (m_pChild) m_pChild->Animate(fTimeElapsed);
+<<<<<<< HEAD
+<<<<<<< HEAD
+	
+=======
+>>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
+=======
+>>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
 }
 
 void CGameObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera)
@@ -1005,7 +1037,17 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			CStandardMesh *pMesh = new CStandardMesh(pd3dDevice, pd3dCommandList);
 			
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile, pGameObject);
+<<<<<<< HEAD
+<<<<<<< HEAD
+			//수정
+			pMesh->SetOOBB(XMFLOAT3(pMesh->GetAABBCenter().x * 0.5f, pMesh->GetAABBCenter().y * 0.5f, pMesh->GetAABBCenter().z * 0.5f), XMFLOAT3(100.f,100.f,100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+			
+=======
 
+>>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
+=======
+
+>>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
 			pGameObject->SetMesh(pMesh);
 		}
 		else if (!strcmp(pstrToken, "<SkinningInfo>:"))
@@ -1019,8 +1061,20 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 
 			nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
 			nReads = (UINT)::fread(pstrToken, sizeof(char), nStrLength, pInFile); //<Mesh>:
+			
 			pSkinnedMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile, pGameObject);
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+			//수정
+			pSkinnedMesh->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter().x * 0.5f, pSkinnedMesh->GetAABBCenter().y * 0.5f, pSkinnedMesh->GetAABBCenter().z * 0.5f), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+			//pSkinnedMesh->SetOOBB(pSkinnedMesh->GetAABBCenter()(), XMFLOAT3(100.1f, 100.1f, 100.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+
+=======
+>>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
+=======
+>>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
 			pGameObject->SetMesh(pSkinnedMesh);
 		}
 		else if (!strcmp(pstrToken, "<Materials>:"))

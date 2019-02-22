@@ -583,6 +583,22 @@ void CScene::CheckObjectByObjectCollisions() {
 	//체크는되는듯한데 왜 중단점이 안되지?
 	if (m_pPlayer->m_xmOOBB.Intersects(m_ppGameObjects[0]->m_xmOOBB))
 	{
+<<<<<<< HEAD
+<<<<<<< HEAD
+	case DISJOINT:
+		m_pPlayer->SetPosition(XMFLOAT3(900.0f, 900.0f, 900.0f));
+		break;
+	case INTERSECTS:
+		m_pPlayer->SetPosition(XMFLOAT3(900.0f, 900.0f, 900.0f)); 
+		break;
+	case CONTAINS:
+		
+		break;
+=======
 		m_ppGameObjects[0]->SetPosition(0, 0, 0);
+>>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
+=======
+		m_ppGameObjects[0]->SetPosition(0, 0, 0);
+>>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
 	}
 }
