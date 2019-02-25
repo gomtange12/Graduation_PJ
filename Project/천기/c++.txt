@@ -1,0 +1,6 @@
+auto , decltype
+- 함수의 지역 변수로만 사용가능
+- 한번 사용하여 타입이 정해진 변수는 다른 타입의 데이터를 입력 시킬수 없다.
+
+ex) template<class T, class U> auto add(T t, U u) -> decltype(t + u);
+
