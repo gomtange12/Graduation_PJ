@@ -1,9 +1,11 @@
 #include "stdafx.h"
-#include "CSceneManager.h"
-#include "Scene.h"
 
+#include "CSceneManager.h"
+#include "CTempScene.h"
 CSceneManager::CSceneManager()
 {
+	m_pTempScene = std::make_shared<CTempScene>();
+
 }
 
 
@@ -21,18 +23,20 @@ void CSceneManager::SetScene(SceneState state)
 	/*switch (state)
 	{
 	case MENU:
-		m_pTempScene = new CTempLoadScene;
-		m_SceneType = E_MENU;
+		
+		m_pTempScene = std::make_shared<CTempLoadScene>();
+
+		m_SceneType = MENU;
 
 		break;
 	case INGAME:
-		m_pTempScene = new CMyInGame;
-		m_SceneType = E_INGAME;
+		m_pTempScene = std::make_shared<CTempInGameScene>();
+		m_SceneType = INGAME;
 
 		break;
 	case GAMEOVER:
-		m_pTempScene = new CMyGameOver;
-		m_SceneType = E_GAMEOVER;
+		m_pTempScene = std::make_shared<CTempGameOverScene>();
+		m_SceneType = GAMEOVER;
 
 		break;
 
