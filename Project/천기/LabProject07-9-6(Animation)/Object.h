@@ -561,6 +561,8 @@ public:
 
 public:
 	virtual void OnPrepareAnimate();
+	
 	virtual void Animate(float fTimeElapsed);
+	
 };
 

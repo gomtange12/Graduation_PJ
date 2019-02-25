@@ -95,6 +95,22 @@ public:
 	virtual void OnPreRender(ID3D12GraphicsCommandList *pd3dCommandList, void *pContext);
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, int nSubSet);
 	virtual void OnPostRender(ID3D12GraphicsCommandList *pd3dCommandList, void *pContext);
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+	//¼öÁ¤
+public:
+	BoundingOrientedBox		m_xmOOBB;
+	
+	void SetOOBB(XMFLOAT3& xmCenter, XMFLOAT3& xmExtents, XMFLOAT4& xmOrientation)
+	{
+		m_xmOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation);
+	}
+	//
+=======
+>>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
+=======
+>>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
