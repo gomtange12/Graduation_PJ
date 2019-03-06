@@ -349,8 +349,25 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			//PLAYER->GetPlayer()->SetPlayerState(PLAYER->GetPlayer()->PlayerState::IDLE);
 
 			break;
-		case ANIMATION_TYPE_PINGPONG:
-			break;
+		//case ANIMATION_TYPE_MOVING:
+		//	m_fPosition += 0.0018;
+
+		//	//sol) m_fPosition += fDelta * speed; 프레임 고정시
+		//	if (m_fPosition >= maxLength)
+		//	{
+		//		m_fPosition = 0.0f;
+		//		//fPosition = 0.0f;
+		//		//fTrackPosition = 0.f;
+		//		oncePosition = 0.0f;
+		//		//maxLength = 0.0f;
+		//		PLAYER->GetPlayer()->SetPlayerState(RUN);
+
+		//		//PLAYER->GetPlayer()->SetPlayerState(IDLE);
+		//	}
+		//	break;
+		/*case ANIMATION_TYPE_MOVING:
+
+			break;*/
 	}
 
 	if (m_pAnimationCallbackHandler)
@@ -1171,10 +1188,15 @@ CAnimationSets *CGameObject::LoadAnimationFromFile(FILE *pInFile, CGameObject *p
 			nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
 			nReads = (UINT)::fread(pAnimationSet->m_pstrName, sizeof(char), nStrLength, pInFile);
 			pAnimationSet->m_pstrName[nStrLength] = '\0';
-			if (!strcmp(pAnimationSet->m_pstrName, "Idle") || !strcmp(pAnimationSet->m_pstrName, "idle"))
+			if (!strcmp(pAnimationSet->m_pstrName, "Idle") || !strcmp(pAnimationSet->m_pstrName, "idle"))// || !strcmp(pAnimationSet->m_pstrName, "Run")|| !strcmp(pAnimationSet->m_pstrName, "run"))
 			{
 				pAnimationSet->m_nType = ANIMATION_TYPE_LOOP;
 			}
+			/*else if (!strcmp(pAnimationSet->m_pstrName, "run") || !strcmp(pAnimationSet->m_pstrName, "Run"))
+			{
+				pAnimationSet->m_nType = ANIMATION_TYPE_MOVING;
+
+			}*/
 			else
 			{
 				pAnimationSet->m_nType = ANIMATION_TYPE_ONCE;
