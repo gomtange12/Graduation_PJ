@@ -29,7 +29,7 @@ protected:
 	float           			m_fMaxVelocityXZ = 0.0f;
 	float           			m_fMaxVelocityY = 0.0f;
 	float           			m_fFriction = 0.0f;
-
+	bool						m_OnAacting{ FALSE };
 	LPVOID						m_pPlayerUpdatedContext = NULL;
 	LPVOID						m_pCameraUpdatedContext = NULL;
 
@@ -37,7 +37,7 @@ protected:
 	//이넘만들기
 	
 	std::shared_ptr<CCamera>	m_pCamera;
-
+	
 public:
 	std::shared_ptr<CCamera> GetCamera() { return(m_pCamera); }
 	virtual void SetCamera(std::shared_ptr<CCamera> pCamera) { m_pCamera = pCamera; }

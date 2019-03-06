@@ -249,14 +249,18 @@ void CPlayer::Update(float fTimeElapsed)
 		break;*/
 	case IDLE:
 		SetTrackAnimationSet(0, IDLE);
+		m_OnAacting = FALSE;
 		break;
 	case RUN:
 		SetTrackAnimationSet(0, RUN);
+		m_OnAacting = FALSE;
+
 		break;
 	
 	case JUMP:
 		SetTrackAnimationSet(0, JUMP);
-		
+		m_OnAacting = TRUE;
+
 		//SetTrackAnimationSet(0, IDLE);
 
 		break;

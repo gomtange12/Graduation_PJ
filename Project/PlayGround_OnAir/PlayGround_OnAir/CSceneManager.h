@@ -8,12 +8,13 @@ class CTempMenuScene;
 
 class CSceneManager : public CSingleTonBase<CSceneManager>
 {
-	shared_ptr <CTempScene> m_pTempScene = NULL;
+	CTempScene*  m_pTempScene = NULL;
 
 	SceneState m_SceneType = MENU;
 public:
 	CSceneManager();
 	~CSceneManager();
+	SceneState GetSceneType() { return m_SceneType; }
 	void SetScene(SceneState state);
 };
 

@@ -154,7 +154,7 @@ void CTempScene::BuildDefaultLightsAndMaterials()
 	m_pLights[3].m_fTheta = (float)cos(XMConvertToRadians(30.0f));
 }
 
-ID3D12RootSignature * CTempScene::CreateGraphicsRootSignature(ID3D12Device * pd3dDevice)
+ID3D12RootSignature *CTempScene::CreateGraphicsRootSignature(ID3D12Device * pd3dDevice)
 {
 	ID3D12RootSignature *pd3dGraphicsRootSignature = NULL;
 
