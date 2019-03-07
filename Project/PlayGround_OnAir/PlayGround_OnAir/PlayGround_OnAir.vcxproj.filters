@@ -22,6 +22,9 @@
     <Filter Include="소스 파일\SceneManager">
       <UniqueIdentifier>{86703a7b-99d0-40cd-8d8c-8a1ac5adb1bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\ObjectManager">
+      <UniqueIdentifier>{c49f908a-2997-4151-9cea-a868b7f25ce9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -87,6 +90,9 @@
     <ClInclude Include="CTempScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="CObjectManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -141,6 +147,9 @@
       <Filter>소스 파일\SceneManager</Filter>
     </ClCompile>
     <ClCompile Include="CTempScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CObjectManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
