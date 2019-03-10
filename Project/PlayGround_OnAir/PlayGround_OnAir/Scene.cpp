@@ -107,8 +107,21 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 
 	m_ppShaders[1] = pAngrybotObjectsShader;
 
-	CLoadedModelInfo *pAngrybotModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Player.bin", NULL, true);
+	CLoadedModelInfo *pAngrybotModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Map/ALL_PIECES.bin", NULL, false);
+	
+	//CAngrybotObjectsShader *pAngrybotObjectsShader = new CAngrybotObjectsShader();
+	//	pAngrybotObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	//	pAngrybotObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
+	/*CMapObjectsShader *pMapObjectsShader = new CMapObjectsShader();
+	pMapObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pMapObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pMapObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+	m_ppShaders[2] = pMapObjectsShader;
+	
+	CLoadedModelInfo *pMapObjectModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Map/ALL_PIECES.bin",NULL,false);
+	
+	*/
 	m_nGameObjects = 1;
 	m_ppGameObjects = new CGameObject*[m_nGameObjects];
 	
@@ -125,16 +138,18 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 
 	m_ppGameObjects[0] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppGameObjects[0]->SetChild(pAngrybotModel->m_pModelRootObject, true);
+	/*m_ppGameObjects[0]->SetChild(pAngrybotModel->m_pModelRootObject, true);
 	m_ppGameObjects[0]->m_pAnimationController = new CAnimationController(2, pAngrybotModel->m_pAnimationSets);
 	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(0, 0);
 	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(1, 1);
 	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.8f);
 	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(1, 0.2f);
-	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);*/
 	m_ppGameObjects[0]->SetPosition(200.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
 	m_ppGameObjects[0]->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
-	m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);
+	m_ppGameObjects[0]->SetScale(200.0f, 200.0f, 200.0f);
+
+
 
 	//m_ppGameObjects[1] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	//m_ppGameObjects[1]->SetChild(pAngrybotModel->m_pModelRootObject, true);
@@ -575,7 +590,8 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 	pd3dCommandList->SetGraphicsRootConstantBufferView(2, d3dcbLightsGpuVirtualAddress); //Lights
 
 	if (m_pSkyBox) m_pSkyBox->Render(pd3dCommandList, pCamera);
-	if (m_pTerrain) m_pTerrain->Render(pd3dCommandList, pCamera);
+	
+	//if (m_pTerrain) m_pTerrain->Render(pd3dCommandList, pCamera);
 
 	for (int i = 0; i < m_nGameObjects; i++)
 	{

@@ -465,13 +465,19 @@ XMFLOAT3 RandomPositionInSphere(XMFLOAT3 xmf3Center, float fRadius, int nColumn,
 
 void CHellicopterObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
-	m_nObjects = 40;
+	m_nObjects = 1;
 	m_ppObjects = new CGameObject*[m_nObjects];
 
-	CLoadedModelInfo *pSuperCobraModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/SuperCobra.bin", this, false);
-	CLoadedModelInfo *pGunshipModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Gunship.bin", this, false);
+	CLoadedModelInfo *pMapModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Map/ALL_PIECES.bin", NULL, false);
+	pMapModel->m_pModelRootObject->AddRef();
+	int nObjects = 0;
+	m_ppObjects[nObjects] = new MapObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	m_ppObjects[nObjects]->SetPosition(380,100,510);
 
-	int nColumnSpace = 5, nColumnSize = 30;           
+	m_ppObjects[nObjects]->SetScale(100, 100, 100);
+	//CLoadedModelInfo *pGunshipModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Gunship.bin", this, false);
+
+	/*int nColumnSpace = 5, nColumnSize = 30;           
     int nFirstPassColumnSize = (m_nObjects % nColumnSize) > 0 ? (nColumnSize - 1) : nColumnSize;
 
 	CHeightMapTerrain *pTerrain = (CHeightMapTerrain *)pContext;
@@ -522,12 +528,12 @@ void CHellicopterObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12Gra
 			m_ppObjects[nObjects]->Rotate(0.0f, 90.0f, 0.0f);
 			m_ppObjects[nObjects++]->OnPrepareAnimate();
         }
-    }
+    }*/
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	if (pSuperCobraModel) delete pSuperCobraModel;
-	if (pGunshipModel) delete pGunshipModel;
+	if (pMapModel) delete pMapModel;
+	//if (pGunshipModel) delete pGunshipModel;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -637,4 +643,22 @@ void CAngrybotObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12Graphi
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
 	if (pAngrybotModel) delete pAngrybotModel;*/
+}
+
+CMapObjectsShader::CMapObjectsShader()
+{
+}
+
+CMapObjectsShader::~CMapObjectsShader()
+{
+}
+
+void CMapObjectsShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	/*CLoadedModelInfo *pMapObjectModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Map/ALL_PIECES.bin", NULL, false);
+
+	
+	
+	CreateShaderVariables(pd3dDevice, pd3dCommandList);*/
+
 }
