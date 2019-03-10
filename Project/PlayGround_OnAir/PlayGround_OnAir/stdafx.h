@@ -76,6 +76,12 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 #define FRAMEWORK	 CGameFramework::GetInstance()
 #define INPUTMANAGER	 CInputManager::GetInstance()
 #define SCENEMANAGER	 CSceneManager::GetInstance()
+enum OBJTYPE {
+	MAP,
+	DYNAMIC
+};
+#define OBJECTMANAGER	 CObjectManager::GetInstance()
+
 
 
 
@@ -105,6 +111,7 @@ enum PlayerState {
 	SAD,
 	BACK_RUN
 };
+
 enum SceneState {
 	LOADING,
 	MENU,

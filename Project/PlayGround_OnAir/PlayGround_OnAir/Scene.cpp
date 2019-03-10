@@ -4,7 +4,7 @@
 
 #include "stdafx.h"
 #include "Scene.h"
-
+#include "CPlayerManager.h"
 ID3D12DescriptorHeap *CScene::m_pd3dCbvSrvDescriptorHeap = NULL;
 
 D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvCPUDescriptorStartHandle;
@@ -109,8 +109,20 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 
 	CLoadedModelInfo *pAngrybotModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Player.bin", NULL, true);
 
-	m_nGameObjects = 4;
+	m_nGameObjects = 1;
 	m_ppGameObjects = new CGameObject*[m_nGameObjects];
+	
+	
+	/*m_ppGameObjects[0] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppGameObjects[0]->SetChild(pAngrybotModel->m_pModelRootObject, true);
+	m_ppGameObjects[0]->m_pAnimationController = new CAnimationController(2, pAngrybotModel->m_pAnimationSets);
+	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(0, 0);
+	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(1, 1);
+	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.8f);
+	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(1, 0.2f);
+	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+	m_ppGameObjects[0]->SetPosition(400.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
+	m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 
 	m_ppGameObjects[0] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppGameObjects[0]->SetChild(pAngrybotModel->m_pModelRootObject, true);
@@ -120,34 +132,35 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.8f);
 	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(1, 0.2f);
 	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-	m_ppGameObjects[0]->SetPosition(400.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
+	m_ppGameObjects[0]->SetPosition(200.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
+	m_ppGameObjects[0]->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);
 
-	m_ppGameObjects[1] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppGameObjects[1]->SetChild(pAngrybotModel->m_pModelRootObject, true);
-	m_ppGameObjects[1]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
-	m_ppGameObjects[1]->m_pAnimationController->SetTrackAnimationSet(0, 1);
-	m_ppGameObjects[1]->m_pAnimationController->SetTrackSpeed(0, 0.25f);
-	m_ppGameObjects[1]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-	m_ppGameObjects[1]->SetPosition(450.0f, m_pTerrain->GetHeight(450.0f, 680.0f), 680.0f);
-	m_ppGameObjects[1]->SetScale(2.0f, 2.0f, 2.0f);
+	//m_ppGameObjects[1] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	//m_ppGameObjects[1]->SetChild(pAngrybotModel->m_pModelRootObject, true);
+	//m_ppGameObjects[1]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
+	//m_ppGameObjects[1]->m_pAnimationController->SetTrackAnimationSet(0, 1);
+	//m_ppGameObjects[1]->m_pAnimationController->SetTrackSpeed(0, 0.25f);
+	//m_ppGameObjects[1]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+	//m_ppGameObjects[1]->SetPosition(450.0f, m_pTerrain->GetHeight(450.0f, 680.0f), 680.0f);
+	//m_ppGameObjects[1]->SetScale(2.0f, 2.0f, 2.0f);
 
-	m_ppGameObjects[2] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppGameObjects[2]->SetChild(pAngrybotModel->m_pModelRootObject, true);
-	m_ppGameObjects[2]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
-	m_ppGameObjects[2]->m_pAnimationController->SetTrackAnimationSet(0, 0);
-	m_ppGameObjects[2]->m_pAnimationController->SetTrackPosition(0, 0.95f);
-	m_ppGameObjects[2]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-	m_ppGameObjects[2]->SetPosition(420.0f, m_pTerrain->GetHeight(420.0f, 750.0f), 750.0f);
-	m_ppGameObjects[2]->SetScale(2.0f, 2.0f, 2.0f);
+	//m_ppGameObjects[2] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	//m_ppGameObjects[2]->SetChild(pAngrybotModel->m_pModelRootObject, true);
+	//m_ppGameObjects[2]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
+	//m_ppGameObjects[2]->m_pAnimationController->SetTrackAnimationSet(0, 0);
+	//m_ppGameObjects[2]->m_pAnimationController->SetTrackPosition(0, 0.95f);
+	//m_ppGameObjects[2]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+	//m_ppGameObjects[2]->SetPosition(420.0f, m_pTerrain->GetHeight(420.0f, 750.0f), 750.0f);
+	//m_ppGameObjects[2]->SetScale(2.0f, 2.0f, 2.0f);
 
-	m_ppGameObjects[3] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppGameObjects[3]->SetChild(pAngrybotModel->m_pModelRootObject, true);
-	m_ppGameObjects[3]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
-	m_ppGameObjects[3]->m_pAnimationController->SetTrackAnimationSet(0, 0);
-	m_ppGameObjects[3]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-	m_ppGameObjects[3]->SetPosition(410.0f, m_pTerrain->GetHeight(410.0f, 735.0f), 735.0f);
-	m_ppGameObjects[3]->SetScale(2.0f, 2.0f, 2.0f);
+	//m_ppGameObjects[3] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	//m_ppGameObjects[3]->SetChild(pAngrybotModel->m_pModelRootObject, true);
+	//m_ppGameObjects[3]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
+	//m_ppGameObjects[3]->m_pAnimationController->SetTrackAnimationSet(0, 0);
+	//m_ppGameObjects[3]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+	//m_ppGameObjects[3]->SetPosition(410.0f, m_pTerrain->GetHeight(410.0f, 735.0f), 735.0f);
+	//m_ppGameObjects[3]->SetScale(2.0f, 2.0f, 2.0f);*/
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
@@ -575,5 +588,20 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 	}
 
 	for (int i = 0; i < m_nShaders; i++) if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
+	//CheckObjectByObjectCollisions();
 }
 
+void CScene::CheckObjectByObjectCollisions() {
+	//체크는되는듯한데 왜 중단점이 안되지?
+	
+	if (PLAYER->GetPlayer()->m_xmOOBB.Intersects(m_ppGameObjects[0]->m_xmOOBB)){
+		XMFLOAT3 playeroobb = PLAYER->GetPlayer()->m_xmOOBB.Center;
+		XMFLOAT3 objoobb = m_ppGameObjects[0]->m_xmOOBB.Center;
+		int i = 0;
+		PLAYER->GetPlayer()->SetPosition(XMFLOAT3(900.0f, 900.0f, 900.0f));
+	}
+	XMFLOAT3 playeroobb = PLAYER->GetPlayer()->m_xmOOBB.Center;
+	XMFLOAT3 objoobb = m_ppGameObjects[0]->m_xmOOBB.Center;
+
+
+}

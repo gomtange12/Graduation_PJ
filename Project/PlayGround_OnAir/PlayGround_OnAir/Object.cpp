@@ -613,6 +613,9 @@ CGameObject::CGameObject(int nMaterials) : CGameObject()
 		m_ppMaterials = new CMaterial*[m_nMaterials];
 		for(int i = 0; i < m_nMaterials; i++) m_ppMaterials[i] = NULL;
 	}
+	
+
+	
 }
 
 CGameObject::~CGameObject()
@@ -718,9 +721,12 @@ CGameObject *CGameObject::GetRootSkinnedGameObject()
 void CGameObject::UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent)
 {
 	m_xmf4x4World = (pxmf4x4Parent) ? Matrix4x4::Multiply(m_xmf4x4ToParent, *pxmf4x4Parent) : m_xmf4x4ToParent;
-
+	
 	if (m_pSibling) m_pSibling->UpdateTransform(pxmf4x4Parent);
 	if (m_pChild) m_pChild->UpdateTransform(&m_xmf4x4World);
+
+	
+	
 }
 
 void CGameObject::SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet)
@@ -739,6 +745,13 @@ void CGameObject::Animate(float fTimeElapsed)
 
 	if (m_pSibling) m_pSibling->Animate(fTimeElapsed);
 	if (m_pChild) m_pChild->Animate(fTimeElapsed);
+	
+	
+	m_xmTransedOOBB.Transform(m_xmTransedOOBB, XMLoadFloat4x4(&m_xmf4x4World));
+	XMStoreFloat4(&m_xmTransedOOBB.Orientation, XMQuaternionNormalize(XMLoadFloat4(&m_xmTransedOOBB.Orientation)));
+	
+	XMFLOAT3 pos = PLAYER->GetPlayer()->m_xmTransedOOBB.Center;
+	
 }
 
 void CGameObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera>pCamera)
@@ -1075,7 +1088,9 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 		{
 			CStandardMesh *pMesh = new CStandardMesh(pd3dDevice, pd3dCommandList);
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
+
 			pGameObject->SetMesh(pMesh);
+			//pGameObject->SetOOBB(XMFLOAT3(pMesh->GetAABBCenter().x * 0.5f, pMesh->GetAABBCenter().y * 0.5f, pMesh->GetAABBCenter().z * 0.5f), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 		}
 		else if (!strcmp(pstrToken, "<SkinningInfo>:"))
 		{
@@ -1091,6 +1106,7 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			pSkinnedMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
 			pGameObject->SetMesh(pSkinnedMesh);
+			//pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter().x * 0.5f, pSkinnedMesh->GetAABBCenter().y * 0.5f, pSkinnedMesh->GetAABBCenter().z * 0.5f), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 		}
 		else if (!strcmp(pstrToken, "<Materials>:"))
 		{
@@ -1141,7 +1157,7 @@ CAnimationSets *CGameObject::LoadAnimationFromFile(FILE *pInFile, CGameObject *p
 	UINT nReads = 0;
 
 	CAnimationSets *pAnimationSets = new CAnimationSets();
-
+	
 	for ( ; ; )
 	{
 		nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
@@ -1151,7 +1167,11 @@ CAnimationSets *CGameObject::LoadAnimationFromFile(FILE *pInFile, CGameObject *p
 		if (!strcmp(pstrToken, "<AnimationSets>:"))
 		{
 			nReads = (UINT)::fread(&pAnimationSets->m_nAnimationSets, sizeof(int), 1, pInFile);
+			if (pAnimationSets->m_nAnimationSets == 0)
+			{
+				
 
+			}
 			pAnimationSets->m_pAnimationSets = new CAnimationSet[pAnimationSets->m_nAnimationSets];
 
 
@@ -1187,10 +1207,12 @@ CAnimationSets *CGameObject::LoadAnimationFromFile(FILE *pInFile, CGameObject *p
 			nReads = (UINT)::fread(&nAnimationSet, sizeof(int), 1, pInFile);
 			CAnimationSet *pAnimationSet = &pAnimationSets->m_pAnimationSets[nAnimationSet];
 
+			
+			
 			nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
 			nReads = (UINT)::fread(pAnimationSet->m_pstrName, sizeof(char), nStrLength, pInFile);
 			pAnimationSet->m_pstrName[nStrLength] = '\0';
-			if (!strcmp(pAnimationSet->m_pstrName, "Idle") || !strcmp(pAnimationSet->m_pstrName, "idle"))// || !strcmp(pAnimationSet->m_pstrName, "Run")|| !strcmp(pAnimationSet->m_pstrName, "run"))
+			if (!strcmp(pAnimationSet->m_pstrName, "Idle") || !strcmp(pAnimationSet->m_pstrName, "idle") || !strcmp(pAnimationSet->m_pstrName, "Run")|| !strcmp(pAnimationSet->m_pstrName, "run"))
 			{
 				pAnimationSet->m_nType = ANIMATION_TYPE_LOOP;
 			}
@@ -1492,7 +1514,11 @@ void CAngrybotObject::OnPrepareAnimate()
 
 void CAngrybotObject::Animate(float fTimeElapsed)
 {
-	CGameObject::Animate(fTimeElapsed);
+	//CGameObject::Animate(fTimeElapsed);
+	//if (this != NULL && m_pMesh != NULL) {
+		
+	//}
+
 }
 
 

@@ -5,7 +5,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "Shader.h"
-
+#include "CObjectManager.h"
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CPlayer
 //int CPlayer::m_PlayeState = IDLE;
@@ -248,12 +248,15 @@ void CPlayer::Update(float fTimeElapsed)
 		SetTrackAnimationSet(0, IDLE);
 		break;*/
 	case IDLE:
-		SetTrackAnimationSet(0, IDLE);
-		m_OnAacting = FALSE;
-		break;
+		//SetTrackAnimationSet(0, IDLE);
+
+		//break;
 	case RUN:
-		SetTrackAnimationSet(0, RUN);
 		m_OnAacting = FALSE;
+		SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
+		//SetTrackAnimationSet(0, RUN);
+		//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
+		//m_OnAacting = FALSE;
 
 		break;
 	
@@ -266,6 +269,7 @@ void CPlayer::Update(float fTimeElapsed)
 		break;
 	}
 	//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
+
 	//SetTrackAnimationSet(0, 2);
 
 }
@@ -296,13 +300,14 @@ std::shared_ptr<CCamera> CPlayer::OnChangeCamera(DWORD nNewCameraMode, DWORD nCu
 		
 		//pNewCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
 		pNewCamera->SetTimeLag(0.25f);
-		pNewCamera->SetOffset(XMFLOAT3(-3.0f, 80.0f, -55.0f));
+		pNewCamera->SetOffset(XMFLOAT3(0.0f, 50.0f, -80.0f));
 		//pNewCamera->SetLookAtPosition(m_xmf3Position);
 		//pNewCamera->SET
 		//pNewCamera->Rotate(0, 90, 0);
 		//pNewCamera->SetLookAt(m_xmf3Position);
 		//pNewCamera->SetCameraRotate(0, 90, 0);
-		//pNewCamera->SetLookAt(m_xmf3Up);
+		//pNewCamera->SetLookAt(m_xmf3Up)
+		
 		pNewCamera->SetPosition(Vector3::Add(m_xmf3Position, m_pCamera->GetOffset()));
 		//pNewCamera->Rotate(-90, 0, 0);
 		pNewCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
@@ -573,13 +578,14 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 
 	}
 
-
-	CLoadedModelInfo *pAngrybotModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);
+	//m_ObjType = DYNAMIC;
+	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);
 	
-	SetChild(pAngrybotModel->m_pModelRootObject, true);
-	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
 
-	m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
+	SetChild(pPlayerModel->m_pModelRootObject, true);
+	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
+
+	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
 	m_pAnimationController->SetTrackAnimationSet(0, 0);
 
 	m_pAnimationController->SetCallbackKeys(1, 3);
@@ -601,8 +607,10 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 		SetPlayerUpdatedContext(pContext);
 		SetCameraUpdatedContext(pContext);
 	}
-
-	if (pAngrybotModel) delete pAngrybotModel;
+	SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
+	OBJECTMANAGER->AddGameObject(this, m_ObjType);
+	if (pPlayerModel) delete pPlayerModel;
+	
 }
 
 CTerrainPlayer::~CTerrainPlayer()
@@ -712,3 +720,12 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 	}
 	
 }
+////////////////////////////
+//void CTerrainPlayer::Animate(float fTimeElapsed)
+//{
+//	CGameObject::Animate(fTimeElapsed);
+//}
+//void CTerrainPlayer::UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent) {
+//
+// CGameObject::UpdateTransform(NULL);
+//}

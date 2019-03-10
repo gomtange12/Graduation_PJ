@@ -67,7 +67,6 @@ protected:
 	ID3D12Resource					**m_ppd3dSubSetIndexBuffers = NULL;
 	ID3D12Resource					**m_ppd3dSubSetIndexUploadBuffers = NULL;
 	D3D12_INDEX_BUFFER_VIEW			*m_pd3dSubSetIndexBufferViews = NULL;
-	BoundingOrientedBox			m_xmOOBB;
 
 public:
 	UINT GetType() { return(m_nType); }
@@ -81,7 +80,15 @@ public:
 	virtual void OnPreRender(ID3D12GraphicsCommandList *pd3dCommandList, void *pContext);
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, int nSubSet);
 	virtual void OnPostRender(ID3D12GraphicsCommandList *pd3dCommandList, void *pContext);
-	void SetOOBB(XMFLOAT3& xmCenter, XMFLOAT3& xmExtents, XMFLOAT4& xmOrientation) { m_xmOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation); }
+
+public:
+
+	XMFLOAT3 GetAABBCenter() {
+		return m_xmf3AABBCenter;
+	};
+	XMFLOAT3 GetAABBExtents() {
+		return m_xmf3AABBExtents;
+	};
 
 };
 

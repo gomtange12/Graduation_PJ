@@ -1,5 +1,5 @@
 #pragma once
-class CInputManager : public CSingleTonBase<CPlayerManager>
+class CInputManager : public CSingleTonBase<CInputManager>
 {
 public:
 	CInputManager();

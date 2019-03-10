@@ -94,7 +94,6 @@ public:
 
 private:
 	int								m_nReferences = 0;
-
 public:
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
@@ -364,6 +363,7 @@ class CGameObject
 private:
 	int								m_nReferences = 0;
 
+
 public:
 	void AddRef();
 	void Release();
@@ -375,6 +375,9 @@ public:
 
 public:
 	//static int m_ObjectState;
+	
+	OBJTYPE							m_ObjType;
+
 	char							m_pstrFrameName[64];
 
 	CMesh							*m_pMesh = NULL;
@@ -393,9 +396,9 @@ public:
 	void SetShader(CShader *pShader);
 	void SetShader(int nMaterial, CShader *pShader);
 	void SetMaterial(int nMaterial, CMaterial *pMaterial);
-
+	void SetObjType(OBJTYPE type) { m_ObjType = type; }
 	void SetChild(CGameObject *pChild, bool bReferenceUpdate=false);
-
+	
 	virtual void BuildMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList) { }
 
 	virtual void OnPrepareAnimate() { }
@@ -460,6 +463,12 @@ public:
 	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, char *pstrFileName, CShader *pShader, bool bHasAnimation);
 
 	static void PrintFrameInfo(CGameObject *pGameObject, CGameObject *pParent);
+	BoundingOrientedBox			m_xmOOBB;
+	BoundingOrientedBox			m_xmTransedOOBB;
+
+	void SetOOBB(XMFLOAT3& xmCenter, XMFLOAT3& xmExtents, XMFLOAT4& xmOrientation) { m_xmOOBB = m_xmTransedOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation); }
+
+
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

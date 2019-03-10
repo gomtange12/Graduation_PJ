@@ -54,9 +54,6 @@
     <ClInclude Include="Mesh.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -91,7 +88,10 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="CObjectManager.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일\ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>소스 파일\ObjectManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -114,9 +114,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MyStruct.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
@@ -149,8 +146,11 @@
     <ClCompile Include="CTempScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>소스 파일\ObjectManager</Filter>
+    </ClCompile>
     <ClCompile Include="CObjectManager.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\ObjectManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

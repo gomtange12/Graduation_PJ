@@ -5,6 +5,8 @@
 #include "stdafx.h"
 #include "Shader.h"
 
+#include "Player.h"
+#include "CPlayerManager.h"
 CShader::CShader()
 {
 }
@@ -422,6 +424,8 @@ void CStandardObjectsShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, 
 			m_ppObjects[j]->Render(pd3dCommandList, pCamera);
 		}
 	}
+
+	
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -551,7 +555,17 @@ void CSkinnedAnimationObjectsShader::ReleaseObjects()
 
 void CSkinnedAnimationObjectsShader::AnimateObjects(float fTimeElapsed)
 {
-	m_fElapsedTime = fTimeElapsed;
+	//if (!m_ppObjects[0] )
+	//{
+
+	//if (PLAYER->GetPlayer()->m_xmTransedOOBB.Intersects(m_ppObjects[0]->m_xmTransedOOBB)){
+	//	//PLAYER->GetPlayer()->SetPosition(XMFLOAT3(900.0f, 900.0f, 900.0f));
+	//}
+	//}
+	//else
+	//{
+	//	int i = 0;
+	//}
 }
 
 void CSkinnedAnimationObjectsShader::ReleaseUploadBuffers()
@@ -565,13 +579,15 @@ void CSkinnedAnimationObjectsShader::Render(ID3D12GraphicsCommandList *pd3dComma
 
 	for (int j = 0; j < m_nObjects; j++)
 	{
-		if (m_ppObjects[j])
+		if (m_ppObjects[j]!=NULL)
 		{
 			//m_ppObjects[j]->Animate(m_fElapsedTime);
 			m_ppObjects[j]->UpdateTransform(NULL);
 			m_ppObjects[j]->Render(pd3dCommandList, pCamera);
 		}
 	}
+
+	
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -586,7 +602,7 @@ CAngrybotObjectsShader::~CAngrybotObjectsShader()
 
 void CAngrybotObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
-	int xObjects = 7, zObjects = 7, i = 0;
+	/*int xObjects = 7, zObjects = 7, i = 0;
 
 	m_nObjects = (xObjects * 2 + 1) * (zObjects * 2 + 1);
 
@@ -620,5 +636,5 @@ void CAngrybotObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12Graphi
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	if (pAngrybotModel) delete pAngrybotModel;
+	if (pAngrybotModel) delete pAngrybotModel;*/
 }
