@@ -465,7 +465,7 @@ XMFLOAT3 RandomPositionInSphere(XMFLOAT3 xmf3Center, float fRadius, int nColumn,
 
 void CHellicopterObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
-	m_nObjects = 1;
+	/*m_nObjects = 1;
 	m_ppObjects = new CGameObject*[m_nObjects];
 
 	CLoadedModelInfo *pMapModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Map/ALL_PIECES.bin", NULL, false);
@@ -474,7 +474,7 @@ void CHellicopterObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12Gra
 	m_ppObjects[nObjects] = new MapObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
 	m_ppObjects[nObjects]->SetPosition(380,100,510);
 
-	m_ppObjects[nObjects]->SetScale(100, 100, 100);
+	m_ppObjects[nObjects]->SetScale(100, 100, 100);*/
 	//CLoadedModelInfo *pGunshipModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Gunship.bin", this, false);
 
 	/*int nColumnSpace = 5, nColumnSize = 30;           
@@ -530,9 +530,9 @@ void CHellicopterObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12Gra
         }
     }*/
 
-	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	if (pMapModel) delete pMapModel;
+	//if (pMapModel) delete pMapModel;
 	//if (pGunshipModel) delete pGunshipModel;
 }
 

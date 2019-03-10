@@ -613,9 +613,7 @@ CGameObject::CGameObject(int nMaterials) : CGameObject()
 		m_ppMaterials = new CMaterial*[m_nMaterials];
 		for(int i = 0; i < m_nMaterials; i++) m_ppMaterials[i] = NULL;
 	}
-	
 
-	
 }
 
 CGameObject::~CGameObject()
