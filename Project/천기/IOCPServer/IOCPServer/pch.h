@@ -10,10 +10,12 @@
 #define PCH_H
 
 // TODO: 여기에 미리 컴파일하려는 헤더 추가
+#pragma comment(lib, "ws2_32.lib")
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <process.h>
 #include <winsock2.h>
+
 
 #endif //PCH_H

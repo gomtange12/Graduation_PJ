@@ -13,13 +13,19 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\FRAMEWORK">
+      <UniqueIdentifier>{2652ab1a-ca40-41b9-8f2b-9d5726b48df3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\IOCPServer">
+      <UniqueIdentifier>{adec572c-50a1-4459-8b05-eacd02721adb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="IOCPServer.h">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\IOCPServer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -27,10 +33,10 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="FRAMEWORK.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\FRAMEWORK</Filter>
     </ClCompile>
     <ClCompile Include="IOCPServer.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\IOCPServer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
