@@ -4,7 +4,7 @@
 #include "CTempScene.h"
 CSceneManager::CSceneManager()
 {
-	m_pTempScene = NULL;// std::make_shared<CTempScene>();
+	m_pTempScene = std::make_shared<CTempScene>();
 
 }
 
@@ -15,7 +15,7 @@ CSceneManager::~CSceneManager()
 
 void CSceneManager::SetScene(SceneState state)
 {
-	/*if (m_pTempScene != NULL)
+	if (m_pTempScene != NULL)
 	{
 
 		switch (state)
@@ -38,8 +38,8 @@ void CSceneManager::SetScene(SceneState state)
 		break;
 		}
 
-	}*/
-	if (m_pTempScene)
+	}
+	/*if (m_pTempScene)
 	{
 		delete m_pTempScene;
 		m_pTempScene = NULL;
@@ -62,5 +62,5 @@ void CSceneManager::SetScene(SceneState state)
 
 		break;
 
-	}
+	}*/
 }

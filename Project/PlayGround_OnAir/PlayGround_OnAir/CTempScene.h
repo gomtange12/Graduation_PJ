@@ -1,4 +1,8 @@
 #pragma once
+#include "stdafx.h"
+#include "Shader.h"
+#include "Player.h"
+#include "Scene.h"
 #define TEMP_MAX_LIGHTS						16 
 #define TEMP_POINT_LIGHT						1
 #define TEMP_SPOT_LIGHT						2
@@ -7,6 +11,7 @@ class CGameObject;
 class CShader;
 class CSkyBox;
 class CHeightMapTerrain;
+class CScene;
 struct TEMPLIGHT
 {
 	XMFLOAT4							m_xmf4Ambient;
@@ -52,6 +57,7 @@ public:
 
 	ID3D12Resource						*m_pd3dcbLights = NULL;
 	TEMPLIGHTS								*m_pcbMappedLights = NULL;
+	
 	//필요한 리소스별로 생성하고 추가.
 public: 
 	//가상함수
@@ -63,7 +69,13 @@ public:
 	virtual void ReleaseShaderVariables();
 	void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 public:
+	static D3D12_GPU_DESCRIPTOR_HANDLE CreateConstantBufferViews(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nConstantBufferViews, ID3D12Resource *pd3dConstantBuffers, UINT nStride);
+	static D3D12_GPU_DESCRIPTOR_HANDLE CreateShaderResourceViews(ID3D12Device *pd3dDevice, CTexture *pTexture, UINT nRootParameter, bool bAutoIncrement);
+	void AnimateObjects(float fTimeElapsed);
+	float								m_fElapsedTime = 0.0f;
+
 	ID3D12RootSignature					*m_pd3dTempGraphicsRootSignature = NULL;
+	ID3D12RootSignature *GetGraphicsRootSignature() { return(m_pd3dGraphicsRootSignature); }
 
 	static ID3D12DescriptorHeap			*m_pd3dCbvSrvDescriptorHeap;
 
@@ -84,11 +96,15 @@ public:
 	void BuildDefaultLightsAndMaterials();
 
 	ID3D12RootSignature *CTempScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevice);
+	void ReleaseUploadBuffers();
+	bool ProcessInput(UCHAR *pKeysBuffer);
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
 
+	void ReleaseObjects();
 	//정적변수들을 어떻게 할 것인가
 };
 
-class CTempLoadScene : public CTempScene
+class CTempLoadScene : public CScene
 {
 public:
 	CTempLoadScene();
@@ -96,7 +112,7 @@ public:
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 
 };
-class CTempMenuScene : public CTempScene
+class CTempMenuScene : public CScene
 {
 public:
 	CTempMenuScene();
@@ -104,7 +120,7 @@ public:
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList) override;
 
 };
-class CTempInGameScene : public CTempScene
+class CTempInGameScene : public CScene
 {
 public:
 	CTempInGameScene();
@@ -112,7 +128,7 @@ public:
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList) override;
 
 };
-class CTempGameOverScene : public CTempScene
+class CTempGameOverScene : public CScene
 {
 public:
 	CTempGameOverScene();
