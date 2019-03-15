@@ -1,0 +1,5 @@
+천기
+ 예정사항
+ - UI 2차 완성 예정 (HP BAR + 로비 화면 UI)
+ - ECO Client 와 ECO IOCP SERVER 연동 후 -> DX12 프로젝트와 연동
+ - 패킷 정의, 서버 프레임워크 업데이트
