@@ -54,7 +54,7 @@ bool IOCPServer::setSocket()
 	{ 
 		ErrorHandling("bind() error!");
 	}
-	if (listen(m_hServSock, 10) == SOCKET_ERROR)
+	if (listen(m_hServSock, 10) == SOCKET_ERROR) //int backlog : 접속 대기 큐의 최대 연결 가능 수
 	{
 		ErrorHandling("listen() error!");
 	}
@@ -73,11 +73,14 @@ bool IOCPServer::Run()
 		SOCKET hClntSock;
 		SOCKADDR_IN clntAddr;
 		int nAddrLen = sizeof(clntAddr);
+
 		hClntSock = accept(m_hServSock, (SOCKADDR *)&clntAddr, &nAddrLen);
 		if (hClntSock == INVALID_SOCKET)
 		{ 
 			ErrorHandling("accept() error!");
-		}// 연결된 클라이언트의 소켓 핸들 정보와 주소 정보를 설정
+		}
+
+		// 연결된 클라이언트의 소켓 핸들 정보와 주소 정보를 설정
 		perHandleData = new PER_HANDLE_DATA;
 		perHandleData->hClntSock = hClntSock; 
 		memcpy(&(perHandleData->clntAddr), &clntAddr, nAddrLen);
@@ -90,7 +93,8 @@ bool IOCPServer::Run()
 		memset(&(perIoData->overlapped), 0, sizeof(OVERLAPPED));
 		perIoData->wsaBuf.len = BUFSIZE;
 		perIoData->wsaBuf.buf = perIoData->buffer;
-		perIoData->rwMode = READ;dwFlags = 0;
+		perIoData->rwMode = READ;
+		dwFlags = 0;
 		
 		// 4. 중첩된 데이타 입력
 		WSARecv(perHandleData->hClntSock,   // 데이타 입력 소켓
@@ -146,7 +150,7 @@ UINT WINAPI IOCPServer::CompletionThread()
 			perIoData->wsaBuf.len = dwBytesTransferred;
 			perIoData->rwMode = WRITE;
 			WSASend(perHandleData->hClntSock, &(perIoData->wsaBuf), 1, NULL, 0, &(perIoData->overlapped), NULL);
-			
+			  
 			// RECEIVE AGAIN
 			perIoData = new PER_IO_DATA(); 
 			memset(&(perIoData->overlapped), 0, sizeof(OVERLAPPED));
