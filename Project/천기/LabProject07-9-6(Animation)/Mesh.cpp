@@ -449,11 +449,11 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 			//pGameObject->SetOOBB(m_xmf3AABBCenter, m_xmf3AABBExtents, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 			// 수정
 			// 무기마다 설정값이 다르니까 따로 if문 만들어 줘야함
-			if (!strcmp(m_pstrMeshName, "keytar"))
-			{
-				//m_xmf3AABBExtents.y + 20; //테스트용
-				pGameObject->SetOOBB(m_xmf3AABBCenter, m_xmf3AABBExtents, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
-			}
+			//if (!strcmp(m_pstrMeshName, "keytar"))
+			//{
+			//	//m_xmf3AABBExtents.y + 20; //테스트용
+			//	pGameObject->SetOOBB(m_xmf3AABBCenter, m_xmf3AABBExtents, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+			//}
 			
 		}
 		else if (!strcmp(pstrToken, "<Positions>:"))

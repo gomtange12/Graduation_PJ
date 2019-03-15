@@ -48,10 +48,7 @@ protected:
 	XMFLOAT3						m_xmf3AABBCenter = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	XMFLOAT3						m_xmf3AABBExtents = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
-	//수정
-	XMFLOAT3						m_xmf3OOBBCenter = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	XMFLOAT3						m_xmf3OOBBExtents = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	//
+
 
 	D3D12_PRIMITIVE_TOPOLOGY		m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	UINT							m_nSlot = 0;
@@ -79,10 +76,10 @@ public:
 
 	//수정
 	XMFLOAT3 GetOOBBCenter() {
-		return m_xmf3OOBBCenter;
+		return m_xmf3AABBCenter;
 	};
 	XMFLOAT3 GetOOBBExtents() {
-		return m_xmf3OOBBExtents;
+		return m_xmf3AABBExtents;
 	};
 	//
 
@@ -95,22 +92,8 @@ public:
 	virtual void OnPreRender(ID3D12GraphicsCommandList *pd3dCommandList, void *pContext);
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, int nSubSet);
 	virtual void OnPostRender(ID3D12GraphicsCommandList *pd3dCommandList, void *pContext);
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-	//수정
-public:
-	BoundingOrientedBox		m_xmOOBB;
-	
-	void SetOOBB(XMFLOAT3& xmCenter, XMFLOAT3& xmExtents, XMFLOAT4& xmOrientation)
-	{
-		m_xmOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation);
-	}
-	//
-=======
->>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
-=======
->>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
+
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,7 @@
 
 
 
-#define PORT        9088
+#define PORT        9000
 #define BUFSIZE     1024
 #define READ        3
 #define WRITE       5

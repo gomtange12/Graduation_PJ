@@ -124,13 +124,6 @@ public:
 
 	virtual void OnPlayerUpdateCallback(float fTimeElapsed);
 	virtual void OnCameraUpdateCallback(float fTimeElapsed);
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-	
-=======
->>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
-=======
->>>>>>> c5067460ced36c3f80b4fa54099b3420276964e3
 };
 
