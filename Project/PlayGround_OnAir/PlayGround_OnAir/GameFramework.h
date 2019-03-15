@@ -6,7 +6,7 @@
 #include "Timer.h"
 #include "Player.h"
 #include "Scene.h"
-class CTempScene;
+
 class CGameFramework //: public CSingleTonBase<CGameFramework>
 {
 public:
@@ -82,7 +82,6 @@ private:
 	CGameTimer					m_GameTimer;
 
 	CScene						*m_pScene = NULL;
-	std::shared_ptr<CTempScene> *m_pTempScene = NULL;
 	//CPlayer						*m_pPlayer = NULL;
 	shared_ptr<CCamera>					m_pCamera = NULL;
 
