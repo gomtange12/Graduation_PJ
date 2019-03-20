@@ -27,7 +27,7 @@ CScene::~CScene()
 
 void CScene::BuildDefaultLightsAndMaterials()
 {
-	m_nLights = 8;
+	m_nLights = 9;
 	m_pLights = new LIGHT[m_nLights];
 	::ZeroMemory(m_pLights, sizeof(LIGHT) * m_nLights);
 
@@ -43,7 +43,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[0].m_bEnable = true;
 	m_pLights[0].m_nType = SPOT_LIGHT;
-	m_pLights[0].m_fRange = 600.0f;
+	m_pLights[0].m_fRange = 500.0f;
 	m_pLights[0].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[0].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[0].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -57,7 +57,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[1].m_bEnable = true;
 	m_pLights[1].m_nType = SPOT_LIGHT;
-	m_pLights[1].m_fRange = 600.0f;
+	m_pLights[1].m_fRange = 500.0f;
 	m_pLights[1].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[1].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[1].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -70,7 +70,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[2].m_bEnable = true;
 	m_pLights[2].m_nType = SPOT_LIGHT;
-	m_pLights[2].m_fRange = 600.0f;
+	m_pLights[2].m_fRange = 500.0f;
 	m_pLights[2].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[2].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[2].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -83,7 +83,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[3].m_bEnable = true;
 	m_pLights[3].m_nType = SPOT_LIGHT;
-	m_pLights[3].m_fRange = 600.0f;
+	m_pLights[3].m_fRange = 500.0f;
 	m_pLights[3].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[3].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[3].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -97,7 +97,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[4].m_bEnable = true;
 	m_pLights[4].m_nType = SPOT_LIGHT;
-	m_pLights[4].m_fRange = 600.0f;
+	m_pLights[4].m_fRange = 500.0f;
 	m_pLights[4].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[4].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[4].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -111,7 +111,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[5].m_bEnable = true;
 	m_pLights[5].m_nType = SPOT_LIGHT;
-	m_pLights[5].m_fRange = 600.0f;
+	m_pLights[5].m_fRange = 500.0f;
 	m_pLights[5].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[5].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[5].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -125,7 +125,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[6].m_bEnable = true;
 	m_pLights[6].m_nType = SPOT_LIGHT;
-	m_pLights[6].m_fRange = 600.0f;
+	m_pLights[6].m_fRange = 500.0f;
 	m_pLights[6].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[6].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[6].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -139,7 +139,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[7].m_bEnable = true;
 	m_pLights[7].m_nType = SPOT_LIGHT;
-	m_pLights[7].m_fRange = 600.0f;
+	m_pLights[7].m_fRange = 500.0f;
 	m_pLights[7].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[7].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[7].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -149,6 +149,19 @@ void CScene::BuildDefaultLightsAndMaterials()
 	m_pLights[7].m_fFalloff = 8.0f;
 	m_pLights[7].m_fPhi = (float)cos(XMConvertToRadians(40.0f));
 	m_pLights[7].m_fTheta = (float)cos(XMConvertToRadians(20.0f));
+
+	m_pLights[8].m_bEnable = true;
+	m_pLights[8].m_nType = POINT_LIGHT;
+	m_pLights[8].m_fRange = 500.0f;
+	m_pLights[8].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+	m_pLights[8].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	m_pLights[8].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
+	m_pLights[8].m_xmf3Position = XMFLOAT3(190.0f, 710.0f, 465.0f); //플레이어 위
+	m_pLights[8].m_xmf3Direction = XMFLOAT3(-1.0f, 1.0f, 1.0f);
+	m_pLights[8].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
+	m_pLights[8].m_fFalloff = 8.0f;
+	m_pLights[8].m_fPhi = (float)cos(XMConvertToRadians(40.0f));
+	m_pLights[8].m_fTheta = (float)cos(XMConvertToRadians(20.0f));
 	//m_pLights[0].m_bEnable = true;
 	//m_pLights[0].m_nType = POINT_LIGHT;
 	//m_pLights[0].m_fRange = 1000.0f;
