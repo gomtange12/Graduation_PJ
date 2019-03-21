@@ -93,6 +93,9 @@
     <ClInclude Include="Object.h">
       <Filter>소스 파일\ObjectManager</Filter>
     </ClInclude>
+    <ClInclude Include="CBillboardObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -151,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="CObjectManager.cpp">
       <Filter>소스 파일\ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CBillboardObject.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

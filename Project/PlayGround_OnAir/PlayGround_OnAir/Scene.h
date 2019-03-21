@@ -42,7 +42,7 @@ class CScene
 public:
     CScene();
     ~CScene();
-
+	SceneState m_Scene{ MENUSCENE };
 	bool OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 
@@ -116,4 +116,20 @@ public:
 
 	ID3D12Resource						*m_pd3dcbLights = NULL;
 	LIGHTS								*m_pcbMappedLights = NULL;
+};
+
+class CMenuScene : public CScene
+{
+public:
+	CMenuScene();
+	~CMenuScene();
+
+public:
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void ReleaseShaderVariables();
+public:
+	ID3D12Resource						*m_pd3dcbMenuLights = NULL;
+	LIGHTS								*m_pcbMappedMenuLights = NULL;
+
 };

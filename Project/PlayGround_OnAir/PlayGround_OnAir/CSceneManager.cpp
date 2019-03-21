@@ -46,9 +46,9 @@ void CSceneManager::SetScene(SceneState state)
 	}
 	switch (state)
 	{
-	case MENU:
+	case MENUSCENE:
 		m_pTempScene = new CTempLoadScene;
-		m_SceneType = MENU;
+		m_SceneType = MENUSCENE;
 
 		break;
 	case INGAME:

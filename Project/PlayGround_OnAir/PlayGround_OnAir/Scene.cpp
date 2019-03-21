@@ -41,9 +41,10 @@ void CScene::BuildDefaultLightsAndMaterials()
 	m_pLights[0].m_xmf3Direction = XMFLOAT3(1.0f, 0.0f, 0.0f);
 	m_pLights[0].m_xmf3Position = XMFLOAT3(200.0f, 500.0f, 0.0f);*/
 
+	//중앙라이트
 	m_pLights[0].m_bEnable = true;
 	m_pLights[0].m_nType = SPOT_LIGHT;
-	m_pLights[0].m_fRange = 500.0f;
+	m_pLights[0].m_fRange = 300.0f;
 	m_pLights[0].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[0].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[0].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -51,13 +52,13 @@ void CScene::BuildDefaultLightsAndMaterials()
 	m_pLights[0].m_xmf3Direction = XMFLOAT3(1.0f, 1.0f, -1.0f);
 	m_pLights[0].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
 	m_pLights[0].m_fFalloff = 8.0f;
-	m_pLights[0].m_fPhi = (float)cos(XMConvertToRadians(40.0f));
+	m_pLights[0].m_fPhi = (float)cos(XMConvertToRadians(30.0f));
 	m_pLights[0].m_fTheta = (float)cos(XMConvertToRadians(20.0f));
 
 
 	m_pLights[1].m_bEnable = true;
 	m_pLights[1].m_nType = SPOT_LIGHT;
-	m_pLights[1].m_fRange = 500.0f;
+	m_pLights[1].m_fRange = 300.0f;
 	m_pLights[1].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[1].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[1].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -70,7 +71,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[2].m_bEnable = true;
 	m_pLights[2].m_nType = SPOT_LIGHT;
-	m_pLights[2].m_fRange = 500.0f;
+	m_pLights[2].m_fRange = 300.0f;
 	m_pLights[2].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[2].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[2].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -83,7 +84,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[3].m_bEnable = true;
 	m_pLights[3].m_nType = SPOT_LIGHT;
-	m_pLights[3].m_fRange = 500.0f;
+	m_pLights[3].m_fRange = 300.0f;
 	m_pLights[3].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[3].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[3].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -97,7 +98,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[4].m_bEnable = true;
 	m_pLights[4].m_nType = SPOT_LIGHT;
-	m_pLights[4].m_fRange = 500.0f;
+	m_pLights[4].m_fRange = 300.0f;
 	m_pLights[4].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[4].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[4].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -111,7 +112,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[5].m_bEnable = true;
 	m_pLights[5].m_nType = SPOT_LIGHT;
-	m_pLights[5].m_fRange = 500.0f;
+	m_pLights[5].m_fRange = 300.0f;
 	m_pLights[5].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[5].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[5].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -125,7 +126,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[6].m_bEnable = true;
 	m_pLights[6].m_nType = SPOT_LIGHT;
-	m_pLights[6].m_fRange = 500.0f;
+	m_pLights[6].m_fRange = 300.0f;
 	m_pLights[6].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[6].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[6].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -139,7 +140,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[7].m_bEnable = true;
 	m_pLights[7].m_nType = SPOT_LIGHT;
-	m_pLights[7].m_fRange = 500.0f;
+	m_pLights[7].m_fRange = 300.0f;
 	m_pLights[7].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[7].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[7].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
@@ -152,16 +153,17 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 	m_pLights[8].m_bEnable = true;
 	m_pLights[8].m_nType = POINT_LIGHT;
-	m_pLights[8].m_fRange = 500.0f;
+	m_pLights[8].m_fRange = 300.0f;
 	m_pLights[8].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 	m_pLights[8].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	m_pLights[8].m_xmf4Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.0f);
-	m_pLights[8].m_xmf3Position = XMFLOAT3(190.0f, 710.0f, 465.0f); //플레이어 위
-	m_pLights[8].m_xmf3Direction = XMFLOAT3(-1.0f, 1.0f, 1.0f);
+	m_pLights[8].m_xmf3Position = XMFLOAT3(190.0f, 710.0f, 235.0f); //플레이어 위
+	m_pLights[8].m_xmf3Direction = XMFLOAT3(0.0f, -1.0f, 0.0f);
 	m_pLights[8].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
 	m_pLights[8].m_fFalloff = 8.0f;
-	m_pLights[8].m_fPhi = (float)cos(XMConvertToRadians(40.0f));
-	m_pLights[8].m_fTheta = (float)cos(XMConvertToRadians(20.0f));
+	
+
+
 	//m_pLights[0].m_bEnable = true;
 	//m_pLights[0].m_nType = POINT_LIGHT;
 	//m_pLights[0].m_fRange = 1000.0f;
@@ -777,4 +779,33 @@ void CScene::CheckObjectByObjectCollisions() {
 	XMFLOAT3 objoobb = m_ppGameObjects[0]->m_xmOOBB.Center;
 
 
+}
+
+CMenuScene::CMenuScene()
+{
+	m_nLights = 0;
+}
+
+CMenuScene::~CMenuScene()
+{
+
+}
+
+void CMenuScene::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
+	m_pd3dcbMenuLights = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_pd3dcbMenuLights->Map(0, NULL, (void **)&m_pcbMappedLights);
+}
+
+void CMenuScene::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	::memcpy(m_pcbMappedLights->m_pLights, m_pLights, sizeof(LIGHT) * m_nLights);
+	::memcpy(&m_pcbMappedLights->m_xmf4GlobalAmbient, &m_xmf4GlobalAmbient, sizeof(XMFLOAT4));
+	::memcpy(&m_pcbMappedLights->m_nLights, &m_nLights, sizeof(int));
+}
+
+void CMenuScene::ReleaseShaderVariables()
+{
 }

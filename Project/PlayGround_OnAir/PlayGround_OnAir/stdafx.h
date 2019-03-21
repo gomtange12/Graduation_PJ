@@ -114,7 +114,7 @@ enum PlayerState {
 
 enum SceneState {
 	LOADING,
-	MENU,
+	MENUSCENE,
 	INGAME,
 	GAMEOVER
 };
@@ -220,7 +220,17 @@ namespace Vector3
 		XMStoreFloat3(&xmf3Result, XMVector3TransformCoord(XMLoadFloat3(&xmf3Vector), xmmtxTransform));
 		return(xmf3Result);
 	}
-
+	inline XMFLOAT3 SubtractNormalize(XMFLOAT3& xmf3Vector1, XMFLOAT3& xmf3Vector2, bool bNormalize = false)
+	{
+		XMFLOAT3 xmf3Result;
+		if (bNormalize) {
+			XMStoreFloat3(&xmf3Result, XMVector3Normalize(XMLoadFloat3(&xmf3Vector1) - XMLoadFloat3(&xmf3Vector2)));
+		}
+		else {
+			XMStoreFloat3(&xmf3Result, XMLoadFloat3(&xmf3Vector1) - XMLoadFloat3(&xmf3Vector2));
+		}
+		return(xmf3Result);
+	}
 	inline XMFLOAT3 TransformCoord(XMFLOAT3& xmf3Vector, XMFLOAT4X4& xmmtx4x4Matrix)
 	{
 		return(TransformCoord(xmf3Vector, XMLoadFloat4x4(&xmmtx4x4Matrix)));
