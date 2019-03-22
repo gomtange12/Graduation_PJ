@@ -10,12 +10,22 @@
 #define PCH_H
 
 // TODO: 여기에 미리 컴파일하려는 헤더 추가
-#pragma comment(lib, "ws2_32.lib")
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <process.h>
 #include <winsock2.h>
+#pragma comment(lib, "ws2_32.lib")
+#include <iostream>
+//
+#include <vector>
+#include <thread>
+//
 
+
+
+#define MAX_BUFFER		1024
+#define SERVER_PORT		3500
+#define MAX_USER		10
 
 #endif //PCH_H

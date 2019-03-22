@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="IOCPServer.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Obj.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FRAMEWORK.cpp" />
