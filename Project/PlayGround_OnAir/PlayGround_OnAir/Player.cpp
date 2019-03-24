@@ -249,8 +249,12 @@ void CPlayer::Update(float fTimeElapsed)
 		break;*/
 	case IDLE:
 	case RUN:
-		m_OnAacting = FALSE;
-		SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
+		//if (!m_OnAacting)
+		//{
+
+			SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
+			m_OnAacting = FALSE;
+		//}
 		//SetTrackAnimationSet(0, RUN);
 		//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		//m_OnAacting = FALSE;
@@ -258,12 +262,13 @@ void CPlayer::Update(float fTimeElapsed)
 		break;
 	
 	case JUMP:
-		SetTrackAnimationSet(0, JUMP);
 		m_OnAacting = TRUE;
+		SetTrackAnimationSet(0, JUMP);
 
 		//SetTrackAnimationSet(0, IDLE);
 
 		break;
+
 	}
 	//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 
@@ -578,7 +583,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	}
 
 	//m_ObjType = DYNAMIC;
-	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);
+	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeytarTest.bin", NULL, true);
 	
 
 	SetChild(pPlayerModel->m_pModelRootObject, true);

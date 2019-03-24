@@ -238,7 +238,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	XMFLOAT4 xmf4Color(0.0f, 0.3f, 0.0f, 0.0f);
 	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/white.raw"), 257, 257, xmf3Scale, xmf4Color);
 
-	m_nShaders = 1;
+	m_nShaders = 2;
 	m_ppShaders = new CShader*[m_nShaders];
 
 	/*CHellicopterObjectsShader *pHellicopterObjectsShader = new CHellicopterObjectsShader();
@@ -257,6 +257,16 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 
 	CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL_PIECES.bin", NULL, false);
 	
+	CAngrybotObjectsShader *pPlayGroundObjectsShader = new CAngrybotObjectsShader();
+	pPlayGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pPlayGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pPlayGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+
+	m_ppShaders[1] = pPlayGroundObjectsShader;
+
+	CLoadedModelInfo *pPlayGroundMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
+
+
 	/*CMapObjectsShader *pConcertMapShader = new CMapObjectsShader();
 	pConcertMapShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	pConcertMapShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -279,7 +289,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	CLoadedModelInfo *pMapObjectModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Map/ALL_PIECES.bin",NULL,false);
 	
 	*/
-	m_nGameObjects = 1;
+	m_nGameObjects = 2;
 	m_ppGameObjects = new CGameObject*[m_nGameObjects];
 	
 	
@@ -295,7 +305,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 
 	m_ppGameObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppGameObjects[0]->SetChild(pMapObject->m_pModelRootObject, true);
+	m_ppGameObjects[0]->SetChild(pPlayGroundMapObject->m_pModelRootObject, true);
 	//m_ppGameObjects[0]->AddRef();
 	//m_ppGameObjects[0]->SetMesh(pAngrybotModel->m_nSkinnedMeshes);
 	/*m_ppGameObjects[0]->m_pAnimationController = new CAnimationController(2, pAngrybotModel->m_pAnimationSets);
@@ -308,7 +318,12 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppGameObjects[0]->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	m_ppGameObjects[0]->SetScale(200.0f, 200.0f, 200.0f);
 
-
+	//2¹ø¤Š ¸Ê
+	m_ppGameObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppGameObjects[1]->SetChild(pMapObject->m_pModelRootObject, true);
+	m_ppGameObjects[1]->SetPosition(200.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
+	m_ppGameObjects[1]->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
+	m_ppGameObjects[1]->SetScale(200.0f, 200.0f, 200.0f);
 
 	//m_ppGameObjects[1] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	//m_ppGameObjects[1]->SetChild(pAngrybotModel->m_pModelRootObject, true);
@@ -339,6 +354,8 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
 	if (pMapObject) delete pMapObject;
+	if (pPlayGroundMapObject) delete pPlayGroundMapObject;
+
 }
 
 void CScene::ReleaseObjects()
