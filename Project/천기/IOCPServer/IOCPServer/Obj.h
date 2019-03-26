@@ -3,7 +3,7 @@
 //struct OverEx {
 //	WSAOVERLAPPED	m_wsa_over;
 //	WSABUF			m_wsa_buf;
-//	unsigned char	IOCPbuf[MAX_BUFFER];
+//	unsigned char	m_IOCPbuf[MAX_BUFFER];
 //	bool			m_is_recv;
 //};
 //

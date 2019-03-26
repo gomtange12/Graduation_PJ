@@ -13,11 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\FRAMEWORK">
-      <UniqueIdentifier>{2652ab1a-ca40-41b9-8f2b-9d5726b48df3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\IOCPServer">
       <UniqueIdentifier>{adec572c-50a1-4459-8b05-eacd02721adb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ServerMain">
+      <UniqueIdentifier>{2652ab1a-ca40-41b9-8f2b-9d5726b48df3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ThreadManager">
+      <UniqueIdentifier>{a4a9f3dd-302f-4d94-b312-61d1d64e6c99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -30,16 +33,28 @@
     <ClInclude Include="Obj.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="SingleTone.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadManager.h">
+      <Filter>소스 파일\ThreadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Protocol.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="FRAMEWORK.cpp">
-      <Filter>소스 파일\FRAMEWORK</Filter>
-    </ClCompile>
     <ClCompile Include="IOCPServer.cpp">
       <Filter>소스 파일\IOCPServer</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerMain.cpp">
+      <Filter>소스 파일\ServerMain</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadManager.cpp">
+      <Filter>소스 파일\ThreadManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

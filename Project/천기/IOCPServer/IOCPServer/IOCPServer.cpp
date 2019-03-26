@@ -1,27 +1,9 @@
-/*
-## 소켓 서버 : 1 v n - overlapped callback
-1. socket()            : 소켓생성
-2. bind()            : 소켓설정
-3. listen()            : 수신대기열생성
-4. accept()            : 연결대기
-5. read()&write()
-	WIN recv()&send    : 데이터 읽고쓰기
-6. close()
-	WIN closesocket    : 소켓종료
-*/
+
 
 #include "pch.h"
+#include "Protocol.h"
 
-#define MAX_BUFFER        1024
-#define SERVER_PORT        3500
-const int OP_RECV = 1;
-const int OP_SEND = 2;
-struct stOverEx {
-	WSAOVERLAPPED m_wsaOver;
-	WSABUF m_wsaBuf;
-	unsigned char m_IOCPbuf[MAX_BUFFER]; // IOCP send/recv 버퍼
-	unsigned char	m_todo;
-};
+
 struct ClientInfo {
 	SOCKET m_socket;
 	stOverEx m_RecvOverEx;
@@ -38,15 +20,46 @@ struct ChessClient {
 };
 
 ChessClient g_clients[10];
-struct move_packet
-{
-	unsigned char size;
-	unsigned char type;
-};
+
 
 //void CALLBACK callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags);
 HANDLE	g_hIOCP;
 
+void OverlappedRecv(int id) {
+	
+	DWORD flags = 0;
+	ZeroMemory(&g_clients[id].m_ClientInfo.m_RecvOverEx.m_wsaOver, sizeof(WSAOVERLAPPED));
+	
+	if (WSARecv(g_clients[id].m_ClientInfo.m_socket, &g_clients[0].m_ClientInfo.m_RecvOverEx.m_wsaBuf, 1, NULL, &flags, &(g_clients[0].m_ClientInfo.m_RecvOverEx.m_wsaOver), 0))
+	{
+
+		if (WSAGetLastError() != WSA_IO_PENDING)
+		{
+			printf("Error - IO pending Failure\n");
+		}
+	}
+	else {
+		printf("Non Overlapped Recv return.\n");
+
+	}
+	
+}
+void send_packet(int id, void *packet)
+{
+	stOverEx *ex = new stOverEx;
+	memcpy(ex->m_IOCPbuf, packet,reinterpret_cast<unsigned char *>(packet)[0]);
+	ex->m_todo = OP_SEND;
+	ex->m_wsaBuf.buf = (char *)ex->m_IOCPbuf;
+	ex->m_wsaBuf.len = ex->m_IOCPbuf[0];
+	ZeroMemory(&ex->m_wsaOver, sizeof(WSAOVERLAPPED));
+
+	int ret = WSASend(g_clients[id].m_ClientInfo.m_socket, &ex->m_wsaBuf, 1, NULL, 0,&ex->m_wsaOver, 0);
+	if (0 != ret) {
+		int err_no = WSAGetLastError();
+		if (WSA_IO_PENDING != err_no)
+			printf("오류");
+	}
+}
 void InitNetwork() 
 {
 	// Winsock Start - windock.dll 로드
@@ -74,7 +87,7 @@ void accept_thread() {
 	serverAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
 
 	// 2. 소켓설정
-	if (bind(listenSocket, (struct sockaddr*)&serverAddr, sizeof(SOCKADDR_IN)) == SOCKET_ERROR)
+	if (::bind(listenSocket, (struct sockaddr*)&serverAddr, sizeof(SOCKADDR_IN)) == SOCKET_ERROR)
 	{
 		printf("Error - Fail bind\n");
 		// 6. 소켓종료
@@ -99,11 +112,10 @@ void accept_thread() {
 	int addrLen = sizeof(SOCKADDR_IN);
 	memset(&clientAddr, 0, addrLen);
 	SOCKET clientSocket;
-
 	while (1)
 	{
-
 		clientSocket = WSAAccept(listenSocket, (struct sockaddr *)&clientAddr, &addrLen, NULL, NULL);
+	
 		if (clientSocket == INVALID_SOCKET)
 		{
 			printf("Error - Accept Failure\n");
@@ -124,33 +136,123 @@ void accept_thread() {
 		//여기에
 		//패킷을만듬 - 패킷에 데이터를 저장->타입변환해서 버퍼에 넣어줌 ->
 		//WSASend(클라소켓, 저장된 버퍼, 1(버퍼갯수), NULL(보낸데이터크기), 0(동작옵션), 오버랩, 0)
-
-		DWORD flags = 0;
+		
+		
 		g_clients[id].m_id = id;
 		g_clients[id].m_ClientInfo.m_socket = clientSocket;
 		g_clients[id].m_ClientInfo.m_RecvOverEx.m_todo = OP_RECV;
-		g_clients[id].m_ClientInfo.m_RecvOverEx.m_wsaBuf.buf = (CHAR*)g_clients[0].m_ClientInfo.m_RecvOverEx.m_IOCPbuf;
-		g_clients[id].m_ClientInfo.m_RecvOverEx.m_wsaBuf.len = sizeof(g_clients[0].m_ClientInfo.m_RecvOverEx.m_IOCPbuf);
+		g_clients[id].m_ClientInfo.m_RecvOverEx.m_wsaBuf.buf = (CHAR*)g_clients[id].m_ClientInfo.m_RecvOverEx.m_IOCPbuf;
+		g_clients[id].m_ClientInfo.m_RecvOverEx.m_wsaBuf.len = sizeof(g_clients[id].m_ClientInfo.m_RecvOverEx.m_IOCPbuf);
 		g_clients[id].m_ClientInfo.m_prev_size = 0;
-		CreateIoCompletionPort(reinterpret_cast<HANDLE>(g_clients[0].m_ClientInfo.m_socket), g_hIOCP, 0, 0);
-		ZeroMemory(&g_clients[id].m_ClientInfo.m_RecvOverEx.m_wsaOver, sizeof(WSAOVERLAPPED));
-		printf("여기1");
-		if (WSARecv(g_clients[id].m_ClientInfo.m_socket, &g_clients[0].m_ClientInfo.m_RecvOverEx.m_wsaBuf, 1, NULL, &flags, &(g_clients[0].m_ClientInfo.m_RecvOverEx.m_wsaOver), NULL) == SOCKET_ERROR)
-		{
+		g_clients[id].m_connected = true;
 
-			if (WSAGetLastError() != WSA_IO_PENDING)
-			{
-				printf("Error - IO pending Failure\n");
-			}
-		}
-		else {
-			printf("Non Overlapped Recv return.\n");
-
-		}
-		printf("여기2");
+		CreateIoCompletionPort(reinterpret_cast<HANDLE>(g_clients[id].m_ClientInfo.m_socket), g_hIOCP, id, 0);
+		
+		OverlappedRecv(id);
 	}
 }
-void worker_thread() {
+void ProcessPacket(int id, unsigned char *packet)
+{
+	int x = g_clients[id].m_x;
+	int y = g_clients[id].m_y;
+
+	switch (packet[1]) { //type
+	case CS_MOVE:
+		{
+		//이동시
+		switch (packet[2]) //DIR
+		{
+		case UP:
+			break;
+		case DOWN:
+
+			break;
+		case LEFT:
+
+			break;
+		case RIGHT:
+			break;
+		}
+		g_clients[id].m_x = x;
+		g_clients[id].m_y = y;
+		}
+		//보낼 패킷에 넣어줌
+		sc_packet_pos pos_packet;
+		pos_packet.ID = id;
+		pos_packet.size = sizeof(sc_packet_pos);
+		pos_packet.type = SC_POSITION_INFO;
+		pos_packet.X_POS = x;
+		pos_packet.Y_POS = y;
+		send_packet(id, &pos_packet);
+		printf("보냄");
+	}
+}
+void worker_thread()
+{
+	while (true) {
+		
+		DWORD iosize;
+		unsigned long long key;
+		stOverEx *over;
+
+		int ret = GetQueuedCompletionStatus(g_hIOCP, &iosize, &key,
+			reinterpret_cast<WSAOVERLAPPED **>(&over), INFINITE);
+		printf("일시작");
+		// 에러처리
+		if (0 == ret) {
+			int err_no = GetLastError();
+			if (64 == err_no)
+				//ClientDIsconnect(key);
+			//else error_display("GQCS : ", err_no);
+			continue;
+		}
+		//접속종료 처리
+		if (0 == iosize) {
+			//ClientDIsconnect(key);
+			continue;
+		}
+		if (OP_RECV == over->m_todo) {
+			// 패킷 재조립
+			int rest_data = iosize;
+			unsigned char *ptr = over->m_IOCPbuf;
+			int packet_size = 0;
+			if (0 != g_clients[key].m_ClientInfo.m_prev_size)
+				packet_size = g_clients[key].m_ClientInfo.m_packet_buf[0];
+
+			while (rest_data > 0) {
+				if (0 == packet_size) packet_size = ptr[0];
+				int need_size = packet_size - g_clients[key].m_ClientInfo.m_prev_size;
+				if (rest_data >= need_size) {
+					// 패킷을 하나 조립할 수 있음
+					memcpy(g_clients[key].m_ClientInfo.m_packet_buf
+						+ g_clients[key].m_ClientInfo.m_prev_size,
+						ptr, need_size);
+					
+					printf("조립완료");
+					//조립한 패킷을 넘김
+					ProcessPacket(key, g_clients[key].m_ClientInfo.m_packet_buf);
+					//
+					ptr += need_size;
+					rest_data -= need_size;
+					packet_size = 0;
+					g_clients[key].m_ClientInfo.m_prev_size = 0;
+				}
+				else {
+					// 패킷을 완성할 수 없으니 후일 기약하고 남은 데이터 저장
+					memcpy(g_clients[key].m_ClientInfo.m_packet_buf
+						+ g_clients[key].m_ClientInfo.m_prev_size,
+						ptr, rest_data);
+					ptr += rest_data;
+					g_clients[key].m_ClientInfo.m_prev_size += rest_data;
+					rest_data = 0;
+				}
+			}
+			OverlappedRecv(key);
+			
+		}
+		//상태 점검해야함
+	}
+
 
 }
 
@@ -165,66 +267,13 @@ int main()
 		worker_threads.push_back(std::thread{ worker_thread });
 	std::thread accept_th{ accept_thread };
 
-	for (auto &wth : worker_threads) wth.join();
+	for (auto &wth : worker_threads) 
+		wth.join();
 	accept_th.join();
-	printf("여기3");
+	
 	// Winsock End
 	WSACleanup();
 
 	return 0;
 }
 
-//void CALLBACK callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags)
-//{
-//	struct SOCKETINFO *socketInfo;
-//	DWORD sendBytes = 0;
-//	DWORD receiveBytes = 0;
-//	DWORD flags = 0;
-//
-//	socketInfo = (struct SOCKETINFO *)overlapped;
-//	memset(&(socketInfo->overlapped), 0x00, sizeof(WSAOVERLAPPED));
-//
-//	if (dataBytes == 0)
-//	{
-//		closesocket(socketInfo->socket);
-//		free(socketInfo);
-//		return;
-//	}
-//
-//	if (socketInfo->receiveBytes == 0)
-//	{
-//		// WSARecv(최초 대기에 대한)의 콜백일 경우
-//		socketInfo->receiveBytes = dataBytes;
-//		socketInfo->sendBytes = 0;
-//		socketInfo->dataBuffer.buf = socketInfo->messageBuffer;
-//		socketInfo->dataBuffer.len = socketInfo->receiveBytes;
-//
-//		printf("TRACE - Receive message : %s (%d bytes)\n", socketInfo->messageBuffer, dataBytes);
-//
-//		if (WSASend(socketInfo->socket, &(socketInfo->dataBuffer), 1, &sendBytes, 0, &(socketInfo->overlapped), callback) == SOCKET_ERROR)
-//		{
-//			if (WSAGetLastError() != WSA_IO_PENDING)
-//			{
-//				printf("Error - Fail WSASend(error_code : %d)\n", WSAGetLastError());
-//			}
-//		}
-//	}
-//	else
-//	{
-//		// WSASend(응답에 대한)의 콜백일 경우
-//		socketInfo->sendBytes += dataBytes;
-//		socketInfo->receiveBytes = 0;
-//		socketInfo->dataBuffer.len = MAX_BUFFER;
-//		socketInfo->dataBuffer.buf = socketInfo->messageBuffer;
-//
-//		printf("TRACE - Send message : %s (%d bytes)\n", socketInfo->messageBuffer, dataBytes);
-//
-//		if (WSARecv(socketInfo->socket, &socketInfo->dataBuffer, 1, &receiveBytes, &flags, &(socketInfo->overlapped), callback) == SOCKET_ERROR)
-//		{
-//			if (WSAGetLastError() != WSA_IO_PENDING)
-//			{
-//				printf("Error - Fail WSARecv(error_code : %d)\n", WSAGetLastError());
-//			}
-//		}
-//	}
-//}
