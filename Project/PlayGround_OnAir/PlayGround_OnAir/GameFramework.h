@@ -6,6 +6,7 @@
 #include "Timer.h"
 #include "Player.h"
 #include "Scene.h"
+#define	_WITH_DIRECT2D_IMAGE_EFFECT
 
 class CGameFramework //: public CSingleTonBase<CGameFramework>
 {
@@ -40,12 +41,15 @@ public:
 	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
-	
+#ifdef _WITH_DIRECT2D
+	void CreateDirect2DDevice();
+#endif
 
 private:
+	D3D12_VIEWPORT				m_d3dViewport;
+	D3D12_RECT					m_d3dScissorRect;
 	HINSTANCE					m_hInstance;
 	HWND						m_hWnd; 
-
 	int							m_nWndClientWidth;
 	int							m_nWndClientHeight;
         
@@ -88,5 +92,32 @@ private:
 	POINT						m_ptOldCursorPos;
 
 	_TCHAR						m_pszFrameRate[70];
+
+#ifdef _WITH_DIRECT2D
+	ID3D11On12Device			*m_pd3d11On12Device = NULL;
+	ID3D11DeviceContext			*m_pd3d11DeviceContext = NULL;
+	ID2D1Factory3				*m_pd2dFactory = NULL;
+	IDWriteFactory				*m_pdWriteFactory = NULL;
+	ID2D1Device2				*m_pd2dDevice = NULL;
+	ID2D1DeviceContext2			*m_pd2dDeviceContext = NULL;
+
+	ID3D11Resource				*m_ppd3d11WrappedBackBuffers[m_nSwapChainBuffers];
+	ID2D1Bitmap1				*m_ppd2dRenderTargets[m_nSwapChainBuffers];
+
+	ID2D1SolidColorBrush		*m_pd2dbrBackground = NULL;
+	ID2D1SolidColorBrush		*m_pd2dbrBorder = NULL;
+	IDWriteTextFormat			*m_pdwFont = NULL;
+	IDWriteTextLayout			*m_pdwTextLayout = NULL;
+	ID2D1SolidColorBrush		*m_pd2dbrText = NULL;
+
+#ifdef _WITH_DIRECT2D_IMAGE_EFFECT
+	IWICImagingFactory			*m_pwicImagingFactory = NULL;
+	ID2D1Effect					*m_pd2dfxBitmapSource = NULL;
+	ID2D1Effect					*m_pd2dfxGaussianBlur = NULL;
+	ID2D1DrawingStateBlock1		*m_pd2dsbDrawingState = NULL;
+	IWICFormatConverter			*m_pwicFormatConverter = NULL;
+#endif
+#endif
+
 };
 

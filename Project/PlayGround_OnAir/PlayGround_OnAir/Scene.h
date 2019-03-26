@@ -42,7 +42,8 @@ class CScene
 public:
     CScene();
     ~CScene();
-	SceneState m_Scene{ MENUSCENE };
+	SceneState m_SceneType{ MENUSCENE };
+	int m_MapNum{ 0 };
 	bool OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 

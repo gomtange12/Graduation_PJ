@@ -718,12 +718,12 @@ bool CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
-		case 'W': m_ppGameObjects[0]->MoveForward(+3.0f); break;
+	/*	case 'W': m_ppGameObjects[0]->MoveForward(+3.0f); break;
 		case 'S': m_ppGameObjects[0]->MoveForward(-3.0f); break;
 		case 'A': m_ppGameObjects[0]->MoveStrafe(-3.0f); break;
 		case 'D': m_ppGameObjects[0]->MoveStrafe(+3.0f); break;
 		case 'Q': m_ppGameObjects[0]->MoveUp(+3.0f); break;
-		case 'R': m_ppGameObjects[0]->MoveUp(-3.0f); break;
+		case 'R': m_ppGameObjects[0]->MoveUp(-3.0f); break;*/
 		default:
 			break;
 		}
@@ -775,7 +775,10 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		{
 //			m_ppGameObjects[i]->Animate(m_fElapsedTime);
 			m_ppGameObjects[i]->UpdateTransform(NULL);
-			m_ppGameObjects[i]->Render(pd3dCommandList, pCamera);
+			if (m_MapNum == 0)
+			{
+				m_ppGameObjects[i]->Render(pd3dCommandList, pCamera);
+			}
 		}
 	}
 

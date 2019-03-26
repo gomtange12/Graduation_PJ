@@ -25,8 +25,14 @@ CGameFramework::CGameFramework()
 
 	m_hFenceEvent = NULL;
 	m_pd3dFence = NULL;
-	for (int i = 0; i < m_nSwapChainBuffers; i++) m_nFenceValues[i] = 0;
-
+	for (int i = 0; i < m_nSwapChainBuffers; i++)
+	{
+		m_nFenceValues[i] = 0;
+#ifdef _WITH_DIRECT2D
+		m_ppd3d11WrappedBackBuffers[i] = NULL;
+		m_ppd2dRenderTargets[i] = NULL;
+#endif
+	}
 	m_nWndClientWidth = FRAME_BUFFER_WIDTH;
 	m_nWndClientHeight = FRAME_BUFFER_HEIGHT;
 
@@ -47,6 +53,9 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 
 	CreateDirect3DDevice();
 	CreateCommandQueueAndList();
+#ifdef _WITH_DIRECT2D
+	CreateDirect2DDevice();
+#endif
 	CreateRtvAndDsvDescriptorHeaps();
 	CreateSwapChain();
 	CreateDepthStencilView();
@@ -57,7 +66,66 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 
 	return(true);
 }
+#define _WITH_DIRECT2D_IMAGE_EFFECT
+#ifdef _WITH_DIRECT2D
+void CGameFramework::CreateDirect2DDevice()
+{
+	UINT nD3D11DeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+#if defined(_DEBUG)
+	nD3D11DeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
 
+	ID3D11Device *pd3d11Device = NULL;
+	HRESULT hResult = ::D3D11On12CreateDevice(m_pd3dDevice, nD3D11DeviceFlags, NULL, 0, (IUnknown **)&m_pd3dCommandQueue, 1, 0, &pd3d11Device, &m_pd3d11DeviceContext, NULL);
+	hResult = pd3d11Device->QueryInterface(__uuidof(ID3D11On12Device), (void **)&m_pd3d11On12Device);
+	if (pd3d11Device) pd3d11Device->Release();
+
+	D2D1_FACTORY_OPTIONS nD2DFactoryOptions = { D2D1_DEBUG_LEVEL_NONE };
+#if defined(_DEBUG)
+	nD2DFactoryOptions.debugLevel = D2D1_DEBUG_LEVEL_INFORMATION;
+#endif
+	hResult = ::D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory3), &nD2DFactoryOptions, (void **)&m_pd2dFactory);
+
+	IDXGIDevice *pdxgiDevice = NULL;
+	hResult = m_pd3d11On12Device->QueryInterface(__uuidof(IDXGIDevice), (void **)&pdxgiDevice);
+	hResult = m_pd2dFactory->CreateDevice(pdxgiDevice, &m_pd2dDevice);
+	hResult = m_pd2dDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &m_pd2dDeviceContext);
+	hResult = ::DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown **)&m_pdWriteFactory);
+
+	if (pdxgiDevice) pdxgiDevice->Release();
+
+	m_pd2dDeviceContext->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
+
+	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(0.3f, 0.0f, 0.0f, 0.5f), &m_pd2dbrBackground);
+	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0x9ACD32, 1.0f)), &m_pd2dbrBorder);
+
+	hResult = m_pdWriteFactory->CreateTextFormat(L"궁서체", NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL, 15.0f, L"en-US", &m_pdwFont);
+	hResult = m_pdwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	hResult = m_pdwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Purple, 1.0f), &m_pd2dbrText);
+	hResult = m_pdWriteFactory->CreateTextLayout(L"텍스트 레이아웃", 8, m_pdwFont, 4096.0f, 4096.0f, &m_pdwTextLayout);
+
+#ifdef _WITH_DIRECT2D_IMAGE_EFFECT
+	CoInitialize(NULL);
+	hResult = ::CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, __uuidof(IWICImagingFactory), (void **)&m_pwicImagingFactory);
+
+	hResult = m_pd2dFactory->CreateDrawingStateBlock(&m_pd2dsbDrawingState);
+	hResult = m_pd2dDeviceContext->CreateEffect(CLSID_D2D1BitmapSource, &m_pd2dfxBitmapSource);
+	hResult = m_pd2dDeviceContext->CreateEffect(CLSID_D2D1GaussianBlur, &m_pd2dfxGaussianBlur);
+
+	IWICBitmapDecoder *pwicBitmapDecoder;
+	hResult = m_pwicImagingFactory->CreateDecoderFromFilename(L"UI/InGameUI/chatting_bg.png", NULL, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &pwicBitmapDecoder);
+	IWICBitmapFrameDecode *pwicFrameDecode;
+	pwicBitmapDecoder->GetFrame(0, &pwicFrameDecode);
+	m_pwicImagingFactory->CreateFormatConverter(&m_pwicFormatConverter);
+	m_pwicFormatConverter->Initialize(pwicFrameDecode, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, NULL, 0.0f, WICBitmapPaletteTypeCustom);
+	m_pd2dfxBitmapSource->SetValue(D2D1_BITMAPSOURCE_PROP_WIC_BITMAP_SOURCE, m_pwicFormatConverter);
+	m_pd2dfxGaussianBlur->SetInputEffect(0, m_pd2dfxBitmapSource);
+	if (pwicBitmapDecoder) pwicBitmapDecoder->Release();
+	if (pwicFrameDecode) pwicFrameDecode->Release();
+#endif
+}
+#endif
 void CGameFramework::CreateSwapChain()
 {
 	RECT rcClient;
@@ -210,6 +278,24 @@ void CGameFramework::CreateRenderTargetViews()
 		m_pd3dDevice->CreateRenderTargetView(m_ppd3dSwapChainBackBuffers[i], NULL, d3dRtvCPUDescriptorHandle);
 		d3dRtvCPUDescriptorHandle.ptr += m_nRtvDescriptorIncrementSize;
 	}
+
+#ifdef _WITH_DIRECT2D
+	float fxDPI, fyDPI;
+	m_pd2dFactory->GetDesktopDpi(&fxDPI, &fyDPI); //UINT GetDpiForWindow(HWND hwnd);
+
+	D2D1_BITMAP_PROPERTIES1 d2dBitmapProperties = D2D1::BitmapProperties1(D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW, D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED), fxDPI, fyDPI);
+
+	for (UINT i = 0; i < m_nSwapChainBuffers; i++)
+	{
+		D3D11_RESOURCE_FLAGS d3d11Flags = { D3D11_BIND_RENDER_TARGET };
+		m_pd3d11On12Device->CreateWrappedResource(m_ppd3dSwapChainBackBuffers[i], &d3d11Flags, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT, __uuidof(ID3D11Resource), (void **)&m_ppd3d11WrappedBackBuffers[i]);
+
+		IDXGISurface *pdxgiSurface = NULL;
+		m_ppd3d11WrappedBackBuffers[i]->QueryInterface(__uuidof(IDXGISurface), (void **)&pdxgiSurface);
+		m_pd2dDeviceContext->CreateBitmapFromDxgiSurface(pdxgiSurface, &d2dBitmapProperties, &m_ppd2dRenderTargets[i]);
+		if (pdxgiSurface) pdxgiSurface->Release();
+	}
+#endif
 }
 
 void CGameFramework::CreateDepthStencilView()
@@ -370,6 +456,34 @@ void CGameFramework::OnDestroy()
     ReleaseObjects();
 
 	::CloseHandle(m_hFenceEvent);
+#ifdef _WITH_DIRECT2D
+	if (m_pd2dbrBackground) m_pd2dbrBackground->Release();
+	if (m_pd2dbrBorder) m_pd2dbrBorder->Release();
+	if (m_pdwFont) m_pdwFont->Release();
+	if (m_pdwTextLayout) m_pdwTextLayout->Release();
+	if (m_pd2dbrText) m_pd2dbrText->Release();
+#ifdef _WITH_DIRECT2D_IMAGE_EFFECT
+	if (m_pd2dfxBitmapSource) m_pd2dfxBitmapSource->Release();
+	if (m_pd2dfxGaussianBlur) m_pd2dfxGaussianBlur->Release();
+	if (m_pd2dsbDrawingState) m_pd2dsbDrawingState->Release();
+	if (m_pwicFormatConverter) m_pwicFormatConverter->Release();
+	if (m_pwicImagingFactory) m_pwicImagingFactory->Release();
+#endif
+
+	if (m_pd2dDeviceContext) m_pd2dDeviceContext->Release();
+	if (m_pd2dDevice) m_pd2dDevice->Release();
+	if (m_pdWriteFactory) m_pdWriteFactory->Release();
+	if (m_pd3d11On12Device) m_pd3d11On12Device->Release();
+	if (m_pd3d11DeviceContext) m_pd3d11DeviceContext->Release();
+	if (m_pd2dFactory) m_pd2dFactory->Release();
+
+	for (int i = 0; i < m_nSwapChainBuffers; i++)
+	{
+		if (m_ppd3d11WrappedBackBuffers[i]) m_ppd3d11WrappedBackBuffers[i]->Release();
+		if (m_ppd2dRenderTargets[i]) m_ppd2dRenderTargets[i]->Release();
+	}
+#endif
+
 
 	if (m_pd3dDepthStencilBuffer) m_pd3dDepthStencilBuffer->Release();
 	if (m_pd3dDsvDescriptorHeap) m_pd3dDsvDescriptorHeap->Release();
@@ -496,8 +610,8 @@ void CGameFramework::ProcessInput()
 		{
 			SetCursor(NULL);
 			GetCursorPos(&ptCursorPos);
-			cxDelta = (float)(ptCursorPos.x - m_ptOldCursorPos.x) / 3.0f;
-			cyDelta = (float)(ptCursorPos.y - m_ptOldCursorPos.y) / 3.0f;
+			cxDelta = (float)(ptCursorPos.x - m_ptOldCursorPos.x) / 4.0f;
+			cyDelta = (float)(ptCursorPos.y - m_ptOldCursorPos.y) / 4.0f;
 			SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
 		}
 
@@ -524,6 +638,15 @@ void CGameFramework::AnimateObjects()
 
 	PLAYER->GetPlayer()->Animate(fTimeElapsed);
 	PLAYER->GetPlayer()->UpdateTransform(NULL);
+#ifdef _WITH_DIRECT2D_IMAGE_EFFECT
+	static UINT64 i = 0;
+	if (++i % 15) return;
+
+	static float fColors[4] = { 0.0f, 0.478f, 0.8f, 1.0f };
+	fColors[1] += 0.01f;
+	if (fColors[1] > 1.0f) fColors[1] = 0.0f;
+	m_pd2dfxGaussianBlur->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, 0.3f + fColors[1] * 10.0f);
+#endif
 }
 
 void CGameFramework::WaitForGpuComplete()
@@ -571,10 +694,14 @@ void CGameFramework::FrameAdvance()
 	d3dResourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	d3dResourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
 	d3dResourceBarrier.Transition.pResource = m_ppd3dSwapChainBackBuffers[m_nSwapChainBufferIndex];
-	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT; //다렉투디로 바꿀떄 비활성화
 	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 	m_pd3dCommandList->ResourceBarrier(1, &d3dResourceBarrier);
+
+	m_pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
+	m_pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
+
 
 	D3D12_CPU_DESCRIPTOR_HANDLE d3dRtvCPUDescriptorHandle = m_pd3dRtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	d3dRtvCPUDescriptorHandle.ptr += (m_nSwapChainBufferIndex * m_nRtvDescriptorIncrementSize);
@@ -586,8 +713,11 @@ void CGameFramework::FrameAdvance()
 	m_pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	m_pd3dCommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
-
 	if (m_pScene) m_pScene->Render(m_pd3dCommandList, m_pCamera);
+
+
+
+
 
 #ifdef _WITH_PLAYER_TOP
 	m_pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
@@ -605,7 +735,45 @@ void CGameFramework::FrameAdvance()
 	m_pd3dCommandQueue->ExecuteCommandLists(1, ppd3dCommandLists);
 
 	WaitForGpuComplete();
+#ifndef _WITH_DIRECT2D
+	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+	d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	m_pd3dCommandList->ResourceBarrier(1, &d3dResourceBarrier);
+#endif
 
+
+
+#ifdef _WITH_DIRECT2D
+	//Direct2D Drawing
+	m_pd3d11On12Device->AcquireWrappedResources(&m_ppd3d11WrappedBackBuffers[m_nSwapChainBufferIndex], 1);
+	m_pd2dDeviceContext->SetTarget(m_ppd2dRenderTargets[m_nSwapChainBufferIndex]);
+
+	m_pd2dDeviceContext->BeginDraw();
+
+	m_pd2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
+#ifdef _WITH_DIRECT2D_IMAGE_EFFECT
+	m_pd2dDeviceContext->DrawImage(m_pd2dfxBitmapSource);
+	//	m_pd2dDeviceContext->DrawRectangle(rcText, m_pd2dbrBackground);
+
+	//	m_pd2dDeviceContext->DrawRectangle(&rcText, m_pd2dbrBorder);
+	//	m_pd2dDeviceContext->FillRectangle(&rcText, m_pd2dbrBackground);
+#endif
+	D2D1_SIZE_F szRenderTarget = m_ppd2dRenderTargets[m_nSwapChainBufferIndex]->GetSize(); //D2D1::SizeF(0, szRenderTarget.height*0.2);/
+	m_GameTimer.GetFrameRate(m_pszFrameRate + 12, 37);
+	D2D1_RECT_F rcUpperText = D2D1::RectF(0, 0, szRenderTarget.width * 0.5, szRenderTarget.height*0.2);
+	m_pd2dDeviceContext->DrawTextW(m_pszFrameRate, (UINT32)wcslen(m_pszFrameRate), m_pdwFont, &rcUpperText, m_pd2dbrText);
+
+	D2D1_RECT_F rcLowerText = D2D1::RectF(0, 0 , szRenderTarget.width * 0.5, szRenderTarget.height);
+	m_pd2dDeviceContext->DrawTextW(L"트위치 채팅창 예시", (UINT32)wcslen(L"트위치 채팅창 예시"), m_pdwFont, &rcLowerText, m_pd2dbrText);
+
+
+	m_pd2dDeviceContext->EndDraw();
+
+	m_pd3d11On12Device->ReleaseWrappedResources(&m_ppd3d11WrappedBackBuffers[m_nSwapChainBufferIndex], 1);
+
+	m_pd3d11DeviceContext->Flush();
+#endif
 #ifdef _WITH_PRESENT_PARAMETERS
 	DXGI_PRESENT_PARAMETERS dxgiPresentParameters;
 	dxgiPresentParameters.R = 0;
