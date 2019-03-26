@@ -95,12 +95,15 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 #define SCENEMANAGER	 CSceneManager::GetInstance()
 enum OBJTYPE {
 	MAP,
-	DYNAMIC
+	PLAYEROBJ,
+	STATICOBJ,
+	DYNAMICOBJ
 };
 #define OBJECTMANAGER	 CObjectManager::GetInstance()
 
 
 
+#define MAXOBJECTNUM 100
 
 
 #define RANDOM_COLOR			XMFLOAT4(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX))

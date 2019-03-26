@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "Scene.h"
 #include "CPlayerManager.h"
+#include "CObjectManager.h"
 ID3D12DescriptorHeap *CScene::m_pd3dCbvSrvDescriptorHeap = NULL;
 
 D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvCPUDescriptorStartHandle;
@@ -289,6 +290,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	CLoadedModelInfo *pMapObjectModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Map/ALL_PIECES.bin",NULL,false);
 	
 	*/
+
 	m_nGameObjects = 2;
 	m_ppGameObjects = new CGameObject*[m_nGameObjects];
 	
@@ -314,7 +316,8 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.8f);
 	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(1, 0.2f);
 	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-	*/m_ppGameObjects[0]->SetPosition(200.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
+	*/
+	m_ppGameObjects[0]->SetPosition(200.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
 	m_ppGameObjects[0]->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	m_ppGameObjects[0]->SetScale(200.0f, 200.0f, 200.0f);
 
@@ -350,6 +353,9 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	//m_ppGameObjects[3]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
 	//m_ppGameObjects[3]->SetPosition(410.0f, m_pTerrain->GetHeight(410.0f, 735.0f), 735.0f);
 	//m_ppGameObjects[3]->SetScale(2.0f, 2.0f, 2.0f);*/
+	//OBJECTMANAGER->AddGameObject(m_ppGameObjects[1], MAP);
+	//OBJECTMANAGER->AddGameObject(m_ppGameObjects[2], MAP);
+
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
@@ -775,13 +781,21 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		{
 //			m_ppGameObjects[i]->Animate(m_fElapsedTime);
 			m_ppGameObjects[i]->UpdateTransform(NULL);
-			if (m_MapNum == 0)
+			//if (m_MapNum == 0)
 			{
 				m_ppGameObjects[i]->Render(pd3dCommandList, pCamera);
 			}
 		}
 	}
 
+	/*for (int i = 0; i < OBJECTMANAGER->GetObjlist[MAP].size(); ++i)
+	{
+		
+		for (auto iter = OBJECTMANAGER->GetObjlist[MAP]->begin(); iter != OBJECTMANAGER->GetObjlist[MAP].end(); ++iter)
+		{
+			
+		}
+	}*/
 	for (int i = 0; i < m_nShaders; i++) if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 	//CheckObjectByObjectCollisions();
 }

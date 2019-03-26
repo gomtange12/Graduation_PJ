@@ -22,12 +22,12 @@ void CObjectManager::AddGameObject(CGameObject * obj, OBJTYPE objType)
 	auto iter = m_ObjMap.find(objType);
 	if (iter != m_ObjMap.end()) //있으면 리스트에 넣음
 	{
-		//obj->SetPos(xPos, yPos);
+		//obj->SetPosition(xmf, yPos);
 		//obj->SetSize(size);
 		//obj->SetType(objType);
 		//obj->SetHp(20);//temp
 		m_ObjMap[objType].push_back(obj);
-		//m_ObjMap[objType].begin()
+		m_ObjMap[objType].begin();
 	}
 	else //없으면 리스트를 만들어서 넣음
 	{
@@ -35,8 +35,8 @@ void CObjectManager::AddGameObject(CGameObject * obj, OBJTYPE objType)
 		//obj->SetSize(size);
 		//obj->SetType(objType);
 		//obj->SetHp(20);//temp
-		//ObjList.push_back(obj);
-		//m_ObjMap.insert(std::make_pair(objType, ObjList));
+		ObjList.push_back(obj);
+		m_ObjMap.insert(std::make_pair(objType, ObjList));
 
 	}
 	//있으면 저 오브젝트리스트로 들어가서. m_ObjMap[objType].pushback(obj)
@@ -45,7 +45,7 @@ void CObjectManager::AddGameObject(CGameObject * obj, OBJTYPE objType)
 
 void CObjectManager::SetObjlist(vector<CGameObject*>& Obj)
 {
-	//Obj = ObjList;
+	Obj = ObjList;
 
 }
 

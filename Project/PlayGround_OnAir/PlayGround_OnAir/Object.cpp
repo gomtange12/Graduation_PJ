@@ -599,10 +599,22 @@ void CAnimationController::AdvanceTime(float fTimeElapsed)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+CGameObject* CGameObject::AllObjectList[MAXOBJECTNUM] = { nullptr, };
+unsigned long CGameObject::ObjIndex = 0;
+
 CGameObject::CGameObject()
 {
 	m_xmf4x4ToParent = Matrix4x4::Identity();
 	m_xmf4x4World = Matrix4x4::Identity();
+
+	while (AllObjectList[ObjIndex] != nullptr)
+	{
+		ObjIndex %= MAXOBJECTNUM;
+		++ObjIndex;
+	}
+	AllObjectList[ObjIndex] = this;
+	myIdx = ObjIndex;
+	++ObjIndex;
 }
 
 CGameObject::CGameObject(int nMaterials) : CGameObject()
@@ -613,7 +625,14 @@ CGameObject::CGameObject(int nMaterials) : CGameObject()
 		m_ppMaterials = new CMaterial*[m_nMaterials];
 		for(int i = 0; i < m_nMaterials; i++) m_ppMaterials[i] = NULL;
 	}
-
+	while (AllObjectList[ObjIndex] != nullptr)
+	{
+		ObjIndex %= MAXOBJECTNUM;
+		++ObjIndex;
+	}
+	AllObjectList[ObjIndex] = this;
+	myIdx = ObjIndex;
+	++ObjIndex;
 }
 
 CGameObject::~CGameObject()
