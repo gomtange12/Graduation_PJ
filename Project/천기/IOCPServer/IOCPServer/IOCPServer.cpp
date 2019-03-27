@@ -29,7 +29,7 @@ void OverlappedRecv(int id) {
 	
 	DWORD flags = 0;
 	ZeroMemory(&g_clients[id].m_ClientInfo.m_RecvOverEx.m_wsaOver, sizeof(WSAOVERLAPPED));
-	
+	printf(" 받는다");
 	if (WSARecv(g_clients[id].m_ClientInfo.m_socket, &g_clients[0].m_ClientInfo.m_RecvOverEx.m_wsaBuf, 1, NULL, &flags, &(g_clients[0].m_ClientInfo.m_RecvOverEx.m_wsaOver), 0))
 	{
 
@@ -52,7 +52,7 @@ void send_packet(int id, void *packet)
 	ex->m_wsaBuf.buf = (char *)ex->m_IOCPbuf;
 	ex->m_wsaBuf.len = ex->m_IOCPbuf[0];
 	ZeroMemory(&ex->m_wsaOver, sizeof(WSAOVERLAPPED));
-
+	printf(" 보낸다");
 	int ret = WSASend(g_clients[id].m_ClientInfo.m_socket, &ex->m_wsaBuf, 1, NULL, 0,&ex->m_wsaOver, 0);
 	if (0 != ret) {
 		int err_no = WSAGetLastError();
@@ -147,7 +147,7 @@ void accept_thread() {
 		g_clients[id].m_connected = true;
 
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(g_clients[id].m_ClientInfo.m_socket), g_hIOCP, id, 0);
-		
+		printf(" 연결");
 		OverlappedRecv(id);
 	}
 }
@@ -184,7 +184,7 @@ void ProcessPacket(int id, unsigned char *packet)
 		pos_packet.X_POS = x;
 		pos_packet.Y_POS = y;
 		send_packet(id, &pos_packet);
-		printf("보냄");
+		printf(" 다보냄");
 	}
 }
 void worker_thread()
@@ -197,7 +197,7 @@ void worker_thread()
 
 		int ret = GetQueuedCompletionStatus(g_hIOCP, &iosize, &key,
 			reinterpret_cast<WSAOVERLAPPED **>(&over), INFINITE);
-		printf("일시작");
+		printf(" W_TH_시작");
 		// 에러처리
 		if (0 == ret) {
 			int err_no = GetLastError();
@@ -228,7 +228,7 @@ void worker_thread()
 						+ g_clients[key].m_ClientInfo.m_prev_size,
 						ptr, need_size);
 					
-					printf("조립완료");
+					printf(" 조립완료");
 					//조립한 패킷을 넘김
 					ProcessPacket(key, g_clients[key].m_ClientInfo.m_packet_buf);
 					//
@@ -247,6 +247,7 @@ void worker_thread()
 					rest_data = 0;
 				}
 			}
+			printf(" 받기전");
 			OverlappedRecv(key);
 			
 		}
