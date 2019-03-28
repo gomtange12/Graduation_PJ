@@ -13,6 +13,7 @@ public:
 	void AddGameObject(CGameObject* obj, OBJTYPE objType);
 	void SetObjlist(vector<CGameObject*> &Obj);
 	std::vector<CGameObject*> GetObjlist() { return ObjList; }
+	std::map<OBJTYPE, std::vector<CGameObject*>> GetAllObjList() { return m_ObjMap; }
 	CGameObject* FindGameObject(OBJTYPE objType, int idx);
 
 };

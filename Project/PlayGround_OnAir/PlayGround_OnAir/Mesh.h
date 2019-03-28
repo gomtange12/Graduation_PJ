@@ -260,3 +260,13 @@ public:
 
 	virtual void OnPreRender(ID3D12GraphicsCommandList *pd3dCommandList, void *pContext);
 };
+
+////////////////////////////////////////////////////////////////
+//billboardMesh
+
+class CTexturedRectMesh :public CMesh
+{
+public:
+	CTexturedRectMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, float fWidth, float fHeight, float fDepth, float fxPosition, float fyPosition, float fzPosition);
+	virtual ~CTexturedRectMesh();
+};
