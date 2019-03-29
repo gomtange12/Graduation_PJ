@@ -524,6 +524,7 @@ void CGameFramework::BuildObjects()
 	PLAYER->Initialize(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(380.0f, m_pScene->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	PLAYER->GetPlayer()->SetScale(XMFLOAT3(15.0f, 15.0f, 15.0f));
+	PLAYER->MakeOtherPlayers(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	/*CTerrainPlayer *pPlayer = new CTerrainPlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	pPlayer->SetPosition(XMFLOAT3(380.0f, m_pScene->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	pPlayer->SetScale(XMFLOAT3(15.0f,15.0f,15.0f));*/

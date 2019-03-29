@@ -17,7 +17,6 @@ CPlayerManager::~CPlayerManager()
 void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
 	m_pPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature,pContext);
-	//m_pOtherPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);
 
 	//4m_pPlayer->SETPO
 	//m_vecPlayerList.reserve(m_MaxPlayerNum);
@@ -25,6 +24,13 @@ void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 
 	//AddPlayer(m_pOtherPlayer, ENEMY, BASS);
 	
+}
+
+void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	//여길 고쳐야함. 
+	//m_pOtherPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);
+
 }
 
 void CPlayerManager::AddPlayer(shared_ptr<CTerrainPlayer> playerObj, E_PLAYERTYPE objType, E_CHARACTERTYPE charactertype)
