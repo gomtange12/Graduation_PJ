@@ -49,7 +49,7 @@ void CObjectManager::SetObjlist(vector<CGameObject*>& Obj)
 
 }
 
-CGameObject * CObjectManager::FindGameObject(OBJTYPE objType, int idx)
+CGameObject* CObjectManager::FindGameObject(OBJTYPE objType, int idx)
 {
 	//_ObjMap.find(obj)
 	/*for (unsigned int i = 0; i < m_ObjMap[objType].size(); ++i)

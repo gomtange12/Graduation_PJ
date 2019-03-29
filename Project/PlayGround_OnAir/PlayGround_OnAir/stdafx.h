@@ -27,6 +27,7 @@
 
 #include <fstream>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -89,19 +90,12 @@ extern ID3D12Resource *CreateBufferResource(ID3D12Device *pd3dDevice, ID3D12Grap
 extern ID3D12Resource *CreateTextureResourceFromDDSFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, wchar_t *pszFileName, ID3D12Resource **ppd3dUploadBuffer, D3D12_RESOURCE_STATES d3dResourceStates = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, wchar_t *pszFileName, ID3D12Resource **ppd3dUploadBuffer, D3D12_RESOURCE_STATES d3dResourceStates = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
+
 #define PLAYER	 CPlayerManager::GetInstance()
 #define FRAMEWORK	 CGameFramework::GetInstance()
 #define INPUTMANAGER	 CInputManager::GetInstance()
 #define SCENEMANAGER	 CSceneManager::GetInstance()
-enum OBJTYPE {
-	MAP,
-	PLAYEROBJ,
-	STATICOBJ,
-	DYNAMICOBJ
-};
 #define OBJECTMANAGER	 CObjectManager::GetInstance()
-
-
 
 #define MAXOBJECTNUM 100
 

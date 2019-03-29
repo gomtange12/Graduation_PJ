@@ -760,6 +760,7 @@ void CSkinnedMesh::OnPreRender(ID3D12GraphicsCommandList *pd3dCommandList, void 
 }
 
 CTexturedRectMesh::CTexturedRectMesh(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, float fWidth, float fHeight, float fDepth, float fxPosition, float fyPosition, float fzPosition)
+	:CMesh(pd3dDevice, pd3dCommandList)
 {
 }
 

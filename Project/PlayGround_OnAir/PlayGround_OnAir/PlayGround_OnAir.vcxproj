@@ -170,6 +170,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="WICTextureLoader12.h" />
+    <ClInclude Include="MyData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />

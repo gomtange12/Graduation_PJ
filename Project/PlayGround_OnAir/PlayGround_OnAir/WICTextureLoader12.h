@@ -27,6 +27,7 @@
 #include <d3d12.h>
 #include <stdint.h>
 #include <memory>
+#include <wincodec.h>
 
 
 namespace DirectX

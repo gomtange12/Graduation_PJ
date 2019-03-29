@@ -1,5 +1,5 @@
 #pragma once
-#include <map>
+
 class CGameObject;
 class CObjectManager : public CSingleTonBase<CObjectManager>
 {
@@ -15,6 +15,5 @@ public:
 	std::vector<CGameObject*> GetObjlist() { return ObjList; }
 	std::map<OBJTYPE, std::vector<CGameObject*>> GetAllObjList() { return m_ObjMap; }
 	CGameObject* FindGameObject(OBJTYPE objType, int idx);
-
 };
 
