@@ -20,7 +20,7 @@ public:
 
 	std::shared_ptr<CTerrainPlayer> GetPlayer() { return m_pPlayer; }
 	//std::shared_ptr<CTerrainPlayer> SetPlayer() { return m_pPlayer; }
-	//int m_MaxPlayerNum{ 8 };
+	int m_MaxPlayerNum{ 8 };
 	void AddPlayer(shared_ptr<CTerrainPlayer> playerObj, E_PLAYERTYPE type, E_CHARACTERTYPE charactertype);
 
 
