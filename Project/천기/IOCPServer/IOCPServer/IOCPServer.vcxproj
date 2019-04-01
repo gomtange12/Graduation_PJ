@@ -152,13 +152,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="IOCPServer.h" />
+    <ClInclude Include="ObjManager.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Obj.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Protocol.h" />
     <ClInclude Include="SingleTone.h" />
     <ClInclude Include="ThreadManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ObjManager.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="ServerMain.cpp" />
     <ClCompile Include="IOCPServer.cpp" />
     <ClCompile Include="pch.cpp">
