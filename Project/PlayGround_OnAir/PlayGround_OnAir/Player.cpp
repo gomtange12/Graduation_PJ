@@ -612,7 +612,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 		SetCameraUpdatedContext(pContext);
 	}
 	SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
-	OBJECTMANAGER->AddGameObject(this, m_ObjType);
+	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
 	if (pPlayerModel) delete pPlayerModel;
 	
 }

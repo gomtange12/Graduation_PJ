@@ -23,17 +23,22 @@ void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	//m_vecPlayerList.emplace_back(m_pOtherPlayer);
 
 	//AddPlayer(m_pOtherPlayer, ENEMY, BASS);
-	
+	MakeOtherPlayers(pd3dDevice,pd3dCommandList,pd3dGraphicsRootSignature, pContext);
 }
 
 void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
 	//여길 고쳐야함. 
 	//m_pOtherPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);
-	m_vecPlayerList.emplace_back(std::make_shared<CTerrainPlayer>());
+	//AddPlayer()
+	
+	m_vecPlayerList.emplace_back(new CTerrainPlayer);
+
+	
+	//AddPlayer()
 }
 
-void CPlayerManager::AddPlayer(shared_ptr<CTerrainPlayer> playerObj, E_PLAYERTYPE objType, E_CHARACTERTYPE charactertype)
+void CPlayerManager::AddPlayer(CTerrainPlayer* playerObj, E_PLAYERTYPE objType, E_CHARACTERTYPE charactertype)
 {
 
 	//auto iter = m_PlayerMap.find(objType);
@@ -57,4 +62,9 @@ void CPlayerManager::AddPlayer(shared_ptr<CTerrainPlayer> playerObj, E_PLAYERTYP
 	//	m_PlayerMap.insert(std::make_pair(objType, m_vecPlayerList));
 
 	//}
+}
+
+void CPlayerManager::SetPlayerResource()
+{
+
 }
