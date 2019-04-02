@@ -1,13 +1,6 @@
 #include "pch.h"
-#include "Protocol.h"
-#include "IOCPServer.h"
 
-IOCPServer::IOCPServer() 
-{
-};
-IOCPServer::~IOCPServer()
-{
-};
+#include "IOCPServer.h"
 
 void IOCPServer::InitNetwork()
 {
