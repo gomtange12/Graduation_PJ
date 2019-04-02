@@ -1,12 +1,18 @@
 #include "pch.h"
 #include "Player.h"
 #include "ObjManager.h"
-ObjManager::ObjManager() {
+ObjManager::ObjManager() 
+{
 
-	
 };
 ObjManager::~ObjManager() {};
-
+void ObjManager::Init()
+{
+	//shared_ptr<Player> gclients(new Player[10], [](Player* p) {
+	//	delete[] p;
+	//});
+	//printf("생성확인");
+};
 void ObjManager::SendPacket(int id, void *packet)
 {
 	stOverEx *ex = new stOverEx;

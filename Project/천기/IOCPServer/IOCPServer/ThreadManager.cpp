@@ -67,20 +67,20 @@ void ThreadManager::Worker_thread() {
 
 					printf(" 조립완료");
 					//조립한 패킷을 넘김
-					OBJMANAGER->ProcessPacket(key,OBJMANAGER->OBJMANAGER->g_clients[key]->m_packet_buf);
+					OBJMANAGER->ProcessPacket(key,OBJMANAGER->g_clients[key]->m_packet_buf);
 					//
 					ptr += need_size;
 					rest_data -= need_size;
 					packet_size = 0;
-					OBJMANAGER->OBJMANAGER->g_clients[key]->m_prev_size = 0;
+					OBJMANAGER->g_clients[key]->m_prev_size = 0;
 				}
 				else {
 					// 패킷을 완성할 수 없으니 남은 데이터 저장
-					memcpy(OBJMANAGER->OBJMANAGER->g_clients[key]->m_packet_buf
-						+OBJMANAGER->OBJMANAGER->g_clients[key]->m_prev_size,
+					memcpy(OBJMANAGER->g_clients[key]->m_packet_buf
+						+OBJMANAGER->g_clients[key]->m_prev_size,
 						ptr, rest_data);
 					ptr += rest_data;
-					OBJMANAGER->OBJMANAGER->g_clients[key]->m_prev_size += rest_data;
+					OBJMANAGER->g_clients[key]->m_prev_size += rest_data;
 					rest_data = 0;
 				}
 			}
@@ -144,7 +144,7 @@ void ThreadManager::Accept_thread()
 
 		int id = -1;
 		for (int i = 0; i < MAX_USER; ++i)
-			if (false == OBJMANAGER->g_clients[i]->m_connected) {
+			if (false == OBJMANAGER->g_clients[i]->m_connected) { //여기서 터짐 
 				id = i;
 				break;
 			}

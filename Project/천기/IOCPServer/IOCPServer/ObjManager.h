@@ -8,10 +8,11 @@ public:
 	Player* g_clients[10];
 	
 public:
-	explicit ObjManager();
+	ObjManager();
 	virtual ~ObjManager();
 public:
 	//Player** GetClient() { return g_clients; }
+	void Init();
 	void SendPacket(int id, void *packet);
 	void ProcessPacket(int id, unsigned char *packet);
 	
