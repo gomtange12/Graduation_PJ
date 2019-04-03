@@ -141,6 +141,8 @@ void ThreadManager::Accept_thread()
 			printf("Error - Accept Failure\n");
 			exit(1);
 		}
+		OBJMANAGER->ClientInit(USER_NUM); //플레이어 접속마다
+		USER_NUM++;
 
 		int id = -1;
 		for (int i = 0; i < MAX_USER; ++i)

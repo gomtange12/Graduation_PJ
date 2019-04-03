@@ -8,7 +8,7 @@ int main()
 {
 	
 	IOCPSERVER->InitNetwork();
-	OBJMANAGER->Init();
+	
 	THREADMANAGER->CreateThreads();
 	THREADMANAGER->JoinThreads();
 

@@ -28,6 +28,7 @@ using namespace std;
 #define SERVER_PORT		3500
 #define MAX_USER		10
 
+
 enum DIRECTION
 {
 	UP,
