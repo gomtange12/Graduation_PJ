@@ -362,6 +362,7 @@ class CGameObject
 {
 private:
 	int								m_nReferences = 0;
+	int								m_Hp;
 protected:
 	static CGameObject* AllObjectList[MAXOBJECTNUM];
 	static unsigned long ObjIndex;
@@ -395,7 +396,8 @@ public:
 	CGameObject 					*m_pParent = NULL;
 	CGameObject 					*m_pChild = NULL;
 	CGameObject 					*m_pSibling = NULL;
-
+	int GetHP() { return m_Hp; }
+	void SetHp(int hp) { m_Hp = hp; }
 	void SetMesh(CMesh *pMesh);
 	void SetShader(CShader *pShader);
 	void SetShader(int nMaterial, CShader *pShader);
