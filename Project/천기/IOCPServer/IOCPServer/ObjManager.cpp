@@ -9,10 +9,7 @@ ObjManager::~ObjManager() {};
 void ObjManager::ClientInit(int UserN)
 {
 	g_clients[UserN] = new Player;
-	
-	//플레이어 할당해놓는거 다시 생각해보자
-	//임시로 지금 이렇게 해놨지만
-	//정말 잘못된거임...
+
 };
 void ObjManager::SendPacket(int id, void *packet)
 {

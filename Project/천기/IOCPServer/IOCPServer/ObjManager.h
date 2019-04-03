@@ -4,9 +4,8 @@
 class Player;
 class ObjManager : public SingleTone<ObjManager> {
 public:
-	
+
 	Player* g_clients[10];
-	//std::vector<Player*> g_clients;
 
 public:
 	ObjManager();
