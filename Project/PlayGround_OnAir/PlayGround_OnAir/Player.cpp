@@ -689,7 +689,7 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	XMFLOAT3 xmf3PlayerPosition = GetPosition();
 	int z = (int)(xmf3PlayerPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
-	float fHeight = 510; pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
+	float fHeight = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
 	if (xmf3PlayerPosition.y < fHeight)
 	{
 		//if (FindFrame("LFootBone1")->GetPosition().y < fHeight)
@@ -711,7 +711,7 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 	//xmf3CameraPosition.y += 500;
 	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
-	float fHeight = 510; pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
+	float fHeight = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
 	if (xmf3CameraPosition.y <= fHeight)
 	//if(FindFrame())
 	
@@ -788,6 +788,6 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		SetCameraUpdatedContext(pContext);
 	}
 	SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
-	OBJECTMANAGER->AddGameObject(this, m_ObjType);
+	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
 	if (pPlayerModel) delete pPlayerModel;
 }
