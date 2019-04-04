@@ -6,12 +6,10 @@ ObjManager::ObjManager()
 
 };
 ObjManager::~ObjManager() {};
-void ObjManager::Init()
+void ObjManager::ClientInit(int UserN)
 {
-	//shared_ptr<Player> gclients(new Player[10], [](Player* p) {
-	//	delete[] p;
-	//});
-	//printf("생성확인");
+	g_clients[UserN] = new Player;
+
 };
 void ObjManager::SendPacket(int id, void *packet)
 {

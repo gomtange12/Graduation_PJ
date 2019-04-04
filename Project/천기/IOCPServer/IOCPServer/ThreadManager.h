@@ -9,7 +9,7 @@ public:
 	SOCKADDR_IN serverAddr;
 	SOCKET clientSocket;
 	std::vector <std::thread> threads;
-	
+	int USER_NUM = 0;
 	const int NUM_THREADS = 4;
 public:
 	explicit ThreadManager();
