@@ -471,7 +471,7 @@ public:
 	static void PrintFrameInfo(CGameObject *pGameObject, CGameObject *pParent);
 	BoundingOrientedBox			m_xmOOBB;
 	BoundingOrientedBox			m_xmTransedOOBB;
-
+	
 	void SetOOBB(XMFLOAT3& xmCenter, XMFLOAT3& xmExtents, XMFLOAT4& xmOrientation) { m_xmOOBB = m_xmTransedOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation); }
 
 

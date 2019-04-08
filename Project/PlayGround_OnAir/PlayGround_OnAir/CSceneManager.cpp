@@ -2,10 +2,12 @@
 
 #include "CSceneManager.h"
 #include "CTempScene.h"
+#include "Scene.h"
+
 CSceneManager::CSceneManager()
 {
 	m_pTempScene = NULL;// std::make_shared<CTempScene>();
-
+	m_MapList[MENUSCENE] = new CMenuScene();
 }
 
 
