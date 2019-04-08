@@ -16,17 +16,13 @@
 #include "SingleTone.h"
 
 #define IOCPSERVER		IOCPServer::GET_INSTANCE()
+#define PACKETMANAGER	Packetmanager::GET_INSTANCE()
 #define OBJMANAGER		ObjManager::GET_INSTANCE()
 #define THREADMANAGER	ThreadManager::GET_INSTANCE()
 
 //
 
 using namespace std;
-
-
-#define MAX_BUFFER		1024
-#define SERVER_PORT		3500
-#define MAX_USER		10
 
 
 enum DIRECTION

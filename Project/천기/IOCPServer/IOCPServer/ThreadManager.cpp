@@ -3,6 +3,9 @@
 #include "ThreadManager.h"
 #include "ObjManager.h"
 #include "IOCPServer.h"
+#include "PacketManager.h"
+#include "Player.h"
+
 ThreadManager::ThreadManager()
 {
 }
@@ -167,10 +170,15 @@ void ThreadManager::Accept_thread()
 		OBJMANAGER->g_clients[id]->m_RecvOverEx.m_wsaBuf.buf = (CHAR*)OBJMANAGER->g_clients[id]->m_RecvOverEx.m_IOCPbuf;
 		OBJMANAGER->g_clients[id]->m_RecvOverEx.m_wsaBuf.len = sizeof(OBJMANAGER->g_clients[id]->m_RecvOverEx.m_IOCPbuf);
 		OBJMANAGER->g_clients[id]->m_prev_size = 0;
-		OBJMANAGER->g_clients[id]->m_connected = true;
-
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(OBJMANAGER->g_clients[id]->m_socket), IOCPSERVER->g_hIOCP, id, 0);
+		OBJMANAGER->g_clients[id]->m_connected = true;
 		printf("5번확인");
+
+		//로그인 + 다른 사용자 접속 처리 
+		PACKETMANAGER->LoginPacking(id);
+		PACKETMANAGER->PutPlayerPacking(id);
+		////
+	
 		OverlappedRecv(id);
 	}
 }

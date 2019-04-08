@@ -28,6 +28,9 @@
     <Filter Include="소스 파일\Player">
       <UniqueIdentifier>{7c884d97-cb55-4e27-b616-e47331f4e87e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\PacketManager">
+      <UniqueIdentifier>{72468219-3399-4831-971e-ee6cdadb25b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -51,6 +54,9 @@
     <ClInclude Include="Player.h">
       <Filter>소스 파일\Player</Filter>
     </ClInclude>
+    <ClInclude Include="PacketManager.h">
+      <Filter>소스 파일\PacketManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -70,6 +76,9 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>소스 파일\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketManager.cpp">
+      <Filter>소스 파일\PacketManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

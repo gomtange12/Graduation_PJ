@@ -1,6 +1,4 @@
 #pragma once
-#include "pch.h"
-#include "Player.h"
 
 class ThreadManager : public SingleTone<ThreadManager>
 {

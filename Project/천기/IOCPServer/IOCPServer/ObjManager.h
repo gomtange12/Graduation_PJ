@@ -1,5 +1,4 @@
 #pragma once
-#include "Protocol.h"
 
 class Player;
 class ObjManager : public SingleTone<ObjManager> {
@@ -13,7 +12,7 @@ public:
 public:
 	//Player** GetClient() { return g_clients; }
 	void ClientInit(int UserN);
-	void SendPacket(int id, void *packet);
+	
 	void ProcessPacket(int id, unsigned char *packet);
 	
 };

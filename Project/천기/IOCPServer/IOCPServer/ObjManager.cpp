@@ -1,6 +1,8 @@
 #include "pch.h"
+#include "Protocol.h"
 #include "Player.h"
 #include "ObjManager.h"
+#include "PacketManager.h"
 ObjManager::ObjManager() 
 {
 
@@ -11,22 +13,7 @@ void ObjManager::ClientInit(int UserN)
 	g_clients[UserN] = new Player;
 
 };
-void ObjManager::SendPacket(int id, void *packet)
-{
-	stOverEx *ex = new stOverEx;
-	memcpy(ex->m_IOCPbuf, packet, reinterpret_cast<unsigned char *>(packet)[0]);
-	ex->m_todo = OP_SEND;
-	ex->m_wsaBuf.buf = (char *)ex->m_IOCPbuf;
-	ex->m_wsaBuf.len = ex->m_IOCPbuf[0];
-	ZeroMemory(&ex->m_wsaOver, sizeof(WSAOVERLAPPED));
-	printf(" 보낸다");
-	int ret = WSASend(g_clients[id]->m_socket, &ex->m_wsaBuf, 1, NULL, 0, &ex->m_wsaOver, 0);
-	if (0 != ret) {
-		int err_no = WSAGetLastError();
-		if (WSA_IO_PENDING != err_no)
-			printf("오류");
-	}
-}
+
 void ObjManager::ProcessPacket(int id, unsigned char *packet)
 {
 	int x = g_clients[id]->m_x;
@@ -39,27 +26,25 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 		switch (packet[2]) //DIR
 		{
 		case UP:
+			if (y > 0) y--;
 			break;
 		case DOWN:
-
+			if (y < WORLD_HEIGHT - 1) y++;
 			break;
 		case LEFT:
-
+			if (x > 0) x--;
 			break;
 		case RIGHT:
+			if (x < WORLD_WIDTH - 1) x++;
 			break;
+		default:
+			wcout << L"정의되지 않은 패킷 도착!!\n";
+			while (true);
 		}
 		g_clients[id]->m_x = x;
 		g_clients[id]->m_y = y;
 	}
-	//보낼 패킷에 넣어줌
-	sc_packet_pos pos_packet;
-	pos_packet.ID = id;
-	pos_packet.size = sizeof(sc_packet_pos);
-	pos_packet.type = SC_POSITION_INFO;
-	pos_packet.X_POS = x;
-	pos_packet.Y_POS = y;
-	SendPacket(id, &pos_packet);
-	printf(" 다보냄");
+	PACKETMANAGER->PosPacking(id, x, y);
+	printf(" 이동");
 	}
-}
+};

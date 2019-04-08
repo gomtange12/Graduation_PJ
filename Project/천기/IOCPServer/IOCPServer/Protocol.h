@@ -1,12 +1,25 @@
 #pragma once
 
+#define MAX_BUFFER		1024
+#define SERVER_PORT		3500
+#define MAX_USER		10
+
 const int OP_RECV = 1;
 const int OP_SEND = 2;
 
+////////////////////
 #define CS_MOVE 2
 #define SC_POSITION_INFO 3
 
+////////////////////
 
+////=확인용=/////
+constexpr int WORLD_WIDTH = 8;
+constexpr int WORLD_HEIGHT = 8;
+////=확인용=/////
+
+constexpr int SC_LOGIN_OK = 1;
+constexpr int SC_PUT_PLAYER = 2;
 
 struct stOverEx {
 	WSAOVERLAPPED m_wsaOver;
@@ -29,4 +42,16 @@ struct sc_packet_pos {//SC_POSITION_INFO 3
 	WORD ID;
 	WORD X_POS;
 	WORD Y_POS;
+};
+struct sc_packet_login_ok {
+	char size;
+	char type;
+	char id;
+};
+
+struct sc_packet_put_player {
+	char size;
+	char type;
+	char id;
+	char x, y;
 };

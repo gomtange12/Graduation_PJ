@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="IOCPServer.h" />
     <ClInclude Include="ObjManager.h" />
+    <ClInclude Include="PacketManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Protocol.h" />
@@ -161,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ObjManager.cpp" />
+    <ClCompile Include="PacketManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ServerMain.cpp" />
     <ClCompile Include="IOCPServer.cpp" />
