@@ -7,7 +7,8 @@
 CSceneManager::CSceneManager()
 {
 	m_pTempScene = NULL;// std::make_shared<CTempScene>();
-	m_MapList[MENUSCENE] = new CMenuScene();
+	
+	
 }
 
 
@@ -41,7 +42,7 @@ void CSceneManager::SetScene(SceneState state)
 		}
 
 	}*/
-	if (m_pTempScene)
+	/*if (m_pTempScene)
 	{
 		delete m_pTempScene;
 		m_pTempScene = NULL;
@@ -54,7 +55,7 @@ void CSceneManager::SetScene(SceneState state)
 
 		break;
 	case INGAME:
-		m_pTempScene = new CTempInGameScene;
+		m_pTempScene = new ;
 		m_SceneType = INGAME;
 
 		break;
@@ -64,5 +65,5 @@ void CSceneManager::SetScene(SceneState state)
 
 		break;
 
-	}
+	}*/
 }

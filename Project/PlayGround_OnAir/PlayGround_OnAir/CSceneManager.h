@@ -8,7 +8,7 @@ class CTempMenuScene;
 
 class CSceneManager : public CSingleTonBase<CSceneManager>
 {
-	CTempScene*  m_pTempScene = NULL;
+	CScene*  m_pTempScene = NULL;
 	CScene* m_pScene = NULL;
 	SceneState m_SceneType = MENUSCENE;
 public:

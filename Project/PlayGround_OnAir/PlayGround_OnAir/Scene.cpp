@@ -6,18 +6,42 @@
 #include "Scene.h"
 #include "CPlayerManager.h"
 #include "CObjectManager.h"
-ID3D12DescriptorHeap *CScene::m_pd3dCbvSrvDescriptorHeap = NULL;
+//ID3D12DescriptorHeap *CScene::m_pd3dCbvSrvDescriptorHeap = NULL;
 
-D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvCPUDescriptorStartHandle;
-D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvGPUDescriptorStartHandle;
-D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvCPUDescriptorStartHandle;
-D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvGPUDescriptorStartHandle;
+//D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvCPUDescriptorStartHandle;
+//D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvGPUDescriptorStartHandle;
+//D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvCPUDescriptorStartHandle;
+//D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvGPUDescriptorStartHandle;
+//
+//D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvCPUDescriptorNextHandle;
+//D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvGPUDescriptorNextHandle;
+//D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvCPUDescriptorNextHandle;
+//D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvGPUDescriptorNextHandle;
 
-D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvCPUDescriptorNextHandle;
-D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvGPUDescriptorNextHandle;
-D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvCPUDescriptorNextHandle;
-D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvGPUDescriptorNextHandle;
 
+//ID3D12DescriptorHeap *CMenuScene::m_pd3dCbvSrvDescriptorHeap = NULL;
+//
+//D3D12_CPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dCbvCPUDescriptorStartHandle;
+//D3D12_GPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dCbvGPUDescriptorStartHandle;
+//D3D12_CPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dSrvCPUDescriptorStartHandle;
+//D3D12_GPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dSrvGPUDescriptorStartHandle;
+//							
+//D3D12_CPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dCbvCPUDescriptorNextHandle;
+//D3D12_GPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dCbvGPUDescriptorNextHandle;
+//D3D12_CPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dSrvCPUDescriptorNextHandle;
+//D3D12_GPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dSrvGPUDescriptorNextHandle;
+//
+//ID3D12DescriptorHeap *CInGameScene::m_pd3dCbvSrvDescriptorHeap = NULL;
+//
+//D3D12_CPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dCbvCPUDescriptorStartHandle;
+//D3D12_GPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dCbvGPUDescriptorStartHandle;
+//D3D12_CPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dSrvCPUDescriptorStartHandle;
+//D3D12_GPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dSrvGPUDescriptorStartHandle;
+//							
+//D3D12_CPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dCbvCPUDescriptorNextHandle;
+//D3D12_GPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dCbvGPUDescriptorNextHandle;
+//D3D12_CPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dSrvCPUDescriptorNextHandle;
+//D3D12_GPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dSrvGPUDescriptorNextHandle;
 CScene::CScene()
 {
 }
@@ -228,7 +252,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 
 	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 45); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
-
+	//CreateShaderResourceViews()
 	CMaterial::PrepareShaders(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature); 
 
 	BuildDefaultLightsAndMaterials();
@@ -702,6 +726,7 @@ D3D12_SHADER_RESOURCE_VIEW_DESC GetShaderResourceViewDesc(D3D12_RESOURCE_DESC d3
 
 D3D12_GPU_DESCRIPTOR_HANDLE CScene::CreateShaderResourceViews(ID3D12Device *pd3dDevice, CTexture *pTexture, UINT nRootParameter, bool bAutoIncrement)
 {
+	
 	D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGPUDescriptorHandle = m_d3dSrvGPUDescriptorNextHandle;
 	if (pTexture)
 	{
@@ -860,4 +885,151 @@ void CMenuScene::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandLi
 
 void CMenuScene::ReleaseShaderVariables()
 {
+}
+
+bool CMenuScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
+{
+	return false;
+}
+
+bool CMenuScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
+{
+	return false;
+}
+
+void CMenuScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
+
+	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
+	//CreateShaderResourceViews()
+	CMaterial::PrepareShaders(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_nShaders = 0;
+	m_ppShaders = new CShader*[m_nShaders];
+
+	
+	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+
+}
+
+void CMenuScene::ReleaseObjects()
+{
+}
+
+void CMenuScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
+{
+}
+
+bool CMenuScene::ProcessInput(UCHAR * pKeysBuffer)
+{
+	return false;
+}
+
+void CMenuScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
+{
+	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
+	d3dDescriptorHeapDesc.NumDescriptors = nConstantBufferViews + nShaderResourceViews; //CBVs + SRVs 
+	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	d3dDescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	d3dDescriptorHeapDesc.NodeMask = 0;
+	pd3dDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc, __uuidof(ID3D12DescriptorHeap), (void **)&m_pd3dCbvSrvDescriptorHeap);
+
+	m_d3dCbvCPUDescriptorNextHandle = m_d3dCbvCPUDescriptorStartHandle = m_pd3dCbvSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	m_d3dCbvGPUDescriptorNextHandle = m_d3dCbvGPUDescriptorStartHandle = m_pd3dCbvSrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
+	m_d3dSrvCPUDescriptorNextHandle.ptr = m_d3dSrvCPUDescriptorStartHandle.ptr = m_d3dCbvCPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
+	m_d3dSrvGPUDescriptorNextHandle.ptr = m_d3dSrvGPUDescriptorStartHandle.ptr = m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
+
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE CMenuScene::CreateConstantBufferViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, ID3D12Resource * pd3dConstantBuffers, UINT nStride)
+{
+	return D3D12_GPU_DESCRIPTOR_HANDLE();
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE CMenuScene::CreateShaderResourceViews(ID3D12Device * pd3dDevice, CTexture * pTexture, UINT nRootParameter, bool bAutoIncrement)
+{
+	return D3D12_GPU_DESCRIPTOR_HANDLE();
+}
+
+CInGameScene::CInGameScene()
+{
+}
+
+CInGameScene::~CInGameScene()
+{
+}
+
+void CInGameScene::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+}
+
+void CInGameScene::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+}
+
+void CInGameScene::ReleaseShaderVariables()
+{
+}
+
+bool CInGameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
+{
+	return false;
+}
+
+bool CInGameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
+{
+	return false;
+}
+
+void CInGameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
+
+	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
+	//CreateShaderResourceViews()
+	CMaterial::PrepareShaders(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_nShaders = 0;
+	m_ppShaders = new CShader*[m_nShaders];
+
+
+	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+}
+
+void CInGameScene::ReleaseObjects()
+{
+}
+
+void CInGameScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
+{
+}
+
+bool CInGameScene::ProcessInput(UCHAR * pKeysBuffer)
+{
+	return false;
+}
+
+void CInGameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
+{
+	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
+	d3dDescriptorHeapDesc.NumDescriptors = nConstantBufferViews + nShaderResourceViews; //CBVs + SRVs 
+	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	d3dDescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	d3dDescriptorHeapDesc.NodeMask = 0;
+	pd3dDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc, __uuidof(ID3D12DescriptorHeap), (void **)&m_pd3dCbvSrvDescriptorHeap);
+
+	m_d3dCbvCPUDescriptorNextHandle = m_d3dCbvCPUDescriptorStartHandle = m_pd3dCbvSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	m_d3dCbvGPUDescriptorNextHandle = m_d3dCbvGPUDescriptorStartHandle = m_pd3dCbvSrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
+	m_d3dSrvCPUDescriptorNextHandle.ptr = m_d3dSrvCPUDescriptorStartHandle.ptr = m_d3dCbvCPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
+	m_d3dSrvGPUDescriptorNextHandle.ptr = m_d3dSrvGPUDescriptorStartHandle.ptr = m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
+
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE CInGameScene::CreateConstantBufferViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, ID3D12Resource * pd3dConstantBuffers, UINT nStride)
+{
+	return D3D12_GPU_DESCRIPTOR_HANDLE();
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE CInGameScene::CreateShaderResourceViews(ID3D12Device * pd3dDevice, CTexture * pTexture, UINT nRootParameter, bool bAutoIncrement)
+{
+	return D3D12_GPU_DESCRIPTOR_HANDLE();
 }

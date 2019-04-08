@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "GameFramework.h"
+#include "CSceneManager.h"
 CGameFramework::CGameFramework()
 {
 	m_pdxgiFactory = NULL;
@@ -515,22 +516,29 @@ void CGameFramework::OnDestroy()
 void CGameFramework::BuildObjects()
 {
 	m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
-
-	m_pScene = new CScene();
-	if (m_pScene) m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
 	SCENEMANAGER->
+	//m_pScene = new CScene();
+	//if (m_pScene) m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
+	SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
+	SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
+
+	for (auto p : SCENEMANAGER->m_MapList)
+	{
+		//p.second->CreateShaderResourceViews(m_pd3dDevice,nullptr,)
+		p.second->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
+	}
 
 	//여기가 배치 구문이니 신경써야한다. 
 #ifdef _WITH_TERRAIN_PLAYER
-	PLAYER->Initialize(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(380.0f, m_pScene->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+	PLAYER->Initialize(m_pd3dDevice, m_pd3dCommandList, SCENEMANAGER->m_MapList[INGAME]->GetGraphicsRootSignature(), SCENEMANAGER->m_MapList[INGAME]->m_pTerrain);
+	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	PLAYER->GetPlayer()->SetScale(XMFLOAT3(15.0f, 15.0f, 15.0f));
-	PLAYER->MakeOtherPlayers(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+	PLAYER->MakeOtherPlayers(m_pd3dDevice, m_pd3dCommandList, SCENEMANAGER->m_MapList[INGAME]->GetGraphicsRootSignature(), SCENEMANAGER->m_MapList[INGAME]->m_pTerrain);
 	/*CTerrainPlayer *pPlayer = new CTerrainPlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	pPlayer->SetPosition(XMFLOAT3(380.0f, m_pScene->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	pPlayer->SetScale(XMFLOAT3(15.0f,15.0f,15.0f));*/
 #else
-	CAirplanePlayer *pPlayer = new CAirplanePlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), NULL);
+	CAirplanePlayer *pPlayer = new CAirplanePlayer(m_pd3dDevice, m_pd3dCommandList, SCENEMANAGER->m_MapList[INGAME]->GetGraphicsRootSignature(), NULL);
 	pPlayer->SetPosition(XMFLOAT3(425.0f, 240.0f, 640.0f));
 #endif
 
@@ -544,7 +552,7 @@ void CGameFramework::BuildObjects()
 
 	WaitForGpuComplete();
 
-	if (m_pScene) m_pScene->ReleaseUploadBuffers();
+	if (SCENEMANAGER->m_MapList[INGAME]) SCENEMANAGER->m_MapList[INGAME]->ReleaseUploadBuffers();
 	//if (m_pPlayer) PLAYER->GetPlayer()->ReleaseUploadBuffers();
 
 	m_GameTimer.Reset();
