@@ -48,13 +48,13 @@ using namespace std;
 #include <DirectXCollision.h>
 
 #include <Mmsystem.h>
-
+#include <winsock2.h>
 #ifdef _DEBUG
 #include <dxgidebug.h>
 #endif
 #include "SingleTon.h"
 #include "CPlayerManager.h"
-
+#include "..\..\Ãµ±â\IOCPServer\IOCPServer\Protocol.h"
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 

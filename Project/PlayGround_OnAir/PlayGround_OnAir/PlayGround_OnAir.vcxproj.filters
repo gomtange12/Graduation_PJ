@@ -64,6 +64,12 @@
     <Filter Include="소스 파일\ObjectManager\Object">
       <UniqueIdentifier>{05021bec-42ab-40e2-b259-ed86444f0109}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\SceneManager\Scene\MenuScene">
+      <UniqueIdentifier>{6cd6e395-621b-45ce-8e6b-c9452d6a4561}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\SceneManager\Scene\InGameScene">
+      <UniqueIdentifier>{fdc88d86-4325-435c-9945-1158fb116e99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -138,6 +144,12 @@
     <ClInclude Include="MyData.h">
       <Filter>소스 파일\A_MyData</Filter>
     </ClInclude>
+    <ClInclude Include="CIngameScene.h">
+      <Filter>소스 파일\SceneManager\Scene\InGameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="CMenuScene.h">
+      <Filter>소스 파일\SceneManager\Scene\MenuScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Player.cpp">
@@ -199,6 +211,12 @@
     </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>소스 파일\ObjectManager\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CIngameScene.cpp">
+      <Filter>소스 파일\SceneManager\Scene\InGameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="CMenuScene.cpp">
+      <Filter>소스 파일\SceneManager\Scene\MenuScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

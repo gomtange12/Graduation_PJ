@@ -5,6 +5,9 @@
 #include "stdafx.h"
 #include "GameFramework.h"
 #include "CSceneManager.h"
+#include "CMenuScene.h"
+#include "CIngameScene.h"
+
 CGameFramework::CGameFramework()
 {
 	m_pdxgiFactory = NULL;
@@ -644,7 +647,11 @@ void CGameFramework::AnimateObjects()
 {
 	float fTimeElapsed = m_GameTimer.GetTimeElapsed();
 
-	if (m_pScene) m_pScene->AnimateObjects(fTimeElapsed);
+	for (auto&& p : SCENEMANAGER->m_MapList)
+	{
+		p.second->AnimateObjects(fTimeElapsed);
+
+	}
 
 	PLAYER->GetPlayer()->Animate(fTimeElapsed);
 	PLAYER->GetPlayer()->UpdateTransform(NULL);
