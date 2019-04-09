@@ -4,15 +4,13 @@
 
 void IOCPServer::InitNetwork()
 {
+	std::wcout.imbue(std::locale("korean"));
 	// Winsock Start - windock.dll 로드
 	WSADATA WSAData;
-	if (WSAStartup(MAKEWORD(2, 2), &WSAData) != 0)
-	{
-		printf("Error - Can not load 'winsock.dll' file\n");
-		exit(1);
-	}
+	WSAStartup(MAKEWORD(2, 2), &WSAData);
+	
 	g_hIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
-	printf("1번확인");
+	
 }
 
 

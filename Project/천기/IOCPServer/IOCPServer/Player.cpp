@@ -4,10 +4,15 @@
 Player::Player()
 {
 	
-	m_connected = false;
+	
 	
 }
 
 Player::~Player()
 {
+}
+void Player::Initialize() {
+	m_connected = false;
+	m_x=4;
+	m_y=4;
 }

@@ -6,9 +6,10 @@
 
 int main()
 {
+	OBJMANAGER->ClientInit();
 	
 	IOCPSERVER->InitNetwork();
-	
+
 	THREADMANAGER->CreateThreads();
 	THREADMANAGER->JoinThreads();
 

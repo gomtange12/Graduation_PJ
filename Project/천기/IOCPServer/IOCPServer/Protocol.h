@@ -20,6 +20,8 @@ constexpr int WORLD_HEIGHT = 8;
 
 constexpr int SC_LOGIN_OK = 1;
 constexpr int SC_PUT_PLAYER = 2;
+constexpr int SC_REMOVE_PLAYER = 3;
+constexpr int SC_MOVE_PLAYER = 4;
 
 struct stOverEx {
 	WSAOVERLAPPED m_wsaOver;
@@ -30,12 +32,6 @@ struct stOverEx {
 
 
 //////////////////////packet/////////////////////////
-struct move_packet
-{
-	unsigned char size;
-	unsigned char type;
-};
-
 struct sc_packet_pos {//SC_POSITION_INFO 3 
 	unsigned char size;
 	unsigned char type;
@@ -54,4 +50,9 @@ struct sc_packet_put_player {
 	char type;
 	char id;
 	char x, y;
+};
+struct sc_packet_remove_player {
+	char size;
+	char type;
+	char id;
 };

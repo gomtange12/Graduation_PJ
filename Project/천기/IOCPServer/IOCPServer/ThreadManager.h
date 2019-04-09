@@ -1,5 +1,5 @@
 #pragma once
-
+#include "ObjManager.h"
 class ThreadManager : public SingleTone<ThreadManager>
 {
 public:
@@ -18,6 +18,7 @@ public:
 	void Worker_thread();
 	void Accept_thread();
 	void OverlappedRecv(int id);
+	void error_display(const char *msg, int err_no);
 private:
-
+	ObjManager* objectManager = OBJMANAGER->GetObjectManager();
 };

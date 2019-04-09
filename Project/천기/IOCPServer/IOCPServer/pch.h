@@ -12,6 +12,7 @@
 #include <memory>
 //
 #include <vector>
+#include <array>
 #include <thread>
 #include "SingleTone.h"
 
@@ -22,7 +23,7 @@
 
 //
 
-using namespace std;
+//using namespace std;
 
 
 enum DIRECTION

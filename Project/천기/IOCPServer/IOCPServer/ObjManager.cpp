@@ -8,9 +8,13 @@ ObjManager::ObjManager()
 
 };
 ObjManager::~ObjManager() {};
-void ObjManager::ClientInit(int UserN)
+void ObjManager::ClientInit()
 {
-	g_clients[UserN] = new Player;
+	for (Player*& p : g_clients)
+	{
+		p = new Player;
+		p->Initialize();
+	}
 
 };
 
@@ -38,13 +42,13 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 			if (x < WORLD_WIDTH - 1) x++;
 			break;
 		default:
-			wcout << L"정의되지 않은 패킷 도착!!\n";
+			std::wcout << L"정의되지 않은 패킷 도착!!\n";
 			while (true);
 		}
 		g_clients[id]->m_x = x;
 		g_clients[id]->m_y = y;
 	}
 	PACKETMANAGER->PosPacking(id, x, y);
-	printf(" 이동");
+	printf("이동 ");
 	}
 };
