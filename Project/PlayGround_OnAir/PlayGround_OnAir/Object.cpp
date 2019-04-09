@@ -208,6 +208,7 @@ void CMaterial::LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsComm
 			(*ppTexture)->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pwstrTextureName, 0, true);
 			if (*ppTexture) (*ppTexture)->AddRef();
 
+			//SCENEMANAGER->GetSceneType ¿©±â ½¦ÀÌ´õ ¸®¼Ò½ººä
 			for (auto p : SCENEMANAGER->m_MapList)
 			{
 				p.second->CreateShaderResourceViews(pd3dDevice, *ppTexture, nRootParameter, false);

@@ -249,142 +249,142 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
-	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
-
-	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 45); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
-	//CreateShaderResourceViews()
-	CMaterial::PrepareShaders(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature); 
-
-	BuildDefaultLightsAndMaterials();
-
-	m_pSkyBox = new CSkyBox(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-
-	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
-	XMFLOAT4 xmf4Color(0.0f, 0.3f, 0.0f, 0.0f);
-	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/white.raw"), 257, 257, xmf3Scale, xmf4Color);
-
-	m_nShaders = 2;
-	m_ppShaders = new CShader*[m_nShaders];
-
-	/*CHellicopterObjectsShader *pHellicopterObjectsShader = new CHellicopterObjectsShader();
-	pHellicopterObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	pHellicopterObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	pHellicopterObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);*/
-
-	//m_ppShaders[0] = pHellicopterObjectsShader;
-
-	CAngrybotObjectsShader *pAngrybotObjectsShader = new CAngrybotObjectsShader();
-	pAngrybotObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	pAngrybotObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	pAngrybotObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
-
-	m_ppShaders[0] = pAngrybotObjectsShader;
-
- 	CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL_(1).bin", NULL, false);
-	
-	CAngrybotObjectsShader *pPlayGroundObjectsShader = new CAngrybotObjectsShader();
-	pPlayGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	pPlayGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	pPlayGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
-
-	m_ppShaders[1] = pPlayGroundObjectsShader;
-
-	CLoadedModelInfo *pPlayGroundMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
-
-
-	/*CMapObjectsShader *pConcertMapShader = new CMapObjectsShader();
-	pConcertMapShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	pConcertMapShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	pConcertMapShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
-
-	m_ppShaders[1] = pConcertMapShader;
-	CLoadedModelInfo *pConcertMap = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Player.bin", NULL, true);
-*/
-	
-	//CAngrybotObjectsShader *pAngrybotObjectsShader = new CAngrybotObjectsShader();
-	//	pAngrybotObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	//	pAngrybotObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-
-	/*CMapObjectsShader *pMapObjectsShader = new CMapObjectsShader();
-	pMapObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	pMapObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	pMapObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
-	m_ppShaders[2] = pMapObjectsShader;
-	
-	CLoadedModelInfo *pMapObjectModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Map/ALL_PIECES.bin",NULL,false);
-	
-	*/
-
-	m_nGameObjects = 2;
-	m_ppGameObjects = new CGameObject*[m_nGameObjects];
-	
-	
-	/*m_ppGameObjects[0] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppGameObjects[0]->SetChild(pAngrybotModel->m_pModelRootObject, true);
-	m_ppGameObjects[0]->m_pAnimationController = new CAnimationController(2, pAngrybotModel->m_pAnimationSets);
-	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(0, 0);
-	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(1, 1);
-	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.8f);
-	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(1, 0.2f);
-	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-	m_ppGameObjects[0]->SetPosition(400.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
-	m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
-
-	m_ppGameObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppGameObjects[0]->SetChild(pPlayGroundMapObject->m_pModelRootObject, true);
-	//m_ppGameObjects[0]->AddRef();
-	//m_ppGameObjects[0]->SetMesh(pAngrybotModel->m_nSkinnedMeshes);
-	/*m_ppGameObjects[0]->m_pAnimationController = new CAnimationController(2, pAngrybotModel->m_pAnimationSets);
-	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(0, 0);
-	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(1, 1);
-	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.8f);
-	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(1, 0.2f);
-	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-	*/
-	m_ppGameObjects[0]->SetPosition(200.0f,151, 700.0f); //¸Ê °Å²Ù·Î ¹ö±× ¿©±â
-	m_ppGameObjects[0]->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
-	m_ppGameObjects[0]->SetScale(200.0f, 200.0f, 200.0f);
-
-	//2¹ø¤Š ¸Ê
-	m_ppGameObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppGameObjects[1]->SetChild(pMapObject->m_pModelRootObject, true);
-	m_ppGameObjects[1]->SetPosition(200.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
-	m_ppGameObjects[1]->SetOOBB(m_ppGameObjects[1]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
-	m_ppGameObjects[1]->SetScale(200.0f, 200.0f, 200.0f);
-
-	//m_ppGameObjects[1] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	//m_ppGameObjects[1]->SetChild(pAngrybotModel->m_pModelRootObject, true);
-	//m_ppGameObjects[1]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
-	//m_ppGameObjects[1]->m_pAnimationController->SetTrackAnimationSet(0, 1);
-	//m_ppGameObjects[1]->m_pAnimationController->SetTrackSpeed(0, 0.25f);
-	//m_ppGameObjects[1]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-	//m_ppGameObjects[1]->SetPosition(450.0f, m_pTerrain->GetHeight(450.0f, 680.0f), 680.0f);
-	//m_ppGameObjects[1]->SetScale(2.0f, 2.0f, 2.0f);
-
-	//m_ppGameObjects[2] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	//m_ppGameObjects[2]->SetChild(pAngrybotModel->m_pModelRootObject, true);
-	//m_ppGameObjects[2]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
-	//m_ppGameObjects[2]->m_pAnimationController->SetTrackAnimationSet(0, 0);
-	//m_ppGameObjects[2]->m_pAnimationController->SetTrackPosition(0, 0.95f);
-	//m_ppGameObjects[2]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-	//m_ppGameObjects[2]->SetPosition(420.0f, m_pTerrain->GetHeight(420.0f, 750.0f), 750.0f);
-	//m_ppGameObjects[2]->SetScale(2.0f, 2.0f, 2.0f);
-
-	//m_ppGameObjects[3] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	//m_ppGameObjects[3]->SetChild(pAngrybotModel->m_pModelRootObject, true);
-	//m_ppGameObjects[3]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
-	//m_ppGameObjects[3]->m_pAnimationController->SetTrackAnimationSet(0, 0);
-	//m_ppGameObjects[3]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-	//m_ppGameObjects[3]->SetPosition(410.0f, m_pTerrain->GetHeight(410.0f, 735.0f), 735.0f);
-	//m_ppGameObjects[3]->SetScale(2.0f, 2.0f, 2.0f);*/
-	//OBJECTMANAGER->AddGameObject(m_ppGameObjects[1], MAP);
-	//OBJECTMANAGER->AddGameObject(m_ppGameObjects[2], MAP);
-	//PLAYER->AddPlayer()
-
-	CreateShaderVariables(pd3dDevice, pd3dCommandList);
-
-	if (pMapObject) delete pMapObject;
-	if (pPlayGroundMapObject) delete pPlayGroundMapObject;
+//	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
+//
+//	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 45); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
+//	//CreateShaderResourceViews()
+//	CMaterial::PrepareShaders(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature); 
+//
+//	BuildDefaultLightsAndMaterials();
+//
+//	m_pSkyBox = new CSkyBox(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+//
+//	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
+//	XMFLOAT4 xmf4Color(0.0f, 0.3f, 0.0f, 0.0f);
+//	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/white.raw"), 257, 257, xmf3Scale, xmf4Color);
+//
+//	m_nShaders = 2;
+//	m_ppShaders = new CShader*[m_nShaders];
+//
+//	/*CHellicopterObjectsShader *pHellicopterObjectsShader = new CHellicopterObjectsShader();
+//	pHellicopterObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+//	pHellicopterObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+//	pHellicopterObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);*/
+//
+//	//m_ppShaders[0] = pHellicopterObjectsShader;
+//
+//	CAngrybotObjectsShader *pAngrybotObjectsShader = new CAngrybotObjectsShader();
+//	pAngrybotObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+//	pAngrybotObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+//	pAngrybotObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+//
+//	m_ppShaders[0] = pAngrybotObjectsShader;
+//
+// 	CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL_(1).bin", NULL, false);
+//	
+//	CAngrybotObjectsShader *pPlayGroundObjectsShader = new CAngrybotObjectsShader();
+//	pPlayGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+//	pPlayGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+//	pPlayGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+//
+//	m_ppShaders[1] = pPlayGroundObjectsShader;
+//
+//	CLoadedModelInfo *pPlayGroundMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
+//
+//
+//	/*CMapObjectsShader *pConcertMapShader = new CMapObjectsShader();
+//	pConcertMapShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+//	pConcertMapShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+//	pConcertMapShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+//
+//	m_ppShaders[1] = pConcertMapShader;
+//	CLoadedModelInfo *pConcertMap = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Player.bin", NULL, true);
+//*/
+//	
+//	//CAngrybotObjectsShader *pAngrybotObjectsShader = new CAngrybotObjectsShader();
+//	//	pAngrybotObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+//	//	pAngrybotObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+//
+//	/*CMapObjectsShader *pMapObjectsShader = new CMapObjectsShader();
+//	pMapObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+//	pMapObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+//	pMapObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+//	m_ppShaders[2] = pMapObjectsShader;
+//	
+//	CLoadedModelInfo *pMapObjectModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Map/ALL_PIECES.bin",NULL,false);
+//	
+//	*/
+//
+//	m_nGameObjects = 2;
+//	m_ppGameObjects = new CGameObject*[m_nGameObjects];
+//	
+//	
+//	/*m_ppGameObjects[0] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+//	m_ppGameObjects[0]->SetChild(pAngrybotModel->m_pModelRootObject, true);
+//	m_ppGameObjects[0]->m_pAnimationController = new CAnimationController(2, pAngrybotModel->m_pAnimationSets);
+//	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(0, 0);
+//	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(1, 1);
+//	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.8f);
+//	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(1, 0.2f);
+//	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+//	m_ppGameObjects[0]->SetPosition(400.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
+//	m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
+//
+//	m_ppGameObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+//	m_ppGameObjects[0]->SetChild(pPlayGroundMapObject->m_pModelRootObject, true);
+//	//m_ppGameObjects[0]->AddRef();
+//	//m_ppGameObjects[0]->SetMesh(pAngrybotModel->m_nSkinnedMeshes);
+//	/*m_ppGameObjects[0]->m_pAnimationController = new CAnimationController(2, pAngrybotModel->m_pAnimationSets);
+//	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(0, 0);
+//	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(1, 1);
+//	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.8f);
+//	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(1, 0.2f);
+//	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+//	*/
+//	m_ppGameObjects[0]->SetPosition(200.0f,151, 700.0f); //¸Ê °Å²Ù·Î ¹ö±× ¿©±â
+//	m_ppGameObjects[0]->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
+//	m_ppGameObjects[0]->SetScale(200.0f, 200.0f, 200.0f);
+//
+//	//2¹ø¤Š ¸Ê
+//	m_ppGameObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+//	m_ppGameObjects[1]->SetChild(pMapObject->m_pModelRootObject, true);
+//	m_ppGameObjects[1]->SetPosition(200.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
+//	m_ppGameObjects[1]->SetOOBB(m_ppGameObjects[1]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
+//	m_ppGameObjects[1]->SetScale(200.0f, 200.0f, 200.0f);
+//
+//	//m_ppGameObjects[1] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+//	//m_ppGameObjects[1]->SetChild(pAngrybotModel->m_pModelRootObject, true);
+//	//m_ppGameObjects[1]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
+//	//m_ppGameObjects[1]->m_pAnimationController->SetTrackAnimationSet(0, 1);
+//	//m_ppGameObjects[1]->m_pAnimationController->SetTrackSpeed(0, 0.25f);
+//	//m_ppGameObjects[1]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+//	//m_ppGameObjects[1]->SetPosition(450.0f, m_pTerrain->GetHeight(450.0f, 680.0f), 680.0f);
+//	//m_ppGameObjects[1]->SetScale(2.0f, 2.0f, 2.0f);
+//
+//	//m_ppGameObjects[2] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+//	//m_ppGameObjects[2]->SetChild(pAngrybotModel->m_pModelRootObject, true);
+//	//m_ppGameObjects[2]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
+//	//m_ppGameObjects[2]->m_pAnimationController->SetTrackAnimationSet(0, 0);
+//	//m_ppGameObjects[2]->m_pAnimationController->SetTrackPosition(0, 0.95f);
+//	//m_ppGameObjects[2]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+//	//m_ppGameObjects[2]->SetPosition(420.0f, m_pTerrain->GetHeight(420.0f, 750.0f), 750.0f);
+//	//m_ppGameObjects[2]->SetScale(2.0f, 2.0f, 2.0f);
+//
+//	//m_ppGameObjects[3] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+//	//m_ppGameObjects[3]->SetChild(pAngrybotModel->m_pModelRootObject, true);
+//	//m_ppGameObjects[3]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
+//	//m_ppGameObjects[3]->m_pAnimationController->SetTrackAnimationSet(0, 0);
+//	//m_ppGameObjects[3]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+//	//m_ppGameObjects[3]->SetPosition(410.0f, m_pTerrain->GetHeight(410.0f, 735.0f), 735.0f);
+//	//m_ppGameObjects[3]->SetScale(2.0f, 2.0f, 2.0f);*/
+//	//OBJECTMANAGER->AddGameObject(m_ppGameObjects[1], MAP);
+//	//OBJECTMANAGER->AddGameObject(m_ppGameObjects[2], MAP);
+//	//PLAYER->AddPlayer()
+//
+//	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+//
+//	if (pMapObject) delete pMapObject;
+//	if (pPlayGroundMapObject) delete pPlayGroundMapObject;
 
 }
 
@@ -861,6 +861,8 @@ void CScene::CheckObjectByObjectCollisions() {
 CMenuScene::CMenuScene()
 {
 	m_nLights = 0;
+	m_SceneType = INGAME;
+
 }
 
 CMenuScene::~CMenuScene()
@@ -953,6 +955,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE CMenuScene::CreateShaderResourceViews(ID3D12Device *
 
 CInGameScene::CInGameScene()
 {
+	m_SceneType = INGAME;
 }
 
 CInGameScene::~CInGameScene()
@@ -1015,10 +1018,10 @@ void CInGameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12
 	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	d3dDescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	d3dDescriptorHeapDesc.NodeMask = 0;
-	pd3dDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc, __uuidof(ID3D12DescriptorHeap), (void **)&m_pd3dCbvSrvDescriptorHeap);
+	pd3dDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc, __uuidof(ID3D12DescriptorHeap), (void **)&m_pd3dInGameCbvSrvDescriptorHeap);
 
-	m_d3dCbvCPUDescriptorNextHandle = m_d3dCbvCPUDescriptorStartHandle = m_pd3dCbvSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	m_d3dCbvGPUDescriptorNextHandle = m_d3dCbvGPUDescriptorStartHandle = m_pd3dCbvSrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
+	m_d3dCbvCPUDescriptorNextHandle = m_d3dCbvCPUDescriptorStartHandle = m_pd3dInGameCbvSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	m_d3dCbvGPUDescriptorNextHandle = m_d3dCbvGPUDescriptorStartHandle = m_pd3dInGameCbvSrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
 	m_d3dSrvCPUDescriptorNextHandle.ptr = m_d3dSrvCPUDescriptorStartHandle.ptr = m_d3dCbvCPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
 	m_d3dSrvGPUDescriptorNextHandle.ptr = m_d3dSrvGPUDescriptorStartHandle.ptr = m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
 
