@@ -25,8 +25,8 @@ void ThreadManager::JoinThreads() {
 	for (auto &th : threads)
 		th.join();
 }
-void ThreadManager::Worker_thread() {
-
+void ThreadManager::Worker_thread() 
+{
 	while (true) 
 	{
 		DWORD iosize;
@@ -92,7 +92,6 @@ void ThreadManager::Worker_thread() {
 }
 void ThreadManager::Accept_thread() 
 {
-
 	listenSocket = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
 	if (listenSocket == INVALID_SOCKET)
 	{
@@ -100,8 +99,7 @@ void ThreadManager::Accept_thread()
 		exit(1);
 	}
 
-	// 서버정보 객체설정
-	
+	// 서버정보 객체설정	
 	ZeroMemory(&serverAddr, 0, sizeof(SOCKADDR_IN));
 	serverAddr.sin_family = AF_INET;
 	serverAddr.sin_port = htons(SERVER_PORT);
@@ -110,7 +108,6 @@ void ThreadManager::Accept_thread()
 	// 2. 소켓설정
 	::bind(listenSocket, reinterpret_cast<sockaddr *>(&serverAddr), sizeof(SOCKADDR_IN));
 	
-
 	// 3. 수신대기열생성
 	listen(listenSocket, 5);
 

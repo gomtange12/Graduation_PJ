@@ -13,7 +13,6 @@ int main()
 	THREADMANAGER->CreateThreads();
 	THREADMANAGER->JoinThreads();
 
-	// Winsock End
 	WSACleanup();
 
 	return 0;

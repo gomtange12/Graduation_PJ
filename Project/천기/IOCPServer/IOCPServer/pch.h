@@ -21,11 +21,7 @@
 #define OBJMANAGER		ObjManager::GET_INSTANCE()
 #define THREADMANAGER	ThreadManager::GET_INSTANCE()
 
-//
-
 //using namespace std;
-
-
 enum DIRECTION
 {
 	UP,

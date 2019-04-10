@@ -22,6 +22,7 @@ public: //
 public:
 	Player();
 	~Player();
+
 	void Initialize();
 
 };

@@ -5,7 +5,6 @@
 #include "PacketManager.h"
 ObjManager::ObjManager() 
 {
-
 };
 ObjManager::~ObjManager() {};
 void ObjManager::ClientInit()
