@@ -26,9 +26,9 @@ public:
 	ID3D12Resource						*m_pd3dcbInGameLights = NULL;
 	LIGHTS								*m_pcbMappedInGameLights = NULL;
 	//protected:
-	ID3D12RootSignature					*m_pd3dGraphicsRootSignature = NULL;
+	//ID3D12RootSignature					*m_pd3dGraphicsRootSignature = NULL;
 	//
-	ID3D12DescriptorHeap			*m_pd3dInGameCbvSrvDescriptorHeap;
+	//ID3D12DescriptorHeap			*m_pd3dInGameCbvSrvDescriptorHeap;
 	//
 	D3D12_CPU_DESCRIPTOR_HANDLE	m_d3dCbvCPUDescriptorStartHandle;
 	D3D12_GPU_DESCRIPTOR_HANDLE	m_d3dCbvGPUDescriptorStartHandle;

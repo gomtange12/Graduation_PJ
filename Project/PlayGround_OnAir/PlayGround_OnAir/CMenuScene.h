@@ -28,7 +28,7 @@ public:
 
 	//ID3D12RootSignature					*m_pd3dGraphicsRootSignature = NULL;
 
-	ID3D12DescriptorHeap			*m_pd3dCbvSrvDescriptorHeap;
+	//ID3D12DescriptorHeap			*m_pd3dCbvSrvDescriptorHeap;
 
 	// D3D12_CPU_DESCRIPTOR_HANDLE	m_d3dCbvCPUDescriptorStartHandle;
 	// D3D12_GPU_DESCRIPTOR_HANDLE	m_d3dCbvGPUDescriptorStartHandle;

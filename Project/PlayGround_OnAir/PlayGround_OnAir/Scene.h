@@ -68,7 +68,7 @@ public:
 
 	//CPlayer								*m_pPlayer = NULL;
 
-//protected:
+protected:
 	ID3D12RootSignature					*m_pd3dGraphicsRootSignature = NULL;
 
 	ID3D12DescriptorHeap			*m_pd3dCbvSrvDescriptorHeap = NULL;// m_pd3dCbvSrvDescriptorHeap ;
