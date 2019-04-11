@@ -1,10 +1,10 @@
 #pragma once
 
 class Player;
-class ObjManager : public SingleTone<ObjManager> {
-public:
+class ObjManager : public SingleTone<ObjManager> 
+{
+private:
 	std::array<Player*, MAX_USER>		g_clients;
-	//Player* g_clients[MAX_USER];
 
 public:
 	ObjManager();

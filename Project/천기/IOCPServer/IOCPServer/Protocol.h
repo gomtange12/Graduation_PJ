@@ -22,6 +22,8 @@ constexpr int SC_LOGIN_OK = 1;
 constexpr int SC_PUT_PLAYER = 2;
 constexpr int SC_REMOVE_PLAYER = 3;
 constexpr int SC_MOVE_PLAYER = 4;
+constexpr int SC_MATCHING_PLAYER = 5;
+constexpr int SC_MATCHING_RESULT = 6;
 
 struct stOverEx {
 	WSAOVERLAPPED m_wsaOver;
@@ -29,7 +31,6 @@ struct stOverEx {
 	unsigned char m_IOCPbuf[MAX_BUFFER]; // IOCP send/recv ¹öÆÛ
 	unsigned char	m_todo;
 };
-
 
 //////////////////////packet/////////////////////////
 struct sc_packet_pos {//SC_POSITION_INFO 3 
@@ -40,19 +41,30 @@ struct sc_packet_pos {//SC_POSITION_INFO 3
 	WORD Y_POS;
 };
 struct sc_packet_login_ok {
-	char size;
-	char type;
+	unsigned char size;
+	unsigned char type;
 	char id;
 };
-
 struct sc_packet_put_player {
-	char size;
-	char type;
+	unsigned char size;
+	unsigned char type;
 	char id;
 	char x, y;
 };
 struct sc_packet_remove_player {
-	char size;
-	char type;
+	unsigned char size;
+	unsigned char type;
 	char id;
+};
+struct sc_packet_matching {
+	unsigned char size;
+	unsigned char type;
+	char map;
+	char charac;
+	char mod;
+};
+struct sc_packet_match_result {
+	unsigned char size;
+	unsigned char type;
+	char result;
 };

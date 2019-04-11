@@ -31,6 +31,15 @@
     <Filter Include="소스 파일\PacketManager">
       <UniqueIdentifier>{72468219-3399-4831-971e-ee6cdadb25b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\MyThread">
+      <UniqueIdentifier>{9a660fd7-1658-4df3-b25d-29b2c030ca20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\MyThread\AcceptThread">
+      <UniqueIdentifier>{0ef50b97-0d26-42f1-972d-6c6841ff77ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\MyThread\WorkerThread">
+      <UniqueIdentifier>{72f12d81-5732-44d8-9dc4-e459217adc7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -57,6 +66,15 @@
     <ClInclude Include="PacketManager.h">
       <Filter>소스 파일\PacketManager</Filter>
     </ClInclude>
+    <ClInclude Include="AcceptThread.h">
+      <Filter>소스 파일\MyThread\AcceptThread</Filter>
+    </ClInclude>
+    <ClInclude Include="WorkerThread.h">
+      <Filter>소스 파일\MyThread\WorkerThread</Filter>
+    </ClInclude>
+    <ClInclude Include="MyThread.h">
+      <Filter>소스 파일\MyThread</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -79,6 +97,15 @@
     </ClCompile>
     <ClCompile Include="PacketManager.cpp">
       <Filter>소스 파일\PacketManager</Filter>
+    </ClCompile>
+    <ClCompile Include="AcceptThread.cpp">
+      <Filter>소스 파일\MyThread\AcceptThread</Filter>
+    </ClCompile>
+    <ClCompile Include="WorkerThread.cpp">
+      <Filter>소스 파일\MyThread\WorkerThread</Filter>
+    </ClCompile>
+    <ClCompile Include="MyThread.cpp">
+      <Filter>소스 파일\MyThread</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
