@@ -573,9 +573,14 @@ void CGameFramework::ProcessInput()
 {
 	static UCHAR pKeysBuffer[256];
 	bool bProcessedByScene = false;
-	if (GetKeyboardState(pKeysBuffer) && m_pScene) bProcessedByScene = m_pScene->ProcessInput(pKeysBuffer);
+	if (GetKeyboardState(pKeysBuffer) && SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]!=NULL)
+		bProcessedByScene = SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->ProcessInput(pKeysBuffer);
 	if (!bProcessedByScene)
 	{
+		if (pKeysBuffer[VK_RETURN] & 0xF0)
+		{
+			SCENEMANAGER->SetScene(INGAME);
+		}
 		DWORD dwDirection = 0;
 		if (pKeysBuffer[VK_UP] & 0xF0)
 		{
@@ -650,7 +655,6 @@ void CGameFramework::AnimateObjects()
 	for (auto&& p : SCENEMANAGER->m_MapList)
 	{
 		p.second->AnimateObjects(fTimeElapsed);
-
 	}
 
 	PLAYER->GetPlayer()->Animate(fTimeElapsed);
@@ -730,10 +734,13 @@ void CGameFramework::FrameAdvance()
 	m_pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	m_pd3dCommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
-	if (m_pScene) m_pScene->Render(m_pd3dCommandList, m_pCamera);
+	//if (m_pScene) m_pScene->Render(m_pd3dCommandList, m_pCamera);
 
 
-
+//	if (SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()] != NULL)
+	{
+		SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->Render(m_pd3dCommandList, m_pCamera);
+	}
 
 
 #ifdef _WITH_PLAYER_TOP
