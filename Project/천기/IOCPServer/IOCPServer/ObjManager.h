@@ -1,4 +1,5 @@
 #pragma once
+#include "Protocol.h"
 
 class Player;
 class ObjManager : public SingleTone<ObjManager> 

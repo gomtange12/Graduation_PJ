@@ -4,7 +4,7 @@
 class IOCPServer : public SingleTone<IOCPServer> {
 public:
 
-	HANDLE	g_hIOCP;
+	HANDLE	IOCP;
 
 	explicit IOCPServer() {};
 	virtual ~IOCPServer() {};

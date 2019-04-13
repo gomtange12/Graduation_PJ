@@ -1,28 +1,23 @@
 #pragma once
-
 #include "ObjManager.h"
+#include "WorkerThread.h"
+#include "AcceptThread.h"
+
 class ThreadManager : public SingleTone<ThreadManager>
 {
 private:
-	std::vector <std::thread> threads;
-	
+	std::vector <MyThread*> threads;
 	ObjManager* objectManager = OBJMANAGER->GetObjectManager();
-	
-	SOCKET listenSocket;
-	SOCKADDR_IN serverAddr;
-	SOCKET clientSocket;
 	//std::vector <std::shared_ptr<std::thread>> threads;
-public:
-	int USER_NUM = 0;
 	const int NUM_THREADS = 4;
 public:
 	explicit ThreadManager();
 	virtual ~ThreadManager();
+public:
 
 	void CreateThreads();
+	void AddThread(MyThread* myth);
 	void JoinThreads();
-	void Worker_thread();
-	void Accept_thread();
-	void OverlappedRecv(int id);
-	void error_display(const char *msg, int err_no);
+	void OverlappedRecv(unsigned int id);
+	
 };
