@@ -46,7 +46,7 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 		g_clients[id]->m_x = x;
 		g_clients[id]->m_y = y;
 	}
-	PACKETMANAGER->PosPacking(id, x, y);
+	PACKETMANAGER->PosPacket(id, x, y);
 	printf("¿Ãµø ");
 	}
 };

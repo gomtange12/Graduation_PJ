@@ -6,6 +6,7 @@ class Player
 {
 public:
 	bool m_connected;
+	bool m_join;
 	int m_id;
 
 	wchar_t m_name[20];

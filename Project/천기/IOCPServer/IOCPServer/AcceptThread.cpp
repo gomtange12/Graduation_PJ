@@ -57,9 +57,12 @@ void AcceptThread::Proc()
 		int id = -1;
 		for (int i = 0; i < MAX_USER; ++i)
 			if (false == objectManager->GetPlayer(i)->m_connected) {
-				id = i;
-				break;
+				if (false == objectManager->GetPlayer(i)->m_join) {
+					id = i;
+					break;
+				}
 			}
+
 		if (-1 == id) {
 			std::cout << " ==MAX USER== \n";
 			closesocket(clientSocket);
@@ -75,11 +78,12 @@ void AcceptThread::Proc()
 		objectManager->GetPlayer(id)->m_prev_size = 0;
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(objectManager->GetPlayer(id)->m_socket), IOCPSERVER->IOCP, id, 0);
 		objectManager->GetPlayer(id)->m_connected = true;
+		objectManager->GetPlayer(id)->m_join = true;
 		////
 
 		//로그인 + 다른 사용자 접속 처리 
-		PACKETMANAGER->LoginPacking(id);
-		PACKETMANAGER->PutPlayerPacking(id);
+		PACKETMANAGER->LoginPacket(id);
+		PACKETMANAGER->PutPlayerPacket(id);
 		////
 
 		THREADMANAGER->OverlappedRecv(id);

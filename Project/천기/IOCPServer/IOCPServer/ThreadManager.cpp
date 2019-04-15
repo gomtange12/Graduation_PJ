@@ -37,6 +37,6 @@ void ThreadManager::OverlappedRecv(unsigned int id)
 {
 	DWORD flags = 0;
 	ZeroMemory(&objectManager->GetPlayer(id)->m_RecvOverEx.m_wsaOver, sizeof(WSAOVERLAPPED));
-	WSARecv(objectManager->GetPlayer(id)->m_socket, &objectManager->GetPlayer(id)->m_RecvOverEx.m_wsaBuf, 1, NULL, &flags, &(objectManager->GetPlayer(id)->m_RecvOverEx.m_wsaOver), 0);
-
+	WSARecv(objectManager->GetPlayer(id)->m_socket, &objectManager->GetPlayer(id)->m_RecvOverEx.m_wsaBuf, 
+		1, NULL, &flags, &(objectManager->GetPlayer(id)->m_RecvOverEx.m_wsaOver), 0);
 }

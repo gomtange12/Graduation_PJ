@@ -26,7 +26,7 @@ void Packetmanager::SendPacket(int id, void *packet)
 			printf("¿À·ù");
 	}
 };
-void Packetmanager::LoginPacking(int id) 
+void Packetmanager::LoginPacket(int id) 
 {
 	sc_packet_login_ok packet;
 	packet.id = id;
@@ -34,7 +34,7 @@ void Packetmanager::LoginPacking(int id)
 	packet.type = SC_LOGIN_OK;
 	SendPacket(id, &packet);
 }
-void Packetmanager::PutPlayerPacking(int id)
+void Packetmanager::PutPlayerPacket(int id)
 {
 	for (int i = 0; i < MAX_USER; ++i) {
 		if (true == objectManager->GetPlayer(i)->m_connected) {
@@ -60,7 +60,7 @@ void Packetmanager::PutPlayerPacking(int id)
 	}	
 	
 };
-void Packetmanager::PosPacking(int id, int x, int y)
+void Packetmanager::PosPacket(int id, int x, int y)
 {
 	for (int i = 0; i < MAX_USER; ++i) {
 		if (true == objectManager->GetPlayer(i)->m_connected) {
