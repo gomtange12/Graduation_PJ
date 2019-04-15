@@ -2,6 +2,8 @@
 
 class MyThread
 {
+private:
+
 public:
 	explicit MyThread();
 	virtual ~MyThread();
@@ -10,14 +12,13 @@ public:
 	virtual void Init() {};
 	virtual void Proc() {};
 
-	void Join() {
+	virtual void Join() {
 		mythread.join();
 	}
 
 protected:
 	std::thread mythread;
 
-private:
 
 };
 

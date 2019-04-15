@@ -249,13 +249,13 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
-//	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
+	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 //
-//	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 45); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
-//	//CreateShaderResourceViews()
-//	CMaterial::PrepareShaders(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature); 
+	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 45); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
+	//CreateShaderResourceViews();
+	CMaterial::PrepareShaders(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature); 
 //
-//	BuildDefaultLightsAndMaterials();
+	BuildDefaultLightsAndMaterials();
 //
 //	m_pSkyBox = new CSkyBox(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 //
@@ -381,7 +381,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 //	//OBJECTMANAGER->AddGameObject(m_ppGameObjects[2], MAP);
 //	//PLAYER->AddPlayer()
 //
-//	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 //
 //	if (pMapObject) delete pMapObject;
 //	if (pPlayGroundMapObject) delete pPlayGroundMapObject;
@@ -803,25 +803,25 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 
 	UpdateShaderVariables(pd3dCommandList);
 
-	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
-	pd3dCommandList->SetGraphicsRootConstantBufferView(2, d3dcbLightsGpuVirtualAddress); //Lights
-
-	if (m_pSkyBox) m_pSkyBox->Render(pd3dCommandList, pCamera);
-	
-	//if (m_pTerrain) m_pTerrain->Render(pd3dCommandList, pCamera);
-
-	for (int i = 0; i < m_nGameObjects; i++)
-	{
-		if (m_ppGameObjects[i])
-		{
-//			m_ppGameObjects[i]->Animate(m_fElapsedTime);
-			m_ppGameObjects[i]->UpdateTransform(NULL);
-			//if (m_MapNum == 0)
-			{
-				m_ppGameObjects[i]->Render(pd3dCommandList, pCamera);
-			}
-		}
-	}
+//	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
+//	pd3dCommandList->SetGraphicsRootConstantBufferView(2, d3dcbLightsGpuVirtualAddress); //Lights
+//
+//	if (m_pSkyBox) m_pSkyBox->Render(pd3dCommandList, pCamera);
+//	
+//	//if (m_pTerrain) m_pTerrain->Render(pd3dCommandList, pCamera);
+//
+//	for (int i = 0; i < m_nGameObjects; i++)
+//	{
+//		if (m_ppGameObjects[i])
+//		{
+////			m_ppGameObjects[i]->Animate(m_fElapsedTime);
+//			m_ppGameObjects[i]->UpdateTransform(NULL);
+//			//if (m_MapNum == 0)
+//			{
+//				m_ppGameObjects[i]->Render(pd3dCommandList, pCamera);
+//			}
+//		}
+//	}
 
 	/*for (auto p = PLAYER->m_vecPlayerList.begin(); p!= PLAYER->m_vecPlayerList.end(); ++p)
 	{
@@ -839,7 +839,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 			
 		}
 	}*/
-	for (int i = 0; i < m_nShaders; i++) if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
+	//for (int i = 0; i < m_nShaders; i++) if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 	//CheckObjectByObjectCollisions();
 }
 

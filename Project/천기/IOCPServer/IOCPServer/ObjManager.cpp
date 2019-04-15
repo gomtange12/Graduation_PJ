@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "Protocol.h"
 #include "Player.h"
 #include "ObjManager.h"
 #include "PacketManager.h"

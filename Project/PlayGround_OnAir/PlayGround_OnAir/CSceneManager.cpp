@@ -66,4 +66,5 @@ void CSceneManager::SetScene(SceneState state)
 		break;
 
 	}*/
+	m_SceneType = state;
 }

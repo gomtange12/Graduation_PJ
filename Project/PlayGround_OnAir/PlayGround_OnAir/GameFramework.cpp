@@ -536,7 +536,7 @@ void CGameFramework::BuildObjects()
 	PLAYER->Initialize(m_pd3dDevice, m_pd3dCommandList, SCENEMANAGER->m_MapList[INGAME]->GetGraphicsRootSignature(), SCENEMANAGER->m_MapList[INGAME]->m_pTerrain);
 	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(0, 0, 0));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	PLAYER->GetPlayer()->SetScale(XMFLOAT3(15.0f, 15.0f, 15.0f)); //박스도 151515배 여기여기0409
-	PLAYER->MakeOtherPlayers(m_pd3dDevice, m_pd3dCommandList, SCENEMANAGER->m_MapList[INGAME]->GetGraphicsRootSignature(), SCENEMANAGER->m_MapList[INGAME]->m_pTerrain);
+//	PLAYER->MakeOtherPlayers(m_pd3dDevice, m_pd3dCommandList, SCENEMANAGER->m_MapList[INGAME]->GetGraphicsRootSignature(), SCENEMANAGER->m_MapList[INGAME]->m_pTerrain);
 	/*CTerrainPlayer *pPlayer = new CTerrainPlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	pPlayer->SetPosition(XMFLOAT3(380.0f, m_pScene->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	pPlayer->SetScale(XMFLOAT3(15.0f,15.0f,15.0f));*/
@@ -573,9 +573,14 @@ void CGameFramework::ProcessInput()
 {
 	static UCHAR pKeysBuffer[256];
 	bool bProcessedByScene = false;
-	if (GetKeyboardState(pKeysBuffer) && m_pScene) bProcessedByScene = m_pScene->ProcessInput(pKeysBuffer);
+	if (GetKeyboardState(pKeysBuffer) && SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]!=NULL)
+		bProcessedByScene = SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->ProcessInput(pKeysBuffer);
 	if (!bProcessedByScene)
 	{
+		if (pKeysBuffer[VK_RETURN] & 0xF0)
+		{
+			SCENEMANAGER->SetScene(INGAME);
+		}
 		DWORD dwDirection = 0;
 		if (pKeysBuffer[VK_UP] & 0xF0)
 		{
@@ -650,7 +655,6 @@ void CGameFramework::AnimateObjects()
 	for (auto&& p : SCENEMANAGER->m_MapList)
 	{
 		p.second->AnimateObjects(fTimeElapsed);
-
 	}
 
 	PLAYER->GetPlayer()->Animate(fTimeElapsed);
@@ -730,10 +734,13 @@ void CGameFramework::FrameAdvance()
 	m_pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	m_pd3dCommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
-	if (m_pScene) m_pScene->Render(m_pd3dCommandList, m_pCamera);
+	//if (m_pScene) m_pScene->Render(m_pd3dCommandList, m_pCamera);
 
 
-
+//	if (SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()] != NULL)
+	{
+		SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->Render(m_pd3dCommandList, m_pCamera);
+	}
 
 
 #ifdef _WITH_PLAYER_TOP

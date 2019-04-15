@@ -9,7 +9,7 @@ void IOCPServer::InitNetwork()
 	WSADATA WSAData;
 	WSAStartup(MAKEWORD(2, 2), &WSAData);
 	
-	g_hIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
+	IOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
 	
 }
 
