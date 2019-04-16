@@ -29,4 +29,10 @@ enum DIRECTION
 	LEFT,
 	RIGHT,
 };
+enum SceneState {
+	LOADING,
+	MENUSCENE,
+	INGAME,
+	GAMEOVER
+};
 #endif //PCH_H

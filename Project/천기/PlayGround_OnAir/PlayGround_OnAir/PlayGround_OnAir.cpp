@@ -186,6 +186,7 @@
 #include "stdafx.h"
 #include "PlayGround_OnAir.h"
 #include "GameFramework.h"
+#include "CNetWork.h"
 float m_eTime = 0.0f;
 float m_CurrentTime = 0.0f;
 float m_PrevTime = 0.0f;
@@ -340,7 +341,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		switch (WSAGETSELECTEVENT(lParam)) {
 		case FD_READ:
-			gGameFramework.ReadPacket((SOCKET)wParam);
+			CNETWORK->ReadPacket((SOCKET)wParam);
 			break;
 		case FD_CLOSE:
 			closesocket((SOCKET)wParam);

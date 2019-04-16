@@ -38,11 +38,7 @@ public:
 	void WaitForGpuComplete();
 	void MoveToNextFrame();
 
-	//Server
-	void MakeServer();
-	void ReadPacket(const SOCKET& sock);
-	void ProcessPacket(char *ptr);
-	//
+
 
 	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
@@ -85,16 +81,6 @@ private:
 	UINT64						m_nFenceValues[m_nSwapChainBuffers];
 	HANDLE						m_hFenceEvent;
 
-	//Server
-	SOCKET  g_mysocket;
-	WSABUF	send_wsabuf;
-	char 	send_buffer[MAX_BUFFER];
-	WSABUF	recv_wsabuf;
-	char	recv_buffer[MAX_BUFFER];
-	char	packet_buffer[MAX_BUFFER];
-	DWORD	in_packet_size = 0;
-	int		saved_packet_size = 0;
-	int		g_myid;
 
 #if defined(_DEBUG)
 	ID3D12Debug					*m_pd3dDebugController;

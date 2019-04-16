@@ -21,8 +21,9 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 	int x = g_clients[id]->m_x;
 	int y = g_clients[id]->m_y;
 
-	switch (packet[1]) { //type
-	case CS_MOVE:
+	switch (packet[1]) //type
+	{ 
+	case SC_MOVE_PLAYER:
 	{
 		//이동시
 		switch (packet[2]) //DIR
@@ -45,8 +46,24 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 		}
 		g_clients[id]->m_x = x;
 		g_clients[id]->m_y = y;
+
+		PACKETMANAGER->PosPacket(id, x, y);
+		printf("이동 ");
 	}
-	PACKETMANAGER->PosPacket(id, x, y);
-	printf("이동 ");
+	case SC_SCENE:
+	{
+		switch (packet[2]) //DIR
+		{
+		case INGAME: {
+			printf("인게임\n");
+			break;
+		}
+		default:
+			std::wcout << L"정의되지 않은 패킷 도착!!\n";
+			while (true);
+		}
+		
+	}
+
 	}
 };

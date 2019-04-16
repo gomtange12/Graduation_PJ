@@ -152,6 +152,7 @@
     <ClInclude Include="CIngameScene.h" />
     <ClInclude Include="CInputManager.h" />
     <ClInclude Include="CMenuScene.h" />
+    <ClInclude Include="CNetWork.h" />
     <ClInclude Include="CObjectManager.h" />
     <ClInclude Include="CPlayerManager.h" />
     <ClInclude Include="CSceneManager.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="CIngameScene.cpp" />
     <ClCompile Include="CInputManager.cpp" />
     <ClCompile Include="CMenuScene.cpp" />
+    <ClCompile Include="CNetWork.cpp" />
     <ClCompile Include="CObjectManager.cpp" />
     <ClCompile Include="CPlayerManager.cpp" />
     <ClCompile Include="CSceneManager.cpp" />

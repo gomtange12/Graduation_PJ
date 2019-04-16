@@ -7,11 +7,6 @@
 const int OP_RECV = 1;
 const int OP_SEND = 2;
 
-////////////////////
-#define CS_MOVE 2
-#define SC_POSITION_INFO 3
-
-////////////////////
 
 ////=È®ÀÎ¿ë=/////
 constexpr int WORLD_WIDTH = 8;
@@ -24,7 +19,8 @@ constexpr int SC_REMOVE_PLAYER = 3;
 constexpr int SC_MOVE_PLAYER = 4;
 constexpr int SC_MATCHING_PLAYER = 5;
 constexpr int SC_MATCHING_RESULT = 6;
-constexpr int SC_MATCH_SCENE = 7;
+constexpr int SC_SCENE = 7;
+
 
 
 struct stOverEx {
@@ -38,7 +34,7 @@ struct stOverEx {
 struct sc_packet_pos {//SC_POSITION_INFO 3 
 	BYTE size;
 	BYTE type;
-	WORD ID;
+	WORD id;
 	WORD X_POS;
 	WORD Y_POS;
 };
@@ -66,13 +62,13 @@ struct sc_packet_matching {
 	char charac;
 	char mod;
 };
-struct sc_packet_match_scene {
+struct sc_packet_scene {
 	BYTE size;
 	BYTE type;
-	char sceneNum;
+	WORD sceneNum;
 };
 struct sc_packet_match_result {
-	unsigned char size;
-	unsigned char type;
+	BYTE size;
+	BYTE type;
 	char result;
 };

@@ -65,7 +65,7 @@ void Packetmanager::PosPacket(int id, int x, int y)
 	for (int i = 0; i < MAX_USER; ++i) {
 		if (true == objectManager->GetPlayer(i)->m_connected) {
 			sc_packet_pos pos_packet;
-			pos_packet.ID = id;
+			pos_packet.id = id;
 			pos_packet.size = sizeof(sc_packet_pos);
 			pos_packet.type = SC_MOVE_PLAYER;
 			pos_packet.X_POS = x;

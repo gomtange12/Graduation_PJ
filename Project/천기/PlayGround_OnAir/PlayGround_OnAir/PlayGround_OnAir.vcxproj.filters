@@ -70,6 +70,9 @@
     <Filter Include="소스 파일\SceneManager\Scene\InGameScene">
       <UniqueIdentifier>{fdc88d86-4325-435c-9945-1158fb116e99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\NetWork">
+      <UniqueIdentifier>{50358450-d85e-4431-806e-3a6bb55e7b11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -150,6 +153,9 @@
     <ClInclude Include="CMenuScene.h">
       <Filter>소스 파일\SceneManager\Scene\MenuScene</Filter>
     </ClInclude>
+    <ClInclude Include="CNetWork.h">
+      <Filter>소스 파일\NetWork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Player.cpp">
@@ -217,6 +223,9 @@
     </ClCompile>
     <ClCompile Include="CMenuScene.cpp">
       <Filter>소스 파일\SceneManager\Scene\MenuScene</Filter>
+    </ClCompile>
+    <ClCompile Include="CNetWork.cpp">
+      <Filter>소스 파일\NetWork</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
