@@ -61,7 +61,7 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 		//	default:
 		//		break;
 		//	}
-		//	g_clients[id]->charac = match->charac;
+		//	g_clients[id]->avatar = match->avatar;
 		//	g_clients[id]->map = match->map;
 		//	g_clients[id]->ready = match->ready;
 		//	//여기에 모두 레디 되면 씬 센드 해줘야함

@@ -52,7 +52,7 @@ struct sc_packet_matching {
 	BYTE size;
 	BYTE type;
 	char map;
-	char charac;
+	char avatar;
 	char mod;
 	bool ready;
 };

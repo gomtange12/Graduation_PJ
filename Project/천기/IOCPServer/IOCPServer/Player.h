@@ -27,7 +27,7 @@ public:
 	BYTE m_x;
 	BYTE m_y;
 	bool ready=false;
-	int charac;
+	int avatar;
 	int mod;
 	int map;
 	//DirectX::XMFLOAT3	m_xmf3Position;
