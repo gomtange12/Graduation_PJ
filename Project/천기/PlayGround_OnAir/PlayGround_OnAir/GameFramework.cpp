@@ -585,7 +585,7 @@ void CGameFramework::ProcessInput()
 	{
 		if (pKeysBuffer[VK_RETURN] & 0xF0)
 		{
-			CNETWORK->ScenePacket(INGAME);
+			CNETWORK->ScenePacket(INGAME); //MatchPacket()으로 수정될꺼임
 			//SCENEMANAGER->SetScene(INGAME);
 		}
 		DWORD dwDirection = 0;

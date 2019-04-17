@@ -10,14 +10,16 @@
 #include <winsock2.h>
 #include <iostream>
 #include <memory>
-//
 #include <vector>
 #include <array>
 #include <thread>
+#include <d3d12.h>
+#include <DirectXMath.h>
+
 #include "SingleTone.h"
 
 #define IOCPSERVER		IOCPServer::GET_INSTANCE()
-#define PACKETMANAGER	Packetmanager::GET_INSTANCE()
+#define PACKETMANAGER	PacketManager::GET_INSTANCE()
 #define OBJMANAGER		ObjManager::GET_INSTANCE()
 #define THREADMANAGER	ThreadManager::GET_INSTANCE()
 

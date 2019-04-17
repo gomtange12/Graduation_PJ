@@ -19,7 +19,9 @@ public:
 	~CNetWork();
 
 	void MakeServer();
-	void ReadPacket(const SOCKET& sock);
+	void SendPacket();
+	void ReadPacket();
 	void ProcessPacket(char *ptr);
 	void ScenePacket(WORD num);
+	void MatchPacket();
 };

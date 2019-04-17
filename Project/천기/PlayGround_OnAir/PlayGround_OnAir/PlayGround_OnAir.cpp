@@ -341,7 +341,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		switch (WSAGETSELECTEVENT(lParam)) {
 		case FD_READ:
-			CNETWORK->ReadPacket((SOCKET)wParam);
+			CNETWORK->ReadPacket();
 			break;
 		case FD_CLOSE:
 			closesocket((SOCKET)wParam);

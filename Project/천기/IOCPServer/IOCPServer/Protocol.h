@@ -21,15 +21,7 @@ constexpr int SC_MATCHING_PLAYER = 5;
 constexpr int SC_MATCHING_RESULT = 6;
 constexpr int SC_SCENE = 7;
 
-
-
-struct stOverEx {
-	WSAOVERLAPPED m_wsaOver;
-	WSABUF m_wsaBuf;
-	unsigned char m_IOCPbuf[MAX_BUFFER]; // IOCP send/recv ¹öÆÛ
-	unsigned char	m_todo;
-};
-
+#pragma pack (push, 1)
 //////////////////////packet/////////////////////////
 struct sc_packet_pos {//SC_POSITION_INFO 3 
 	BYTE size;
@@ -37,6 +29,7 @@ struct sc_packet_pos {//SC_POSITION_INFO 3
 	WORD id;
 	WORD X_POS;
 	WORD Y_POS;
+	//float X_POS;
 };
 struct sc_packet_login_ok {
 	BYTE size;
@@ -61,6 +54,7 @@ struct sc_packet_matching {
 	char map;
 	char charac;
 	char mod;
+	bool ready;
 };
 struct sc_packet_scene {
 	BYTE size;

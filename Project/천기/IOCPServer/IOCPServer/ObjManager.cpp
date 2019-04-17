@@ -50,7 +50,24 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 		PACKETMANAGER->PosPacket(id, x, y);
 		printf("이동 ");
 	}
-	case SC_SCENE:
+	case SC_MATCHING_PLAYER:
+	{
+		//sc_packet_matching *match = reinterpret_cast<sc_packet_matching *>(packet);
+		//g_clients[id]->mod = match->mod;
+		//for (int i = 0; i <= MAX_USER; ++i) {
+		//	if(true == GetPlayer(i)->m_connected)
+		//	switch (g_clients[id]->mod)
+		//	{
+		//	default:
+		//		break;
+		//	}
+		//	g_clients[id]->charac = match->charac;
+		//	g_clients[id]->map = match->map;
+		//	g_clients[id]->ready = match->ready;
+		//	//여기에 모두 레디 되면 씬 센드 해줘야함
+		//}
+	}
+	case SC_SCENE: //없어지고 MATCHING하면 씬넘겨줄꺼
 	{
 		switch (packet[2]) //DIR
 		{

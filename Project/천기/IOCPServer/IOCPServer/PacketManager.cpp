@@ -3,14 +3,14 @@
 #include "PacketManager.h"
 #include "Player.h"
 
-Packetmanager::Packetmanager()
+PacketManager::PacketManager()
 {
 };
 
-Packetmanager::~Packetmanager()
+PacketManager::~PacketManager()
 {
 };
-void Packetmanager::SendPacket(int id, void *packet)
+void PacketManager::SendPacket(int id, void *packet)
 {
 	stOverEx *ex = new stOverEx;
 	memcpy(ex->m_IOCPbuf, packet, reinterpret_cast<unsigned char *>(packet)[0]);
@@ -26,7 +26,7 @@ void Packetmanager::SendPacket(int id, void *packet)
 			printf("¿À·ù");
 	}
 };
-void Packetmanager::LoginPacket(int id) 
+void PacketManager::LoginPacket(int id) 
 {
 	sc_packet_login_ok packet;
 	packet.id = id;
@@ -34,7 +34,7 @@ void Packetmanager::LoginPacket(int id)
 	packet.type = SC_LOGIN_OK;
 	SendPacket(id, &packet);
 }
-void Packetmanager::PutPlayerPacket(int id)
+void PacketManager::PutPlayerPacket(int id)
 {
 	for (int i = 0; i < MAX_USER; ++i) {
 		if (true == objectManager->GetPlayer(i)->m_connected) {
@@ -60,7 +60,7 @@ void Packetmanager::PutPlayerPacket(int id)
 	}	
 	
 };
-void Packetmanager::PosPacket(int id, int x, int y)
+void PacketManager::PosPacket(int id, int x, int y)
 {
 	for (int i = 0; i < MAX_USER; ++i) {
 		if (true == objectManager->GetPlayer(i)->m_connected) {
@@ -74,7 +74,7 @@ void Packetmanager::PosPacket(int id, int x, int y)
 		}
 	}
 }
-void Packetmanager::ClientDisconnect(int id)
+void PacketManager::ClientDisconnect(int id)
 {
 	for (int i = 0; i < MAX_USER; ++i) {
 		if (false == objectManager->GetPlayer(i)->m_connected) continue;
@@ -88,4 +88,7 @@ void Packetmanager::ClientDisconnect(int id)
 	}
 	closesocket(objectManager->GetPlayer(id)->m_socket);
 	objectManager->GetPlayer(id)->m_connected = false;
+}
+void PacketManager::ScenePacket(int num) {
+	
 }

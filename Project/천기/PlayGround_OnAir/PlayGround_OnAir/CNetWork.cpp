@@ -33,11 +33,21 @@ void CNetWork::MakeServer()
 	recv_wsabuf.len = MAX_BUFFER;
 
 }
-void CNetWork::ReadPacket(const SOCKET& sock) 
+void CNetWork::SendPacket()
+{
+	DWORD iobyte;
+	int ret = WSASend(g_mysocket, &send_wsabuf, 1, &iobyte, 0, NULL, NULL);
+	if (0 != ret) {
+		int err_no = WSAGetLastError();
+		if (WSA_IO_PENDING != err_no)
+			printf("오류");
+	}
+}
+void CNetWork::ReadPacket() 
 {
 	DWORD iobyte, ioflag = 0;
 
-	int ret = WSARecv(sock, &recv_wsabuf, 1, &iobyte, &ioflag, NULL, NULL);
+	int ret = WSARecv(g_mysocket, &recv_wsabuf, 1, &iobyte, &ioflag, NULL, NULL);
 	if (ret) {
 		int err_code = WSAGetLastError();
 		printf("Recv Error [%d]\n", err_code);
@@ -166,17 +176,24 @@ void CNetWork::ProcessPacket(char *ptr)
 void CNetWork::ScenePacket(WORD num)
 {
 	sc_packet_scene *my_packet = reinterpret_cast<sc_packet_scene *>(send_buffer);
+	send_wsabuf.len = sizeof(my_packet);
 	my_packet->size = sizeof(my_packet);
 	my_packet->type = SC_SCENE;
 ;
 	my_packet->sceneNum = num;
-	send_wsabuf.len = sizeof(my_packet);
-	DWORD iobyte;
+	
+	SendPacket();
+}
 
-	int ret = WSASend(g_mysocket, &send_wsabuf, 1, &iobyte, 0, NULL, NULL);
-	if (0 != ret) {
-		int err_no = WSAGetLastError();
-		if (WSA_IO_PENDING != err_no)
-			printf("오류");
-	}
+void CNetWork::MatchPacket() 
+{
+	sc_packet_matching *my_packet = reinterpret_cast<sc_packet_matching *>(send_buffer);
+	send_wsabuf.len = sizeof(my_packet);
+	my_packet->size = sizeof(my_packet);
+	my_packet->type = SC_MATCHING_PLAYER;
+	//my_packet->charac =
+	//my_packet->map =
+	//my_packet->mod =
+
+	SendPacket();
 }
