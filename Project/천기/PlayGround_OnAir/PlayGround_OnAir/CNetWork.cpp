@@ -86,7 +86,7 @@ void CNetWork::ProcessPacket(char *ptr)
 	case SC_SCENE:
 	{
 		sc_packet_scene *paket = reinterpret_cast<sc_packet_scene *>(ptr);
-		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
+		//SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
 	}
 	case SC_PUT_PLAYER:
 	{

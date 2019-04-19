@@ -54,8 +54,7 @@ using namespace std;
 #endif
 #include "SingleTon.h"
 #include "CPlayerManager.h"
-//#include "..\..\Ãµ±â\IOCPServer\IOCPServer\Protocol.h"
-#include "..\..\IOCPServer\IOCPServer\Protocol.h"
+
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 
