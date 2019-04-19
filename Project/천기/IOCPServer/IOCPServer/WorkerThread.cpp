@@ -58,9 +58,13 @@ void WorkerThread::Proc()
 						+ objectManager->GetPlayer(key)->m_prev_size,
 						ptr, need_size);
 
-
-					//조립한 패킷을 넘김
-					OBJMANAGER->ProcessPacket(key, objectManager->GetPlayer(key)->m_packet_buf);
+					//매칭 관리
+					if (objectManager->GetPlayer(key)->m_match == false) {
+						objectManager->MatchProcess(key, objectManager->GetPlayer(key)->m_packet_buf);
+					}
+					else { //인게임
+						objectManager->ProcessPacket(key, objectManager->GetPlayer(key)->m_packet_buf);
+					}
 					//
 					ptr += need_size;
 					rest_data -= need_size;
@@ -80,6 +84,11 @@ void WorkerThread::Proc()
 			THREADMANAGER->OverlappedRecv(key);
 		}
 		//상태 점검해야함
+		else {
+			if (OP_SEND == over->m_todo)
+				// 받자 마자 지워줘서 이상한 값이 들어간다.
+				delete over;
+		}
 	}
 }
 void WorkerThread::error_display(const char *msg, int err_no)

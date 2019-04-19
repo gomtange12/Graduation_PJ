@@ -72,10 +72,6 @@ void AcceptThread::Proc()
 		//클라이언트 info 설정//
 		objectManager->GetPlayer(id)->m_id = id;
 		objectManager->GetPlayer(id)->m_socket = clientSocket;
-		objectManager->GetPlayer(id)->m_RecvOverEx.m_todo = OP_RECV;
-		objectManager->GetPlayer(id)->m_RecvOverEx.m_wsaBuf.buf = (CHAR*)objectManager->GetPlayer(id)->m_RecvOverEx.m_IOCPbuf;
-		objectManager->GetPlayer(id)->m_RecvOverEx.m_wsaBuf.len = sizeof(objectManager->GetPlayer(id)->m_RecvOverEx.m_IOCPbuf);
-		objectManager->GetPlayer(id)->m_prev_size = 0;
 		//
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(objectManager->GetPlayer(id)->m_socket), IOCPSERVER->IOCP, id, 0);
 		//

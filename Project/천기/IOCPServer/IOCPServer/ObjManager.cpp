@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Player.h"
+#include "SoloRoom.h"
 #include "ObjManager.h"
 #include "PacketManager.h"
 ObjManager::ObjManager() 
@@ -16,6 +17,77 @@ void ObjManager::ClientInit()
 
 };
 
+void ObjManager::MatchProcess(int id, unsigned char *packet) 
+{
+	if (packet[1] == SC_MATCHING_PLAYER) { //type
+
+		sc_packet_matching *match = reinterpret_cast<sc_packet_matching *>(packet);
+		g_clients[id]->mod = match->mod;
+		//g_clients[id]->ready = match->ready;
+		g_clients[id]->avatar = match->avatar;
+		g_clients[id]->map = match->map;
+		
+	}
+	switch (g_clients[id]->map)
+	{
+	case PLAYGROUND:
+	{
+		ModMatch(id);
+		break;
+	}
+	case CONCERT:
+	{
+		ModMatch(id);
+		break;
+	}
+	}
+	
+}
+void ObjManager::ModMatch(int id)
+{
+	switch (g_clients[id]->mod)
+	{
+	case SOLO:
+	{
+		if (v_soloRoom.size() == soloRoomNum) { // 빈 방 생성
+			v_soloRoom.emplace_back();
+		}
+		//솔로룸 앞에서부터 인원이 비어있는 솔로룸을 찾음
+		for (auto& vsr : v_soloRoom) {
+			if (vsr->m_full == false) {
+				for (int i = 0; i <= PERSONNEL; ++i) {
+					if (vsr->m_ids[i] < 0) {
+						vsr->m_ids[i] = id;
+						if (i == 8) {
+							for (int i = 0; i <= PERSONNEL; ++i) {
+								//풀방됬으니 씬센드
+								g_clients[i]->m_match = true;
+								vsr->m_full = true;
+								++soloRoomNum; //
+							}
+							break;
+						}
+					}
+				}
+				break;
+			}
+		}
+		break;
+	}
+	case DUO:
+	{
+
+		break;
+	}
+	case SQUAD:
+	{
+
+		break;
+	}
+	default:
+		break;
+	}
+}
 void ObjManager::ProcessPacket(int id, unsigned char *packet)
 {
 	int x = g_clients[id]->m_x;
@@ -47,48 +119,10 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 		g_clients[id]->m_x = x;
 		g_clients[id]->m_y = y;
 
-		//PACKETMANAGER->PosPacket(id, x, y);
+		PACKETMANAGER->PosPacket(id, x, y);
 		printf("이동 ");
 	}
-	case SC_MATCHING_PLAYER:
-	{
-		sc_packet_matching *match = reinterpret_cast<sc_packet_matching *>(packet);
-		g_clients[id]->mod = match->mod;
-		g_clients[id]->ready = match->ready;
-		g_clients[id]->avatar = match->avatar;
-		g_clients[id]->map = match->map;
-		//게임에 들어가면 레디를 false로 바꿔줘야함! 꼭!
-		
-		//매칭시스템
-		for (int i = 0; i <= MAX_USER; ++i) {
-			if(true == GetPlayer(i)->ready)
-			switch (g_clients[id]->mod)
-			{
-			case SOLO:
-			{
-				//인게임들어가있는 넘들 방하나씩 만들어줘야할듯?
-				//인게임으로 씬 체인지 센드 하고
-				//레디 false로 바꾸자
-				g_clients[id]->ready = false;
-				break;
-			}
-			case DUO:
-			{
-
-				g_clients[id]->ready = false;
-				break;
-			}
-			case SQUAD:
-			{
-
-				g_clients[id]->ready = false;
-				break;
-			}
-			default:
-				break;
-			}
-		}
-	}
+	
 	case SC_SCENE: //없어지고 MATCHING하면 씬넘겨줄꺼
 	{
 		switch (packet[2]) //DIR

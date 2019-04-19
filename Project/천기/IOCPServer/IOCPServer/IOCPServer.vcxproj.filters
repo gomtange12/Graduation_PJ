@@ -40,6 +40,9 @@
     <Filter Include="소스 파일\ServerMain\IOCPServer">
       <UniqueIdentifier>{adec572c-50a1-4459-8b05-eacd02721adb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\ObjManager\MatchRoom">
+      <UniqueIdentifier>{51bf2e69-e4c7-4b4c-ae20-0548cc417a2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -75,6 +78,9 @@
     <ClInclude Include="MyThread.h">
       <Filter>소스 파일\MyThread</Filter>
     </ClInclude>
+    <ClInclude Include="SoloRoom.h">
+      <Filter>소스 파일\ObjManager\MatchRoom</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -106,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="MyThread.cpp">
       <Filter>소스 파일\MyThread</Filter>
+    </ClCompile>
+    <ClCompile Include="SoloRoom.cpp">
+      <Filter>소스 파일\ObjManager\MatchRoom</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

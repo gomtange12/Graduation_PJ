@@ -191,7 +191,7 @@ void CNetWork::MatchPacket()
 	send_wsabuf.len = sizeof(my_packet);
 	my_packet->size = sizeof(my_packet);
 	my_packet->type = SC_MATCHING_PLAYER;
-	//my_packet->charac =
+	//my_packet->avatar =
 	//my_packet->map =
 	//my_packet->mod =
 

@@ -13,6 +13,7 @@ constexpr int WORLD_WIDTH = 8;
 constexpr int WORLD_HEIGHT = 8;
 ////=È®ÀÎ¿ë=/////
 
+
 constexpr int SC_LOGIN_OK = 1;
 constexpr int SC_PUT_PLAYER = 2;
 constexpr int SC_REMOVE_PLAYER = 3;
@@ -54,7 +55,7 @@ struct sc_packet_matching {
 	char map;
 	char avatar;
 	char mod;
-	bool ready;
+	//bool ready;
 };
 struct sc_packet_scene {
 	BYTE size;
