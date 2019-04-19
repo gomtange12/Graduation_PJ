@@ -20,13 +20,14 @@ public: //
 public:
 	bool m_connected;
 	bool m_join;
+	bool m_ing;
 	int m_id;
 
 public:
 	wchar_t m_name[20];
 	BYTE m_x;
 	BYTE m_y;
-	bool ready=false;
+	bool ready;
 	int avatar;
 	int mod;
 	int map;

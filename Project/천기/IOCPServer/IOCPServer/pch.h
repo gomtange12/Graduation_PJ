@@ -24,6 +24,11 @@
 #define THREADMANAGER	ThreadManager::GET_INSTANCE()
 
 //using namespace std;
+enum ModNumber {
+	SOLO,
+	DUO,
+	SQUAD
+};
 enum DIRECTION
 {
 	UP,

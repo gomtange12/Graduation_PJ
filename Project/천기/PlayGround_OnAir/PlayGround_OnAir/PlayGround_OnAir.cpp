@@ -348,6 +348,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			exit(-1); //clientError
 			break;
 		}
+		break;
 	}
 	default:
 		return(::DefWindowProc(hWnd, message, wParam, lParam));

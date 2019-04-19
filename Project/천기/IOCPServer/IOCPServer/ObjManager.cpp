@@ -47,25 +47,47 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 		g_clients[id]->m_x = x;
 		g_clients[id]->m_y = y;
 
-		PACKETMANAGER->PosPacket(id, x, y);
+		//PACKETMANAGER->PosPacket(id, x, y);
 		printf("이동 ");
 	}
 	case SC_MATCHING_PLAYER:
 	{
-		//sc_packet_matching *match = reinterpret_cast<sc_packet_matching *>(packet);
-		//g_clients[id]->mod = match->mod;
-		//for (int i = 0; i <= MAX_USER; ++i) {
-		//	if(true == GetPlayer(i)->m_connected)
-		//	switch (g_clients[id]->mod)
-		//	{
-		//	default:
-		//		break;
-		//	}
-		//	g_clients[id]->avatar = match->avatar;
-		//	g_clients[id]->map = match->map;
-		//	g_clients[id]->ready = match->ready;
-		//	//여기에 모두 레디 되면 씬 센드 해줘야함
-		//}
+		sc_packet_matching *match = reinterpret_cast<sc_packet_matching *>(packet);
+		g_clients[id]->mod = match->mod;
+		g_clients[id]->ready = match->ready;
+		g_clients[id]->avatar = match->avatar;
+		g_clients[id]->map = match->map;
+		//게임에 들어가면 레디를 false로 바꿔줘야함! 꼭!
+		
+		//매칭시스템
+		for (int i = 0; i <= MAX_USER; ++i) {
+			if(true == GetPlayer(i)->ready)
+			switch (g_clients[id]->mod)
+			{
+			case SOLO:
+			{
+				//인게임들어가있는 넘들 방하나씩 만들어줘야할듯?
+				//인게임으로 씬 체인지 센드 하고
+				//레디 false로 바꾸자
+				g_clients[id]->ready = false;
+				break;
+			}
+			case DUO:
+			{
+
+				g_clients[id]->ready = false;
+				break;
+			}
+			case SQUAD:
+			{
+
+				g_clients[id]->ready = false;
+				break;
+			}
+			default:
+				break;
+			}
+		}
 	}
 	case SC_SCENE: //없어지고 MATCHING하면 씬넘겨줄꺼
 	{
