@@ -6,7 +6,7 @@
 #pragma once
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "dwrite.lib")
-#pragma comment (lib, "ws2_32.lib")
+
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "windowscodecs.lib")
 
@@ -48,7 +48,7 @@ using namespace std;
 #include <DirectXCollision.h>
 
 #include <Mmsystem.h>
-#include <WinSock2.h>
+
 #ifdef _DEBUG
 #include <dxgidebug.h>
 #endif

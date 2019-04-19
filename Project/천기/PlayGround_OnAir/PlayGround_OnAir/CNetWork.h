@@ -1,6 +1,7 @@
 #pragma once
+#pragma comment (lib, "ws2_32.lib")
+#include <WinSock2.h>
 #include "..\..\IOCPServer\IOCPServer\Protocol.h"
-
 class CNetWork : public CSingleTonBase<CNetWork>
 {
 private:
