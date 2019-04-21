@@ -44,8 +44,8 @@ public:
     ~CScene();
 	SceneState m_SceneType{ MENUSCENE };
 	int m_MapNum{ 0 };
-	virtual bool OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
-	virtual bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
+	bool OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
+	bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
@@ -54,15 +54,15 @@ public:
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void ReleaseObjects();
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera=NULL);
-	virtual bool ProcessInput(UCHAR *pKeysBuffer);
+	bool ProcessInput(UCHAR *pKeysBuffer);
 
 	void BuildDefaultLightsAndMaterials();
 	ID3D12RootSignature *CreateGraphicsRootSignature(ID3D12Device *pd3dDevice);
 	ID3D12RootSignature *GetGraphicsRootSignature() { return(m_pd3dGraphicsRootSignature); }
 
-    void AnimateObjects(float fTimeElapsed);
+    virtual void AnimateObjects(float fTimeElapsed);
 
-	void ReleaseUploadBuffers();
+	virtual void ReleaseUploadBuffers();
 
 	void CheckObjectByObjectCollisions();
 
@@ -99,8 +99,8 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUSrvDescriptorNextHandle() { return(m_d3dSrvCPUDescriptorNextHandle); }
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUSrvDescriptorNextHandle() { return(m_d3dSrvGPUDescriptorNextHandle); }
 
-	int									m_nGameObjects = 0;
-	CGameObject							**m_ppGameObjects = NULL;
+	int									m_nMapGameObjects = 0;
+	CGameObject							**m_ppMapObjects = NULL;
 
 	float								m_fElapsedTime = 0.0f;
 

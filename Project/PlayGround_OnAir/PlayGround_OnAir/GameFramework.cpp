@@ -373,13 +373,17 @@ void CGameFramework::ChangeSwapChainState()
 
 void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
+	//if (m_pScene)
+	//	m_pScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
 	if (m_pScene) m_pScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
+
 	switch (nMessageID)
 	{
 		case WM_LBUTTONDOWN:
 		case WM_RBUTTONDOWN:
-			::SetCapture(hWnd);
-			::GetCursorPos(&m_ptOldCursorPos);
+			SetCapture(hWnd);
+			GetCursorPos(&m_ptOldCursorPos);
+			//ScreenToClient(m_hWnd, &m_ptOldCursorPos);
 			break;
 		case WM_LBUTTONUP:
 		case WM_RBUTTONUP:
@@ -394,7 +398,9 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
+	//if (SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]) SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
 	if (m_pScene) m_pScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
+
 	switch (nMessageID)
 	{
 		case WM_KEYUP:
@@ -413,11 +419,11 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 				case VK_F9:
 					ChangeSwapChainState();
 					break;
-				case '1':
+			/*	case '1':
 				case '2':
 					PLAYER->GetPlayer()->SetTrackAnimationSet(0, int(wParam) - '1');
 					break;
-				default:
+			*/	default:
 					break;
 			}
 			break;
@@ -519,13 +525,13 @@ void CGameFramework::OnDestroy()
 void CGameFramework::BuildObjects()
 {
 	m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
-	SCENEMANAGER->
+	//SCENEMANAGER->
 	//m_pScene = new CScene();
 	//if (m_pScene) m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
 	SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
 	SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
 
-	for (auto& p : SCENEMANAGER->m_MapList)
+	for (auto&& p : SCENEMANAGER->m_MapList)
 	{
 		//p.second->CreateShaderResourceViews(m_pd3dDevice,nullptr,)
 		p.second->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
@@ -565,23 +571,25 @@ void CGameFramework::ReleaseObjects()
 {
 	//if (m_pPlayer) PLAYER->GetPlayer()->Release();
 
-	if (m_pScene) m_pScene->ReleaseObjects();
-	if (m_pScene) delete m_pScene;
+	//if (m_pScene) m_pScene->ReleaseObjects();
+	//if (m_pScene) delete m_pScene;
 }
 
 void CGameFramework::ProcessInput()
 {
-	static UCHAR pKeysBuffer[256];
+	UCHAR pKeysBuffer[256]{0};
 	bool bProcessedByScene = false;
-	if (GetKeyboardState(pKeysBuffer) && SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]!=NULL)
-		bProcessedByScene = SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->ProcessInput(pKeysBuffer);
-	if (!bProcessedByScene)
+	/*if (GetKeyboardState(pKeysBuffer) && SCENEMANAGER->GetSceneType() == MENUSCENE)
+		bProcessedByScene = SCENEMANAGER->m_MapList[MENUSCENE]->ProcessInput(pKeysBuffer);*/
+	//if (!bProcessedByScene)
+	//if(SCENEMANAGER->GetSceneType()==MENUSCENE)
+	GetKeyboardState(pKeysBuffer);
 	{
+		DWORD dwDirection = 0;
 		if (pKeysBuffer[VK_RETURN] & 0xF0)
 		{
 			SCENEMANAGER->SetScene(INGAME);
 		}
-		DWORD dwDirection = 0;
 		if (pKeysBuffer[VK_UP] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
@@ -628,6 +636,7 @@ void CGameFramework::ProcessInput()
 		{
 			SetCursor(NULL);
 			GetCursorPos(&ptCursorPos);
+			//ClientToScreen(m_hWnd, &ptCursorPos);
 			cxDelta = (float)(ptCursorPos.x - m_ptOldCursorPos.x) / 4.0f;
 			cyDelta = (float)(ptCursorPos.y - m_ptOldCursorPos.y) / 4.0f;
 			SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
@@ -642,7 +651,8 @@ void CGameFramework::ProcessInput()
 				else
 					PLAYER->GetPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
 			}
-			if (dwDirection) PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
+			if (dwDirection) 
+				PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
 		}
 	}
 	PLAYER->GetPlayer()->Update(m_GameTimer.GetTimeElapsed());
@@ -652,10 +662,11 @@ void CGameFramework::AnimateObjects()
 {
 	float fTimeElapsed = m_GameTimer.GetTimeElapsed();
 
-	for (auto&& p : SCENEMANAGER->m_MapList)
+	/*for (auto&& p = SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()].)
 	{
 		p.second->AnimateObjects(fTimeElapsed);
-	}
+	}*/
+	SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->AnimateObjects(fTimeElapsed);
 
 	PLAYER->GetPlayer()->Animate(fTimeElapsed);
 	PLAYER->GetPlayer()->UpdateTransform(NULL);

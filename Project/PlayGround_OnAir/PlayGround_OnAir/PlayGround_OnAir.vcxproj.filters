@@ -150,6 +150,9 @@
     <ClInclude Include="CMenuScene.h">
       <Filter>소스 파일\SceneManager\Scene\MenuScene</Filter>
     </ClInclude>
+    <ClInclude Include="CInstancingShader.h">
+      <Filter>소스 파일\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Player.cpp">
@@ -217,6 +220,9 @@
     </ClCompile>
     <ClCompile Include="CMenuScene.cpp">
       <Filter>소스 파일\SceneManager\Scene\MenuScene</Filter>
+    </ClCompile>
+    <ClCompile Include="CInstancingShader.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

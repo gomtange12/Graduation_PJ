@@ -222,7 +222,8 @@ void CPlayer::Update(float fTimeElapsed)
 	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(m_xmf3Velocity, fTimeElapsed, false);
 	Move(xmf3Velocity, false);
 
-	if (m_pPlayerUpdatedContext) OnPlayerUpdateCallback(fTimeElapsed);
+	if (m_pPlayerUpdatedContext) 
+		OnPlayerUpdateCallback(fTimeElapsed);
 	
 	if (PLAYER->GetPlayer()!=nullptr)
 	{
@@ -241,18 +242,21 @@ void CPlayer::Update(float fTimeElapsed)
 	float fDeceleration = (m_fFriction * fTimeElapsed);
 	if (fDeceleration > fLength) fDeceleration = fLength;
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
-
-	switch (GetPlayerState())
+	PlayerState num = GetPlayerState();
+	switch (num)
 	{
 	/*default:
 		SetTrackAnimationSet(0, IDLE);
 		break;*/
 	case IDLE:
+		SetTrackAnimationSet(0, IDLE);
+		break;
 	case RUN:
+		SetTrackAnimationSet(0, RUN);
 		//if (!m_OnAacting)
 		//{
 
-			SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
+			//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 			m_OnAacting = FALSE;
 		//}
 		//SetTrackAnimationSet(0, RUN);
@@ -574,6 +578,8 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	m_fPitch = 0.0f;
 	m_fRoll = 0.0f;
 	m_fYaw = 0.0f;*/
+
+
 	if (this != nullptr)
 	{
 		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
@@ -690,6 +696,7 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	int z = (int)(xmf3PlayerPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
+	fHeight = 151;
 	if (xmf3PlayerPosition.y < fHeight)
 	{
 		//if (FindFrame("LFootBone1")->GetPosition().y < fHeight)
@@ -712,9 +719,9 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
+	fHeight = 151;
+
 	if (xmf3CameraPosition.y <= fHeight)
-	//if(FindFrame())
-	
 	xmf3CameraPosition.y = fHeight;
 	m_pCamera->SetPosition(xmf3CameraPosition);
 	if (m_pCamera->GetMode() == THIRD_PERSON_CAMERA)
@@ -750,44 +757,44 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_fPitch = 0.0f;
 	m_fRoll = 0.0f;
 	m_fYaw = 0.0f;*/
-	if (this != nullptr)
-	{
-		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
-		m_pCamera->SetLookAt(m_xmf3Position);
-		//m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
-
-	}
-
-	//m_ObjType = DYNAMIC;
-	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeytarTest.bin", NULL, true);
-
-
-	SetChild(pPlayerModel->m_pModelRootObject, true);
-	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
-
-	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
-	m_pAnimationController->SetTrackAnimationSet(0, 0);
-
-	m_pAnimationController->SetCallbackKeys(1, 3);
-#ifdef _WITH_SOUND_RESOURCE
-	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Footstep01"));
-	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Footstep02"));
-	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Footstep03"));
-#else
-	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Sound/Footstep01.wav"));
-	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Sound/Footstep02.wav"));
-	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Sound/Footstep03.wav"));
-#endif
-	CAnimationCallbackHandler *pAnimationCallbackHandler = new CSoundCallbackHandler();
-	m_pAnimationController->SetAnimationCallbackHandler(1, pAnimationCallbackHandler);
-
-	if (this != nullptr)
-	{
-		CreateShaderVariables(pd3dDevice, pd3dCommandList);
-		SetPlayerUpdatedContext(pContext);
-		SetCameraUpdatedContext(pContext);
-	}
-	SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
-	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
-	if (pPlayerModel) delete pPlayerModel;
+//	if (this != nullptr)
+//	{
+//		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
+//		m_pCamera->SetLookAt(m_xmf3Position);
+//		//m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
+//
+//	}
+//
+//	//m_ObjType = DYNAMIC;
+//	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeytarTest.bin", NULL, true);
+//
+//
+//	SetChild(pPlayerModel->m_pModelRootObject, true);
+//	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
+//
+//	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
+//	m_pAnimationController->SetTrackAnimationSet(0, 0);
+//
+//	m_pAnimationController->SetCallbackKeys(1, 3);
+//#ifdef _WITH_SOUND_RESOURCE
+//	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Footstep01"));
+//	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Footstep02"));
+//	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Footstep03"));
+//#else
+//	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Sound/Footstep01.wav"));
+//	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Sound/Footstep02.wav"));
+//	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Sound/Footstep03.wav"));
+//#endif
+//	CAnimationCallbackHandler *pAnimationCallbackHandler = new CSoundCallbackHandler();
+//	m_pAnimationController->SetAnimationCallbackHandler(1, pAnimationCallbackHandler);
+//
+//	if (this != nullptr)
+//	{
+//		CreateShaderVariables(pd3dDevice, pd3dCommandList);
+//		SetPlayerUpdatedContext(pContext);
+//		SetCameraUpdatedContext(pContext);
+//	}
+//	//SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
+//	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
+//	if (pPlayerModel) delete pPlayerModel;
 }

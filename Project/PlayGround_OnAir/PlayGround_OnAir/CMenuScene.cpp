@@ -33,15 +33,15 @@ void CMenuScene::ReleaseShaderVariables()
 {
 }
 
-bool CMenuScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
-{
-	return false;
-}
-
-bool CMenuScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
-{
-	return false;
-}
+//bool CMenuScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
+//{
+//	return false;
+//}
+//
+//bool CMenuScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
+//{
+//	return false;
+//}
 
 void CMenuScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
@@ -67,16 +67,18 @@ void CMenuScene::ReleaseObjects()
 void CMenuScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
 {
 	CScene::Render(pd3dCommandList, pCamera);
-	pCamera->SetViewportsAndScissorRects(pd3dCommandList);
-	pCamera->UpdateShaderVariables(pd3dCommandList);
+	//pCamera->SetViewportsAndScissorRects(pd3dCommandList);
+	//pCamera->UpdateShaderVariables(pd3dCommandList);
 
 	UpdateShaderVariables(pd3dCommandList);
 }
 
-bool CMenuScene::ProcessInput(UCHAR * pKeysBuffer)
-{
-	return false;
-}
+//bool CMenuScene::ProcessInput(UCHAR * pKeysBuffer)
+//{
+//	//eturn true;
+//	return false;
+//
+//}
 
 //void CMenuScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
 //{
