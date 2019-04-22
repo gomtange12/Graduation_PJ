@@ -42,16 +42,15 @@ public:
 	std::shared_ptr<CCamera> GetCamera() { return(m_pCamera); }
 	virtual void SetCamera(std::shared_ptr<CCamera> pCamera) { m_pCamera = pCamera; }
 	void SetYPosition(float ypos) { m_xmf3Position.y = ypos; }
-private:
-	PlayerState m_PlayerState = IDLE;
-public:
+	
+	int m_PlayerState = IDLE;
+
 	CPlayer();
 	CPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 
 	virtual ~CPlayer();
-	PlayerState GetPlayerState() { return m_PlayerState; }
-	void SetPlayerState(PlayerState state) { 
-		m_PlayerState = state; }
+	int GetPlayerState() { return m_PlayerState; }
+	void SetPlayerState(PlayerState state) { m_PlayerState = state; }
 	XMFLOAT3 GetPosition() { return(m_xmf3Position); }
 	XMFLOAT3 GetLookVector() { return(m_xmf3Look); }
 	XMFLOAT3 GetUpVector() { return(m_xmf3Up); }
@@ -139,8 +138,8 @@ public:
 public:
 	virtual std::shared_ptr<CCamera> ChangeCamera(DWORD nNewCameraMode, float fTimeElapsed);
 
-	virtual void OnPlayerUpdateCallback(float fTimeElapsed) override;
-	virtual void OnCameraUpdateCallback(float fTimeElapsed) override;
+	virtual void OnPlayerUpdateCallback(float fTimeElapsed);
+	virtual void OnCameraUpdateCallback(float fTimeElapsed);
 	//virtual void Animate(float fTimeElapsed);
 	//virtual void UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent);
 };

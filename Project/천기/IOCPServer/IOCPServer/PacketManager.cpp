@@ -25,6 +25,7 @@ void PacketManager::SendPacket(int id, void *packet)
 		if (WSA_IO_PENDING != err_no)
 			printf("오류");
 	}
+	printf("보냄");
 };
 void PacketManager::LoginPacket(int id) 
 {
@@ -89,6 +90,11 @@ void PacketManager::ClientDisconnect(int id)
 	closesocket(objectManager->GetPlayer(id)->m_socket);
 	objectManager->GetPlayer(id)->m_connected = false;
 }
-void PacketManager::ScenePacket(int num) {
-	
+void PacketManager::ScenePacket(int id) {
+	//해당 채널 매칭된 클라 모두에게
+	sc_packet_scene packet;
+	packet.sceneNum = LOADING;
+	packet.size = sizeof(sc_packet_scene);
+	packet.type = SC_SCENE;
+	SendPacket(id, &packet);
 }

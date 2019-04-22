@@ -9,7 +9,6 @@
 #include "CIngameScene.h"
 #include "CNetWork.h"
 
-
 CGameFramework::CGameFramework()
 {
 	m_pdxgiFactory = NULL;
@@ -56,7 +55,7 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 {
 	m_hInstance = hInstance;
 	m_hWnd = hMainWnd;
-	
+
 	CreateDirect3DDevice();
 	CreateCommandQueueAndList();
 #ifdef _WITH_DIRECT2D
@@ -67,8 +66,6 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 	CreateDepthStencilView();
 
 	CoInitialize(NULL);
-
-	
 
 	BuildObjects();
 
@@ -414,6 +411,10 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 				case VK_F3:
 					m_pCamera = PLAYER->GetPlayer()->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
 					break;
+				case VK_F6: {
+					CNETWORK->MatchPacket();
+					break;
+				}
 				case VK_F9:
 					ChangeSwapChainState();
 					break;
@@ -522,10 +523,9 @@ void CGameFramework::OnDestroy()
 
 void CGameFramework::BuildObjects()
 {
-	CNETWORK->MakeServer();
-
+	CNETWORK->MakeServer(m_hWnd);
 	m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
-	SCENEMANAGER->
+	
 	//m_pScene = new CScene();
 	//if (m_pScene) m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
 	SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
@@ -577,7 +577,7 @@ void CGameFramework::ReleaseObjects()
 
 void CGameFramework::ProcessInput()
 {
-	UCHAR pKeysBuffer[256];
+	static UCHAR pKeysBuffer[256];
 	bool bProcessedByScene = false;
 	if (GetKeyboardState(pKeysBuffer) && SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]!=NULL)
 		bProcessedByScene = SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->ProcessInput(pKeysBuffer);
@@ -585,8 +585,7 @@ void CGameFramework::ProcessInput()
 	{
 		if (pKeysBuffer[VK_RETURN] & 0xF0)
 		{
-			//CNETWORK->ScenePacket(INGAME); //MatchPacket()으로 수정될꺼임
-			//SCENEMANAGER->SetScene(INGAME);
+			//SCENEMANAGER->SetScene(LOADING);
 		}
 		DWORD dwDirection = 0;
 		if (pKeysBuffer[VK_UP] & 0xF0)
@@ -829,5 +828,4 @@ void CGameFramework::FrameAdvance()
 	_stprintf_s(m_pszFrameRate + nLength, 70 - nLength, _T("(%4f, %4f, %4f)"), xmf3Position.x, xmf3Position.y, xmf3Position.z);
 	::SetWindowText(m_hWnd, m_pszFrameRate);
 }
-
 

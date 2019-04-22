@@ -10,7 +10,7 @@ CNetWork::~CNetWork()
 {
 }
 
-void CNetWork::MakeServer()
+void CNetWork::MakeServer(HWND hWnd)
 {
 	WSADATA	wsadata;
 	WSAStartup(MAKEWORD(2, 2), &wsadata);
@@ -25,7 +25,7 @@ void CNetWork::MakeServer()
 
 	int Result = WSAConnect(g_mysocket, (sockaddr *)&ServerAddr, sizeof(ServerAddr), NULL, NULL, NULL, NULL);
 
-	//WSAAsyncSelect(g_mysocket, hMainWnd, WM_SOCKET, FD_CLOSE | FD_READ);
+	WSAAsyncSelect(g_mysocket, hWnd, WM_SOCKET, FD_CLOSE | FD_READ);
 
 	send_wsabuf.buf = send_buffer;
 	send_wsabuf.len = MAX_BUFFER;
@@ -43,11 +43,11 @@ void CNetWork::SendPacket()
 			printf("¿À·ù");
 	}
 }
-void CNetWork::ReadPacket() 
+void CNetWork::ReadPacket(SOCKET sock)
 {
 	DWORD iobyte, ioflag = 0;
 
-	int ret = WSARecv(g_mysocket, &recv_wsabuf, 1, &iobyte, &ioflag, NULL, NULL);
+	int ret = WSARecv(sock, &recv_wsabuf, 1, &iobyte, &ioflag, NULL, NULL);
 	if (ret) {
 		int err_code = WSAGetLastError();
 		printf("Recv Error [%d]\n", err_code);
@@ -82,11 +82,14 @@ void CNetWork::ProcessPacket(char *ptr)
 		sc_packet_login_ok *packet =
 			reinterpret_cast<sc_packet_login_ok *>(ptr);
 		g_myid = packet->id;
+		break;
 	}
 	case SC_SCENE:
 	{
 		sc_packet_scene *paket = reinterpret_cast<sc_packet_scene *>(ptr);
-		//SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
+		
+		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
+		break;
 	}
 	case SC_PUT_PLAYER:
 	{
@@ -191,9 +194,9 @@ void CNetWork::MatchPacket()
 	send_wsabuf.len = sizeof(my_packet);
 	my_packet->size = sizeof(my_packet);
 	my_packet->type = SC_MATCHING_PLAYER;
-	//my_packet->avatar =
-	//my_packet->map =
-	//my_packet->mod =
+	my_packet->avatar = A;
+	my_packet->map = PLAYGROUND;
+	my_packet->mod = SOLO;
 
 	SendPacket();
 }

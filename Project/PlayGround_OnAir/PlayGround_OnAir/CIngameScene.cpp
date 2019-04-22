@@ -5,7 +5,6 @@
 CInGameScene::CInGameScene()
 {
 	m_SceneType = INGAME;
-	m_MapNum = 1;
 }
 
 CInGameScene::~CInGameScene()
@@ -24,22 +23,14 @@ void CInGameScene::ReleaseShaderVariables()
 {
 }
 
-//bool CInGameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
-//{
-//	return false;
-//}
-//
-//bool CInGameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
-//{
-//	return false;
-//}
-
-void CInGameScene::ReleaseUploadBuffers()
+bool CInGameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
+	return false;
 }
 
-void CInGameScene::AnimateObjects(float fTimeElapsed)
+bool CInGameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
+	return false;
 }
 
 void CInGameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
@@ -50,51 +41,31 @@ void CInGameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	//CreateShaderResourceViews()
 	CMaterial::PrepareShaders(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 
-	XMFLOAT3 xmf3Scale(1.0f, 1.0f, 1.0f);
+	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
 	XMFLOAT4 xmf4Color(0.0f, 0.3f, 0.0f, 0.0f);
-	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/white.raw"), 257, 257, xmf3Scale, xmf4Color);
+	//m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/white.raw"), 257, 257, xmf3Scale, xmf4Color);
 
 
 	//m_nShaders = 0;
 
+	//CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL_(1).bin", NULL, false);
+	////	
+	//CAngrybotObjectsShader *pPlayGroundObjectsShader = new CAngrybotObjectsShader();
+	//pPlayGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	//pPlayGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	//pPlayGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+
+
+	//CLoadedModelInfo *pPlayGroundMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
 	
-
-	CLoadedModelInfo *pPlayGroundMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
-	CAngrybotObjectsShader *pPlayGroundObjectsShader = new CAngrybotObjectsShader();
-	pPlayGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	pPlayGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	pPlayGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
-
-	CLoadedModelInfo *pConcertMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL_(1).bin", NULL, false);
-	CAngrybotObjectsShader *pConcertGroundObjectsShader = new CAngrybotObjectsShader();
-	pConcertGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	pConcertGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	pConcertGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
-
 	//
-	m_nShaders = 2;
 
-	m_ppShaders = new CShader*[m_nShaders];
-	m_ppShaders[0] = pPlayGroundObjectsShader;
-	m_ppShaders[1] = pConcertGroundObjectsShader;
+	//m_ppShaders = new CShader*[m_nShaders];
+	//m_ppShaders[1] = pPlayGroundObjectsShader;
+	//m_ppGameObjects[0]->SetPosition(200.0f, 151, 700.0f); //맵 거꾸로 버그 여기
+	//m_ppGameObjects[0]->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
+	//m_ppGameObjects[0]->SetScale(200.0f, 200.0f, 200.0f);
 
-	m_MapGameObjects = 2;
-	m_ppMapObjects = new CGameObject*[m_MapGameObjects];
-
-	m_ppMapObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppMapObjects[0]->SetChild(pConcertMapObject->m_pModelRootObject, false);
-	m_ppMapObjects[0]->SetPosition(0.0f, 151, 700.0f); //맵 거꾸로 버그 여기
-	m_ppMapObjects[0]->SetOOBB(m_ppMapObjects[0]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
-	m_ppMapObjects[0]->SetScale(200.0f, 200.0f, 200.0f);
-
-	m_ppMapObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppMapObjects[1]->SetChild(pConcertMapObject->m_pModelRootObject, false);
-	m_ppMapObjects[1]->SetPosition(0.0f, 151, 700.0f); //맵 거꾸로 버그 여기
-	m_ppMapObjects[1]->SetOOBB(m_ppMapObjects[1]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
-	m_ppMapObjects[1]->SetScale(200.0f, 200.0f, 200.0f);
-
-
-	
 	////2번쨰 맵
 	//m_ppGameObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	//m_ppGameObjects[1]->SetChild(pMapObject->m_pModelRootObject, false);
@@ -103,18 +74,10 @@ void CInGameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	//m_ppGameObjects[1]->SetScale(200.0f, 200.0f, 200.0f);
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
-
-	if (pConcertMapObject) delete pConcertMapObject;
-	if (pPlayGroundMapObject) delete pPlayGroundMapObject;
 }
 
 void CInGameScene::ReleaseObjects()
 {
-	if (m_ppMapObjects)
-	{
-		for (int i = 0; i < m_nMapGameObjects; i++) if (m_ppMapObjects[i]) m_ppMapObjects[i]->Release();
-		delete[] m_ppMapObjects;
-	}
 }
 
 void CInGameScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
@@ -128,26 +91,19 @@ void CInGameScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shar
 
 	UpdateShaderVariables(pd3dCommandList);
 
-	
-	m_ppMapObjects[m_MapNum]->Animate(m_fElapsedTime);
-	m_ppMapObjects[m_MapNum]->UpdateTransform(NULL);
-	m_ppMapObjects[m_MapNum]->Render(pd3dCommandList, pCamera);
-
-	//D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbInGameLights->GetGPUVirtualAddress();
+	//D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
 	//pd3dCommandList->SetGraphicsRootConstantBufferView(2, d3dcbLightsGpuVirtualAddress); //Lights
 
 	//if (m_pSkyBox) m_pSkyBox->Render(pd3dCommandList, pCamera);
 	//m_nShaders = 0;
-	//for (int i = 0; i < m_nShaders; i++) 
-	if (m_ppShaders[m_MapNum])
-		m_ppShaders[m_MapNum]->Render(pd3dCommandList, pCamera);
+	//for (int i = 0; i < m_nShaders; i++) if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 
 }
 
-//bool CInGameScene::ProcessInput(UCHAR * pKeysBuffer)
-//{
-//	return false;
-//}
+bool CInGameScene::ProcessInput(UCHAR * pKeysBuffer)
+{
+	return false;
+}
 
 //void CInGameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
 //{

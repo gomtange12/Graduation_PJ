@@ -771,7 +771,7 @@ void CGameObject::Animate(float fTimeElapsed)
 	m_xmTransedOOBB.Transform(m_xmTransedOOBB, XMLoadFloat4x4(&m_xmf4x4World));
 	XMStoreFloat4(&m_xmTransedOOBB.Orientation, XMQuaternionNormalize(XMLoadFloat4(&m_xmTransedOOBB.Orientation)));
 	
-	//XMFLOAT3 pos = PLAYER->GetPlayer()->m_xmTransedOOBB.Center;
+	XMFLOAT3 pos = PLAYER->GetPlayer()->m_xmTransedOOBB.Center;
 	
 }
 

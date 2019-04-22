@@ -407,11 +407,11 @@ void CScene::ReleaseObjects()
 	if (m_pTerrain) delete m_pTerrain;
 	if (m_pSkyBox) delete m_pSkyBox;
 
-	/*if (m_ppGameObjects)
+	if (m_ppGameObjects)
 	{
 		for (int i = 0; i < m_nGameObjects; i++) if (m_ppGameObjects[i]) m_ppGameObjects[i]->Release();
 		delete[] m_ppGameObjects;
-	}*/
+	}
 
 	ReleaseShaderVariables();
 
@@ -649,7 +649,7 @@ void CScene::ReleaseUploadBuffers()
 	if (m_pTerrain) m_pTerrain->ReleaseUploadBuffers();
 
 	for (int i = 0; i < m_nShaders; i++) m_ppShaders[i]->ReleaseUploadBuffers();
-	//for (int i = 0; i < m_nGameObjects; i++) m_ppGameObjects[i]->ReleaseUploadBuffers();
+	for (int i = 0; i < m_nGameObjects; i++) m_ppGameObjects[i]->ReleaseUploadBuffers();
 }
 
 void CScene::CreateCbvSrvDescriptorHeaps(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
@@ -777,8 +777,7 @@ bool CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 
 bool CScene::ProcessInput(UCHAR *pKeysBuffer)
 {
-
-	return false;
+	return(false);
 }
 
 void CScene::AnimateObjects(float fTimeElapsed)
@@ -804,8 +803,8 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 
 	UpdateShaderVariables(pd3dCommandList);
 
-	//D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
-	//pd3dCommandList->SetGraphicsRootConstantBufferView(2, d3dcbLightsGpuVirtualAddress); //Lights
+//	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
+//	pd3dCommandList->SetGraphicsRootConstantBufferView(2, d3dcbLightsGpuVirtualAddress); //Lights
 //
 //	if (m_pSkyBox) m_pSkyBox->Render(pd3dCommandList, pCamera);
 //	
@@ -847,15 +846,15 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 void CScene::CheckObjectByObjectCollisions() {
 	//체크는되는듯한데 왜 중단점이 안되지?
 	
-	/*if (PLAYER->GetPlayer()->m_xmOOBB.Intersects(m_ppGameObjects[0]->m_xmOOBB)){
+	if (PLAYER->GetPlayer()->m_xmOOBB.Intersects(m_ppGameObjects[0]->m_xmOOBB)){
 		XMFLOAT3 playeroobb = PLAYER->GetPlayer()->m_xmOOBB.Center;
 		XMFLOAT3 objoobb = m_ppGameObjects[0]->m_xmOOBB.Center;
 		int i = 0;
 		PLAYER->GetPlayer()->SetPosition(XMFLOAT3(900.0f, 900.0f, 900.0f));
-	}*/
-	/*XMFLOAT3 playeroobb = PLAYER->GetPlayer()->m_xmOOBB.Center;
+	}
+	XMFLOAT3 playeroobb = PLAYER->GetPlayer()->m_xmOOBB.Center;
 	XMFLOAT3 objoobb = m_ppGameObjects[0]->m_xmOOBB.Center;
 
-*/
+
 }
 

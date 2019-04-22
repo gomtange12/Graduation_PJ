@@ -70,8 +70,8 @@
     <Filter Include="소스 파일\SceneManager\Scene\InGameScene">
       <UniqueIdentifier>{fdc88d86-4325-435c-9945-1158fb116e99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\NetWork">
-      <UniqueIdentifier>{50358450-d85e-4431-806e-3a6bb55e7b11}</UniqueIdentifier>
+    <Filter Include="소스 파일\CNetwork">
+      <UniqueIdentifier>{8fd0e33c-97bb-4fa4-8931-9c07ddc32c7a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -154,7 +154,7 @@
       <Filter>소스 파일\SceneManager\Scene\MenuScene</Filter>
     </ClInclude>
     <ClInclude Include="CNetWork.h">
-      <Filter>소스 파일\NetWork</Filter>
+      <Filter>소스 파일\CNetwork</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -225,7 +225,7 @@
       <Filter>소스 파일\SceneManager\Scene\MenuScene</Filter>
     </ClCompile>
     <ClCompile Include="CNetWork.cpp">
-      <Filter>소스 파일\NetWork</Filter>
+      <Filter>소스 파일\CNetwork</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

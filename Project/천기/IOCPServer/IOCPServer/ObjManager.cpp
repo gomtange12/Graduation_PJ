@@ -14,11 +14,12 @@ void ObjManager::ClientInit()
 		p = new Player;
 		p->Initialize();
 	}
-
+	soloRoomNum = 0;
 };
 
 void ObjManager::MatchProcess(int id, unsigned char *packet) 
 {
+	std::cout << "매칭 " << id << std::endl;
 	if (packet[1] == SC_MATCHING_PLAYER) { //type
 
 		sc_packet_matching *match = reinterpret_cast<sc_packet_matching *>(packet);
@@ -37,20 +38,25 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 	}
 	case CONCERT:
 	{
-		ModMatch(id);
+		//ModMatch(id);
 		break;
 	}
+	default:
+		std::wcout << "잘못된 매칭 정보입니다\n";
+		break;
 	}
 	
 }
 void ObjManager::ModMatch(int id)
 {
+	v_soloRoom.reserve(3);
 	switch (g_clients[id]->mod)
 	{
 	case SOLO:
 	{
 		if (v_soloRoom.size() == soloRoomNum) { // 빈 방 생성
-			v_soloRoom.emplace_back();
+			SoloRoom* sr = new SoloRoom;
+			v_soloRoom.emplace_back(sr);
 		}
 		//솔로룸 앞에서부터 인원이 비어있는 솔로룸을 찾음
 		for (auto& vsr : v_soloRoom) {
@@ -58,15 +64,23 @@ void ObjManager::ModMatch(int id)
 				for (int i = 0; i <= PERSONNEL; ++i) {
 					if (vsr->m_ids[i] < 0) {
 						vsr->m_ids[i] = id;
-						if (i == 8) {
-							for (int i = 0; i <= PERSONNEL; ++i) {
-								//풀방됬으니 씬센드
-								g_clients[i]->m_match = true;
-								vsr->m_full = true;
-								++soloRoomNum; //
-							}
-							break;
-						}
+						//g_clients[i]->m_match = true;
+						//if (i == 1) {
+						//	for (int i = 0; i <= PERSONNEL; ++i) {
+						//		//풀방됬으니 씬센드
+						//		if (g_clients[i]->m_match == true) {
+						//			vsr->m_full = true;
+						//			++soloRoomNum; //
+						//			PACKETMANAGER->ScenePacket(i);
+						//		}
+						//	}
+						//	SoloRoom* sr = new SoloRoom;
+						//	v_soloRoom.emplace_back(sr);
+						//	break;
+						//}
+						//else {
+						//	break;
+						//}
 					}
 				}
 				break;
@@ -87,6 +101,9 @@ void ObjManager::ModMatch(int id)
 	default:
 		break;
 	}
+	std::cout << g_clients[id]->avatar << std::endl;
+	std::cout << g_clients[id]->map << std::endl;
+	std::cout << g_clients[id]->mod << std::endl;
 }
 void ObjManager::ProcessPacket(int id, unsigned char *packet)
 {
@@ -123,20 +140,6 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 		printf("이동 ");
 	}
 	
-	case SC_SCENE: //없어지고 MATCHING하면 씬넘겨줄꺼
-	{
-		switch (packet[2]) //DIR
-		{
-		case INGAME: {
-			printf("인게임\n");
-			break;
-		}
-		default:
-			std::wcout << L"정의되지 않은 패킷 도착!!\n";
-			while (true);
-		}
-		
-	}
 
 	}
 };

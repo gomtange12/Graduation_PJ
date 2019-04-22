@@ -186,12 +186,15 @@
 #include "stdafx.h"
 #include "PlayGround_OnAir.h"
 #include "GameFramework.h"
+#include <WinSock2.h>
 #include "CNetWork.h"
 float m_eTime = 0.0f;
 float m_CurrentTime = 0.0f;
 float m_PrevTime = 0.0f;
 float m_eActine = 0.0f;
 #define MAX_LOADSTRING 100
+
+
 
 HINSTANCE						ghAppInstance;
 TCHAR							szTitle[MAX_LOADSTRING];
@@ -239,8 +242,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 			m_eActine += m_eTime;
 			if (m_eActine > 1 / FPS_PERSECOND)
 			{*/
-
-				
 				gGameFramework.FrameAdvance();
 				/*m_eActine = 0.f;
 			}
@@ -336,19 +337,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		if (WSAGETSELECTERROR(lParam)) {
 			closesocket((SOCKET)wParam);
-			exit(-1); //clientError
+			exit(1);
 			break;
 		}
 		switch (WSAGETSELECTEVENT(lParam)) {
 		case FD_READ:
-			CNETWORK->ReadPacket();
+			CNETWORK->ReadPacket((SOCKET)wParam);
 			break;
 		case FD_CLOSE:
 			closesocket((SOCKET)wParam);
-			exit(-1); //clientError
+			exit(1);
 			break;
 		}
-		break;
+
 	}
 	default:
 		return(::DefWindowProc(hWnd, message, wParam, lParam));

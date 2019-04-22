@@ -96,13 +96,11 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 #define INPUTMANAGER	 CInputManager::GetInstance()
 #define SCENEMANAGER	 CSceneManager::GetInstance()
 #define OBJECTMANAGER	 CObjectManager::GetInstance()
-#define CNETWORK	 CNetWork::GetInstance()
+#define CNETWORK	CNetWork::GetInstance()
 
 #define MAXOBJECTNUM 100
 
-//Server
 #define	WM_SOCKET				WM_USER + 1
-//
 
 #define RANDOM_COLOR			XMFLOAT4(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX))
 #define FPS_PERSECOND 60
@@ -135,6 +133,19 @@ enum SceneState {
 	MENUSCENE,
 	INGAME,
 	GAMEOVER
+};
+enum AVATARNumber {
+	A, //ÀÓ½Ã¸íÄª
+	B
+};
+enum MAPNumber {
+	PLAYGROUND,
+	CONCERT
+};
+enum ModNumber {
+	SOLO,
+	DUO,
+	SQUAD
 };
 namespace Vector3
 {
