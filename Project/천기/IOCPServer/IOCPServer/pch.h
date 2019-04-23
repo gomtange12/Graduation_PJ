@@ -23,7 +23,7 @@
 #define OBJMANAGER		ObjManager::GET_INSTANCE()
 #define THREADMANAGER	ThreadManager::GET_INSTANCE()
 
-#define PERSONNEL 8
+#define PERSONNEL 1
 //using namespace std;
 enum AVATARNumber {
 	A, //임시명칭

@@ -64,26 +64,26 @@ void ObjManager::ModMatch(int id)
 				for (int i = 0; i <= PERSONNEL; ++i) {
 					if (vsr->m_ids[i] < 0) {
 						vsr->m_ids[i] = id;
-						//g_clients[i]->m_match = true;
-						//if (i == 1) {
-						//	for (int i = 0; i <= PERSONNEL; ++i) {
-						//		//풀방됬으니 씬센드
-						//		if (g_clients[i]->m_match == true) {
-						//			vsr->m_full = true;
-						//			++soloRoomNum; //
-						//			PACKETMANAGER->ScenePacket(i);
-						//		}
-						//	}
-						//	SoloRoom* sr = new SoloRoom;
-						//	v_soloRoom.emplace_back(sr);
-						//	break;
-						//}
-						//else {
-						//	break;
-						//}
+						g_clients[i]->m_match = true;
+						if(vsr->m_ids[1] >= 0) //풀방?
+							vsr->m_full = true;
 					}
+					//
+					if (vsr->m_full == true) { //풀방됬으니 씬센드
+						for (int i = 0; i <= PERSONNEL; ++i) {
+							PACKETMANAGER->ScenePacket(vsr->m_ids[i]);
+						}
+						//풀방이니 새로운방 하나 만들어 두기
+						++soloRoomNum;
+						SoloRoom* sr = new SoloRoom;
+						v_soloRoom.emplace_back(sr);
+						break;
+					} //풀방 아니면
+					else {
+						break;
+					}
+					
 				}
-				break;
 			}
 		}
 		break;
@@ -104,6 +104,7 @@ void ObjManager::ModMatch(int id)
 	std::cout << g_clients[id]->avatar << std::endl;
 	std::cout << g_clients[id]->map << std::endl;
 	std::cout << g_clients[id]->mod << std::endl;
+	std::cout << id << std::endl;
 }
 void ObjManager::ProcessPacket(int id, unsigned char *packet)
 {
