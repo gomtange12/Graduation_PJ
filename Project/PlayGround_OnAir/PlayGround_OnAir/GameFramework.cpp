@@ -7,6 +7,7 @@
 #include "CSceneManager.h"
 #include "CMenuScene.h"
 #include "CIngameScene.h"
+#include "CNetWork.h"
 
 CGameFramework::CGameFramework()
 {
@@ -410,6 +411,10 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 				case VK_F3:
 					m_pCamera = PLAYER->GetPlayer()->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
 					break;
+				case VK_F6: {
+					CNETWORK->MatchPacket();
+					break;
+				}
 				case VK_F9:
 					ChangeSwapChainState();
 					break;
@@ -518,8 +523,9 @@ void CGameFramework::OnDestroy()
 
 void CGameFramework::BuildObjects()
 {
+	CNETWORK->MakeServer(m_hWnd);
 	m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
-	SCENEMANAGER->
+	
 	//m_pScene = new CScene();
 	//if (m_pScene) m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
 	SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
@@ -579,7 +585,7 @@ void CGameFramework::ProcessInput()
 	{
 		if (pKeysBuffer[VK_RETURN] & 0xF0)
 		{
-			SCENEMANAGER->SetScene(INGAME);
+			//SCENEMANAGER->SetScene(LOADING);
 		}
 		DWORD dwDirection = 0;
 		if (pKeysBuffer[VK_UP] & 0xF0)
