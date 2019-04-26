@@ -1,14 +1,14 @@
 #include "pch.h"
-#include "SoloRoom.h"
+#include "Room.h"
 
 
-SoloRoom::SoloRoom()
+Room::Room()
 {
 	m_full = false;
 	for (int i = 0; i < PERSONNEL; ++i) {
 		m_ids[i] = -1;
 	}
 }
-SoloRoom::~SoloRoom()
+Room::~Room()
 {
 }

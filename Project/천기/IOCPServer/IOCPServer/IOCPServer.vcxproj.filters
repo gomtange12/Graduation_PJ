@@ -40,7 +40,10 @@
     <Filter Include="소스 파일\ServerMain\IOCPServer">
       <UniqueIdentifier>{adec572c-50a1-4459-8b05-eacd02721adb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\ObjManager\MatchRoom">
+    <Filter Include="소스 파일\RoomManager">
+      <UniqueIdentifier>{25d20351-316d-4176-b1f9-80f63e075570}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\RoomManager\MatchRoom">
       <UniqueIdentifier>{51bf2e69-e4c7-4b4c-ae20-0548cc417a2d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -78,8 +81,11 @@
     <ClInclude Include="MyThread.h">
       <Filter>소스 파일\MyThread</Filter>
     </ClInclude>
-    <ClInclude Include="SoloRoom.h">
-      <Filter>소스 파일\ObjManager\MatchRoom</Filter>
+    <ClInclude Include="RoomManager.h">
+      <Filter>소스 파일\RoomManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>소스 파일\RoomManager\MatchRoom</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -113,8 +119,11 @@
     <ClCompile Include="MyThread.cpp">
       <Filter>소스 파일\MyThread</Filter>
     </ClCompile>
-    <ClCompile Include="SoloRoom.cpp">
-      <Filter>소스 파일\ObjManager\MatchRoom</Filter>
+    <ClCompile Include="RoomManager.cpp">
+      <Filter>소스 파일\RoomManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>소스 파일\RoomManager\MatchRoom</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

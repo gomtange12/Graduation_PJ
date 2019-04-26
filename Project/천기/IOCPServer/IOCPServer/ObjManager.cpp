@@ -49,12 +49,12 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 }
 void ObjManager::ModMatch(int id)
 {
-	v_soloRoom.reserve(3);
+	
 	switch (g_clients[id]->mod)
 	{
 	case SOLO:
 	{
-		if (v_soloRoom.size() == soloRoomNum) { // 后 规 积己
+		if (v_soloRoom.size() == 0) { // 后 规 积己
 			SoloRoom* sr = new SoloRoom;
 			v_soloRoom.emplace_back(sr);
 		}
@@ -74,7 +74,7 @@ void ObjManager::ModMatch(int id)
 							PACKETMANAGER->ScenePacket(vsr->m_ids[i]);
 						}
 						//钱规捞聪 货肺款规 窍唱 父甸绢 滴扁
-						++soloRoomNum;
+						
 						SoloRoom* sr = new SoloRoom;
 						v_soloRoom.emplace_back(sr);
 						break;

@@ -159,8 +159,9 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Protocol.h" />
+    <ClInclude Include="RoomManager.h" />
     <ClInclude Include="SingleTone.h" />
-    <ClInclude Include="SoloRoom.h" />
+    <ClInclude Include="Room.h" />
     <ClInclude Include="ThreadManager.h" />
     <ClInclude Include="WorkerThread.h" />
   </ItemGroup>
@@ -170,6 +171,7 @@
     <ClCompile Include="ObjManager.cpp" />
     <ClCompile Include="PacketManager.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RoomManager.cpp" />
     <ClCompile Include="ServerMain.cpp" />
     <ClCompile Include="IOCPServer.cpp" />
     <ClCompile Include="pch.cpp">
@@ -178,7 +180,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="SoloRoom.cpp" />
+    <ClCompile Include="Room.cpp" />
     <ClCompile Include="ThreadManager.cpp" />
     <ClCompile Include="WorkerThread.cpp" />
   </ItemGroup>

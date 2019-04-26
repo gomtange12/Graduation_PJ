@@ -13,14 +13,27 @@ CInGameScene::~CInGameScene()
 
 void CInGameScene::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
+	UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
+	m_pd3dcbInGameLights = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_pd3dcbInGameLights->Map(0, NULL, (void **)&m_pcbMappedInGameLights);
 }
 
 void CInGameScene::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
 {
+	::memcpy(m_pcbMappedInGameLights->m_pLights, m_pLights, sizeof(LIGHT) * m_nLights);
+	::memcpy(&m_pcbMappedInGameLights->m_xmf4GlobalAmbient, &m_xmf4GlobalAmbient, sizeof(XMFLOAT4));
+	::memcpy(&m_pcbMappedInGameLights->m_nLights, &m_nLights, sizeof(int));
+
 }
 
 void CInGameScene::ReleaseShaderVariables()
 {
+	if (m_pd3dcbInGameLights)
+	{
+		m_pd3dcbInGameLights->Unmap(0, NULL);
+		m_pd3dcbInGameLights->Release();
+	}
 }
 
 bool CInGameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
@@ -48,6 +61,70 @@ void CInGameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 
 	//m_nShaders = 0;
 
+	m_MapGameObjects = 2;
+	m_ppMapObjects = new CGameObject*[m_MapGameObjects];
+
+	CLoadedModelInfo* pPlayGroundMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
+	CMapObjectsShader* pPlayGroundObjectsShader = new CMapObjectsShader();
+	pPlayGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pPlayGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pPlayGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+
+	CLoadedModelInfo* pConcertMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL_(1).bin", NULL, false);
+	CMapObjectsShader* pConcertGroundObjectsShader = new CMapObjectsShader();
+	pConcertGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pConcertGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pConcertGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+
+	m_nShaders = 2;
+	m_ppShaders = new CShader*[m_nShaders];
+
+	m_ppShaders[0] = pPlayGroundObjectsShader;
+	pPlayGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pPlayGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pPlayGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+
+	m_ppShaders[1] = pConcertGroundObjectsShader;
+	pConcertGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pConcertGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pConcertGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+
+	//CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL_(1).bin", NULL, false);
+	////	
+	//CAngrybotObjectsShader *pPlayGroundObjectsShader = new CAngrybotObjectsShader();
+	//pPlayGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	//pPlayGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	//pPlayGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+
+
+	//CLoadedModelInfo *pPlayGroundMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
+	
+	//
+
+	//m_ppShaders = new CShader*[m_nShaders];
+	//m_ppShaders[1] = pPlayGroundObjectsShader;
+	//m_ppGameObjects[0]->SetPosition(200.0f, 151, 700.0f); //맵 거꾸로 버그 여기
+	//m_ppGameObjects[0]->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
+	//m_ppGameObjects[0]->SetScale(200.0f, 200.0f, 200.0f);
+
+	//CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL_(1).bin", NULL, false);
+	////	
+	//CAngrybotObjectsShader *pPlayGroundObjectsShader = new CAngrybotObjectsShader();
+	//pPlayGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	//pPlayGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	//pPlayGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+
+
+	//CLoadedModelInfo *pPlayGroundMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
+	
+	//
+
+	//m_ppShaders = new CShader*[m_nShaders];
+	//m_ppShaders[1] = pPlayGroundObjectsShader;
+	//m_ppGameObjects[0]->SetPosition(200.0f, 151, 700.0f); //맵 거꾸로 버그 여기
+	//m_ppGameObjects[0]->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
+	//m_ppGameObjects[0]->SetScale(200.0f, 200.0f, 200.0f);
+
 	//CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL_(1).bin", NULL, false);
 	////	
 	//CAngrybotObjectsShader *pPlayGroundObjectsShader = new CAngrybotObjectsShader();
@@ -73,11 +150,24 @@ void CInGameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	//m_ppGameObjects[1]->SetOOBB(m_ppGameObjects[1]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	//m_ppGameObjects[1]->SetScale(200.0f, 200.0f, 200.0f);
 
+	//CScene::CreateShaderVariables(pd3dDevice, pd3dCommandList);
+
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+
+
+	if (pConcertMapObject) delete pConcertMapObject;
+	if (pPlayGroundMapObject) delete pPlayGroundMapObject;
+
 }
 
 void CInGameScene::ReleaseObjects()
 {
+   /*if (m_ppMapObjects)
+	{
+		for (int i = 0; i < m_MapGameObjects; i++) if (m_ppMapObjects[i]) m_ppMapObjects[i]->Release();
+		delete[] m_ppMapObjects;
+   }*/
+
 }
 
 void CInGameScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
@@ -89,7 +179,11 @@ void CInGameScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shar
 	pCamera->SetViewportsAndScissorRects(pd3dCommandList);
 	pCamera->UpdateShaderVariables(pd3dCommandList);
 
+
+	CScene::UpdateShaderVariables(pd3dCommandList);
+
 	UpdateShaderVariables(pd3dCommandList);
+
 
 	//D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
 	//pd3dCommandList->SetGraphicsRootConstantBufferView(2, d3dcbLightsGpuVirtualAddress); //Lights

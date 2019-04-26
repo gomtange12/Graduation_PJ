@@ -23,8 +23,8 @@ public:
 	//virtual D3D12_GPU_DESCRIPTOR_HANDLE CreateShaderResourceViews(ID3D12Device *pd3dDevice, CTexture *pTexture, UINT nRootParameter, bool bAutoIncrement);
 
 public:
-	/*ID3D12Resource						*m_pd3dcbInGameLights = NULL;
-	LIGHTS								*m_pcbMappedInGameLights = NULL;*/
+	ID3D12Resource						*m_pd3dcbInGameLights = NULL;
+	LIGHTS								*m_pcbMappedInGameLights = NULL;
 	//protected:
 	//ID3D12RootSignature					*m_pd3dGraphicsRootSignature = NULL;
 	//
