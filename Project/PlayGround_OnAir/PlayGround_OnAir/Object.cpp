@@ -322,7 +322,8 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 	{
 		case ANIMATION_TYPE_LOOP:
 		{
-#ifdef _WITH_ANIMATION_INTERPOLATION	
+#ifdef _WITH_ANIMATION_INTERPOLATION
+			PLAYER->GetPlayer()->SetAllowKey(true);
 			m_fPosition = fTrackPosition;
 			 m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]); //원래꺼
 		  
@@ -333,11 +334,14 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			m_nCurrentKey++;
 			if (m_nCurrentKey >= m_nKeyFrameTransforms) m_nCurrentKey = 0;
 #endif
+			
 			break;
 		}
 		case ANIMATION_TYPE_ONCE:
 			//m_fPosition = fTrackPosition;
 			//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //원래꺼
+			PLAYER->GetPlayer()->SetAllowKey(false);
+
 			m_fPosition += 0.0018;
 
 			//sol) m_fPosition += fDelta * speed; 프레임 고정시
@@ -1159,7 +1163,7 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			pSkinnedMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
 			pGameObject->SetMesh(pSkinnedMesh);
-			//pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter().x * 0.5f, pSkinnedMesh->GetAABBCenter().y * 0.5f, pSkinnedMesh->GetAABBCenter().z * 0.5f), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+			//여기pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter().x , pSkinnedMesh->GetAABBCenter().y * 0.5f, pSkinnedMesh->GetAABBCenter().z * 0.5f), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 		}
 		else if (!strcmp(pstrToken, "<Materials>:"))
 		{

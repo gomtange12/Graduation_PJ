@@ -99,7 +99,7 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 #define CNETWORK	CNetWork::GetInstance()
 
 #define MAXOBJECTNUM 100
-
+#define   WM_SOCKET            WM_USER + 1
 
 #define RANDOM_COLOR			XMFLOAT4(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX))
 #define FPS_PERSECOND 60
