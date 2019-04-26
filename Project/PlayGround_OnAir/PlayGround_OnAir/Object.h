@@ -384,7 +384,7 @@ public:
 
 public:
 	//static int m_ObjectState;
-	
+	float							m_BoundScale{ 15 };
 	OBJTYPE							m_ObjType;
 
 	char							m_pstrFrameName[64];

@@ -37,14 +37,15 @@ protected:
 	//이넘만들기
 	
 	std::shared_ptr<CCamera>	m_pCamera;
+	bool m_AllowKey = false;
 	
 public:
+	int m_PlayerState = IDLE;
 	std::shared_ptr<CCamera> GetCamera() { return(m_pCamera); }
 	virtual void SetCamera(std::shared_ptr<CCamera> pCamera) { m_pCamera = pCamera; }
 	void SetYPosition(float ypos) { m_xmf3Position.y = ypos; }
-	
-	int m_PlayerState = IDLE;
-
+	void SetAllowKey(bool key) { m_AllowKey = key; }
+	bool GetAllowKey()const { return m_AllowKey; }
 	CPlayer();
 	CPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 

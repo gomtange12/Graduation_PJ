@@ -409,6 +409,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 				case VK_F1:
 				case VK_F2:
 				case VK_F3:
+				case VK_F4:
 					m_pCamera = PLAYER->GetPlayer()->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
 					break;
 				case VK_F6: {
@@ -541,20 +542,20 @@ void CGameFramework::BuildObjects()
 
 	//m_pScene = new CScene();
 	//if (m_pScene) m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
-	SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
-	SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
+	//SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
+	//SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
 
-	for (auto& p : SCENEMANAGER->m_MapList)
-	{
-		//p.second->CreateShaderResourceViews(m_pd3dDevice,nullptr,)
-		p.second->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
-	}
+	//for (auto& p : SCENEMANAGER->m_MapList)
+	//{
+	//	//p.second->CreateShaderResourceViews(m_pd3dDevice,nullptr,)
+	//	p.second->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
+	//}
 
 	//여기가 배치 구문이니 신경써야한다. 
 #ifdef _WITH_TERRAIN_PLAYER
 	PLAYER->Initialize(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(0, 0, 0));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
-	PLAYER->GetPlayer()->SetScale(XMFLOAT3(15.0f, 15.0f, 15.0f)); //박스도 151515배 여기여기0409
+	PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()-> m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
 //	PLAYER->MakeOtherPlayers(m_pd3dDevice, m_pd3dCommandList, SCENEMANAGER->m_MapList[INGAME]->GetGraphicsRootSignature(), SCENEMANAGER->m_MapList[INGAME]->m_pTerrain);
 	/*CTerrainPlayer *pPlayer = new CTerrainPlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	pPlayer->SetPosition(XMFLOAT3(380.0f, m_pScene->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
@@ -592,9 +593,9 @@ void CGameFramework::ProcessInput()
 {
 	static UCHAR pKeysBuffer[256];
 	bool bProcessedByScene = false;
-	if (GetKeyboardState(pKeysBuffer) && SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]!=NULL)
-		bProcessedByScene = SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->ProcessInput(pKeysBuffer);
-	if (!bProcessedByScene)
+	if (GetKeyboardState(pKeysBuffer) && m_pScene)
+		bProcessedByScene = m_pScene->ProcessInput(pKeysBuffer);
+	if (!bProcessedByScene&& PLAYER->GetPlayer()->GetAllowKey())
 	{
 		if (pKeysBuffer[VK_RETURN] & 0xF0)
 		{

@@ -186,6 +186,8 @@
 #include "stdafx.h"
 #include "PlayGround_OnAir.h"
 #include "GameFramework.h"
+#include <WinSock2.h>
+#include "CNetWork.h"
 float m_eTime = 0.0f;
 float m_CurrentTime = 0.0f;
 float m_PrevTime = 0.0f;
@@ -329,6 +331,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_DESTROY:
 		::PostQuitMessage(0);
 		break;
+	case WM_SOCKET:
+	{
+		if (WSAGETSELECTERROR(lParam)) {
+			closesocket((SOCKET)wParam);
+			exit(1);
+			break;
+		}
+		switch (WSAGETSELECTEVENT(lParam)) {
+		case FD_READ:
+			CNETWORK->ReadPacket((SOCKET)wParam);
+			break;
+		case FD_CLOSE:
+			closesocket((SOCKET)wParam);
+			exit(1);
+			break;
+		}
+	}
+
 	default:
 		return(::DefWindowProc(hWnd, message, wParam, lParam));
 	}
