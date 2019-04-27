@@ -378,13 +378,17 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 	switch (nMessageID)
 	{
 		case WM_LBUTTONDOWN:
+		/*	::SetCapture(hWnd);
+			::GetCursorPos(&m_ptRightOldCursorPos);*/
+
 		case WM_RBUTTONDOWN:
 			::SetCapture(hWnd);
 			::GetCursorPos(&m_ptOldCursorPos);
 			break;
-		case WM_LBUTTONUP:
 		case WM_RBUTTONUP:
 			::ReleaseCapture();
+		case WM_LBUTTONUP:
+			break;
 			break;
 		case WM_MOUSEMOVE:
 			break;
@@ -617,18 +621,15 @@ void CGameFramework::ProcessInput()
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			dwDirection |= DIR_LEFT;
-
 		} 
 		if (pKeysBuffer[VK_RIGHT] & 0xF0) 
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			dwDirection |= DIR_RIGHT;
-
 		}
 		if (pKeysBuffer[VK_PRIOR] & 0xF0) {
 			//PLAYER->GetPlayer()->SetPlayerState(RUN);
 			dwDirection |= DIR_UP;
-
 		} 
 		if (pKeysBuffer[VK_NEXT] & 0xF0)
 		{
@@ -640,7 +641,10 @@ void CGameFramework::ProcessInput()
 			PLAYER->GetPlayer()->SetPlayerState(JUMP);
 			//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
 		}
-		
+		if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
+		{
+			PLAYER->GetPlayer()->SetPlayerState(HIT);
+		}
 
 		float cxDelta = 0.0f, cyDelta = 0.0f;
 		POINT ptCursorPos;
@@ -657,9 +661,9 @@ void CGameFramework::ProcessInput()
 		{
 			if (cxDelta || cyDelta)
 			{
-				if (pKeysBuffer[VK_RBUTTON] & 0xF0)
-					PLAYER->GetPlayer()->Rotate(cyDelta, 0.0f, -cxDelta);
-				else
+				//if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
+				//	PLAYER->GetPlayer()->Rotate(cyDelta, 0.0f, -cxDelta);
+				if (pKeysBuffer[VK_RBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설
 					PLAYER->GetPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
 			}
 			if (dwDirection) PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);

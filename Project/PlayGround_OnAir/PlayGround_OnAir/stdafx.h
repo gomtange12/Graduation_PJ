@@ -128,7 +128,6 @@ enum PlayerState {
 };
 
 enum SceneState {
-
 	MENUSCENE  = 0,
 	INGAME = 1,
 	GAMEOVER,

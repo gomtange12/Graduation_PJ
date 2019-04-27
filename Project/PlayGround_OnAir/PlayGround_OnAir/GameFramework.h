@@ -90,6 +90,8 @@ private:
 	shared_ptr<CCamera>					m_pCamera = NULL;
 
 	POINT						m_ptOldCursorPos;
+	POINT						m_ptRightOldCursorPos;
+
 
 	_TCHAR						m_pszFrameRate[70];
 

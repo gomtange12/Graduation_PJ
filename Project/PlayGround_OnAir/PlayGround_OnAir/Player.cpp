@@ -251,24 +251,49 @@ void CPlayer::Update(float fTimeElapsed)
 	case RUN:
 		//if (!m_OnAacting)
 		//{
-
 			SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 			m_OnAacting = FALSE;
 		//}
 		//SetTrackAnimationSet(0, RUN);
 		//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		//m_OnAacting = FALSE;
-
 		break;
-	
 	case JUMP:
 		m_OnAacting = TRUE;
 		SetTrackAnimationSet(0, JUMP);
-
-		//SetTrackAnimationSet(0, IDLE);
-
 		break;
-
+	case STUN:
+		m_OnAacting = TRUE;
+		SetTrackAnimationSet(0, STUN);
+		break;
+	case JUMPROLL:
+		m_OnAacting = TRUE;
+		SetTrackAnimationSet(0, JUMPROLL);
+		break;
+	case RUN_JUMP_ATTAK:
+		m_OnAacting = TRUE;
+		SetTrackAnimationSet(0, RUN_JUMP_ATTAK);
+		break;
+	case KICK:
+		m_OnAacting = TRUE;
+		SetTrackAnimationSet(0, KICK);
+		break;
+	case ATTACK:
+		m_OnAacting = TRUE;
+		SetTrackAnimationSet(0, ATTACK);
+		break;
+	case HAPPY:
+		m_OnAacting = TRUE;
+		SetTrackAnimationSet(0, HAPPY);
+		break;
+	case SAD:
+		m_OnAacting = TRUE;
+		SetTrackAnimationSet(0, SAD);
+		break;
+	case BACK_RUN:
+		m_OnAacting = TRUE;
+		SetTrackAnimationSet(0, BACK_RUN);
+		break;
 	}
 	//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 

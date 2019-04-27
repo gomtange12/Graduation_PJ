@@ -67,7 +67,10 @@ protected:
 	ID3D12Resource					**m_ppd3dSubSetIndexBuffers = NULL;
 	ID3D12Resource					**m_ppd3dSubSetIndexUploadBuffers = NULL;
 	D3D12_INDEX_BUFFER_VIEW			*m_pd3dSubSetIndexBufferViews = NULL;
-
+	BoundingBox						m_BoundBox;
+public:
+	//void SetBoundBox(){}
+	BoundingBox GetBoundBox()const { return m_BoundBox; }
 public:
 	UINT GetType() { return(m_nType); }
 
