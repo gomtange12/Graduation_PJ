@@ -6,6 +6,7 @@
 #include "Object.h"
 #include "Shader.h"
 #include "Scene.h"
+
 #include "CSceneManager.h"
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -208,10 +209,11 @@ void CMaterial::LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsComm
 			(*ppTexture)->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pwstrTextureName, 0, true);
 			if (*ppTexture) (*ppTexture)->AddRef();
 
+			CScene::CreateShaderResourceViews(pd3dDevice, *ppTexture, nRootParameter, false);
 			//SCENEMANAGER->GetSceneType ¿©±â ½¦ÀÌ´õ ¸®¼Ò½ººä
-			for (auto p : SCENEMANAGER->m_MapList)
+			//for (auto p : SCENEMANAGER->m_MapList)
 			{
-				p.second->CreateShaderResourceViews(pd3dDevice, *ppTexture, nRootParameter, false);
+				//p.second->CreateShaderResourceViews(pd3dDevice, *ppTexture, nRootParameter, false);
 			}
 		}
 		else
@@ -804,6 +806,36 @@ void CGameObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared
 	if (m_pChild) m_pChild->Render(pd3dCommandList, pCamera);
 }
 
+void CGameObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, CCamera * pCamera, UINT uInstances)
+{
+	/*OnPrepareRender();
+
+	if (m_ppMaterials)
+	{
+		if (m_ppMaterials->m_pShader)
+		{
+			m_pMaterial->m_pShader->Render(pd3dCommandList, pCamera);
+			m_pMaterial->m_pShader->UpdateShaderVariables(pd3dCommandList);
+
+			UpdateShaderVariables(pd3dCommandList);
+		}
+		if (m_pMaterial->m_pTexture)
+		{
+			m_pMaterial->m_pTexture->UpdateShaderVariables(pd3dCommandList);
+		}
+	}
+
+	pd3dCommandList->SetGraphicsRootDescriptorTable(2, m_d3dCbvGPUDescriptorHandle);
+
+	if (m_pMesh)
+	{
+		for (int i = 0; i < m_nMeshes; i++)
+		{
+			if (m_ppMeshes[i]) m_ppMeshes[i]->Render(pd3dCommandList, uInstances);
+		}
+	}*/
+}
+
 void CGameObject::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 }
@@ -1382,13 +1414,14 @@ CHeightMapTerrain::CHeightMapTerrain(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 	pTerrainShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
 	pTerrainShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	for (auto p : SCENEMANAGER->m_MapList)
+	/*for (auto p : SCENEMANAGER->m_MapList)
 	{
 
 	p.second->CreateShaderResourceViews(pd3dDevice, pTerrainBaseTexture, 13, false);
 	p.second->CreateShaderResourceViews(pd3dDevice, pTerrainDetailTexture, 14, false);
-	}
-
+	}*/
+	CScene::CreateShaderResourceViews(pd3dDevice, pTerrainBaseTexture, 13, false);
+	CScene::CreateShaderResourceViews(pd3dDevice, pTerrainDetailTexture, 14, false);
 	CMaterial *pTerrainMaterial = new CMaterial(2);
 	pTerrainMaterial->SetTexture(pTerrainBaseTexture, 0);
 	pTerrainMaterial->SetTexture(pTerrainDetailTexture, 1);
@@ -1418,7 +1451,7 @@ CSkyBox::CSkyBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dComman
 	pSkyBoxShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
 	pSkyBoxShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	SCENEMANAGER->m_MapList[INGAME]->CreateShaderResourceViews(pd3dDevice, pSkyBoxTexture, 10, false);
+	CScene::CreateShaderResourceViews(pd3dDevice, pSkyBoxTexture, 10, false);
 
 	CMaterial *pSkyBoxMaterial = new CMaterial(1);
 	pSkyBoxMaterial->SetTexture(pSkyBoxTexture);

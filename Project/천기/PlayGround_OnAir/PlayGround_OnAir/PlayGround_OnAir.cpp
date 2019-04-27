@@ -188,13 +188,12 @@
 #include "GameFramework.h"
 #include <WinSock2.h>
 #include "CNetWork.h"
+
 float m_eTime = 0.0f;
 float m_CurrentTime = 0.0f;
 float m_PrevTime = 0.0f;
 float m_eActine = 0.0f;
 #define MAX_LOADSTRING 100
-
-
 
 HINSTANCE						ghAppInstance;
 TCHAR							szTitle[MAX_LOADSTRING];
