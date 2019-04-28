@@ -359,25 +359,7 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			//PLAYER->GetPlayer()->SetPlayerState(PLAYER->GetPlayer()->PlayerState::IDLE);
 
 			break;
-		//case ANIMATION_TYPE_MOVING:
-		//	m_fPosition += 0.0018;
-
-		//	//sol) m_fPosition += fDelta * speed; 프레임 고정시
-		//	if (m_fPosition >= maxLength)
-		//	{
-		//		m_fPosition = 0.0f;
-		//		//fPosition = 0.0f;
-		//		//fTrackPosition = 0.f;
-		//		oncePosition = 0.0f;
-		//		//maxLength = 0.0f;
-		//		PLAYER->GetPlayer()->SetPlayerState(RUN);
-
-		//		//PLAYER->GetPlayer()->SetPlayerState(IDLE);
-		//	}
-		//	break;
-		/*case ANIMATION_TYPE_MOVING:
-
-			break;*/
+		
 	}
 
 	if (m_pAnimationCallbackHandler)
@@ -1147,6 +1129,8 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
 			pGameObject->SetMesh(pMesh);
+			pGameObject->SetOOBB(XMFLOAT3(pMesh->GetAABBCenter()), pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
 			//pGameObject->SetOOBB(XMFLOAT3(pMesh->GetAABBCenter().x, pMesh->GetAABBCenter().y, pMesh->GetAABBCenter().z), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 		}
 		else if (!strcmp(pstrToken, "<SkinningInfo>:"))
@@ -1164,7 +1148,7 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 
 			pGameObject->SetMesh(pSkinnedMesh);
 
-			//pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter()), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+			pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter()), pSkinnedMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 			//여기pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter().x , pSkinnedMesh->GetAABBCenter().y * 0.5f, pSkinnedMesh->GetAABBCenter().z * 0.5f), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 		}
 		else if (!strcmp(pstrToken, "<Materials>:"))

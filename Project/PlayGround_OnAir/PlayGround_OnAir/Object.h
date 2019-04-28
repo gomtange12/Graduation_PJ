@@ -479,8 +479,8 @@ public:
 	BoundingOrientedBox			m_xmTransedOOBB;
 	
 	void SetOOBB(XMFLOAT3& xmCenter, XMFLOAT3& xmExtents, XMFLOAT4& xmOrientation) { m_xmOOBB = m_xmTransedOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation); }
-
-
+	BoundingOrientedBox GetBoundingBox() const { return m_xmOOBB; }
+	void SetOOBBScale(float x, float y, float z){}
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -755,11 +755,8 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 	float fHeight = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
 
 	//fHeight = 151;
-
-
 	if (xmf3CameraPosition.y <= fHeight)
-	//if(FindFrame())
-	
+
 	xmf3CameraPosition.y = fHeight;
 	m_pCamera->SetPosition(xmf3CameraPosition);
 	if (m_pCamera->GetMode() == THIRD_PERSON_CAMERA)

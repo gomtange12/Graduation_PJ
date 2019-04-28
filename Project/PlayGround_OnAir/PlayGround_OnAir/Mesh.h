@@ -86,12 +86,8 @@ public:
 
 public:
 
-	XMFLOAT3 GetAABBCenter() {
-		return m_xmf3AABBCenter;
-	};
-	XMFLOAT3 GetAABBExtents() {
-		return m_xmf3AABBExtents;
-	};
+	XMFLOAT3 GetAABBCenter() { return m_xmf3AABBCenter; }
+	XMFLOAT3 GetAABBExtents() { return m_xmf3AABBExtents; };
 
 };
 

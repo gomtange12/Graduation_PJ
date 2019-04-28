@@ -265,6 +265,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	XMFLOAT3 xmf3Scale(1.0f, 1.0f, 1.0f);
 	XMFLOAT4 xmf4Color(0.0f, 0.3f, 0.0f, 0.0f);
 	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/white.raw"), 257, 257, xmf3Scale, xmf4Color);
+	m_pPlayGroundTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/white.raw"), 257, 257, xmf3Scale, xmf4Color);
 
 	m_nShaders = 2;
 	m_ppShaders = new CShader*[m_nShaders];
@@ -290,7 +291,6 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	pAngrybotObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
 
 	m_ppShaders[1] = pAngrybotObjectsShader;
-
  	CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
 	
 	
@@ -345,15 +345,29 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
 	*/
 	m_ppGameObjects[0]->SetPosition(200.0f, 255, 700.0f); //맵 거꾸로 버그 여기
-	m_ppGameObjects[0]->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	m_ppGameObjects[0]->SetScale(100.0f, 100.0f, 100.0f);
+	if(m_ppGameObjects[0]->m_pMesh)
+	m_ppGameObjects[0]->SetOOBB(m_ppGameObjects[0]->GetPosition(), m_ppGameObjects[0]->m_pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	//2번쨰 맵
 	m_ppGameObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppGameObjects[1]->SetChild(pMapObject->m_pModelRootObject, true);
 	m_ppGameObjects[1]->SetPosition(200.0f, 235, 700.0f); //맵 거꾸로 버그 여기
-	m_ppGameObjects[1]->SetOOBB(m_ppGameObjects[1]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	m_ppGameObjects[1]->SetScale(50.0f, 50.0f, 50.0f);
+	if (m_ppGameObjects[1]->m_pMesh)
+	m_ppGameObjects[1]->SetOOBB(m_ppGameObjects[1]->GetPosition(), m_ppGameObjects[1]->m_pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	//CLoadedModelInfo *pOtherPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);
+	//m_ppGameObjects[2] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	//m_ppGameObjects[2]->SetChild(pOtherPlayerModel->m_pModelRootObject, true);
+	//m_ppGameObjects[2]->SetPosition(XMFLOAT3(0, 0, 0)); //맵 거꾸로 버그 여기
+	//m_ppGameObjects[2]->SetScale(50.0f, 50.0f, 50.0f);
+	//if (m_ppGameObjects[2]->m_pMesh)
+	//	m_ppGameObjects[2]->SetOOBB(m_ppGameObjects[2]->GetPosition(), m_ppGameObjects[2]->m_pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	//m_ppGameObjects[2]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pOtherPlayerModel);
+	//m_ppGameObjects[2]->m_pAnimationController = new CAnimationController(1, pOtherPlayerModel->m_pAnimationSets);
+	//m_ppGameObjects[2]->m_pAnimationController->SetTrackAnimationSet(0, 0);
+	//m_ppGameObjects[2]->m_pAnimationController->SetCallbackKeys(1, 3);
 
 	//m_ppGameObjects[1] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	//m_ppGameObjects[1]->SetChild(pAngrybotModel->m_pModelRootObject, true);
@@ -788,7 +802,6 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 
 	pCamera->SetViewportsAndScissorRects(pd3dCommandList);
 	pCamera->UpdateShaderVariables(pd3dCommandList);
-
 	UpdateShaderVariables(pd3dCommandList);
 
 //	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
@@ -818,15 +831,15 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		break;
 	case INGAME:
 		m_ppGameObjects[1]->Render(pd3dCommandList, pCamera);
-
 		break;
-
 	}
+	//m_ppGameObjects[2]->Render(pd3dCommandList, pCamera);
 
 	/*if (m_ppGameObjects[SCENEMANAGER->GetSceneType()])
 		m_ppGameObjects[SCENEMANAGER->GetSceneType()]->Render(pd3dCommandList, pCamera);*/
 	XMFLOAT3 pos = PLAYER->GetPlayer()->GetPosition();
 	XMFLOAT3 MAPpos = m_ppGameObjects[0]->GetPosition();
+	//XMFLOAT3 otherplayerpos = m_ppGameObjects[2]->GetPosition();
 
 	/*for (auto p = PLAYER->m_vecPlayerList.begin(); p!= PLAYER->m_vecPlayerList.end(); ++p)
 	{
@@ -851,15 +864,36 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 void CScene::CheckObjectByObjectCollisions() {
 	//체크는되는듯한데 왜 중단점이 안되지?
 	
-	if (PLAYER->GetPlayer()->m_xmOOBB.Intersects(m_ppGameObjects[0]->m_xmOOBB)){
+	for (int i = 0; i < m_nGameObjects; i++)
+	{
+		if (m_ppGameObjects[i])
+		{
+			m_ppGameObjects[i]->Animate(m_fElapsedTime);
+			m_ppGameObjects[i]->UpdateTransform(NULL);
+		}
+	}
+	XMFLOAT3 playeroobb = PLAYER->GetPlayer()->GetBoundingBox().Center;
+	XMFLOAT3 playeroobbex = PLAYER->GetPlayer()->GetBoundingBox().Extents;
+
+	XMFLOAT3 objoobb = m_ppGameObjects[SCENEMANAGER->GetSceneType()]->GetBoundingBox().Center;
+	XMFLOAT3 objoobbex = m_ppGameObjects[SCENEMANAGER->GetSceneType()]->GetBoundingBox().Extents;
+
+	if (PLAYER->GetPlayer()->GetBoundingBox().Intersects(m_ppGameObjects[SCENEMANAGER->GetSceneType()]->GetBoundingBox()))
+	{
+		PLAYER->GetPlayer()->SetAllowKey(false);
+	}
+	else
+	{
+		PLAYER->GetPlayer()->SetAllowKey(true);
+
+	}
+	/*if (PLAYER->GetPlayer()->m_xmOOBB.Intersects(m_ppGameObjects[0]->m_xmOOBB)){
 		XMFLOAT3 playeroobb = PLAYER->GetPlayer()->m_xmOOBB.Center;
 		XMFLOAT3 objoobb = m_ppGameObjects[0]->m_xmOOBB.Center;
 		int i = 0;
 		PLAYER->GetPlayer()->SetPosition(XMFLOAT3(900.0f, 900.0f, 900.0f));
-	}
-	XMFLOAT3 playeroobb = PLAYER->GetPlayer()->m_xmOOBB.Center;
-	XMFLOAT3 objoobb = m_ppGameObjects[0]->m_xmOOBB.Center;
-
+	}*/
+	
 
 }
 

@@ -112,6 +112,8 @@ public:
 
 	CSkyBox								*m_pSkyBox = NULL;
 	CHeightMapTerrain					*m_pTerrain = NULL;
+	CHeightMapTerrain					*m_pPlayGroundTerrain = NULL;
+
 
 	LIGHT								*m_pLights = NULL;
 	int									m_nLights = 0;
