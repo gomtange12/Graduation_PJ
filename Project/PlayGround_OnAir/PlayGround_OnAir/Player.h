@@ -36,10 +36,16 @@ protected:
 	//CCamera						*m_pCamera = NULL;
 	//이넘만들기
 	
+	
 	std::shared_ptr<CCamera>	m_pCamera;
 	bool m_AllowKey = false;
 	
 public:
+	void SetCollimdeBox() {
+		//if ( != nullptr)
+		SetOOBB(GetPosition(), XMFLOAT3(0.5, 0.5, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
+	};
+
 	int m_PlayerState = IDLE;
 	std::shared_ptr<CCamera> GetCamera() { return(m_pCamera); }
 	virtual void SetCamera(std::shared_ptr<CCamera> pCamera) { m_pCamera = pCamera; }

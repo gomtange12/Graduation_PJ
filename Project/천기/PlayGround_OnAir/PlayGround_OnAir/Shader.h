@@ -6,10 +6,7 @@
 
 #include "Object.h"
 #include "Camera.h"
-struct VS_VB_INSTANCE
-{
-	XMFLOAT4X4 m_xmf4x4Transform;
-};
+
 class CShader
 {
 public:
@@ -227,32 +224,4 @@ protected:
 	CTexture						**m_pTexture = NULL;
 	int								m_nTexture = 0;
 };
-class CObjectsShader : public CTexturedShader
-{
-public:
-	CObjectsShader();
-	virtual ~CObjectsShader();
 
-	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, void *pContext = NULL);
-	virtual void AnimateObjects(float fTimeElapsed);
-	virtual void ReleaseObjects();
-
-	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
-	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
-	virtual void ReleaseShaderVariables();
-
-	virtual void ReleaseUploadBuffers();
-
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera);
-
-protected:
-	CGameObject						**m_ppObjects = 0;
-	int								m_nObjects = 0;
-
-	ID3D12Resource					*m_pd3dcbGameObjects = NULL;
-	CB_GAMEOBJECT_INFO				*m_pcbMappedGameObjects = NULL;
-
-#ifdef _WITH_BATCH_MATERIAL
-	CMaterial						*m_pMaterial = NULL;
-#endif
-};

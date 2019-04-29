@@ -46,6 +46,7 @@
 
 
 
+
 CPlayer::CPlayer()
 {
 
@@ -613,7 +614,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 
 	SetChild(pPlayerModel->m_pModelRootObject, true);
 	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
-
+	
 	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
 	m_pAnimationController->SetTrackAnimationSet(0, 0);
 
@@ -636,7 +637,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 		SetPlayerUpdatedContext(pContext);
 		SetCameraUpdatedContext(pContext);
 	}
-	SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
+
 	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
 	if (pPlayerModel) delete pPlayerModel;
 	
@@ -685,16 +686,7 @@ std::shared_ptr<CCamera> CTerrainPlayer::ChangeCamera(DWORD nNewCameraMode, floa
 			m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
 			m_pCamera->SetTimeLag(0.25f);
 			m_pCamera->SetOffset(XMFLOAT3(0.0f, 10.0f, -50.0f));
-			//m_pCamera->Rotate(0, 0, 0);
-			//if(PLAYER->GetPlayer()==NULL)
-			
 			m_pCamera->SetPosition(Vector3::Add(m_xmf3Position, m_pCamera->GetOffset()));
-		//	m_pCamera->SetPosition(PLAYER->GetPlayer()->GetPosition());
-			//m_pCamera->SetYPosition(PLAYER->GetPlayer()->GetPosition().y + 500);
-			//m_pCamera->SetPosition(
-			//else if (PLAYER->GetPlayer() != NULL)
-			//m_pCamera->SetPosition(m_xmf3Position);
-			//m_pCamera->SetYPosition(m_xmf3Position.y + 1000);
 			m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 			m_pCamera->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
 			m_pCamera->SetScissorRect(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
@@ -727,9 +719,9 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	XMFLOAT3 xmf3PlayerPosition = GetPosition();
 	int z = (int)(xmf3PlayerPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
-	float fHeight = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
+	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
 
-	//fHeight = 151;
+	fHeight = 255;
 
 	if (xmf3PlayerPosition.y < fHeight)
 	{
@@ -752,9 +744,9 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 	//xmf3CameraPosition.y += 500;
 	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
-	float fHeight = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
-
-	//fHeight = 151;
+	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
+	//float boundHeight = 
+	fHeight = 255;
 	if (xmf3CameraPosition.y <= fHeight)
 
 	xmf3CameraPosition.y = fHeight;

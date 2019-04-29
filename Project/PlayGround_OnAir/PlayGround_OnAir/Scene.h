@@ -63,6 +63,7 @@ public:
     void AnimateObjects(float fTimeElapsed);
 
 	void ReleaseUploadBuffers();
+	void SetCollideBox();
 
 	void CheckObjectByObjectCollisions();
 
@@ -98,6 +99,12 @@ public:
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUCbvDescriptorNextHandle() { return(m_d3dCbvGPUDescriptorNextHandle); }
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUSrvDescriptorNextHandle() { return(m_d3dSrvCPUDescriptorNextHandle); }
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUSrvDescriptorNextHandle() { return(m_d3dSrvGPUDescriptorNextHandle); }
+
+	int									m_nUIObjects = 0;
+	CGameObject							**m_ppUIObjects = NULL;
+
+	int									m_nPlayGroundObjects = 0;
+	CGameObject							**m_ppPlayGroundObjects = NULL;
 
 	int									m_MapGameObjects = 0;
 	CGameObject							**m_ppMapObjects = NULL;

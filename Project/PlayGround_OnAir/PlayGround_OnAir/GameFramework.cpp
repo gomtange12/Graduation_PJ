@@ -531,8 +531,12 @@ void CGameFramework::BuildObjects()
 
 	//SCENEMANAGER->
 	m_pScene = new CScene();
-	if (m_pScene) m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
-	//SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
+	if (m_pScene)
+	{
+		m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
+		//m_pScene->SetCollideBox();
+	}
+		//SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
 	//SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
 
 	//for (auto&& p : SCENEMANAGER->m_MapList)
@@ -558,7 +562,8 @@ void CGameFramework::BuildObjects()
 	PLAYER->Initialize(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(0, 0, 0));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()-> m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
-//	PLAYER->MakeOtherPlayers(m_pd3dDevice, m_pd3dCommandList, SCENEMANAGER->m_MapList[INGAME]->GetGraphicsRootSignature(), SCENEMANAGER->m_MapList[INGAME]->m_pTerrain);
+	//PLAYER->GetPlayer()->SetCollideBox();
+																									 //PLAYER->MakeOtherPlayers(m_pd3dDevice, m_pd3dCommandList, SCENEMANAGER->m_MapList[INGAME]->GetGraphicsRootSignature(), SCENEMANAGER->m_MapList[INGAME]->m_pTerrain);
 	/*CTerrainPlayer *pPlayer = new CTerrainPlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	pPlayer->SetPosition(XMFLOAT3(380.0f, m_pScene->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	pPlayer->SetScale(XMFLOAT3(15.0f,15.0f,15.0f));*/

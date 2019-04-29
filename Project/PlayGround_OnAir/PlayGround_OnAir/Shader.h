@@ -186,7 +186,8 @@ class CMapObjectsShader : public CSkinnedAnimationObjectsShader
 public:
 	CMapObjectsShader();
 	virtual ~CMapObjectsShader();
-
+	CGameObject						**m_ppPlayGroundObjects = 0;
+	int								m_nPlayGroundObjects = 0;
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 };
 class CTexturedShader : public CShader

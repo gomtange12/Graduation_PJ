@@ -61,6 +61,7 @@ struct sc_packet_scene {
 	BYTE size;
 	BYTE type;
 	WORD sceneNum;
+	WORD roomNum;
 };
 struct sc_packet_match_result {
 	BYTE size;

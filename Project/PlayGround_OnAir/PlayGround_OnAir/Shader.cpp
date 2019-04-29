@@ -656,12 +656,7 @@ CMapObjectsShader::~CMapObjectsShader()
 
 void CMapObjectsShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
-	/*CLoadedModelInfo *pMapObjectModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Map/ALL_PIECES.bin", NULL, false);
-
 	
-	
-	CreateShaderVariables(pd3dDevice, pd3dCommandList);*/
-
 }
 
 CTexturedShader::CTexturedShader()

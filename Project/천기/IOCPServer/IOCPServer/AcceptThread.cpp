@@ -47,7 +47,7 @@ void AcceptThread::Proc()
 		ZeroMemory(&clientAddr, sizeof(SOCKADDR_IN));
 
 		clientSocket = WSAAccept(listenSocket, reinterpret_cast<sockaddr *>(&clientAddr), &addrLen, NULL, NULL);
-		std::cout << "클라이언트 접속" << ++USER_NUM << std::endl;
+		std::cout << "클라이언트 접속" << USER_NUM++ << std::endl;
 		if (clientSocket == INVALID_SOCKET)
 		{
 			std::cout << "Error - Accept Failure\n";

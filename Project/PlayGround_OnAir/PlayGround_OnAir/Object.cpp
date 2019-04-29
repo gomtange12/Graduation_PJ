@@ -1129,7 +1129,7 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
 			pGameObject->SetMesh(pMesh);
-			pGameObject->SetOOBB(XMFLOAT3(pMesh->GetAABBCenter()), pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+			//pGameObject->SetOOBB(XMFLOAT3(pMesh->GetAABBCenter()), pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 			//pGameObject->SetOOBB(XMFLOAT3(pMesh->GetAABBCenter().x, pMesh->GetAABBCenter().y, pMesh->GetAABBCenter().z), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 		}
@@ -1148,7 +1148,7 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 
 			pGameObject->SetMesh(pSkinnedMesh);
 
-			pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter()), pSkinnedMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+			//pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter()), pSkinnedMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 			//¿©±âpGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter().x , pSkinnedMesh->GetAABBCenter().y * 0.5f, pSkinnedMesh->GetAABBCenter().z * 0.5f), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 		}
 		else if (!strcmp(pstrToken, "<Materials>:"))

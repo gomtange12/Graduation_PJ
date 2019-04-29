@@ -3,12 +3,12 @@
 
 
 class Player;
-class SoloRoom;
 class ObjManager : public SingleTone<ObjManager> 
 {
 private:
 	std::array<Player*, MAX_USER>		g_clients;
-	std::vector<SoloRoom*> v_soloRoom;
+	//std::vector<SoloRoom*> v_soloRoom;
+	
 	int soloRoomNum;
 public:
 	

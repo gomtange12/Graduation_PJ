@@ -22,8 +22,9 @@
 #define PACKETMANAGER	PacketManager::GET_INSTANCE()
 #define OBJMANAGER		ObjManager::GET_INSTANCE()
 #define THREADMANAGER	ThreadManager::GET_INSTANCE()
+#define ROOMMANAGER		RoomManager::GET_INSTANCE()
 
-#define PERSONNEL 1
+#define PERSONNEL 2
 //using namespace std;
 enum AVATARNumber {
 	A, //임시명칭
