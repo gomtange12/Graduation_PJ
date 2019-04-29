@@ -15,5 +15,5 @@ public:
 	void PutPlayerPacket(int id);
 	void PosPacket(int id, int x, int y);
 	void ClientDisconnect(int id);
-	void ScenePacket(int num);
+	void ScenePacket(int num, int roomNum);
 };

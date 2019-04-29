@@ -25,7 +25,6 @@ void PacketManager::SendPacket(int id, void *packet)
 		if (WSA_IO_PENDING != err_no)
 			printf("¿À·ù");
 	}
-	printf("º¸³¿");
 };
 void PacketManager::LoginPacket(int id) 
 {
@@ -90,11 +89,13 @@ void PacketManager::ClientDisconnect(int id)
 	closesocket(objectManager->GetPlayer(id)->m_socket);
 	objectManager->GetPlayer(id)->m_connected = false;
 }
-void PacketManager::ScenePacket(int id) {
+void PacketManager::ScenePacket(int id, int roomNum) {
 	//ÇØ´ç Ã¤³Î ¸ÅÄªµÈ Å¬¶ó ¸ðµÎ¿¡°Ô
 	sc_packet_scene packet;
 	packet.sceneNum = LOADING;
+	packet.roomNum = roomNum;
 	packet.size = sizeof(sc_packet_scene);
 	packet.type = SC_SCENE;
 	SendPacket(id, &packet);
+	printf("¾Àº¸³¿");
 }

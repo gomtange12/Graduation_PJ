@@ -26,11 +26,7 @@ class CStandardShader;
 #define RESOURCE_TEXTURE2DARRAY		0x03
 #define RESOURCE_TEXTURE_CUBE		0x04
 #define RESOURCE_BUFFER				0x05
-struct CB_GAMEOBJECT_INFO
-{
-	XMFLOAT4X4						m_xmf4x4World;
-	UINT								m_terrainID;
-};
+
 struct SRVROOTARGUMENTINFO
 {
 	int								m_nRootParameterIndex = 0;
@@ -416,8 +412,6 @@ public:
 
 	virtual void OnPrepareRender() { }
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera=NULL);
-	//virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera);
-	void Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera, UINT uInstances); //for render
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);

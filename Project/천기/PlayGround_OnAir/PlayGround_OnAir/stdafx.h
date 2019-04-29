@@ -48,13 +48,13 @@ using namespace std;
 #include <DirectXCollision.h>
 
 #include <Mmsystem.h>
-#include <winsock2.h>
+
 #ifdef _DEBUG
 #include <dxgidebug.h>
 #endif
 #include "SingleTon.h"
 #include "CPlayerManager.h"
-//#include "..\..\천기\IOCPServer\IOCPServer\Protocol.h"
+
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 
@@ -98,9 +98,9 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 #define OBJECTMANAGER	 CObjectManager::GetInstance()
 #define CNETWORK	CNetWork::GetInstance()
 
-#define	WM_SOCKET				WM_USER + 1
 #define MAXOBJECTNUM 100
 
+#define	WM_SOCKET				WM_USER + 1
 
 #define RANDOM_COLOR			XMFLOAT4(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX))
 #define FPS_PERSECOND 60
@@ -129,11 +129,23 @@ enum PlayerState {
 };
 
 enum SceneState {
-
-	MENUSCENE  = 0,
-	INGAME = 1,
-	GAMEOVER,
-	LOADING
+	LOADING,
+	MENUSCENE,
+	INGAME,
+	GAMEOVER
+};
+enum AVATARNumber {
+	A, //임시명칭
+	B
+};
+enum MAPNumber {
+	PLAYGROUND,
+	CONCERT
+};
+enum ModNumber {
+	SOLO,
+	DUO,
+	SQUAD
 };
 namespace Vector3
 {

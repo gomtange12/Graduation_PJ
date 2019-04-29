@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Player.h"
-#include "SoloRoom.h"
 #include "ObjManager.h"
 #include "PacketManager.h"
+#include "RoomManager.h"
 ObjManager::ObjManager() 
 {
 };
@@ -19,7 +19,7 @@ void ObjManager::ClientInit()
 
 void ObjManager::MatchProcess(int id, unsigned char *packet) 
 {
-	std::cout << "매칭 " << id << std::endl;
+	std::cout << "매칭요청 : " << id << std::endl;
 	if (packet[1] == SC_MATCHING_PLAYER) { //type
 
 		sc_packet_matching *match = reinterpret_cast<sc_packet_matching *>(packet);
@@ -54,38 +54,7 @@ void ObjManager::ModMatch(int id)
 	{
 	case SOLO:
 	{
-		if (v_soloRoom.size() == 0) { // 빈 방 생성
-			SoloRoom* sr = new SoloRoom;
-			v_soloRoom.emplace_back(sr);
-		}
-		//솔로룸 앞에서부터 인원이 비어있는 솔로룸을 찾음
-		for (auto& vsr : v_soloRoom) {
-			if (vsr->m_full == false) {
-				for (int i = 0; i <= PERSONNEL; ++i) {
-					if (vsr->m_ids[i] < 0) {
-						vsr->m_ids[i] = id;
-						g_clients[i]->m_match = true;
-						if(vsr->m_ids[1] >= 0) //풀방?
-							vsr->m_full = true;
-					}
-					//
-					if (vsr->m_full == true) { //풀방됬으니 씬센드
-						for (int i = 0; i <= PERSONNEL; ++i) {
-							PACKETMANAGER->ScenePacket(vsr->m_ids[i]);
-						}
-						//풀방이니 새로운방 하나 만들어 두기
-						
-						SoloRoom* sr = new SoloRoom;
-						v_soloRoom.emplace_back(sr);
-						break;
-					} //풀방 아니면
-					else {
-						break;
-					}
-					
-				}
-			}
-		}
+		ROOMMANAGER->SoloRoomMatch(id);
 		break;
 	}
 	case DUO:
@@ -101,10 +70,10 @@ void ObjManager::ModMatch(int id)
 	default:
 		break;
 	}
-	std::cout << g_clients[id]->avatar << std::endl;
-	std::cout << g_clients[id]->map << std::endl;
-	std::cout << g_clients[id]->mod << std::endl;
-	std::cout << id << std::endl;
+	std::cout << "캐릭터 : " << g_clients[id]->avatar << std::endl;
+	std::cout << "맵 : " << g_clients[id]->map << std::endl;
+	std::cout << "모드 : " << g_clients[id]->mod << std::endl;
+	std::cout << "아이디 : "<< id << std::endl;
 }
 void ObjManager::ProcessPacket(int id, unsigned char *packet)
 {

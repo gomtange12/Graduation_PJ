@@ -25,7 +25,7 @@ void CNetWork::MakeServer(HWND hWnd)
 
 	int Result = WSAConnect(g_mysocket, (sockaddr *)&ServerAddr, sizeof(ServerAddr), NULL, NULL, NULL, NULL);
 
-	//WSAAsyncSelect(g_mysocket, hWnd, WM_SOCKET, FD_CLOSE | FD_READ);
+	WSAAsyncSelect(g_mysocket, hWnd, WM_SOCKET, FD_CLOSE | FD_READ);
 
 	send_wsabuf.buf = send_buffer;
 	send_wsabuf.len = MAX_BUFFER;
@@ -87,7 +87,7 @@ void CNetWork::ProcessPacket(char *ptr)
 	case SC_SCENE:
 	{
 		sc_packet_scene *paket = reinterpret_cast<sc_packet_scene *>(ptr);
-		
+		int roomNum = paket->roomNum;
 		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
 		break;
 	}
@@ -194,9 +194,9 @@ void CNetWork::MatchPacket()
 	send_wsabuf.len = sizeof(my_packet);
 	my_packet->size = sizeof(my_packet);
 	my_packet->type = SC_MATCHING_PLAYER;
-	//my_packet->avatar = A;
-	/*my_packet->map = PLAYGROUND;
-	my_packet->mod = SOLO;*/
+	my_packet->avatar = A;
+	my_packet->map = PLAYGROUND;
+	my_packet->mod = SOLO;
 
 	SendPacket();
 }
