@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AcceptThread.h" />
+    <ClInclude Include="Functor.h" />
     <ClInclude Include="IOCPServer.h" />
     <ClInclude Include="MyThread.h" />
     <ClInclude Include="ObjManager.h" />

@@ -8,7 +8,7 @@ struct stOverEx {
 	unsigned char m_IOCPbuf[MAX_BUFFER]; // IOCP send/recv ¹öÆÛ
 	unsigned char	m_todo;
 };
-
+////////////////////////////////
 class Player
 {
 public: //
@@ -32,6 +32,7 @@ public:
 	int mod;
 	int map;
 	//DirectX::XMFLOAT3	m_xmf3Position;
+	int state;
 
 
 public:
