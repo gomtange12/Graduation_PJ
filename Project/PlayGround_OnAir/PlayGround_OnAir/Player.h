@@ -41,6 +41,7 @@ protected:
 	bool m_AllowKey = false;
 	
 public:
+	
 	void SetCollimdeBox() {
 		//if ( != nullptr)
 		SetOOBB(GetPosition(), XMFLOAT3(0.5, 0.5, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));

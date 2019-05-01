@@ -7,6 +7,7 @@
 
 #include "Player.h"
 #include "CPlayerManager.h"
+#include "Scene.h"
 CShader::CShader()
 {
 }
@@ -683,8 +684,70 @@ D3D12_INPUT_LAYOUT_DESC CTexturedShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-void CTexturedShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * pd3dGraphicsRootSignature)
+void CTexturedShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
+	m_pd3dcbUIObjects = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL,
+		sizeof(VS_VB_INSTANCE) * 2, D3D12_HEAP_TYPE_UPLOAD,
+		D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
+	//정점 버퍼(업로드 힙)에 대한 포인터를 저장한다.
+	m_pd3dcbUIObjects->Map(0, NULL, (void **)&m_pcbMappedUIObjects);
+
+}
+
+void CTexturedShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	for (int j = 0; j < 2; j++)
+	{
+		XMStoreFloat4x4(&m_pcbMappedUIObjects[j].m_xmf4x4Transform,
+			XMMatrixTranspose(XMLoadFloat4x4(&m_pScene->m_ppUIObjects[j]->m_xmf4x4World)));
+	}
+	pd3dCommandList->SetGraphicsRootShaderResourceView(13, //여기가 2아니라 3
+		m_pd3dcbUIObjects->GetGPUVirtualAddress());
+}
+
+
+
+D3D12_BLEND_DESC CTexturedShader::CreateBlendState()
+{
+	D3D12_BLEND_DESC d3dBlendDesc;
+	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
+	d3dBlendDesc.AlphaToCoverageEnable = FALSE;
+	d3dBlendDesc.IndependentBlendEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].BlendEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].LogicOpEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
+	d3dBlendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ZERO;
+	d3dBlendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	d3dBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	d3dBlendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	d3dBlendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	d3dBlendDesc.RenderTarget[0].LogicOp = D3D12_LOGIC_OP_NOOP;
+	d3dBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	return d3dBlendDesc;
+
+}
+
+D3D12_DEPTH_STENCIL_DESC CTexturedShader::CreateDepthStencilState()
+{
+	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
+	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
+	d3dDepthStencilDesc.DepthEnable = TRUE;
+	d3dDepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	d3dDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+	d3dDepthStencilDesc.StencilEnable = FALSE;
+	d3dDepthStencilDesc.StencilReadMask = 0x00;
+	d3dDepthStencilDesc.StencilWriteMask = 0x00;
+	d3dDepthStencilDesc.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
+	d3dDepthStencilDesc.BackFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.BackFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.BackFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
+
+	return(d3dDepthStencilDesc);
 }
 
 D3D12_SHADER_BYTECODE CTexturedShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
@@ -745,73 +808,6 @@ void CTexturedUIShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, CCam
 
 	//pd3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//pd3dCommandList->DrawInstanced(6, 1, 0, 0);
-
-}
-
-void CTexturedUIShader::CreateGraphicsRootSignature(ID3D12Device * pd3dDevice)
-{
-	//D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[2];
-
-	//pd3dDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	//pd3dDescriptorRanges[0].NumDescriptors = 1;
-	//pd3dDescriptorRanges[0].BaseShaderRegister = 19; //t19 : gtxtPilot
-	//pd3dDescriptorRanges[0].RegisterSpace = 0;
-	//pd3dDescriptorRanges[0].OffsetInDescriptorsFromTableStart = 0;
-
-
-	//pd3dDescriptorRanges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	//pd3dDescriptorRanges[1].NumDescriptors = 1;
-	//pd3dDescriptorRanges[1].BaseShaderRegister = 22; //t22 : gtxtPilot
-	//pd3dDescriptorRanges[1].RegisterSpace = 0;
-	//pd3dDescriptorRanges[1].OffsetInDescriptorsFromTableStart = 0;
-
-
-
-	//D3D12_ROOT_PARAMETER pd3dRootParameters[2];
-
-	//pd3dRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	//pd3dRootParameters[0].DescriptorTable.NumDescriptorRanges = 1;
-	//pd3dRootParameters[0].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[0]; //t19: gtxtPilot
-	//pd3dRootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
-
-
-	//pd3dRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	//pd3dRootParameters[1].DescriptorTable.NumDescriptorRanges = 1;
-	//pd3dRootParameters[1].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[1]; //t22: gtxtTarget
-	//pd3dRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
-
-	//D3D12_STATIC_SAMPLER_DESC d3dSamplerDesc;
-	//::ZeroMemory(&d3dSamplerDesc, sizeof(D3D12_STATIC_SAMPLER_DESC));
-	//d3dSamplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	//d3dSamplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	//d3dSamplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	//d3dSamplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	//d3dSamplerDesc.MipLODBias = 0;
-	//d3dSamplerDesc.MaxAnisotropy = 1;
-	//d3dSamplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-	//d3dSamplerDesc.MinLOD = 0;
-	//d3dSamplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
-	//d3dSamplerDesc.ShaderRegister = 0;
-	//d3dSamplerDesc.RegisterSpace = 0;
-	//d3dSamplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
-	//D3D12_ROOT_SIGNATURE_FLAGS d3dRootSignatureFlags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT | D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
-	//D3D12_ROOT_SIGNATURE_DESC d3dRootSignatureDesc;
-	//::ZeroMemory(&d3dRootSignatureDesc, sizeof(D3D12_ROOT_SIGNATURE_DESC));
-	//d3dRootSignatureDesc.NumParameters = _countof(pd3dRootParameters);
-	//d3dRootSignatureDesc.pParameters = pd3dRootParameters;
-	//d3dRootSignatureDesc.NumStaticSamplers = 1;
-	//d3dRootSignatureDesc.pStaticSamplers = &d3dSamplerDesc;
-	//d3dRootSignatureDesc.Flags = d3dRootSignatureFlags;
-
-	//ID3DBlob *pd3dSignatureBlob = NULL;
-	//ID3DBlob *pd3dErrorBlob = NULL;
-	//D3D12SerializeRootSignature(&d3dRootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &pd3dSignatureBlob, &pd3dErrorBlob);
-	////pd3dDevice->CreateRootSignature(0, pd3dSignatureBlob->GetBufferPointer(), pd3dSignatureBlob->GetBufferSize(), __uuidof(ID3D12RootSignature), (void **)&m_pd3dGraphicsRootSignature);
-	//if (pd3dSignatureBlob) pd3dSignatureBlob->Release();
-	//if (pd3dErrorBlob) pd3dErrorBlob->Release();
 
 }
 
@@ -922,6 +918,319 @@ void CObjectsShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::sha
 	{
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pd3dCommandList, pCamera);
 	}
+}
+////////////////////////////////////////////////////////////////////////////////////////////////
+//
+CGeometeryBillboardShader::CGeometeryBillboardShader() {}
+
+CGeometeryBillboardShader::~CGeometeryBillboardShader() {
+	ReleaseShaderVariables();
+	ReleaseUploadBuffers();
+}
+
+D3D12_INPUT_LAYOUT_DESC CGeometeryBillboardShader::CreateInputLayout()
+{
+	UINT nInputElementDescs = 2;
+	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+
+	//정점 정보를 위한 입력 원소이다.
+	pd3dInputElementDescs[0] = { "POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 };
+	pd3dInputElementDescs[1] = { "SIZE",0,DXGI_FORMAT_R32G32_FLOAT,0,12,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 };
+
+
+	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
+	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
+	d3dInputLayoutDesc.NumElements = nInputElementDescs;
+
+	return(d3dInputLayoutDesc);
+}
+
+
+D3D12_SHADER_BYTECODE CGeometeryBillboardShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "VSBillboard", "vs_5_1", ppd3dShaderBlob));
+}
+D3D12_SHADER_BYTECODE CGeometeryBillboardShader::CreatePixelShader(ID3DBlob **ppd3dShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "PSBillboard", "ps_5_1", ppd3dShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CGeometeryBillboardShader::CreateGeometeryShader(ID3DBlob **ppd3dShaderBlob)
+{
+	return(CShader::CompileShaderFromFile(L"Shaders.hlsl", "GSBillboard", "gs_5_1", ppd3dShaderBlob));
+}
+
+void CGeometeryBillboardShader::CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature *pd3dGraphicsRootSignature)
+{
+
+	//m_nPipelineStates = 1;
+	//m_ppd3dPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
+	ID3DBlob *pd3dVertexShaderBlob = NULL, *pd3dPixelShaderBlob = NULL;
+	ID3DBlob *pd3dGeometeryShaderBlob = NULL;
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC d3dPipelineStateDesc;
+	::ZeroMemory(&d3dPipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
+	d3dPipelineStateDesc.pRootSignature = pd3dGraphicsRootSignature;
+	d3dPipelineStateDesc.VS = CreateVertexShader(&pd3dVertexShaderBlob);			//계층 구조 상에서 오버라이딩 가능 
+	d3dPipelineStateDesc.PS = CreatePixelShader(&pd3dPixelShaderBlob);				//계층 구조 상에서 오버라이딩 가능
+	d3dPipelineStateDesc.GS = CreateGeometeryShader(&pd3dGeometeryShaderBlob);
+	d3dPipelineStateDesc.RasterizerState = CreateRasterizerState();
+	d3dPipelineStateDesc.BlendState = CreateBlendState();
+	d3dPipelineStateDesc.DepthStencilState = CreateDepthStencilState();
+	d3dPipelineStateDesc.InputLayout = CreateInputLayout();							//계층구조상에서 오버이딩 가능
+	d3dPipelineStateDesc.SampleMask = UINT_MAX;
+	d3dPipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+	d3dPipelineStateDesc.NumRenderTargets = 1;
+	d3dPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	d3dPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	d3dPipelineStateDesc.SampleDesc.Count = 1;
+	d3dPipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+	HRESULT hResult = pd3dDevice->CreateGraphicsPipelineState(&d3dPipelineStateDesc, __uuidof(ID3D12PipelineState), (void **)&m_pd3dPipelineState);
+
+	if (pd3dVertexShaderBlob) pd3dVertexShaderBlob->Release();
+	if (pd3dPixelShaderBlob) pd3dPixelShaderBlob->Release();
+	if (pd3dGeometeryShaderBlob) pd3dGeometeryShaderBlob->Release();
+
+	if (d3dPipelineStateDesc.InputLayout.pInputElementDescs) delete[] d3dPipelineStateDesc.InputLayout.pInputElementDescs;
+
+}
+
+
+
+D3D12_RASTERIZER_DESC CGeometeryBillboardShader::CreateRasterizerState()
+{
+	D3D12_RASTERIZER_DESC d3dRasterizerDesc;
+	::ZeroMemory(&d3dRasterizerDesc, sizeof(D3D12_RASTERIZER_DESC));
+	/*Edit*///	d3dRasterizerDesc.FillMode = D3D12_FILL_MODE_WIREFRAME;
+	/*Edit*/	d3dRasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
+	d3dRasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	d3dRasterizerDesc.FrontCounterClockwise = FALSE;
+	d3dRasterizerDesc.DepthBias = 0;
+	d3dRasterizerDesc.DepthBiasClamp = 0.0f;
+	d3dRasterizerDesc.SlopeScaledDepthBias = 0.0f;
+	d3dRasterizerDesc.DepthClipEnable = TRUE;
+	d3dRasterizerDesc.MultisampleEnable = FALSE;
+	d3dRasterizerDesc.AntialiasedLineEnable = FALSE;
+	d3dRasterizerDesc.ForcedSampleCount = 0;
+	d3dRasterizerDesc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
+
+	return(d3dRasterizerDesc);
+}
+
+D3D12_BLEND_DESC CGeometeryBillboardShader::CreateBlendState()
+{
+	D3D12_BLEND_DESC d3dBlendDesc;
+	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
+	d3dBlendDesc.AlphaToCoverageEnable = TRUE;
+	d3dBlendDesc.IndependentBlendEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].BlendEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].LogicOpEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
+	d3dBlendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ZERO;
+	d3dBlendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	d3dBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	d3dBlendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	d3dBlendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	d3dBlendDesc.RenderTarget[0].LogicOp = D3D12_LOGIC_OP_NOOP;
+	d3dBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	return(d3dBlendDesc);
+
+}
+D3D12_DEPTH_STENCIL_DESC CGeometeryBillboardShader::CreateDepthStencilState()
+{
+	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
+	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
+	d3dDepthStencilDesc.DepthEnable = TRUE;
+	d3dDepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	d3dDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+	d3dDepthStencilDesc.StencilEnable = FALSE;
+	d3dDepthStencilDesc.StencilReadMask = 0xff;
+	d3dDepthStencilDesc.StencilWriteMask = 0xff;
+	d3dDepthStencilDesc.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+	d3dDepthStencilDesc.BackFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.BackFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.BackFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+	d3dDepthStencilDesc.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+
+	return(d3dDepthStencilDesc);
+}
+
+void CGeometeryBillboardShader::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
+{
+
+	//UINT ncbElementBytes = ((sizeof(VS_VB_INSTANCE) + 255) & ~255); //256의 배수
+
+
+	//																//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다.
+	//m_pd3dcbGameObjects = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes*m_nVertices, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	////정점 버퍼(업로드 힙)에 대한 포인터를 저장한다.
+	//m_pd3dcbGameObjects->Map(0, NULL, (void**)&m_pcbMappedGameObjects);
+
+
+
+	//////뷰?를 왜 생성하지 (추후에 확인 다시 해볼 것)
+	//m_pd3dVertexBufferView.BufferLocation = m_pd3dcbGameObjects->GetGPUVirtualAddress();
+	//m_pd3dVertexBufferView.StrideInBytes = sizeof(VS_VB_INSTANCE);
+	//m_pd3dVertexBufferView.SizeInBytes = sizeof(VS_VB_INSTANCE)*m_nVertices;
+	//
+}
+void CGeometeryBillboardShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, void *pContext)
+{
+
+
+	CTexture *pTexture = new CTexture(1, RESOURCE_TEXTURE2DARRAY, 0);
+	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Leader.dds", 0);
+	//pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Texture/ExplosionParticle.dds", 0);
+
+
+	CScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1);				//m_nObjects만큼의 상수 버퍼뷰와 1개의 srv						
+	CScene::CreateShaderResourceViews(pd3dDevice, pTexture, 13, true);
+
+
+
+#ifdef _WITH_BATCH_MATERIAL
+
+	m_ppMaterial = new CMaterial();
+	m_ppMaterial->SetTexture(pTexture);
+
+#else
+	CMaterial *pCubeMaterial = new CMaterial(1);
+	pCubeMaterial->SetTexture(pTexture);
+#endif
+
+	CHeightMapTerrain *pTerrain = (CHeightMapTerrain *)pContext;
+	int cxTerrain = pTerrain->GetWidth();
+	int czTerrain = pTerrain->GetLength();
+
+	int fxTerrain = cxTerrain / 256;
+	int fzTerrain = cxTerrain / 256;
+
+	int pxTerrain = cxTerrain / fxTerrain; //하나의 간격
+	int pzTerrain = czTerrain / fzTerrain;
+
+
+
+	m_nStride = sizeof(CTexturedVertex);
+	//	m_nStride = sizeof(XMFLOAT3) + sizeof(XMFLOAT2);
+	m_nVertices = 10000;
+	int treeCount = 0;
+	/*Edit*///CTreeVertex* pTreeVertices = new CTreeVertex[m_nVertices];
+	CTexturedVertex *pTreeVertices = new CTexturedVertex[m_nVertices];
+	//std::vector<CTexturedVertex*> pTreeVertices;
+
+
+	XMFLOAT3 xmf3Position;
+
+	//int i = 0;
+	//while (i<m_nVertices) {
+
+
+
+
+
+	while (treeCount < m_nVertices) {
+		xmf3Position.x = rand() % cxTerrain;
+		xmf3Position.z = rand() % czTerrain;
+		xmf3Position.y = pTerrain->GetHeight(xmf3Position.x, xmf3Position.z, false) + 10.0f;
+		if (xmf3Position.y > 245.0f) {
+			//if (treeCount < m_nVertices) {
+			pTreeVertices[treeCount].m_xmf3Position = xmf3Position;
+			//pTreeVertices[i].m_xmf2Size = XMFLOAT2(5.0f, 5.0f);
+			pTreeVertices[treeCount++].m_xmf2TexCoord = XMFLOAT2(20.0f, 20.0f);
+			//}
+		}
+	}
+
+
+	m_pd3dVertexBuffer = ::CreateBufferResource(pd3dDevice, pd3dCommandList, pTreeVertices, m_nStride*treeCount, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dVertexUploadBuffer);
+
+	m_pd3dVertexBufferView.BufferLocation = m_pd3dVertexBuffer->GetGPUVirtualAddress();
+	m_pd3dVertexBufferView.StrideInBytes = m_nStride;
+	m_pd3dVertexBufferView.SizeInBytes = m_nStride * m_nVertices;
+
+	if (pTreeVertices) delete[] pTreeVertices;
+
+
+
+}
+
+
+void CGeometeryBillboardShader::ReleaseUploadBuffers()
+{
+	/*Edit*///	if (pTreeVertices) delete[] pTreeVertices;
+	/*
+		{
+			for (int i = 0; i < this->m_nVertices; i++)
+			{
+				delete[i] pTreeVertices;
+				memset(&pTreeVertices[i],NULL,sizeof(CTreeVertex));
+			}
+		}
+	*/
+	if (m_pd3dVertexUploadBuffer) m_pd3dVertexUploadBuffer->Release();
+}
+
+void CGeometeryBillboardShader::UpdateShaderVariable(ID3D12GraphicsCommandList* pd3dCommandList, XMFLOAT4X4 *pxmf4x4World)
+{
+
+}
+
+void CGeometeryBillboardShader::ReleaseShaderVariables()
+{
+	if (m_pd3dVertexBuffer)
+	{
+		/*Edit*///		m_pd3dVertexBuffer->Unmap(0, NULL);
+		m_pd3dVertexBuffer->Release();
+	}
+}
+
+void CGeometeryBillboardShader::OnPrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
+{
+	if (!m_pScene->GetGraphicsRootSignature()) pd3dCommandList->SetGraphicsRootSignature(m_pScene->GetGraphicsRootSignature());
+
+	if (m_pd3dPipelineState) pd3dCommandList->SetPipelineState(m_pd3dPipelineState);	//그리기 시작
+
+	pd3dCommandList->SetDescriptorHeaps(1, &m_pScene->m_pd3dCbvSrvDescriptorHeap);
+
+	//if (m_pd) pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);				//camera
+
+	UpdateShaderVariables(pd3dCommandList);
+
+}
+
+void CGeometeryBillboardShader::Render(ID3D12GraphicsCommandList* pd3dCommandList, std::shared_ptr<CCamera> pCamera)
+{
+
+	OnPrepareRender(pd3dCommandList);
+
+	CShader::Render(pd3dCommandList, pCamera);
+	//if (m_pScene->billboardobj-> m_ppMaterial)
+	/*{
+		if (m_ppMaterial->m_pShader)
+		{
+			m_ppMaterial->m_pShader->Render(pd3dCommandList, pCamera);
+			m_ppMaterial->m_pShader->UpdateShaderVariables(pd3dCommandList);
+
+			UpdateShaderVariables(pd3dCommandList);
+		}
+		if (m_ppMaterial->m_pTexture)
+		{
+			m_ppMaterial->m_pTexture->UpdateShaderVariables(pd3dCommandList);
+		}
+	}*/
+
+	pd3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+	pd3dCommandList->IASetVertexBuffers(0, 1, &m_pd3dVertexBufferView);
+
+	pd3dCommandList->DrawInstanced(m_nVertices, 1, 0, 0);
+
+
+
 }
 //CInstancingShader::CInstancingShader()
 //{

@@ -298,6 +298,7 @@ void CPlayer::Update(float fTimeElapsed)
 	}
 	//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 
+	m_xmOOBB.Center = m_xmf3Position;
 	//SetTrackAnimationSet(0, 2);
 
 }
@@ -613,9 +614,14 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	
 
 	SetChild(pPlayerModel->m_pModelRootObject, true);
-	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
+	int i = pPlayerModel->m_pModelRootObject->GetMeshType();
+	//if(m_pMesh!=nullptr)
+	//this->SetMesh(pPlayerModel->m_pModelRootObject->m_pMesh);
 	
+	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
+
 	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
+	SetOOBB(GetPosition(), XMFLOAT3(1,2,1),  XMFLOAT4(0, 0, 0, 1));
 	m_pAnimationController->SetTrackAnimationSet(0, 0);
 
 	m_pAnimationController->SetCallbackKeys(1, 3);
@@ -637,7 +643,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 		SetPlayerUpdatedContext(pContext);
 		SetCameraUpdatedContext(pContext);
 	}
-
+	//SetOOBB(GetPosition(), m_pMesh->GetAABBExtents(), XMFLOAT4(0, 0, 0, 1));
 	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
 	if (pPlayerModel) delete pPlayerModel;
 	
@@ -721,7 +727,7 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
 
-	fHeight = 255;
+	fHeight = 0;
 
 	if (xmf3PlayerPosition.y < fHeight)
 	{
@@ -746,7 +752,7 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
 	//float boundHeight = 
-	fHeight = 255;
+	fHeight = 255; //¿©±â
 	if (xmf3CameraPosition.y <= fHeight)
 
 	xmf3CameraPosition.y = fHeight;

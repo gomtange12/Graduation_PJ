@@ -12,7 +12,7 @@
 #define POINT_LIGHT						1
 #define SPOT_LIGHT						2
 #define DIRECTIONAL_LIGHT				3
-
+class CBillboardObject;
 struct LIGHT
 {
 	XMFLOAT4							m_xmf4Ambient;
@@ -52,6 +52,8 @@ public:
 	virtual void ReleaseShaderVariables();
 
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	void BuildObjectsAfterPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+
 	virtual void ReleaseObjects();
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera=NULL);
 	virtual bool ProcessInput(UCHAR *pKeysBuffer);
@@ -69,10 +71,10 @@ public:
 
 	//CPlayer								*m_pPlayer = NULL;
 
+	static ID3D12DescriptorHeap			*m_pd3dCbvSrvDescriptorHeap;// m_pd3dCbvSrvDescriptorHeap ;
 protected:
 	ID3D12RootSignature				*m_pd3dGraphicsRootSignature = NULL;
 
-	static ID3D12DescriptorHeap			*m_pd3dCbvSrvDescriptorHeap;// m_pd3dCbvSrvDescriptorHeap ;
 
 	static D3D12_CPU_DESCRIPTOR_HANDLE	m_d3dCbvCPUDescriptorStartHandle;
 	static D3D12_GPU_DESCRIPTOR_HANDLE	m_d3dCbvGPUDescriptorStartHandle;
@@ -120,7 +122,7 @@ public:
 	CSkyBox								*m_pSkyBox = NULL;
 	CHeightMapTerrain					*m_pTerrain = NULL;
 	CHeightMapTerrain					*m_pPlayGroundTerrain = NULL;
-
+	CBillboardObject					*billboardobj = NULL;
 
 	LIGHT								*m_pLights = NULL;
 	int									m_nLights = 0;
