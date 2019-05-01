@@ -25,6 +25,7 @@ public:
 
 public:
 	wchar_t m_name[20];
+	XMFLOAT4X4 world_;
 	BYTE m_x;
 	BYTE m_y;
 	//bool ready;

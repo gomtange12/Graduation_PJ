@@ -121,20 +121,18 @@ void ObjManager::MovePkt(int id, unsigned char *packet)
 
 
 
-	//DWORD dwDirection, float fDistance, bool bUpdateVelocity;
+	float fDistance = 0;
 
-	//if (dwDirection)
-	//{
-	//	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
-	//	if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, fDistance);
-	//	if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, -fDistance);
-	//	if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, fDistance);
-	//	if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, -fDistance);
-	//	if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, fDistance);
-	//	if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, -fDistance);
-	//}
-
-
+	 //XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
+	 //if (DIR_FORWARD & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, fDistance);
+	 //if (DIR_BACKWARD & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, -fDistance);
+	 //if (DIR_RIGHT & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, fDistance);
+	 //if (DIR_LEFT & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, -fDistance);
+	 //if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, fDistance);
+	 //if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, -fDistance);
+	
+	//DIR 클라 ojb.h 에있음 프로토콜로 옮기자
+		
 
 	PACKETMANAGER->PosPacket(id, x, y);
 	printf("이동 ");
