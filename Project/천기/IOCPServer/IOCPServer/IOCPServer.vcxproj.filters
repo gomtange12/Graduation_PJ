@@ -87,6 +87,9 @@
     <ClInclude Include="Room.h">
       <Filter>소스 파일\RoomManager\MatchRoom</Filter>
     </ClInclude>
+    <ClInclude Include="Functor.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

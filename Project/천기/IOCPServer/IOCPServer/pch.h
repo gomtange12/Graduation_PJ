@@ -13,8 +13,7 @@
 #include <vector>
 #include <array>
 #include <thread>
-#include <d3d12.h>
-#include <DirectXMath.h>
+
 
 #include "SingleTone.h"
 
@@ -25,6 +24,8 @@
 #define ROOMMANAGER		RoomManager::GET_INSTANCE()
 
 #define PERSONNEL 2
+
+
 //using namespace std;
 enum AVATARNumber {
 	A, //임시명칭
@@ -53,4 +54,20 @@ enum SceneState {
 	INGAME,
 	GAMEOVER
 };
+enum PlayerState {
+	IDLE,
+	RUN,
+	JUMP,
+	DEATH,
+	STUN,
+	HIT,
+	JUMPROLL,
+	RUN_JUMP_ATTAK,
+	KICK,
+	ATTACK,
+	HAPPY,
+	SAD,
+	BACK_RUN
+};
+
 #endif //PCH_H

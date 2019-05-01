@@ -21,6 +21,7 @@ public:
 	void MatchProcess(int id, unsigned char *packet);
 	void ProcessPacket(int id, unsigned char *packet);
 	void ModMatch(int id);
+	void MovePkt(int id, unsigned char *packet);
 	ObjManager*			GetObjectManager() { return this; }
 	inline Player*&		GetPlayer(unsigned int playerIndex) { return g_clients[playerIndex]; }
 };
