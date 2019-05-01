@@ -562,6 +562,11 @@ void CGameFramework::BuildObjects()
 	PLAYER->Initialize(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(0, 0, 0));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()-> m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
+	PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7,10,7), XMFLOAT4(0, 0, 0, 1));
+	//PLAYER->GetPlayer()->SetMesh()
+	//PLAYER->GetPlayer()->FindAndSetSkinnedMesh()
+	///if (PLAYER->GetPlayer()->GetRootSkinnedGameObject()->m_pMesh != nullptr)
+		//int i = 0;
 	//PLAYER->GetPlayer()->SetCollideBox();
 																									 //PLAYER->MakeOtherPlayers(m_pd3dDevice, m_pd3dCommandList, SCENEMANAGER->m_MapList[INGAME]->GetGraphicsRootSignature(), SCENEMANAGER->m_MapList[INGAME]->m_pTerrain);
 	/*CTerrainPlayer *pPlayer = new CTerrainPlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
@@ -571,7 +576,7 @@ void CGameFramework::BuildObjects()
 	CAirplanePlayer *pPlayer = new CAirplanePlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), NULL);
 	pPlayer->SetPosition(XMFLOAT3(425.0f, 240.0f, 640.0f));
 #endif
-
+	m_pScene->BuildObjectsAfterPlayer(m_pd3dDevice, m_pd3dCommandList);
 	//m_pScene->m_pPlayer = m_pPlayer;// = pPlayer;// = PLAYER->GetInstance()->GetPlayer();
 	m_pCamera = PLAYER->GetPlayer()->GetCamera();
 	//m_pCamera->SetMode(THIRD_PERSON_CAMERA);
@@ -608,7 +613,7 @@ void CGameFramework::ProcessInput()
 		{
 			SCENEMANAGER->SetScene(INGAME);
 		}
-		DWORD dwDirection = 0;
+		dwDirection = 0;
 		if (pKeysBuffer[VK_UP] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
@@ -672,6 +677,7 @@ void CGameFramework::ProcessInput()
 			if (dwDirection) PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
 		}
 	}
+	//PLAYER->GetPlayer()->SetAllowKey(true);
 	PLAYER->GetPlayer()->Update(m_GameTimer.GetTimeElapsed());
 }
 

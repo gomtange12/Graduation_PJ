@@ -5,7 +5,8 @@ class CMaterial;
 class CBillboardObject : public CGameObject
 {
 public:
-	CBillboardObject();
+	CBillboardObject() = default;
+	CBillboardObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	~CBillboardObject();
 
 	public:
@@ -18,7 +19,7 @@ public:
 class UIBillboardObject : public CBillboardObject
 {
 public:
-	UIBillboardObject();
+	UIBillboardObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	virtual ~UIBillboardObject();
 
 	//void SetLookAt(XMFLOAT3& xmfTarget);

@@ -248,6 +248,7 @@ CSkinningBoneTransforms::CSkinningBoneTransforms(ID3D12Device *pd3dDevice, ID3D1
 
 	int nSkinnedMesh = 0;
 	pModel->m_pModelRootObject->FindAndSetSkinnedMesh(&nSkinnedMesh, this);
+	
 }
 
 CSkinningBoneTransforms::~CSkinningBoneTransforms()
@@ -750,16 +751,16 @@ void CGameObject::SetTrackAnimationPosition(int nAnimationTrack, float fPosition
 
 void CGameObject::Animate(float fTimeElapsed)
 {
+	m_xmOOBB.Transform(m_xmOOBB, XMLoadFloat4x4(&m_xmf4x4World));
+	XMStoreFloat4(&m_xmOOBB.Orientation, XMQuaternionNormalize(XMLoadFloat4(&m_xmOOBB.Orientation)));
+	
 	if (m_pAnimationController) m_pAnimationController->AdvanceTime(fTimeElapsed);
 
 	if (m_pSibling) m_pSibling->Animate(fTimeElapsed);
 	if (m_pChild) m_pChild->Animate(fTimeElapsed);
 	
 	
-	m_xmTransedOOBB.Transform(m_xmTransedOOBB, XMLoadFloat4x4(&m_xmf4x4World));
-	XMStoreFloat4(&m_xmTransedOOBB.Orientation, XMQuaternionNormalize(XMLoadFloat4(&m_xmTransedOOBB.Orientation)));
-	
-	XMFLOAT3 pos = PLAYER->GetPlayer()->m_xmTransedOOBB.Center;
+	//XMFLOAT3 pos = PLAYER->GetPlayer()->m_xmOOBB.Center;
 	
 }
 
