@@ -1,6 +1,6 @@
 #pragma once
 #include "Protocol.h"
-
+#include "Functor.h"
 
 class Player;
 class ObjManager : public SingleTone<ObjManager> 
@@ -10,6 +10,7 @@ private:
 	//std::vector<SoloRoom*> v_soloRoom;
 	
 	int soloRoomNum;
+	
 public:
 	
 

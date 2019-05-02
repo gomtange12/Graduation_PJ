@@ -37,6 +37,7 @@ public:
 
 	void WaitForGpuComplete();
 	void MoveToNextFrame();
+	DWORD dwDirection = 0;
 
 	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
@@ -90,6 +91,8 @@ private:
 	shared_ptr<CCamera>					m_pCamera = NULL;
 
 	POINT						m_ptOldCursorPos;
+	POINT						m_ptRightOldCursorPos;
+
 
 	_TCHAR						m_pszFrameRate[70];
 

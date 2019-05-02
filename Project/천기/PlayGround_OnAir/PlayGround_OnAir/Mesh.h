@@ -23,7 +23,27 @@ class CGameObject;
 #define VERTEXT_NORMAL_TANGENT_TEXTURE	(VERTEXT_POSITION | VERTEXT_NORMAL | VERTEXT_TANGENT | VERTEXT_TEXTURE_COORD0)
 #define VERTEXT_NORMAL_DETAIL			(VERTEXT_POSITION | VERTEXT_NORMAL | VERTEXT_TEXTURE_COORD0 | VERTEXT_TEXTURE_COORD1)
 #define VERTEXT_NORMAL_TANGENT__DETAIL	(VERTEXT_POSITION | VERTEXT_NORMAL | VERTEXT_TANGENT | VERTEXT_TEXTURE_COORD0 | VERTEXT_TEXTURE_COORD1)
+class CVertex
+{
+public:
+	XMFLOAT3						m_xmf3Position;
 
+public:
+	CVertex() { m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f); }
+	CVertex(XMFLOAT3 xmf3Position) { m_xmf3Position = xmf3Position; }
+	~CVertex() { }
+};
+class CTexturedVertex : public CVertex
+{
+public:
+	XMFLOAT2						m_xmf2TexCoord;
+
+public:
+	CTexturedVertex() { m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f); m_xmf2TexCoord = XMFLOAT2(0.0f, 0.0f); }
+	CTexturedVertex(float x, float y, float z, XMFLOAT2 xmf2TexCoord) { m_xmf3Position = XMFLOAT3(x, y, z); m_xmf2TexCoord = xmf2TexCoord; }
+	CTexturedVertex(XMFLOAT3 xmf3Position, XMFLOAT2 xmf2TexCoord = XMFLOAT2(0.0f, 0.0f)) { m_xmf3Position = xmf3Position; m_xmf2TexCoord = xmf2TexCoord; }
+	~CTexturedVertex() { }
+};
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class CMesh
@@ -46,6 +66,7 @@ protected:
 
 	XMFLOAT3						m_xmf3AABBCenter = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	XMFLOAT3						m_xmf3AABBExtents = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	XMFLOAT2						*m_pxmf2TextureCoords0 = NULL;
 
 	D3D12_PRIMITIVE_TOPOLOGY		m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	UINT							m_nSlot = 0;
@@ -67,7 +88,10 @@ protected:
 	ID3D12Resource					**m_ppd3dSubSetIndexBuffers = NULL;
 	ID3D12Resource					**m_ppd3dSubSetIndexUploadBuffers = NULL;
 	D3D12_INDEX_BUFFER_VIEW			*m_pd3dSubSetIndexBufferViews = NULL;
-
+	BoundingBox						m_BoundBox;
+public:
+	//void SetBoundBox(){}
+	BoundingBox GetBoundBox()const { return m_BoundBox; }
 public:
 	UINT GetType() { return(m_nType); }
 
@@ -83,12 +107,8 @@ public:
 
 public:
 
-	XMFLOAT3 GetAABBCenter() {
-		return m_xmf3AABBCenter;
-	};
-	XMFLOAT3 GetAABBExtents() {
-		return m_xmf3AABBExtents;
-	};
+	XMFLOAT3 GetAABBCenter() { return m_xmf3AABBCenter; }
+	XMFLOAT3 GetAABBExtents() { return m_xmf3AABBExtents; };
 
 };
 

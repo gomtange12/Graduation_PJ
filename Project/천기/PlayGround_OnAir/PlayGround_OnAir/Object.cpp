@@ -6,6 +6,7 @@
 #include "Object.h"
 #include "Shader.h"
 #include "Scene.h"
+
 #include "CSceneManager.h"
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -208,10 +209,11 @@ void CMaterial::LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsComm
 			(*ppTexture)->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pwstrTextureName, 0, true);
 			if (*ppTexture) (*ppTexture)->AddRef();
 
+			CScene::CreateShaderResourceViews(pd3dDevice, *ppTexture, nRootParameter, false);
 			//SCENEMANAGER->GetSceneType 여기 쉐이더 리소스뷰
-			for (auto p : SCENEMANAGER->m_MapList)
+			//for (auto p : SCENEMANAGER->m_MapList)
 			{
-				p.second->CreateShaderResourceViews(pd3dDevice, *ppTexture, nRootParameter, false);
+				//p.second->CreateShaderResourceViews(pd3dDevice, *ppTexture, nRootParameter, false);
 			}
 		}
 		else
@@ -246,6 +248,7 @@ CSkinningBoneTransforms::CSkinningBoneTransforms(ID3D12Device *pd3dDevice, ID3D1
 
 	int nSkinnedMesh = 0;
 	pModel->m_pModelRootObject->FindAndSetSkinnedMesh(&nSkinnedMesh, this);
+	
 }
 
 CSkinningBoneTransforms::~CSkinningBoneTransforms()
@@ -320,7 +323,8 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 	{
 		case ANIMATION_TYPE_LOOP:
 		{
-#ifdef _WITH_ANIMATION_INTERPOLATION	
+#ifdef _WITH_ANIMATION_INTERPOLATION
+			PLAYER->GetPlayer()->SetAllowKey(true);
 			m_fPosition = fTrackPosition;
 			 m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]); //원래꺼
 		  
@@ -331,11 +335,14 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			m_nCurrentKey++;
 			if (m_nCurrentKey >= m_nKeyFrameTransforms) m_nCurrentKey = 0;
 #endif
+			
 			break;
 		}
 		case ANIMATION_TYPE_ONCE:
 			//m_fPosition = fTrackPosition;
 			//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //원래꺼
+			PLAYER->GetPlayer()->SetAllowKey(false);
+
 			m_fPosition += 0.0018;
 
 			//sol) m_fPosition += fDelta * speed; 프레임 고정시
@@ -353,25 +360,7 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			//PLAYER->GetPlayer()->SetPlayerState(PLAYER->GetPlayer()->PlayerState::IDLE);
 
 			break;
-		//case ANIMATION_TYPE_MOVING:
-		//	m_fPosition += 0.0018;
-
-		//	//sol) m_fPosition += fDelta * speed; 프레임 고정시
-		//	if (m_fPosition >= maxLength)
-		//	{
-		//		m_fPosition = 0.0f;
-		//		//fPosition = 0.0f;
-		//		//fTrackPosition = 0.f;
-		//		oncePosition = 0.0f;
-		//		//maxLength = 0.0f;
-		//		PLAYER->GetPlayer()->SetPlayerState(RUN);
-
-		//		//PLAYER->GetPlayer()->SetPlayerState(IDLE);
-		//	}
-		//	break;
-		/*case ANIMATION_TYPE_MOVING:
-
-			break;*/
+		
 	}
 
 	if (m_pAnimationCallbackHandler)
@@ -762,16 +751,16 @@ void CGameObject::SetTrackAnimationPosition(int nAnimationTrack, float fPosition
 
 void CGameObject::Animate(float fTimeElapsed)
 {
+	m_xmOOBB.Transform(m_xmOOBB, XMLoadFloat4x4(&m_xmf4x4World));
+	XMStoreFloat4(&m_xmOOBB.Orientation, XMQuaternionNormalize(XMLoadFloat4(&m_xmOOBB.Orientation)));
+	
 	if (m_pAnimationController) m_pAnimationController->AdvanceTime(fTimeElapsed);
 
 	if (m_pSibling) m_pSibling->Animate(fTimeElapsed);
 	if (m_pChild) m_pChild->Animate(fTimeElapsed);
 	
 	
-	m_xmTransedOOBB.Transform(m_xmTransedOOBB, XMLoadFloat4x4(&m_xmf4x4World));
-	XMStoreFloat4(&m_xmTransedOOBB.Orientation, XMQuaternionNormalize(XMLoadFloat4(&m_xmTransedOOBB.Orientation)));
-	
-	XMFLOAT3 pos = PLAYER->GetPlayer()->m_xmTransedOOBB.Center;
+	//XMFLOAT3 pos = PLAYER->GetPlayer()->m_xmOOBB.Center;
 	
 }
 
@@ -802,6 +791,36 @@ void CGameObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared
 	
 	if (m_pSibling) m_pSibling->Render(pd3dCommandList, pCamera);
 	if (m_pChild) m_pChild->Render(pd3dCommandList, pCamera);
+}
+
+void CGameObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, CCamera * pCamera, UINT uInstances)
+{
+	/*OnPrepareRender();
+
+	if (m_ppMaterials)
+	{
+		if (m_ppMaterials->m_pShader)
+		{
+			m_pMaterial->m_pShader->Render(pd3dCommandList, pCamera);
+			m_pMaterial->m_pShader->UpdateShaderVariables(pd3dCommandList);
+
+			UpdateShaderVariables(pd3dCommandList);
+		}
+		if (m_pMaterial->m_pTexture)
+		{
+			m_pMaterial->m_pTexture->UpdateShaderVariables(pd3dCommandList);
+		}
+	}
+
+	pd3dCommandList->SetGraphicsRootDescriptorTable(2, m_d3dCbvGPUDescriptorHandle);
+
+	if (m_pMesh)
+	{
+		for (int i = 0; i < m_nMeshes; i++)
+		{
+			if (m_ppMeshes[i]) m_ppMeshes[i]->Render(pd3dCommandList, uInstances);
+		}
+	}*/
 }
 
 void CGameObject::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
@@ -1111,7 +1130,9 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
 			pGameObject->SetMesh(pMesh);
-			//pGameObject->SetOOBB(XMFLOAT3(pMesh->GetAABBCenter().x * 0.5f, pMesh->GetAABBCenter().y * 0.5f, pMesh->GetAABBCenter().z * 0.5f), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+			//pGameObject->SetOOBB(XMFLOAT3(pMesh->GetAABBCenter()), pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+			//pGameObject->SetOOBB(XMFLOAT3(pMesh->GetAABBCenter().x, pMesh->GetAABBCenter().y, pMesh->GetAABBCenter().z), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 		}
 		else if (!strcmp(pstrToken, "<SkinningInfo>:"))
 		{
@@ -1127,7 +1148,9 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			pSkinnedMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
 			pGameObject->SetMesh(pSkinnedMesh);
-			//pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter().x * 0.5f, pSkinnedMesh->GetAABBCenter().y * 0.5f, pSkinnedMesh->GetAABBCenter().z * 0.5f), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
+
+			//pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter()), pSkinnedMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+			//여기pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter().x , pSkinnedMesh->GetAABBCenter().y * 0.5f, pSkinnedMesh->GetAABBCenter().z * 0.5f), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 		}
 		else if (!strcmp(pstrToken, "<Materials>:"))
 		{
@@ -1233,7 +1256,7 @@ CAnimationSets *CGameObject::LoadAnimationFromFile(FILE *pInFile, CGameObject *p
 			nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
 			nReads = (UINT)::fread(pAnimationSet->m_pstrName, sizeof(char), nStrLength, pInFile);
 			pAnimationSet->m_pstrName[nStrLength] = '\0';
-			if (!strcmp(pAnimationSet->m_pstrName, "Idle") || !strcmp(pAnimationSet->m_pstrName, "idle") || !strcmp(pAnimationSet->m_pstrName, "Run")|| !strcmp(pAnimationSet->m_pstrName, "run"))
+			if (!strcmp(pAnimationSet->m_pstrName, "Idle") || !strcmp(pAnimationSet->m_pstrName, "idle") || !strcmp(pAnimationSet->m_pstrName, "back_run") || !strcmp(pAnimationSet->m_pstrName, "run") || !strcmp(pAnimationSet->m_pstrName, "Run")|| !strcmp(pAnimationSet->m_pstrName, "run"))
 			{
 				pAnimationSet->m_nType = ANIMATION_TYPE_LOOP;
 			}
@@ -1382,13 +1405,14 @@ CHeightMapTerrain::CHeightMapTerrain(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 	pTerrainShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
 	pTerrainShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	for (auto p : SCENEMANAGER->m_MapList)
+	/*for (auto p : SCENEMANAGER->m_MapList)
 	{
 
 	p.second->CreateShaderResourceViews(pd3dDevice, pTerrainBaseTexture, 13, false);
 	p.second->CreateShaderResourceViews(pd3dDevice, pTerrainDetailTexture, 14, false);
-	}
-
+	}*/
+	CScene::CreateShaderResourceViews(pd3dDevice, pTerrainBaseTexture, 13, false);
+	CScene::CreateShaderResourceViews(pd3dDevice, pTerrainDetailTexture, 14, false);
 	CMaterial *pTerrainMaterial = new CMaterial(2);
 	pTerrainMaterial->SetTexture(pTerrainBaseTexture, 0);
 	pTerrainMaterial->SetTexture(pTerrainDetailTexture, 1);
@@ -1418,7 +1442,7 @@ CSkyBox::CSkyBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dComman
 	pSkyBoxShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
 	pSkyBoxShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	SCENEMANAGER->m_MapList[INGAME]->CreateShaderResourceViews(pd3dDevice, pSkyBoxTexture, 10, false);
+	CScene::CreateShaderResourceViews(pd3dDevice, pSkyBoxTexture, 10, false);
 
 	CMaterial *pSkyBoxMaterial = new CMaterial(1);
 	pSkyBoxMaterial->SetTexture(pSkyBoxTexture);

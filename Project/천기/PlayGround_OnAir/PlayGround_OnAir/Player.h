@@ -1,11 +1,5 @@
 #pragma once
 
-#define DIR_FORWARD				0x01
-#define DIR_BACKWARD			0x02
-#define DIR_LEFT				0x04
-#define DIR_RIGHT				0x08
-#define DIR_UP					0x10
-#define DIR_DOWN				0x20
 
 #include "Object.h"
 #include "Camera.h"
@@ -36,15 +30,23 @@ protected:
 	//CCamera						*m_pCamera = NULL;
 	//이넘만들기
 	
+	
 	std::shared_ptr<CCamera>	m_pCamera;
+	bool m_AllowKey = false;
 	
 public:
+	
+	void SetCollimdeBox() {
+		//if ( != nullptr)
+		SetOOBB(GetPosition(), XMFLOAT3(0.5, 0.5, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
+	};
+
+	int m_PlayerState = IDLE;
 	std::shared_ptr<CCamera> GetCamera() { return(m_pCamera); }
 	virtual void SetCamera(std::shared_ptr<CCamera> pCamera) { m_pCamera = pCamera; }
 	void SetYPosition(float ypos) { m_xmf3Position.y = ypos; }
-	
-	int m_PlayerState = IDLE;
-
+	void SetAllowKey(bool key) { m_AllowKey = key; }
+	bool GetAllowKey()const { return m_AllowKey; }
 	CPlayer();
 	CPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 

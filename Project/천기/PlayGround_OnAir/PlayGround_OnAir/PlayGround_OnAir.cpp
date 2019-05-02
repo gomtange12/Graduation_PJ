@@ -194,8 +194,6 @@ float m_PrevTime = 0.0f;
 float m_eActine = 0.0f;
 #define MAX_LOADSTRING 100
 
-
-
 HINSTANCE						ghAppInstance;
 TCHAR							szTitle[MAX_LOADSTRING];
 TCHAR							szWindowClass[MAX_LOADSTRING];
@@ -349,8 +347,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			exit(1);
 			break;
 		}
-
 	}
+
 	default:
 		return(::DefWindowProc(hWnd, message, wParam, lParam));
 	}
