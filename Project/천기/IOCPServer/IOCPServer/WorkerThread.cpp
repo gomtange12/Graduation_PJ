@@ -59,12 +59,12 @@ void WorkerThread::Proc()
 						ptr, need_size);
 
 					//인게임
-					if (objectManager->GetPlayer(key)->m_match == true) {
+					//if (objectManager->GetPlayer(key)->m_match == true) {
 						objectManager->ProcessPacket(key, objectManager->GetPlayer(key)->m_packet_buf);
-					}
-					else { //매칭 관리
-						objectManager->MatchProcess(key, objectManager->GetPlayer(key)->m_packet_buf);
-					}
+					//}
+					//else { //매칭 관리
+					//	objectManager->MatchProcess(key, objectManager->GetPlayer(key)->m_packet_buf);
+					//}
 					//
 					ptr += need_size;
 					rest_data -= need_size;

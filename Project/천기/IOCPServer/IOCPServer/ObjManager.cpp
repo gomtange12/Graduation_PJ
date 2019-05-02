@@ -23,7 +23,7 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 	std::cout << "매칭요청 : " << id << std::endl;
 	if (packet[1] == SC_MATCHING_PLAYER) 
 	{ 
-		sc_packet_matching *match = reinterpret_cast<sc_packet_matching *>(packet);
+		cs_packet_matching *match = reinterpret_cast<cs_packet_matching *>(packet);
 		g_clients[id]->mod = match->mod;
 		//g_clients[id]->ready = match->ready;
 		g_clients[id]->avatar = match->avatar;
@@ -52,7 +52,7 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 {
 	switch (packet[1]) //type
 	{ 
-	case SC_MOVE_PLAYER:
+	case SC_STATE_INFO:
 	{
 		MovePkt(id, packet);
 		break;
@@ -89,53 +89,33 @@ void ObjManager::ModMatch(int id)
 }
 void ObjManager::MovePkt(int id, unsigned char *packet)
 {
-	//if ((g_clients[id]->state == PlayerState::IDLE ||
-	//	g_clients[id]->state == PlayerState::RUN ||
-	//	g_clients[id]->state == PlayerState::JUMPROLL ||
-	//	g_clients[id]->state == PlayerState::HIT) == false)
-	//	return;
-
-	int x = g_clients[id]->m_x;
-	int y = g_clients[id]->m_y;
-
-	switch (packet[2]) //DIR
-	{
-	case UP:
-		if (y > 0) y--;
-		break;
-	case DOWN:
-		if (y < WORLD_HEIGHT - 1) y++;
-		break;
-	case LEFT:
-		if (x > 0) x--;
-		break;
-	case RIGHT:
-		if (x < WORLD_WIDTH - 1) x++;
-		break;
-	default:
-		std::wcout << L"정의되지 않은 패킷 도착!!\n";
-		while (true);
+	cs_packet_state *pkt = reinterpret_cast<cs_packet_state *>(packet);
+	g_clients[id]->m_xmf3Look = XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ);
+	g_clients[id]->m_xmf3Right = XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ);
+	/*if ((g_clients[id]->state == PlayerState::IDLE ||
+		g_clients[id]->state == PlayerState::RUN ||
+		g_clients[id]->state == PlayerState::JUMPROLL ||
+		g_clients[id]->state == PlayerState::HIT) == false)
+		return;*/
+	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
+	float fDistance = 12.25f;
+	if (DIR_FORWARD & pkt->state) {
+		xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Look, fDistance);
+		std::wcout << L"상 ";
 	}
-	g_clients[id]->m_x = x;
-	g_clients[id]->m_y = y;
+	if (DIR_BACKWARD & pkt->state) {
+		xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Look, -fDistance);
+		std::wcout << L"하 ";
+	}
+	if (DIR_LEFT & pkt->state) {
+		xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Right, -fDistance);
+		std::wcout << L"좌 ";
+	}
+	if (DIR_RIGHT & pkt->state) {
+		xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Right, fDistance);
+		std::wcout << L"우 ";
+	}
 
-
-
-	//DWORD dwDirection, float fDistance, bool bUpdateVelocity;
-
-	//if (dwDirection)
-	//{
-	//	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
-	//	if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, fDistance);
-	//	if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, -fDistance);
-	//	if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, fDistance);
-	//	if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, -fDistance);
-	//	if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, fDistance);
-	//	if (dwDirection & packet[2]) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, -fDistance);
-	//}
-
-
-
-	PACKETMANAGER->PosPacket(id, x, y);
-	printf("이동 ");
+	PACKETMANAGER->PosPacket(id, xmf3Shift);
+	
 }

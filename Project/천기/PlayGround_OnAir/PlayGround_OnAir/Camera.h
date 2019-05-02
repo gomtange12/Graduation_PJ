@@ -5,6 +5,8 @@
 #define FIRST_PERSON_CAMERA			0x01
 #define SPACESHIP_CAMERA			0x02
 #define THIRD_PERSON_CAMERA			0x03
+#define MAP_CAMERA					0x04
+
 
 struct VS_CB_CAMERA_INFO
 {

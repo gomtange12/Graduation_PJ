@@ -9,7 +9,7 @@ private:
 	std::vector <MyThread*> threads;
 	ObjManager* objectManager = OBJMANAGER->GetObjectManager();
 	//std::vector <std::shared_ptr<std::thread>> threads;
-	const int NUM_THREADS = 4;
+	const int NUM_THREADS = 1;
 public:
 	explicit ThreadManager();
 	virtual ~ThreadManager();

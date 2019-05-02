@@ -7,15 +7,6 @@
 #include "Mesh.h"
 #include "Camera.h"
 
-#define DIR_FORWARD					0x01
-#define DIR_BACKWARD				0x02
-#define DIR_LEFT					0x04
-#define DIR_RIGHT					0x08
-#define DIR_UP						0x10
-#define DIR_DOWN					0x20
-#define DIR_JUMP					0x40
-
-
 class CShader;
 class CStandardShader;
 
@@ -26,7 +17,11 @@ class CStandardShader;
 #define RESOURCE_TEXTURE2DARRAY		0x03
 #define RESOURCE_TEXTURE_CUBE		0x04
 #define RESOURCE_BUFFER				0x05
-
+struct CB_GAMEOBJECT_INFO
+{
+	XMFLOAT4X4						m_xmf4x4World;
+	UINT								m_terrainID;
+};
 struct SRVROOTARGUMENTINFO
 {
 	int								m_nRootParameterIndex = 0;
@@ -380,7 +375,7 @@ public:
 
 public:
 	//static int m_ObjectState;
-	
+	float							m_BoundScale{ 15 };
 	OBJTYPE							m_ObjType;
 
 	char							m_pstrFrameName[64];
@@ -412,6 +407,8 @@ public:
 
 	virtual void OnPrepareRender() { }
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera=NULL);
+	//virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera);
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera, UINT uInstances); //for render
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
@@ -472,9 +469,9 @@ public:
 	BoundingOrientedBox			m_xmOOBB;
 	BoundingOrientedBox			m_xmTransedOOBB;
 	
-	void SetOOBB(XMFLOAT3& xmCenter, XMFLOAT3& xmExtents, XMFLOAT4& xmOrientation) { m_xmOOBB = m_xmTransedOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation); }
-
-
+	void SetOOBB(XMFLOAT3& xmCenter, XMFLOAT3& xmExtents, XMFLOAT4& xmOrientation) { m_xmOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation); }
+	BoundingOrientedBox GetBoundingBox() const { return m_xmOOBB; }
+	void SetOOBBScale(float x, float y, float z){}
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

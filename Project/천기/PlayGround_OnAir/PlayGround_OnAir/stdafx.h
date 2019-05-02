@@ -48,13 +48,13 @@ using namespace std;
 #include <DirectXCollision.h>
 
 #include <Mmsystem.h>
-
+#include <winsock2.h>
 #ifdef _DEBUG
 #include <dxgidebug.h>
 #endif
 #include "SingleTon.h"
 #include "CPlayerManager.h"
-
+//#include "..\..\Ãµ±â\IOCPServer\IOCPServer\Protocol.h"
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 
@@ -99,8 +99,7 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 #define CNETWORK	CNetWork::GetInstance()
 
 #define MAXOBJECTNUM 100
-
-#define	WM_SOCKET				WM_USER + 1
+#define   WM_SOCKET            WM_USER + 1
 
 #define RANDOM_COLOR			XMFLOAT4(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX))
 #define FPS_PERSECOND 60

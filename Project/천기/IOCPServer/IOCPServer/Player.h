@@ -1,7 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "Protocol.h"
-
+#include "Functor.h"
 struct stOverEx {
 	WSAOVERLAPPED m_wsaOver;
 	WSABUF m_wsaBuf;
@@ -25,13 +25,24 @@ public:
 
 public:
 	wchar_t m_name[20];
+
+	////
+
+	XMFLOAT4X4 world;
+
+	XMFLOAT3					m_xmf3Position  = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	XMFLOAT3					m_xmf3Right;// = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	XMFLOAT3					m_xmf3Look;// = XMFLOAT3(0.0f, 0.0f, 1.0f);
+
+	XMFLOAT3					m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	////
 	BYTE m_x;
 	BYTE m_y;
+
 	//bool ready;
 	int avatar;
 	int mod;
 	int map;
-	//DirectX::XMFLOAT3	m_xmf3Position;
 	int state;
 
 

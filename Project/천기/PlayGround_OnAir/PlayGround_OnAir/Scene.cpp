@@ -5,43 +5,22 @@
 #include "stdafx.h"
 #include "Scene.h"
 #include "CPlayerManager.h"
+#include "CSceneManager.h"
 #include "CObjectManager.h"
-//ID3D12DescriptorHeap *CScene::m_pd3dCbvSrvDescriptorHeap = NULL;
+#include "CBillboardObject.h"
+#define objScale 6.46
+ID3D12DescriptorHeap *CScene::m_pd3dCbvSrvDescriptorHeap = NULL;
 
-//D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvCPUDescriptorStartHandle;
-//D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvGPUDescriptorStartHandle;
-//D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvCPUDescriptorStartHandle;
-//D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvGPUDescriptorStartHandle;
-//
-//D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvCPUDescriptorNextHandle;
-//D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvGPUDescriptorNextHandle;
-//D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvCPUDescriptorNextHandle;
-//D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvGPUDescriptorNextHandle;
+D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvCPUDescriptorStartHandle;
+D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvGPUDescriptorStartHandle;
+D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvCPUDescriptorStartHandle;
+D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvGPUDescriptorStartHandle;
 
+D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvCPUDescriptorNextHandle;
+D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvGPUDescriptorNextHandle;
+D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvCPUDescriptorNextHandle;
+D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvGPUDescriptorNextHandle;
 
-//ID3D12DescriptorHeap *CMenuScene::m_pd3dCbvSrvDescriptorHeap = NULL;
-//
-//D3D12_CPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dCbvCPUDescriptorStartHandle;
-//D3D12_GPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dCbvGPUDescriptorStartHandle;
-//D3D12_CPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dSrvCPUDescriptorStartHandle;
-//D3D12_GPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dSrvGPUDescriptorStartHandle;
-//							
-//D3D12_CPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dCbvCPUDescriptorNextHandle;
-//D3D12_GPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dCbvGPUDescriptorNextHandle;
-//D3D12_CPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dSrvCPUDescriptorNextHandle;
-//D3D12_GPU_DESCRIPTOR_HANDLE	CMenuScene::m_d3dSrvGPUDescriptorNextHandle;
-//
-//ID3D12DescriptorHeap *CInGameScene::m_pd3dCbvSrvDescriptorHeap = NULL;
-//
-//D3D12_CPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dCbvCPUDescriptorStartHandle;
-//D3D12_GPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dCbvGPUDescriptorStartHandle;
-//D3D12_CPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dSrvCPUDescriptorStartHandle;
-//D3D12_GPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dSrvGPUDescriptorStartHandle;
-//							
-//D3D12_CPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dCbvCPUDescriptorNextHandle;
-//D3D12_GPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dCbvGPUDescriptorNextHandle;
-//D3D12_CPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dSrvCPUDescriptorNextHandle;
-//D3D12_GPU_DESCRIPTOR_HANDLE	CInGameScene::m_d3dSrvGPUDescriptorNextHandle;
 CScene::CScene()
 {
 }
@@ -256,136 +235,261 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	CMaterial::PrepareShaders(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature); 
 //
 	BuildDefaultLightsAndMaterials();
-//
-//	m_pSkyBox = new CSkyBox(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-//
-//	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
-//	XMFLOAT4 xmf4Color(0.0f, 0.3f, 0.0f, 0.0f);
-//	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/white.raw"), 257, 257, xmf3Scale, xmf4Color);
-//
-//	m_nShaders = 2;
-//	m_ppShaders = new CShader*[m_nShaders];
-//
-//	/*CHellicopterObjectsShader *pHellicopterObjectsShader = new CHellicopterObjectsShader();
-//	pHellicopterObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-//	pHellicopterObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-//	pHellicopterObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);*/
-//
-//	//m_ppShaders[0] = pHellicopterObjectsShader;
-//
-//	CAngrybotObjectsShader *pAngrybotObjectsShader = new CAngrybotObjectsShader();
-//	pAngrybotObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-//	pAngrybotObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-//	pAngrybotObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
-//
-//	m_ppShaders[0] = pAngrybotObjectsShader;
-//
-// 	CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL_(1).bin", NULL, false);
-//	
-//	CAngrybotObjectsShader *pPlayGroundObjectsShader = new CAngrybotObjectsShader();
-//	pPlayGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-//	pPlayGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-//	pPlayGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
-//
-//	m_ppShaders[1] = pPlayGroundObjectsShader;
-//
-//	CLoadedModelInfo *pPlayGroundMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
-//
-//
-//	/*CMapObjectsShader *pConcertMapShader = new CMapObjectsShader();
-//	pConcertMapShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-//	pConcertMapShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-//	pConcertMapShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
-//
-//	m_ppShaders[1] = pConcertMapShader;
-//	CLoadedModelInfo *pConcertMap = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Player.bin", NULL, true);
-//*/
-//	
-//	//CAngrybotObjectsShader *pAngrybotObjectsShader = new CAngrybotObjectsShader();
-//	//	pAngrybotObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-//	//	pAngrybotObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-//
-//	/*CMapObjectsShader *pMapObjectsShader = new CMapObjectsShader();
-//	pMapObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-//	pMapObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-//	pMapObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
-//	m_ppShaders[2] = pMapObjectsShader;
-//	
-//	CLoadedModelInfo *pMapObjectModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Map/ALL_PIECES.bin",NULL,false);
-//	
-//	*/
-//
-//	m_nGameObjects = 2;
-//	m_ppGameObjects = new CGameObject*[m_nGameObjects];
-//	
-//	
-//	/*m_ppGameObjects[0] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-//	m_ppGameObjects[0]->SetChild(pAngrybotModel->m_pModelRootObject, true);
-//	m_ppGameObjects[0]->m_pAnimationController = new CAnimationController(2, pAngrybotModel->m_pAnimationSets);
-//	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(0, 0);
-//	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(1, 1);
-//	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.8f);
-//	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(1, 0.2f);
-//	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-//	m_ppGameObjects[0]->SetPosition(400.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
-//	m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
-//
-//	m_ppGameObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-//	m_ppGameObjects[0]->SetChild(pPlayGroundMapObject->m_pModelRootObject, true);
-//	//m_ppGameObjects[0]->AddRef();
-//	//m_ppGameObjects[0]->SetMesh(pAngrybotModel->m_nSkinnedMeshes);
-//	/*m_ppGameObjects[0]->m_pAnimationController = new CAnimationController(2, pAngrybotModel->m_pAnimationSets);
-//	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(0, 0);
-//	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(1, 1);
-//	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.8f);
-//	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(1, 0.2f);
-//	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-//	*/
-//	m_ppGameObjects[0]->SetPosition(200.0f,151, 700.0f); //맵 거꾸로 버그 여기
-//	m_ppGameObjects[0]->SetOOBB(m_ppGameObjects[0]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
-//	m_ppGameObjects[0]->SetScale(200.0f, 200.0f, 200.0f);
-//
-//	//2번쨰 맵
-//	m_ppGameObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-//	m_ppGameObjects[1]->SetChild(pMapObject->m_pModelRootObject, true);
-//	m_ppGameObjects[1]->SetPosition(200.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
-//	m_ppGameObjects[1]->SetOOBB(m_ppGameObjects[1]->GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
-//	m_ppGameObjects[1]->SetScale(200.0f, 200.0f, 200.0f);
-//
-//	//m_ppGameObjects[1] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-//	//m_ppGameObjects[1]->SetChild(pAngrybotModel->m_pModelRootObject, true);
-//	//m_ppGameObjects[1]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
-//	//m_ppGameObjects[1]->m_pAnimationController->SetTrackAnimationSet(0, 1);
-//	//m_ppGameObjects[1]->m_pAnimationController->SetTrackSpeed(0, 0.25f);
-//	//m_ppGameObjects[1]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-//	//m_ppGameObjects[1]->SetPosition(450.0f, m_pTerrain->GetHeight(450.0f, 680.0f), 680.0f);
-//	//m_ppGameObjects[1]->SetScale(2.0f, 2.0f, 2.0f);
-//
-//	//m_ppGameObjects[2] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-//	//m_ppGameObjects[2]->SetChild(pAngrybotModel->m_pModelRootObject, true);
-//	//m_ppGameObjects[2]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
-//	//m_ppGameObjects[2]->m_pAnimationController->SetTrackAnimationSet(0, 0);
-//	//m_ppGameObjects[2]->m_pAnimationController->SetTrackPosition(0, 0.95f);
-//	//m_ppGameObjects[2]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-//	//m_ppGameObjects[2]->SetPosition(420.0f, m_pTerrain->GetHeight(420.0f, 750.0f), 750.0f);
-//	//m_ppGameObjects[2]->SetScale(2.0f, 2.0f, 2.0f);
-//
-//	//m_ppGameObjects[3] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-//	//m_ppGameObjects[3]->SetChild(pAngrybotModel->m_pModelRootObject, true);
-//	//m_ppGameObjects[3]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
-//	//m_ppGameObjects[3]->m_pAnimationController->SetTrackAnimationSet(0, 0);
-//	//m_ppGameObjects[3]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-//	//m_ppGameObjects[3]->SetPosition(410.0f, m_pTerrain->GetHeight(410.0f, 735.0f), 735.0f);
-//	//m_ppGameObjects[3]->SetScale(2.0f, 2.0f, 2.0f);*/
-//	//OBJECTMANAGER->AddGameObject(m_ppGameObjects[1], MAP);
-//	//OBJECTMANAGER->AddGameObject(m_ppGameObjects[2], MAP);
-//	//PLAYER->AddPlayer()
-//
-	CreateShaderVariables(pd3dDevice, pd3dCommandList);
-//
-//	if (pMapObject) delete pMapObject;
-//	if (pPlayGroundMapObject) delete pPlayGroundMapObject;
 
+	XMFLOAT3 xmf3Scale(1.0f, 1.0f, 1.0f);
+	XMFLOAT4 xmf4Color(0.0f, 0.3f, 0.0f, 0.0f);
+	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/white.raw"), 257, 257, xmf3Scale, xmf4Color);
+	m_pPlayGroundTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/white.raw"), 257, 257, xmf3Scale, xmf4Color);
+
+	m_nShaders = 2;
+	m_ppShaders = new CShader*[m_nShaders];
+
+	/*CHellicopterObjectsShader *pHellicopterObjectsShader = new CHellicopterObjectsShader();
+	pHellicopterObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pHellicopterObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pHellicopterObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);*/
+
+	//m_ppShaders[0] = pHellicopterObjectsShader;
+	CMapObjectsShader *pPlayGroundObjectsShader = new CMapObjectsShader();
+	pPlayGroundObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pPlayGroundObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pPlayGroundObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+
+	m_ppShaders[0] = pPlayGroundObjectsShader;
+
+	CLoadedModelInfo *pPlayGroundMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALLPIECES.bin", NULL, false);
+
+	CMapObjectsShader *pAngrybotObjectsShader = new CMapObjectsShader();
+	pAngrybotObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pAngrybotObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pAngrybotObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+
+	m_ppShaders[1] = pAngrybotObjectsShader;
+ 	CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
+	
+	
+
+	/*CMapObjectsShader *pConcertMapShader = new CMapObjectsShader();
+	pConcertMapShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pConcertMapShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pConcertMapShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+
+	m_ppShaders[1] = pConcertMapShader;
+	CLoadedModelInfo *pConcertMap = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Player.bin", NULL, true);
+*/
+	
+	//CAngrybotObjectsShader *pAngrybotObjectsShader = new CAngrybotObjectsShader();
+	//	pAngrybotObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	//	pAngrybotObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+
+	/*CMapObjectsShader *pMapObjectsShader = new CMapObjectsShader();
+	pMapObjectsShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pMapObjectsShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pMapObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
+	m_ppShaders[2] = pMapObjectsShader;
+	
+	CLoadedModelInfo *pMapObjectModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Map/ALL_PIECES.bin",NULL,false);
+	
+	*/
+	/*if (!PLAYER->GetPlayer()->m_p)
+		PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->m_pMesh->GetAABBCenter(), PLAYER->GetPlayer()->m_pMesh->GetAABBExtents(), XMFLOAT4(0, 0, 0, 1));
+*/
+	
+	
+	//try {
+	//	PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->m_pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	//}
+	//catch (exception e) {
+	//	auto error = e.what();
+	//	error = error;
+	//}
+
+	m_nGameObjects = 2;
+	m_ppGameObjects = new CGameObject*[m_nGameObjects];
+	
+	
+	/*m_ppGameObjects[0] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppGameObjects[0]->SetChild(pAngrybotModel->m_pModelRootObject, true);
+	m_ppGameObjects[0]->m_pAnimationController = new CAnimationController(2, pAngrybotModel->m_pAnimationSets);
+	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(0, 0);
+	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(1, 1);
+	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.8f);
+	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(1, 0.2f);
+	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+	m_ppGameObjects[0]->SetPosition(400.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
+	m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
+
+	m_ppGameObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppGameObjects[0]->SetChild(pPlayGroundMapObject->m_pModelRootObject, true);
+	//m_ppGameObjects[0]->AddRef();
+	//m_ppGameObjects[0]->SetMesh(pAngrybotModel->m_nSkinnedMeshes);
+	/*m_ppGameObjects[0]->m_pAnimationController = new CAnimationController(2, pAngrybotModel->m_pAnimationSets);
+	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(0, 0);
+	m_ppGameObjects[0]->m_pAnimationController->SetTrackAnimationSet(1, 1);
+	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.8f);
+	m_ppGameObjects[0]->m_pAnimationController->SetTrackWeight(1, 0.2f);
+	m_ppGameObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+	*/
+	m_ppGameObjects[0]->SetPosition(200.0f, 255, 700.0f); //맵 거꾸로 버그 여기
+	m_ppGameObjects[0]->SetScale(100.0f, 100.0f, 100.0f);
+	//if(m_ppGameObjects[0]->m_pMesh)
+	m_ppGameObjects[0]->SetMesh(pPlayGroundMapObject->m_pModelRootObject->m_pMesh);
+
+	m_ppGameObjects[0]->SetOOBB(m_ppGameObjects[0]->GetPosition(), Vector3::ScalarProduct( m_ppGameObjects[0]->m_pMesh->GetAABBExtents(),100), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	//2번쨰 맵
+	m_ppGameObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppGameObjects[1]->SetChild(pMapObject->m_pModelRootObject, true);
+	m_ppGameObjects[1]->SetPosition(200.0f, 235, 700.0f); //맵 거꾸로 버그 여기
+	m_ppGameObjects[1]->SetScale(50.0f, 50.0f, 50.0f);
+	//if (m_ppGameObjects[1]->m_pMesh)
+	m_ppGameObjects[1]->SetMesh(pMapObject->m_pModelRootObject->m_pMesh);
+
+	m_ppGameObjects[1]->SetOOBB(m_ppGameObjects[1]->GetPosition(), Vector3::ScalarProduct( m_ppGameObjects[1]->m_pMesh->GetAABBExtents(),50), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	//CLoadedModelInfo *pOtherPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);
+	//m_ppGameObjects[2] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	//m_ppGameObjects[2]->SetChild(pOtherPlayerModel->m_pModelRootObject, true);
+	//m_ppGameObjects[2]->SetPosition(XMFLOAT3(0, 0, 0)); //맵 거꾸로 버그 여기
+	//m_ppGameObjects[2]->SetScale(50.0f, 50.0f, 50.0f);
+	//if (m_ppGameObjects[2]->m_pMesh)
+	//	m_ppGameObjects[2]->SetOOBB(m_ppGameObjects[2]->GetPosition(), m_ppGameObjects[2]->m_pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	//m_ppGameObjects[2]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pOtherPlayerModel);
+	//m_ppGameObjects[2]->m_pAnimationController = new CAnimationController(1, pOtherPlayerModel->m_pAnimationSets);
+	//m_ppGameObjects[2]->m_pAnimationController->SetTrackAnimationSet(0, 0);
+	//m_ppGameObjects[2]->m_pAnimationController->SetCallbackKeys(1, 3);
+
+	//m_ppGameObjects[1] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	//m_ppGameObjects[1]->SetChild(pAngrybotModel->m_pModelRootObject, true);
+	//m_ppGameObjects[1]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
+	//m_ppGameObjects[1]->m_pAnimationController->SetTrackAnimationSet(0, 1);
+	//m_ppGameObjects[1]->m_pAnimationController->SetTrackSpeed(0, 0.25f);
+	//m_ppGameObjects[1]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+	//m_ppGameObjects[1]->SetPosition(450.0f, m_pTerrain->GetHeight(450.0f, 680.0f), 680.0f);
+	//m_ppGameObjects[1]->SetScale(2.0f, 2.0f, 2.0f);
+
+
+	//PLAYER->AddPlayer()
+	m_nPlayGroundObjects = 9;
+	m_ppPlayGroundObjects = new CGameObject*[m_nPlayGroundObjects];
+
+	CLoadedModelInfo *Floor = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Floor.bin", NULL, false);
+	m_ppPlayGroundObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[0]->SetChild(Floor->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[0]->SetPosition(0.0f, 0, 0.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[0]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[0]->SetMesh(Floor->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[0]->SetOOBB(m_ppPlayGroundObjects[0]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[0]->m_pMesh->GetAABBExtents(),60.46), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo *Floor_Slide = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Floor_Slide.bin", NULL, false);
+	m_ppPlayGroundObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[1]->SetChild(Floor_Slide->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[1]->SetPosition(0.0f, 10, 0.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[1]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[1]->SetMesh(Floor_Slide->m_pModelRootObject->m_pMesh);
+	//if (m_ppPlayGroundObjects[1]->m_pMesh)
+	m_ppPlayGroundObjects[1]->SetOOBB(m_ppPlayGroundObjects[1]->GetPosition(), XMFLOAT3(348, 20, 348), XMFLOAT4(0, 0, 0, 1));//Vector3::ScalarProduct(m_ppPlayGroundObjects[1]->m_pMesh->GetAABBExtents(),10*objScale) , XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo *Floor_Stage = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Floor_Stage.bin", NULL, false);
+	m_ppPlayGroundObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[2]->SetChild(Floor_Stage->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[2]->SetPosition(0.0f, 20, -825.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[2]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[2]->SetMesh(Floor_Stage->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[2]->SetOOBB(m_ppPlayGroundObjects[2]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents(),10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+//
+	CLoadedModelInfo *Slide = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/미끄럼틀.bin", NULL, false);
+	m_ppPlayGroundObjects[3] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[3]->SetChild(Slide->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[3]->SetPosition(0.0f, 20, 0.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[3]->SetScale(20.0f, 20.0f, 20.0f);
+	m_ppPlayGroundObjects[3]->SetMesh(Slide->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[3]->SetOOBB(m_ppPlayGroundObjects[3]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[3]->m_pMesh->GetAABBExtents(),20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo *Respawn_Blue = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Respawn_Blue.bin", NULL, false);
+	m_ppPlayGroundObjects[4] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[4]->SetChild(Respawn_Blue->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[4]->SetPosition(1000.0f, 30, 700.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[4]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[4]->SetMesh(Respawn_Blue->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[4]->SetOOBB(m_ppPlayGroundObjects[4]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[4]->m_pMesh->GetAABBExtents(), 10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo *Respawn_Red = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Respawn_Red.bin", NULL, false);
+	m_ppPlayGroundObjects[5] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[5]->SetChild(Respawn_Red->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[5]->SetPosition(-1030.0f, 30, 680.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[5]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[5]->SetMesh(Respawn_Red->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[5]->SetOOBB(m_ppPlayGroundObjects[5]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[5]->m_pMesh->GetAABBExtents(),10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo *SeeSaw = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/SeeSaw.bin", NULL, false);
+	m_ppPlayGroundObjects[6] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[6]->SetChild(SeeSaw->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[6]->SetPosition(0.0f, 10, -600.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[6]->SetScale(10.0f, 10.0f, 10.0f);
+	if (m_ppPlayGroundObjects[6]->m_pMesh)
+		m_ppPlayGroundObjects[6]->SetOOBB(m_ppPlayGroundObjects[6]->m_pMesh->GetAABBCenter(), m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo *Slide_Speaker_3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Slide_Speaker_3.bin", NULL, false);
+	m_ppPlayGroundObjects[7] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[7]->SetChild(Slide_Speaker_3->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[7]->SetPosition(200.0f, 245, 700.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[7]->SetScale(15.0f, 15.0f, 15.0f);
+	if (m_ppPlayGroundObjects[7]->m_pMesh)
+		m_ppPlayGroundObjects[7]->SetOOBB(m_ppPlayGroundObjects[7]->m_pMesh->GetAABBCenter(), m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo *Slide_Speaker_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Slide_Speaker_1.bin", NULL, false);
+	m_ppPlayGroundObjects[8] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[8]->SetChild(Slide_Speaker_1->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[8]->SetPosition(200.0f, 245, 700.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[8]->SetScale(15.0f, 15.0f, 15.0f);
+	if (m_ppPlayGroundObjects[8]->m_pMesh)
+		m_ppPlayGroundObjects[8]->SetOOBB(m_ppPlayGroundObjects[8]->m_pMesh->GetAABBCenter(), m_ppPlayGroundObjects[8]->m_pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	//UI
+	//CTexture *ppUITextures;
+	//ppUITextures = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+	//ppUITextures->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/pg_logo.dds", 0);
+
+	//UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
+
+	//CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1); // 텍스쳐 srv
+	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	//CreateShaderResourceViews(pd3dDevice, ppUITextures, 3, true);
+
+	//m_nUIObjects = 2;
+	//m_ppUIObjects = new CGameObject*[m_nUIObjects];
+
+	//CMaterial *ppUIMaterials;
+	//ppUIMaterials = new CMaterial(1);
+	//ppUIMaterials->SetTexture(ppUITextures);
+	//CTexturedRectMesh *pUIMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 15.0f, 30.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	//
+
+	//CBillboardObject *pBillboardObject = NULL;
+
+	//pBillboardObject = new CBillboardObject();
+
+	//pBillboardObject->SetMaterial(1, ppUIMaterials);
+	//pBillboardObject->SetPosition(PLAYER->GetPlayer()->GetPosition().x, PLAYER->GetPlayer()->GetPosition().y+30, PLAYER->GetPlayer()->GetPosition().z); // 셋포지션의 헤이트값 조절해서 바닥에서 자라는지 설정. 풀 월드포지션 설정해주는 부분임
+	//pBillboardObject->(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * i));
+
+	 //billboardobj = new CBillboardObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	 //billboardobj->SetPosition(PLAYER->GetPlayer()->GetPosition().x, PLAYER->GetPlayer()->GetPosition().y + 30, PLAYER->GetPlayer()->GetPosition().z);
+
+	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	
+	if (pMapObject) delete pMapObject;
+	if (pPlayGroundMapObject) delete pPlayGroundMapObject;
+
+}
+
+void CScene::BuildObjectsAfterPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	billboardobj = new CBillboardObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	billboardobj->SetPosition(PLAYER->GetPlayer()->GetPosition().x, PLAYER->GetPlayer()->GetPosition().y + 30, PLAYER->GetPlayer()->GetPosition().z);
+
+	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
 }
 
 void CScene::ReleaseObjects()
@@ -652,6 +756,11 @@ void CScene::ReleaseUploadBuffers()
 	for (int i = 0; i < m_nGameObjects; i++) m_ppGameObjects[i]->ReleaseUploadBuffers();
 }
 
+void CScene::SetCollideBox()
+{
+	
+}
+
 void CScene::CreateCbvSrvDescriptorHeaps(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
 {
 	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
@@ -791,6 +900,8 @@ void CScene::AnimateObjects(float fTimeElapsed)
 		m_pLights[1].m_xmf3Position = PLAYER->GetPlayer()->GetPosition();
 		m_pLights[1].m_xmf3Direction = PLAYER->GetPlayer()->GetLookVector();
 	}
+
+	if (billboardobj) billboardobj->Animate(fTimeElapsed, PLAYER->GetPlayer()->GetCamera());
 }
 
 void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera)
@@ -800,7 +911,6 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 
 	pCamera->SetViewportsAndScissorRects(pd3dCommandList);
 	pCamera->UpdateShaderVariables(pd3dCommandList);
-
 	UpdateShaderVariables(pd3dCommandList);
 
 //	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
@@ -823,6 +933,31 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 //		}
 //	}
 
+	/*switch (SCENEMANAGER->GetSceneType())
+	{
+	case MENUSCENE:
+		m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
+		break;
+	case INGAME:
+		m_ppGameObjects[1]->Render(pd3dCommandList, pCamera);
+		break;
+	}*/
+
+	for (int i = 0; i < 6; i++)
+	{
+		m_ppPlayGroundObjects[i]->Render(pd3dCommandList, pCamera);
+	}
+
+	if (billboardobj) billboardobj->Render(pd3dCommandList, pCamera);
+
+	//m_ppGameObjects[2]->Render(pd3dCommandList, pCamera);
+
+	/*if (m_ppGameObjects[SCENEMANAGER->GetSceneType()])
+		m_ppGameObjects[SCENEMANAGER->GetSceneType()]->Render(pd3dCommandList, pCamera);*/
+	//XMFLOAT3 pos = PLAYER->GetPlayer()->GetPosition();
+	//XMFLOAT3 MAPpos = m_ppGameObjects[0]->GetPosition();
+	//XMFLOAT3 otherplayerpos = m_ppGameObjects[2]->GetPosition();
+
 	/*for (auto p = PLAYER->m_vecPlayerList.begin(); p!= PLAYER->m_vecPlayerList.end(); ++p)
 	{
 		(*p)->Render(pd3dCommandList, pCamera);
@@ -841,20 +976,81 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 	}*/
 	//for (int i = 0; i < m_nShaders; i++) if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 	//CheckObjectByObjectCollisions();
+
 }
 
 void CScene::CheckObjectByObjectCollisions() {
 	//체크는되는듯한데 왜 중단점이 안되지?
 	
-	if (PLAYER->GetPlayer()->m_xmOOBB.Intersects(m_ppGameObjects[0]->m_xmOOBB)){
-		XMFLOAT3 playeroobb = PLAYER->GetPlayer()->m_xmOOBB.Center;
-		XMFLOAT3 objoobb = m_ppGameObjects[0]->m_xmOOBB.Center;
-		int i = 0;
-		PLAYER->GetPlayer()->SetPosition(XMFLOAT3(900.0f, 900.0f, 900.0f));
+	for (int i = 1; i < m_nPlayGroundObjects; i++)
+	{
+	//	if (m_ppPlayGroundObjects[i])
+	//	{
+			m_ppPlayGroundObjects[i]->Animate(m_fElapsedTime);
+	m_ppPlayGroundObjects[i]->UpdateTransform(NULL);
+	m_ppPlayGroundObjects[i]->GetBoundingBox().Center = m_ppPlayGroundObjects[i]->GetPosition();
+	//	}
 	}
-	XMFLOAT3 playeroobb = PLAYER->GetPlayer()->m_xmOOBB.Center;
-	XMFLOAT3 objoobb = m_ppGameObjects[0]->m_xmOOBB.Center;
+	BoundingOrientedBox box = PLAYER->GetPlayer()->GetBoundingBox();
+	
+	for (int i = 1; i < 6; i++)
+	{
+		if (m_ppPlayGroundObjects[i])
+		{
+			BoundingOrientedBox Mapbox = m_ppPlayGroundObjects[i]->GetBoundingBox();
 
+			if (m_ppPlayGroundObjects[i]->GetBoundingBox().Intersects(box))
+			{
+				//PLAYER->GetPlayer()->SetPosition()
+				//PLAYER->GetPlayer()->SetAllowKey(false);
+				//int i = 0;
+				//PLAYER->GetPlayer()->SetVelocity( PLAYER->GetPlayer()->GetVelocity().x - 0.5);
+				int i = 0;
+			}
+			else
+			{
+				PLAYER->GetPlayer()->SetAllowKey(true);
+			}
+		}
+	}
+
+	
+	//PLAYER->GetPlayer()->SetCollimdeBox();
+
+	//XMFLOAT3 playeroobb = PLAYER->GetPlayer()->GetBoundingBox().Center;
+	//XMFLOAT3 playeroobbex = PLAYER->GetPlayer()->GetBoundingBox().Extents;
+
+	//XMFLOAT3 objoobb = m_ppGameObjects[SCENEMANAGER->GetSceneType()]->GetBoundingBox().Center;
+	//XMFLOAT3 objoobbex = m_ppGameObjects[SCENEMANAGER->GetSceneType()]->GetBoundingBox().Extents;
+	//
+	//XMFLOAT3 tempCenter = XMFLOAT3(playeroobb.x + objoobbex.x,
+	//	playeroobb.y + objoobbex.y,
+	//	playeroobb.z + objoobbex.z);
+
+
+
+	////PLAYER->GetPlayer()->SetOOBB(tempCenter, playeroobbex, XMFLOAT4(0, 0, 0, 1));
+	//m_ppGameObjects[SCENEMANAGER->GetSceneType()]->SetOOBB(objoobb, playeroobbex, XMFLOAT4(0, 0, 0, 1));
+	//
+	//auto playerBox = PLAYER->GetPlayer()->GetBoundingBox();
+	//auto objBox = m_ppGameObjects[SCENEMANAGER->GetSceneType()]->GetBoundingBox();
+
+	//if (playerBox.Contains(objBox))
+	//{
+	//	PLAYER->GetPlayer()->SetAllowKey(false);
+	//}
+	//else
+	//{
+	//	PLAYER->GetPlayer()->SetAllowKey(true);
+	//}
+	//BoundingOrientedBox Mapbox = m_ppGameObjects[SCENEMANAGER->GetSceneType()]->GetBoundingBox();
+
+	//if (PLAYER->GetPlayer()->m_xmOOBB.Intersects(m_ppGameObjects[SCENEMANAGER->GetSceneType()]->m_xmOOBB)){
+	//	
+	//	int i = 0;
+	//	//PLAYER->GetPlayer()->SetPosition(XMFLOAT3(900.0f, 900.0f, 900.0f));
+	//}
+	
 
 }
 

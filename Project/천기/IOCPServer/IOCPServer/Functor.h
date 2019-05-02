@@ -96,6 +96,11 @@ namespace Vector3
 		return(XMConvertToDegrees(acosf(XMVectorGetX(xmvAngle))));
 	}
 
+	inline float Angle(XMFLOAT3& xmf3Vector1, XMFLOAT3& xmf3Vector2)
+	{
+		return(Angle(XMLoadFloat3(&xmf3Vector1), XMLoadFloat3(&xmf3Vector2)));
+	}
+
 	inline XMFLOAT3 TransformNormal(XMFLOAT3& xmf3Vector, XMMATRIX& xmmtxTransform)
 	{
 		XMFLOAT3 xmf3Result;
@@ -120,8 +125,12 @@ namespace Vector3
 		}
 		return(xmf3Result);
 	}
-
+	inline XMFLOAT3 TransformCoord(XMFLOAT3& xmf3Vector, XMFLOAT4X4& xmmtx4x4Matrix)
+	{
+		return(TransformCoord(xmf3Vector, XMLoadFloat4x4(&xmmtx4x4Matrix)));
+	}
 }
+
 namespace Vector4
 {
 	inline XMFLOAT4 Add(XMFLOAT4& xmf4Vector1, XMFLOAT4& xmf4Vector2)

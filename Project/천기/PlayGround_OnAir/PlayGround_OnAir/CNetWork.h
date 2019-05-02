@@ -3,6 +3,7 @@
 #include <WinSock2.h>
 
 #include "..\..\IOCPServer\IOCPServer\Protocol.h"
+//#include "..\..\Ãµ±â\IOCPServer\IOCPServer\Protocol.h"
 
 class CNetWork : public CSingleTonBase<CNetWork>
 {
@@ -28,6 +29,6 @@ public:
 	void SendPacket();
 	void ReadPacket(SOCKET sock);
 	void ProcessPacket(char *ptr);
-	void ScenePacket(WORD num);
-	void MatchPacket();
+	void MatchPkt();
+	void StatePkt(DWORD state);
 };
