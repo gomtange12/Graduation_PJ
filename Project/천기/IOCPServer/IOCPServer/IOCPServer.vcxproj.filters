@@ -46,6 +46,9 @@
     <Filter Include="소스 파일\RoomManager\MatchRoom">
       <UniqueIdentifier>{51bf2e69-e4c7-4b4c-ae20-0548cc417a2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\GameObject">
+      <UniqueIdentifier>{f1ec75fd-adcb-4218-85de-26eb7ff7e3e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -90,6 +93,9 @@
     <ClInclude Include="Functor.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>소스 파일\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -127,6 +133,9 @@
     </ClCompile>
     <ClCompile Include="Room.cpp">
       <Filter>소스 파일\RoomManager\MatchRoom</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>소스 파일\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

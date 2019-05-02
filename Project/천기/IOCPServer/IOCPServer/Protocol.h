@@ -94,7 +94,11 @@ struct cs_packet_state {
 	float LposX;
 	float LposY;
 	float LposZ;
+	float y;
 	float RposX;
 	float RposY;
 	float RposZ;
+	float UposX;
+	float UposY;
+	float UposZ;
 };

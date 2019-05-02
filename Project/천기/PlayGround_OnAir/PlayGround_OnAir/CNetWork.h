@@ -30,5 +30,5 @@ public:
 	void ReadPacket(SOCKET sock);
 	void ProcessPacket(char *ptr);
 	void MatchPkt();
-	void StatePkt(DWORD state);
+	void StatePkt(DWORD state,float y);
 };

@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="AcceptThread.h" />
     <ClInclude Include="Functor.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="IOCPServer.h" />
     <ClInclude Include="MyThread.h" />
     <ClInclude Include="ObjManager.h" />
@@ -168,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AcceptThread.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MyThread.cpp" />
     <ClCompile Include="ObjManager.cpp" />
     <ClCompile Include="PacketManager.cpp" />

@@ -10,7 +10,7 @@ private:
 	//std::vector<SoloRoom*> v_soloRoom;
 	
 	int soloRoomNum;
-	
+	float fDistance = 12.25f;
 public:
 	
 

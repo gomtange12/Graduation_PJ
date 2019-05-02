@@ -2,6 +2,8 @@
 #include "pch.h"
 #include "Protocol.h"
 #include "Functor.h"
+#include "GameObject.h"
+
 struct stOverEx {
 	WSAOVERLAPPED m_wsaOver;
 	WSABUF m_wsaBuf;
@@ -9,7 +11,7 @@ struct stOverEx {
 	unsigned char	m_todo;
 };
 ////////////////////////////////
-class Player
+class Player : public GameObject
 {
 public: //
 	SOCKET m_socket;
@@ -24,20 +26,12 @@ public:
 	int m_id;
 
 public:
-	wchar_t m_name[20];
-
-	////
-
-	XMFLOAT4X4 world;
-
 	XMFLOAT3					m_xmf3Position  = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	XMFLOAT3					m_xmf3Right;// = XMFLOAT3(1.0f, 0.0f, 0.0f);
 	XMFLOAT3					m_xmf3Look;// = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	XMFLOAT3					m_xmf3Right;// = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	XMFLOAT3					m_xmf3Up;// = XMFLOAT3(0.0f, 1.0f, 0.0f);
 
 	XMFLOAT3					m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	////
-	BYTE m_x;
-	BYTE m_y;
 
 	//bool ready;
 	int avatar;
