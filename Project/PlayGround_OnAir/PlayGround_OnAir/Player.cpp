@@ -206,6 +206,12 @@ void CPlayer::Rotate(float x, float y, float z)
 	m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
 }
 
+
+void CPlayer::SetPlayCrashMap(bool isCrash)
+{
+	m_isCrashMap = isCrash;
+}
+
 void CPlayer::Update(float fTimeElapsed)
 {
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
@@ -621,7 +627,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
 
 	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
-	SetOOBB(GetPosition(), XMFLOAT3(1,2,1),  XMFLOAT4(0, 0, 0, 1));
+	//SetOOBB(GetPosition(), XMFLOAT3(1,2,1),  XMFLOAT4(0, 0, 0, 1));
 	m_pAnimationController->SetTrackAnimationSet(0, 0);
 
 	m_pAnimationController->SetCallbackKeys(1, 3);
@@ -827,7 +833,7 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		SetPlayerUpdatedContext(pContext);
 		SetCameraUpdatedContext(pContext);
 	}
-	SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
+	//SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
 	if (pPlayerModel) delete pPlayerModel;
 }
