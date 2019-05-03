@@ -671,8 +671,9 @@ void CGameFramework::ProcessInput()
 			{
 				//if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
 				//	PLAYER->GetPlayer()->Rotate(cyDelta, 0.0f, -cxDelta);
-				if (pKeysBuffer[VK_RBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설
+				if (pKeysBuffer[VK_RBUTTON] & 0xF0)  //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설
 					PLAYER->GetPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
+			
 			}
 			//if (dwDirection) PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
 			if (dwDirection) CNETWORK->StatePkt(dwDirection, cxDelta); //서버에 키상태전송
@@ -680,7 +681,9 @@ void CGameFramework::ProcessInput()
 		}
 	}
 	//PLAYER->GetPlayer()->SetAllowKey(true);
+	//CNETWORK->SetTime(m_GameTimer.GetTimeElapsed());
 	PLAYER->GetPlayer()->Update(m_GameTimer.GetTimeElapsed());
+	
 }
 
 void CGameFramework::AnimateObjects()
@@ -695,9 +698,10 @@ void CGameFramework::AnimateObjects()
 	m_pScene->AnimateObjects(fTimeElapsed);
 	//SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->AnimateObjects(fTimeElapsed);
 
-
+	
 	PLAYER->GetPlayer()->Animate(fTimeElapsed);
 	PLAYER->GetPlayer()->UpdateTransform(NULL);
+	
 #ifdef _WITH_DIRECT2D_IMAGE_EFFECT
 	static UINT64 i = 0;
 	if (++i % 15) return;

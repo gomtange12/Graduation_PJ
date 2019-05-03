@@ -31,8 +31,8 @@ constexpr int SC_MOVE_PLAYER = 4;
 constexpr int SC_MATCHING_PLAYER = 5;
 constexpr int SC_MATCHING_RESULT = 6;
 constexpr int SC_SCENE = 7;
-constexpr int SC_STATE_INFO = 8;
-constexpr int SC_POSITION_INFO = 9;
+constexpr int SC_MOVE_STATE_INFO = 8;
+constexpr int SC_ROTE_STATE_INFO = 9;
 #pragma pack (push, 1)
 //////////////////////¼­¹ö/////////////////////////
 struct sc_packet_login_ok {
@@ -87,18 +87,13 @@ struct cs_packet_matching {
 	//bool ready;
 };
 
-struct cs_packet_state {
+struct cs_packet_move_state {
 	BYTE size;
 	BYTE type;
 	DWORD state;
-	float LposX;
-	float LposY;
-	float LposZ;
+};
+struct cs_packet_rote_state {
+	BYTE size;
+	BYTE type;
 	float y;
-	float RposX;
-	float RposY;
-	float RposZ;
-	float UposX;
-	float UposY;
-	float UposZ;
 };
