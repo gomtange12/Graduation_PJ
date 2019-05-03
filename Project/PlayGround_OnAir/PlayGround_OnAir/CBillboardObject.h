@@ -12,8 +12,9 @@ public:
 	public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
 	virtual void Animate(float fTimeElapsed, std::shared_ptr<CCamera>);
-
+	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void SetLookAt(XMFLOAT3& xmfTarget);
+
 };
 
 class UIBillboardObject : public CBillboardObject

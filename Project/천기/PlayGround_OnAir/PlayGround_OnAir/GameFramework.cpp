@@ -675,8 +675,8 @@ void CGameFramework::ProcessInput()
 					PLAYER->GetPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
 			}
 			//if (dwDirection) PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
-			
-			CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
+			if (dwDirection) CNETWORK->StatePkt(dwDirection, cxDelta); //서버에 키상태전송
+		
 		}
 	}
 	//PLAYER->GetPlayer()->SetAllowKey(true);
@@ -740,7 +740,7 @@ void CGameFramework::MoveToNextFrame()
 
 void CGameFramework::FrameAdvance()
 {    
-	m_GameTimer.Tick(0.0f);
+	m_GameTimer.Tick(60.0f);
 	
 	ProcessInput();
 

@@ -751,8 +751,8 @@ void CGameObject::SetTrackAnimationPosition(int nAnimationTrack, float fPosition
 
 void CGameObject::Animate(float fTimeElapsed)
 {
-	m_xmOOBB.Transform(m_xmOOBB, XMLoadFloat4x4(&m_xmf4x4World));
-	XMStoreFloat4(&m_xmOOBB.Orientation, XMQuaternionNormalize(XMLoadFloat4(&m_xmOOBB.Orientation)));
+	//m_xmOOBB.Transform(m_xmOOBB, XMLoadFloat4x4(&m_xmf4x4World));
+	//XMStoreFloat4(&m_xmOOBB.Orientation, XMQuaternionNormalize(XMLoadFloat4(&m_xmOOBB.Orientation)));
 	
 	if (m_pAnimationController) m_pAnimationController->AdvanceTime(fTimeElapsed);
 

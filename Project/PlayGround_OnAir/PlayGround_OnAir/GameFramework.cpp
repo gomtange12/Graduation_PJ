@@ -651,7 +651,7 @@ void CGameFramework::ProcessInput()
 		}
 		if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
 		{
-			PLAYER->GetPlayer()->SetPlayerState(HIT);
+			PLAYER->GetPlayer()->SetPlayerState(ATTACK);
 		}
 
 		float cxDelta = 0.0f, cyDelta = 0.0f;
@@ -738,7 +738,7 @@ void CGameFramework::MoveToNextFrame()
 
 void CGameFramework::FrameAdvance()
 {    
-	m_GameTimer.Tick(0.0f);
+	m_GameTimer.Tick(60.0f);
 	
 	ProcessInput();
 
