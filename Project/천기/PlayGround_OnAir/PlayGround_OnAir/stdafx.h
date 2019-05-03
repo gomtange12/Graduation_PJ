@@ -128,10 +128,10 @@ enum PlayerState {
 };
 
 enum SceneState {
-	LOADING,
-	MENUSCENE,
-	INGAME,
-	GAMEOVER
+	MENUSCENE  = 0,
+	INGAME = 1,
+	GAMEOVER,
+	LOADING
 };
 enum AVATARNumber {
 	A, //ÀÓ½Ã¸íÄª

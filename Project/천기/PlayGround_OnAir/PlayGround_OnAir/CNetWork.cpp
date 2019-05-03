@@ -11,14 +11,14 @@ CNetWork::~CNetWork()
 {
 }
 
-void CNetWork::MakeServer(HWND hWnd)
+void CNetWork::MakeServer(const HWND& hWnd)
 {
-	WSADATA	wsadata;
+	
 	WSAStartup(MAKEWORD(2, 2), &wsadata);
 
 	g_mysocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0);
 
-	SOCKADDR_IN ServerAddr;
+	
 	ZeroMemory(&ServerAddr, sizeof(SOCKADDR_IN));
 	ServerAddr.sin_family = AF_INET;
 	ServerAddr.sin_port = htons(SERVER_PORT);
@@ -72,7 +72,7 @@ void CNetWork::ReadPacket(SOCKET sock)
 		}
 	}
 }
-void CNetWork::ProcessPacket(char *ptr) 
+void CNetWork::ProcessPacket(char *ptr)
 {
 	static bool first_time = true;
 	switch (ptr[1])
@@ -122,7 +122,7 @@ void CNetWork::ProcessPacket(char *ptr)
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		xmf3Shift = XMFLOAT3(pkt->posX, pkt->posY, pkt->posZ);
 		PLAYER->GetPlayer()->Move(xmf3Shift, pkt->velocity);
-		//PLAYER->GetPlayer()->Update(TimeElapsed);
+		
 		//if (other_id == g_myid) {
 		//	g_left_x = pkt->X_POS - 4;
 		//	g_top_y = pkt->Y_POS - 4;
@@ -181,7 +181,7 @@ void CNetWork::ProcessPacket(char *ptr)
 }
 
 
-void CNetWork::MatchPkt() 
+void CNetWork::MatchPkt()
 {
 	cs_packet_matching *pkt = reinterpret_cast<cs_packet_matching *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
@@ -193,7 +193,7 @@ void CNetWork::MatchPkt()
 
 	SendPacket();
 }
-void CNetWork::StatePkt(DWORD state, float y)
+void CNetWork::StatePkt(DWORD state)
 {
 	cs_packet_move_state *pkt = reinterpret_cast<cs_packet_move_state *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
@@ -203,7 +203,7 @@ void CNetWork::StatePkt(DWORD state, float y)
 
 	SendPacket();
 }
-void CNetWork::LookPkt(float y)
+void CNetWork::RotePkt(float y)
 {
 	cs_packet_rote_state *pkt = reinterpret_cast<cs_packet_rote_state *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);

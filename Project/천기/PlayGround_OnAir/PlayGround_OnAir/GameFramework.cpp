@@ -162,6 +162,7 @@ void CGameFramework::CreateSwapChain()
 	dxgiSwapChainFullScreenDesc.Windowed = TRUE;
 
 	HRESULT hResult = m_pdxgiFactory->CreateSwapChainForHwnd(m_pd3dCommandQueue, m_hWnd, &dxgiSwapChainDesc, &dxgiSwapChainFullScreenDesc, NULL, (IDXGISwapChain1 **)&m_pdxgiSwapChain);
+
 #else
 	DXGI_SWAP_CHAIN_DESC dxgiSwapChainDesc;
 	::ZeroMemory(&dxgiSwapChainDesc, sizeof(dxgiSwapChainDesc));
@@ -176,11 +177,18 @@ void CGameFramework::CreateSwapChain()
 	dxgiSwapChainDesc.OutputWindow = m_hWnd;
 	dxgiSwapChainDesc.SampleDesc.Count = (m_bMsaa4xEnable) ? 4 : 1;
 	dxgiSwapChainDesc.SampleDesc.Quality = (m_bMsaa4xEnable) ? (m_nMsaa4xQualityLevels - 1) : 0;
-	dxgiSwapChainDesc.Windowed = TRUE;
+	dxgiSwapChainDesc.Windowed = TRUE; //false는 전체모드. 이거 전체모드 할라면 
 	dxgiSwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	HRESULT hResult = m_pdxgiFactory->CreateSwapChain(m_pd3dCommandQueue, &dxgiSwapChainDesc, (IDXGISwapChain **)&m_pdxgiSwapChain);
+	//hResult = m_pdxgiSwapChain->SetFullscreenState(false, NULL);
+	//if (hResult == E_FAIL)
+	//	return;
+	//m_pdxgiSwapChain->GetDesc(&dxgiSwapChainDesc);
+	////SetFullScreenState함수를 호출해주었기 때문에 ResizeBuffers함수를 호출해줘야함.
+	//m_pdxgiSwapChain->ResizeBuffers(m_nSwapChainBuffers, m_nWndClientWidth, m_nWndClientHeight, dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
 #endif
+
 	m_nSwapChainBufferIndex = m_pdxgiSwapChain->GetCurrentBackBufferIndex();
 
 	hResult = m_pdxgiFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_ALT_ENTER);
@@ -651,7 +659,7 @@ void CGameFramework::ProcessInput()
 		}
 		if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
 		{
-			PLAYER->GetPlayer()->SetPlayerState(HIT);
+			PLAYER->GetPlayer()->SetPlayerState(ATTACK);
 		}
 
 		float cxDelta = 0.0f, cyDelta = 0.0f;
@@ -671,19 +679,15 @@ void CGameFramework::ProcessInput()
 			{
 				//if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
 				//	PLAYER->GetPlayer()->Rotate(cyDelta, 0.0f, -cxDelta);
-				if (pKeysBuffer[VK_RBUTTON] & 0xF0)  //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설
+				if (pKeysBuffer[VK_RBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설
 					PLAYER->GetPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
-			
 			}
 			//if (dwDirection) PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
-			if (dwDirection) CNETWORK->StatePkt(dwDirection, cxDelta); //서버에 키상태전송
-		
+			if (dwDirection) CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
 		}
 	}
 	//PLAYER->GetPlayer()->SetAllowKey(true);
-	//CNETWORK->SetTime(m_GameTimer.GetTimeElapsed());
 	PLAYER->GetPlayer()->Update(m_GameTimer.GetTimeElapsed());
-	
 }
 
 void CGameFramework::AnimateObjects()
@@ -698,10 +702,9 @@ void CGameFramework::AnimateObjects()
 	m_pScene->AnimateObjects(fTimeElapsed);
 	//SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->AnimateObjects(fTimeElapsed);
 
-	
+
 	PLAYER->GetPlayer()->Animate(fTimeElapsed);
 	PLAYER->GetPlayer()->UpdateTransform(NULL);
-	
 #ifdef _WITH_DIRECT2D_IMAGE_EFFECT
 	static UINT64 i = 0;
 	if (++i % 15) return;

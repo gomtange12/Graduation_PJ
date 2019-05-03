@@ -1,5 +1,11 @@
 #pragma once
 
+#define DIR_FORWARD				0x01
+#define DIR_BACKWARD			0x02
+#define DIR_LEFT				0x04
+#define DIR_RIGHT				0x08
+#define DIR_UP					0x10
+#define DIR_DOWN				0x20
 
 #include "Object.h"
 #include "Camera.h"
@@ -24,6 +30,7 @@ protected:
 	float           			m_fMaxVelocityY = 0.0f;
 	float           			m_fFriction = 0.0f;
 	bool						m_OnAacting{ FALSE };
+	bool						m_isCrashMap{ false };
 	LPVOID						m_pPlayerUpdatedContext = NULL;
 	LPVOID						m_pCameraUpdatedContext = NULL;
 
@@ -79,7 +86,8 @@ public:
 	void Move(const XMFLOAT3& xmf3Shift, bool bVelocity = false);
 	void Move(float fxOffset = 0.0f, float fyOffset = 0.0f, float fzOffset = 0.0f);
 	void Rotate(float x, float y, float z);
-
+	bool IsPlayerCrashMap() { return m_isCrashMap; };
+	void SetPlayCrashMap(bool isCrash);
 	void Update(float fTimeElapsed);
 
 	virtual void OnPlayerUpdateCallback(float fTimeElapsed) { }

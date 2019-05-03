@@ -8,7 +8,7 @@
 #include "CSceneManager.h"
 #include "CObjectManager.h"
 #include "CBillboardObject.h"
-#define objScale 6.46
+#define objScale 6.47
 ID3D12DescriptorHeap *CScene::m_pd3dCbvSrvDescriptorHeap = NULL;
 
 D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvCPUDescriptorStartHandle;
@@ -230,7 +230,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 {
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 //
-	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 45); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
+	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 60); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
 	//CreateShaderResourceViews();
 	CMaterial::PrepareShaders(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature); 
 //
@@ -238,10 +238,10 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 
 	XMFLOAT3 xmf3Scale(1.0f, 1.0f, 1.0f);
 	XMFLOAT4 xmf4Color(0.0f, 0.3f, 0.0f, 0.0f);
-	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/white.raw"), 257, 257, xmf3Scale, xmf4Color);
-	m_pPlayGroundTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/white.raw"), 257, 257, xmf3Scale, xmf4Color);
+	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
+	//m_pPlayGroundTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 
-	m_nShaders = 2;
+	m_nShaders = 3;
 	m_ppShaders = new CShader*[m_nShaders];
 
 	/*CHellicopterObjectsShader *pHellicopterObjectsShader = new CHellicopterObjectsShader();
@@ -267,6 +267,15 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppShaders[1] = pAngrybotObjectsShader;
  	CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
 	
+	//CLoadedModelInfo *pPlayGroundMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALLPIECES.bin", NULL, false);
+
+	CUiShader *pUIShader = new CUiShader();
+	pUIShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	//pUIShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pUIShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
+	m_ppShaders[2] = pUIShader;
+	//CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
+
 	
 
 	/*CMapObjectsShader *pConcertMapShader = new CMapObjectsShader();
@@ -370,7 +379,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 
 
 	//PLAYER->AddPlayer()
-	m_nPlayGroundObjects = 9;
+	m_nPlayGroundObjects = 15;
 	m_ppPlayGroundObjects = new CGameObject*[m_nPlayGroundObjects];
 
 	CLoadedModelInfo *Floor = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Floor.bin", NULL, false);
@@ -384,19 +393,19 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	CLoadedModelInfo *Floor_Slide = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Floor_Slide.bin", NULL, false);
 	m_ppPlayGroundObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[1]->SetChild(Floor_Slide->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[1]->SetPosition(0.0f, 10, 0.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[1]->SetPosition(0.0f, 10, 0.0f);
 	m_ppPlayGroundObjects[1]->SetScale(10.0f, 10.0f, 10.0f);
 	m_ppPlayGroundObjects[1]->SetMesh(Floor_Slide->m_pModelRootObject->m_pMesh);
 	//if (m_ppPlayGroundObjects[1]->m_pMesh)
-	m_ppPlayGroundObjects[1]->SetOOBB(m_ppPlayGroundObjects[1]->GetPosition(), XMFLOAT3(348, 20, 348), XMFLOAT4(0, 0, 0, 1));//Vector3::ScalarProduct(m_ppPlayGroundObjects[1]->m_pMesh->GetAABBExtents(),10*objScale) , XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[1]->SetOOBB(m_ppPlayGroundObjects[1]->GetPosition(), XMFLOAT3(350, 20, 350), XMFLOAT4(0, 0, 0, 1));//Vector3::ScalarProduct(m_ppPlayGroundObjects[1]->m_pMesh->GetAABBExtents(),10*objScale) , XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo *Floor_Stage = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Floor_Stage.bin", NULL, false);
+	CLoadedModelInfo *Floor_Stage = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/바닥.bin", NULL, false);
 	m_ppPlayGroundObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[2]->SetChild(Floor_Stage->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[2]->SetPosition(0.0f, 20, -825.0f); //맵 거꾸로 버그 여기
-	m_ppPlayGroundObjects[2]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[2]->SetPosition(0.0f, 20, -865.0f); 
+	m_ppPlayGroundObjects[2]->SetScale(20.0f, 20.0f, 20.0f);
 	m_ppPlayGroundObjects[2]->SetMesh(Floor_Stage->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[2]->SetOOBB(m_ppPlayGroundObjects[2]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents(),10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[2]->SetOOBB(m_ppPlayGroundObjects[2]->GetPosition(),XMFLOAT3( m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents().x * objScale * 20, m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents().y * objScale * 20, m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents().z * objScale * 70), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 //
 	CLoadedModelInfo *Slide = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/미끄럼틀.bin", NULL, false);
 	m_ppPlayGroundObjects[3] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -409,10 +418,10 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	CLoadedModelInfo *Respawn_Blue = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Respawn_Blue.bin", NULL, false);
 	m_ppPlayGroundObjects[4] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[4]->SetChild(Respawn_Blue->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[4]->SetPosition(1000.0f, 30, 700.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[4]->SetPosition(1020.0f, 30, 700.0f); //ㅇ
 	m_ppPlayGroundObjects[4]->SetScale(10.0f, 10.0f, 10.0f);
 	m_ppPlayGroundObjects[4]->SetMesh(Respawn_Blue->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[4]->SetOOBB(m_ppPlayGroundObjects[4]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[4]->m_pMesh->GetAABBExtents(), 10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[4]->SetOOBB(m_ppPlayGroundObjects[4]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[4]->m_pMesh->GetAABBExtents().x * objScale * 10, m_ppPlayGroundObjects[4]->m_pMesh->GetAABBExtents().y * objScale * 10, m_ppPlayGroundObjects[4]->m_pMesh->GetAABBExtents().z * objScale * 75), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo *Respawn_Red = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Respawn_Red.bin", NULL, false);
 	m_ppPlayGroundObjects[5] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -420,62 +429,83 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppPlayGroundObjects[5]->SetPosition(-1030.0f, 30, 680.0f); //맵 거꾸로 버그 여기
 	m_ppPlayGroundObjects[5]->SetScale(10.0f, 10.0f, 10.0f);
 	m_ppPlayGroundObjects[5]->SetMesh(Respawn_Red->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[5]->SetOOBB(m_ppPlayGroundObjects[5]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[5]->m_pMesh->GetAABBExtents(),10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[5]->SetOOBB(m_ppPlayGroundObjects[5]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[5]->m_pMesh->GetAABBExtents().x * objScale * 10, m_ppPlayGroundObjects[5]->m_pMesh->GetAABBExtents().y * objScale * 10, m_ppPlayGroundObjects[5]->m_pMesh->GetAABBExtents().z * objScale * 75), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo *SeeSaw = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/SeeSaw.bin", NULL, false);
+	CLoadedModelInfo *LeftSeeSaw = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/SeeSaw.bin", NULL, false);
 	m_ppPlayGroundObjects[6] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppPlayGroundObjects[6]->SetChild(SeeSaw->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[6]->SetPosition(0.0f, 10, -600.0f); //맵 거꾸로 버그 여기
-	m_ppPlayGroundObjects[6]->SetScale(10.0f, 10.0f, 10.0f);
-	if (m_ppPlayGroundObjects[6]->m_pMesh)
-		m_ppPlayGroundObjects[6]->SetOOBB(m_ppPlayGroundObjects[6]->m_pMesh->GetAABBCenter(), m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[6]->SetChild(LeftSeeSaw->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[6]->SetPosition(1030.0f, 10, -280.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[6]->SetScale(6.0f, 6.0f, 6.0f);
+	m_ppPlayGroundObjects[6]->SetMesh(LeftSeeSaw->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[6]->SetOOBB(m_ppPlayGroundObjects[6]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().x * objScale * 4, m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().y * objScale * 6, m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().z * objScale * 55), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo *RightSeeSaw = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/SeeSaw.bin", NULL, false);
+	m_ppPlayGroundObjects[7] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[7]->SetChild(RightSeeSaw->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[7]->SetPosition(-1030.0f, 10, -280.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[7]->SetScale(6.0f, 6.0f, 6.0f);
+	m_ppPlayGroundObjects[7]->SetMesh(RightSeeSaw->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[7]->SetOOBB(m_ppPlayGroundObjects[7]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().x * objScale * 4, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().y * objScale * 6, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().z * objScale * 55), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	//충돌여기
 
 	CLoadedModelInfo *Slide_Speaker_3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Slide_Speaker_3.bin", NULL, false);
-	m_ppPlayGroundObjects[7] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppPlayGroundObjects[7]->SetChild(Slide_Speaker_3->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[7]->SetPosition(200.0f, 245, 700.0f); //맵 거꾸로 버그 여기
-	m_ppPlayGroundObjects[7]->SetScale(15.0f, 15.0f, 15.0f);
-	if (m_ppPlayGroundObjects[7]->m_pMesh)
-		m_ppPlayGroundObjects[7]->SetOOBB(m_ppPlayGroundObjects[7]->m_pMesh->GetAABBCenter(), m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[8] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[8]->SetChild(Slide_Speaker_3->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[8]->SetPosition(40.0f, 45, -150.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[8]->SetScale(15.0f, 15.0f, 15.0f);
+	m_ppPlayGroundObjects[8]->SetMesh(Slide_Speaker_3->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[8]->SetOOBB(m_ppPlayGroundObjects[8]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[8]->m_pMesh->GetAABBExtents(),20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo *Slide_Speaker_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Slide_Speaker_1.bin", NULL, false);
-	m_ppPlayGroundObjects[8] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppPlayGroundObjects[8]->SetChild(Slide_Speaker_1->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[8]->SetPosition(200.0f, 245, 700.0f); //맵 거꾸로 버그 여기
-	m_ppPlayGroundObjects[8]->SetScale(15.0f, 15.0f, 15.0f);
-	if (m_ppPlayGroundObjects[8]->m_pMesh)
-		m_ppPlayGroundObjects[8]->SetOOBB(m_ppPlayGroundObjects[8]->m_pMesh->GetAABBCenter(), m_ppPlayGroundObjects[8]->m_pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[9] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[9]->SetChild(Slide_Speaker_1->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[9]->SetPosition(10.0f, 45, 100.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[9]->SetScale(20.0f, 20.0f, 20.0f);
+	m_ppPlayGroundObjects[9]->SetMesh(Slide_Speaker_1->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[9]->SetOOBB(m_ppPlayGroundObjects[9]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[9]->m_pMesh->GetAABBExtents(), 20* objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	//UI
-	//CTexture *ppUITextures;
-	//ppUITextures = new CTexture(1, RESOURCE_TEXTURE2D, 0);
-	//ppUITextures->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/pg_logo.dds", 0);
+	CLoadedModelInfo *Stage = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Stage.bin", NULL, false);
+	m_ppPlayGroundObjects[10] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[10]->SetChild(Slide_Speaker_1->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[10]->SetPosition(0.0f, 45, -820.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[10]->SetScale(20.0f, 20.0f, 20.0f);
+	m_ppPlayGroundObjects[10]->SetMesh(Stage->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[10]->SetOOBB(m_ppPlayGroundObjects[10]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[10]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	//UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 
-	//CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1); // 텍스쳐 srv
-	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	//CreateShaderResourceViews(pd3dDevice, ppUITextures, 3, true);
+	CLoadedModelInfo *LeftSpring_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Spring_1.bin", NULL, false);
+	m_ppPlayGroundObjects[11] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[11]->SetChild(LeftSpring_1->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[11]->SetPosition(-400.0f, 20, 700.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[11]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[11]->SetMesh(LeftSpring_1->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[11]->SetOOBB(m_ppPlayGroundObjects[11]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[11]->m_pMesh->GetAABBExtents(), 10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	//m_nUIObjects = 2;
-	//m_ppUIObjects = new CGameObject*[m_nUIObjects];
+	CLoadedModelInfo *Left_Spring_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Spring_2.bin", NULL, false);
+	m_ppPlayGroundObjects[12] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[12]->SetChild(Left_Spring_2->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[12]->SetPosition(-500.0f, 20, 800.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[12]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[12]->SetMesh(Left_Spring_2->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[12]->SetOOBB(m_ppPlayGroundObjects[12]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[12]->m_pMesh->GetAABBExtents(), 10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	//CMaterial *ppUIMaterials;
-	//ppUIMaterials = new CMaterial(1);
-	//ppUIMaterials->SetTexture(ppUITextures);
-	//CTexturedRectMesh *pUIMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 15.0f, 30.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	//
+	CLoadedModelInfo *Right_Spring_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Spring_1.bin", NULL, false);
+	m_ppPlayGroundObjects[13] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[13]->SetChild(Right_Spring_1->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[13]->SetPosition(400.0f, 20, 700.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[13]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[13]->SetMesh(Right_Spring_1->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[13]->SetOOBB(m_ppPlayGroundObjects[13]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[13]->m_pMesh->GetAABBExtents(), 10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	//CBillboardObject *pBillboardObject = NULL;
+	CLoadedModelInfo *RightSpring_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Spring_2.bin", NULL, false);
+	m_ppPlayGroundObjects[14] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[14]->SetChild(RightSpring_2->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[14]->SetPosition(500.0f, 20, 800.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[14]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[14]->SetMesh(RightSpring_2->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[14]->SetOOBB(m_ppPlayGroundObjects[14]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[14]->m_pMesh->GetAABBExtents(), 10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	//pBillboardObject = new CBillboardObject();
-
-	//pBillboardObject->SetMaterial(1, ppUIMaterials);
-	//pBillboardObject->SetPosition(PLAYER->GetPlayer()->GetPosition().x, PLAYER->GetPlayer()->GetPosition().y+30, PLAYER->GetPlayer()->GetPosition().z); // 셋포지션의 헤이트값 조절해서 바닥에서 자라는지 설정. 풀 월드포지션 설정해주는 부분임
-	//pBillboardObject->(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * i));
-
-	 //billboardobj = new CBillboardObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	 //billboardobj->SetPosition(PLAYER->GetPlayer()->GetPosition().x, PLAYER->GetPlayer()->GetPosition().y + 30, PLAYER->GetPlayer()->GetPosition().z);
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	
@@ -487,7 +517,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 void CScene::BuildObjectsAfterPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	billboardobj = new CBillboardObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	billboardobj->SetPosition(PLAYER->GetPlayer()->GetPosition().x, PLAYER->GetPlayer()->GetPosition().y + 30, PLAYER->GetPlayer()->GetPosition().z);
+	billboardobj->SetPosition(XMFLOAT3(30,0,-400));
 
 	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
 }
@@ -524,9 +554,186 @@ void CScene::ReleaseObjects()
 
 ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevice)
 {
+	//ID3D12RootSignature *pd3dGraphicsRootSignature = NULL;
+	//D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[10];
+	//pd3dDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	//pd3dDescriptorRanges[0].NumDescriptors = 1;
+	//pd3dDescriptorRanges[0].BaseShaderRegister = 6; //t6: gtxtAlbedoTexture
+	//pd3dDescriptorRanges[0].RegisterSpace = 0;
+	//pd3escriptorRanges[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	//pd3dDescriptorRanges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	//pd3dDescriptorRanges[1].NumDescriptors = 1;
+	//pd3dDescriptorRanges[1].BaseShaderRegister = 7; //t7: gtxtSpecularTexture
+	//pd3dDescriptorRanges[1].RegisterSpace = 0;
+	//pd3dDescriptorRanges[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	//pd3dDescriptorRanges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	//pd3dDescriptorRanges[2].NumDescriptors = 1;
+	//pd3dDescriptorRanges[2].BaseShaderRegister = 8; //t8: gtxtNormalTexture
+	//pd3dDescriptorRanges[2].RegisterSpace = 0;
+	//pd3dDescriptorRanges[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	//
+	//pd3dDescriptorRanges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	//pd3dDescriptorRanges[3].NumDescriptors = 1;
+	//pd3dDescriptorRanges[3].BaseShaderRegister = 9; //t9: gtxtMetallicTexture
+	//pd3dDescriptorRanges[3].RegisterSpace = 0;
+	//pd3dDescriptorRanges[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	//pd3dDescriptorRanges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	//pd3dDescriptorRanges[4].NumDescriptors = 1;
+	//pd3dDescriptorRanges[4].BaseShaderRegister = 10; //t10: gtxtEmissionTexture
+	//pd3dDescriptorRanges[4].RegisterSpace = 0;
+	//pd3dDescriptorRanges[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	//p3dDescriptorRanges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	//pd3dDescriptorRanges[5].NumDescriptors = 1;
+	//pd3dDescriptorRanges[5].BaseShaderRegister = 11; //t11: gtxtEmissionTexture
+	//pd3dDescriptorRanges[5].RegisterSpace = 0;
+	//pd3dDescriptorRanges[5].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	//pd3dDescriptorRanges[6].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	//pd3dDescriptorRanges[6].NumDescriptors = 1;
+	//pd3dDescriptorRanges[6].BaseShaderRegister = 12; //t12: gtxtEmissionTexture
+	//pd3dDescriptorRanges[6].RegisterSpace = 0;
+	//pd3dDescriptorRanges[6].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	//pd3dDescriptorRanges[7].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	//pd3dDescriptorRanges[7].NumDescriptors = 1;
+	//pd3dDescriptorRanges[7].BaseShaderRegister = 13; //t13: gtxtSkyBoxTexture
+	//pd3dDescriptorRanges[7].RegisterSpace = 0;
+	//pd3dDescriptorRanges[7].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	//pd3dDescriptorRanges[8].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	//pd3dDescriptorRanges[8].NumDescriptors = 1;
+	//pd3dDescriptorRanges[8].BaseShaderRegister = 1; //t1: gtxtTerrainBaseTexture
+	//pd3dDescriptorRanges[8].RegisterSpace = 0;
+	//pd3dDescriptorRanges[8].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	//pd3dDescriptorRanges[9].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	//pd3dDescriptorRanges[9].NumDescriptors = 1;
+	//pd3dDescriptorRanges[9].BaseShaderRegister = 2; //t2: gtxtTerrainDetailTexture
+	//pd3dDescriptorRanges[9].RegisterSpace = 0;
+	//pd3dDescriptorRanges[9].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	////pd3dDescriptorRanges[10].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	////pd3dDescriptorRanges[10].NumDescriptors = 1;
+	////pd3dDescriptorRanges[10].BaseShaderRegister = 14; //t2: gtxtTerrainDetailTexture 게임오브젲ㄱ트니까
+	////pd3dDescriptorRanges[10].RegisterSpace = 0;
+	////pd3dDescriptorRanges[10].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	////pd3dDescriptorRanges[10].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	////pd3dDescriptorRanges[10].NumDescriptors = 1;						//m_nScreenOffRederTarget의 개수
+	////pd3dDescriptorRanges[10].BaseShaderRegister = 20; //T20: gtxtScene
+	////pd3dDescriptorRanges[10].RegisterSpace = 0;
+	////pd3dDescriptorRanges[10].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	//D3D12_ROOT_PARAMETER pd3dRootParameters[15];
+	//pd3dRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//pd3dRootParameters[0].Descriptor.ShaderRegister = 1; //Camera
+	//pd3dRootParameters[0].Descriptor.RegisterSpace = 0;
+	//pd3dRootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//pd3dRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+	//pd3dRootParameters[1].Constants.Num32BitValues = 33;
+	//pd3dRootParameters[1].Constants.ShaderRegister = 2; //GameObject
+	//pd3dRootParameters[1].Constants.RegisterSpace = 0;
+	//pd3dRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//pd3dRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//pd3dRootParameters[2].Descriptor.ShaderRegister = 4; //Lights
+	//pd3dRootParameters[2].Descriptor.RegisterSpace = 0;
+	//pd3dRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//pd3dRootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pd3dRootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
+	//pd3dRootParameters[3].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[0]);
+	//pd3dRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pd3dRootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pd3dRootParameters[4].DescriptorTable.NumDescriptorRanges = 1;
+	//pd3dRootParameters[4].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[1]);
+	//pd3dRootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pd3dRootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pd3dRootParameters[5].DescriptorTable.NumDescriptorRanges = 1;
+	//pd3dRootParameters[5].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[2]);
+	//pd3dRootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pd3dRootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pd3dRootParameters[6].DescriptorTable.NumDescriptorRanges = 1;
+	//pd3dRootParameters[6].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[3]);
+	//pd3dRootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pd3dRootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pd3dRootParameters[7].DescriptorTable.NumDescriptorRanges = 1;
+	//pd3dRootParameters[7].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[4]);
+	//pd3dRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pd3dRootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pd3dRootParameters[8].DescriptorTable.NumDescriptorRanges = 1;
+	//pd3dRootParameters[8].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[5]);
+	//pd3dRootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pd3dRootParameters[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pd3dRootParameters[9].DescriptorTable.NumDescriptorRanges = 1;
+	//pd3dRootParameters[9].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[6]);
+	//pd3dRootParameters[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pd3dRootParameters[10].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pd3dRootParameters[10].DescriptorTable.NumDescriptorRanges = 1;
+	//pd3dRootParameters[10].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[7]);
+	//pd3dRootParameters[10].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pd3dRootParameters[11].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//pd3dRootParameters[11].Descriptor.ShaderRegister = 7; //Skinned Bone Offsets
+	//pd3dRootParameters[11].Descriptor.RegisterSpace = 0;
+	//pd3dRootParameters[11].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+	//pd3dRootParameters[12].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//pd3dRootParameters[12].Descriptor.ShaderRegister = 8; //Skinned Bone Transforms
+	//pd3dRootParameters[12].Descriptor.RegisterSpace = 0;
+	//pd3dRootParameters[12].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+	//pd3dRootParameters[13].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pd3dRootParameters[13].DescriptorTable.NumDescriptorRanges = 1;
+	//pd3dRootParameters[13].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[8]);
+	//pd3dRootParameters[13].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pd3dRootParameters[14].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pd3dRootParameters[14].DescriptorTable.NumDescriptorRanges = 1;
+	//pd3dRootParameters[14].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[9]);
+	//pd3dRootParameters[14].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	////pd3dRootParameters[15].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	////pd3dRootParameters[15].Descriptor.ShaderRegister = 9;
+	////pd3dRootParameters[15].Descriptor.RegisterSpace = 0;
+	////pd3dRootParameters[15].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	////pd3dRootParameters[15].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	////pd3dRootParameters[15].DescriptorTable.NumDescriptorRanges = 1;
+	////pd3dRootParameters[15].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[10];				//t21 : UI
+	////pd3dRootParameters[15].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//D3D12_STATIC_SAMPLER_DESC pd3dSamplerDescs[2];
+	//pd3dSamplerDescs[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	//pd3dSamplerDescs[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	//pd3dSamplerDescs[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	//pd3dSamplerDescs[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	//pd3dSamplerDescs[0].MipLODBias = 0;
+	//pd3dSamplerDescs[0].MaxAnisotropy = 1;
+	//pd3dSamplerDescs[0].ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+	//pd3dSamplerDescs[0].MinLOD = 0;
+	//pd3dSamplerDescs[0].MaxLOD = D3D12_FLOAT32_MAX;
+	//pd3dSamplerDescs[0].ShaderRegister = 0;
+	//pd3dSamplerDescs[0].RegisterSpace = 0;
+	//pd3dSamplerDescs[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	//pd3dSamplerDescs[1].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	//pd3dSamplerDescs[1].AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	//pd3dSamplerDescs[1].AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	//pd3dSamplerDescs[1].AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	//pd3dSamplerDescs[1].MipLODBias = 0;
+	//pd3dSamplerDescs[1].MaxAnisotropy = 1;
+	//pd3dSamplerDescs[1].ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+	//pd3dSamplerDescs[1].MinLOD = 0;
+	//pd3dSamplerDescs[1].MaxLOD = D3D12_FLOAT32_MAX;
+	//pd3dSamplerDescs[1].ShaderRegister = 1;
+	//pd3dSamplerDescs[1].RegisterSpace = 0;
+	//pd3dSamplerDescs[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	//D3D12_ROOT_SIGNATURE_FLAGS d3dRootSignatureFlags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT | D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
+	//D3D12_ROOT_SIGNATURE_DESC d3dRootSignatureDesc;
+	//::ZeroMemory(&d3dRootSignatureDesc, sizeof(D3D12_ROOT_SIGNATURE_DESC));
+	//d3dRootSignatureDesc.NumParameters = _countof(pd3dRootParameters);
+	//d3dRootSignatureDesc.pParameters = pd3dRootParameters;
+	//d3dRootSignatureDesc.NumStaticSamplers = _countof(pd3dSamplerDescs);
+	//d3dRootSignatureDesc.pStaticSamplers = pd3dSamplerDescs;
+	//d3dRootSignatureDesc.Flags = d3dRootSignatureFlags;
+
+	//ID3DBlob *pd3dSignatureBlob = NULL;
+	//ID3DBlob *pd3dErrorBlob = NULL;
+	//D3D12SerializeRootSignature(&d3dRootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &pd3dSignatureBlob, &pd3dErrorBlob);
+	//pd3dDevice->CreateRootSignature(0, pd3dSignatureBlob->GetBufferPointer(), pd3dSignatureBlob->GetBufferSize(), __uuidof(ID3D12RootSignature), (void **)&pd3dGraphicsRootSignature);
+	//if (pd3dSignatureBlob) pd3dSignatureBlob->Release();
+	//if (pd3dErrorBlob) pd3dErrorBlob->Release();
+
+	//return(pd3dGraphicsRootSignature);
 	ID3D12RootSignature *pd3dGraphicsRootSignature = NULL;
 
-	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[10];
+	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[12];
 
 	pd3dDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	pd3dDescriptorRanges[0].NumDescriptors = 1;
@@ -588,12 +795,25 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dDescriptorRanges[9].RegisterSpace = 0;
 	pd3dDescriptorRanges[9].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
+	pd3dDescriptorRanges[10].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pd3dDescriptorRanges[10].NumDescriptors = 1;
+	pd3dDescriptorRanges[10].BaseShaderRegister = 14; //t2: gtxtTerrainDetailTexture
+	pd3dDescriptorRanges[10].RegisterSpace = 0;
+	pd3dDescriptorRanges[10].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	pd3dDescriptorRanges[11].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pd3dDescriptorRanges[11].NumDescriptors = 1;
+	pd3dDescriptorRanges[11].BaseShaderRegister = 15; //t15
+	pd3dDescriptorRanges[11].RegisterSpace = 0;
+	pd3dDescriptorRanges[11].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+
 	//pd3dDescriptorRanges[10].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	//pd3dDescriptorRanges[10].NumDescriptors = 1;						//m_nScreenOffRederTarget의 개수
 	//pd3dDescriptorRanges[10].BaseShaderRegister = 20; //T20: gtxtScene
 	//pd3dDescriptorRanges[10].RegisterSpace = 0;
 	//pd3dDescriptorRanges[10].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	D3D12_ROOT_PARAMETER pd3dRootParameters[15];
+	D3D12_ROOT_PARAMETER pd3dRootParameters[17];
 
 	pd3dRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pd3dRootParameters[0].Descriptor.ShaderRegister = 1; //Camera
@@ -671,6 +891,15 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dRootParameters[14].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[9]);
 	pd3dRootParameters[14].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
+	pd3dRootParameters[15].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pd3dRootParameters[15].Descriptor.ShaderRegister = 5;
+	pd3dRootParameters[15].Descriptor.RegisterSpace = 0;
+	pd3dRootParameters[15].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	pd3dRootParameters[16].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pd3dRootParameters[16].DescriptorTable.NumDescriptorRanges = 1;
+	pd3dRootParameters[16].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[11]);
+	pd3dRootParameters[16].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	//pd3dRootParameters[15].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	//pd3dRootParameters[15].DescriptorTable.NumDescriptorRanges = 1;
 	//pd3dRootParameters[15].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[10];				//t21 : UI
@@ -721,6 +950,7 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	if (pd3dErrorBlob) pd3dErrorBlob->Release();
 
 	return(pd3dGraphicsRootSignature);
+
 }
 
 void CScene::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
@@ -912,6 +1142,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 	pCamera->SetViewportsAndScissorRects(pd3dCommandList);
 	pCamera->UpdateShaderVariables(pd3dCommandList);
 	UpdateShaderVariables(pd3dCommandList);
+	billboardobj->UpdateShaderVariable(pd3dCommandList);
 
 //	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
 //	pd3dCommandList->SetGraphicsRootConstantBufferView(2, d3dcbLightsGpuVirtualAddress); //Lights
@@ -933,23 +1164,28 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 //		}
 //	}
 
-	/*switch (SCENEMANAGER->GetSceneType())
+	switch (SCENEMANAGER->GetSceneType())
 	{
 	case MENUSCENE:
-		m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
+		//m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
+	if (m_ppShaders[2]) m_ppShaders[2]->Render(pd3dCommandList, pCamera);
+
 		break;
 	case INGAME:
-		m_ppGameObjects[1]->Render(pd3dCommandList, pCamera);
-		break;
-	}*/
-
-	for (int i = 0; i < 6; i++)
-	{
-		m_ppPlayGroundObjects[i]->Render(pd3dCommandList, pCamera);
+		for (int i = 0; i < m_nPlayGroundObjects; i++)
+		{
+			m_ppPlayGroundObjects[i]->Render(pd3dCommandList, pCamera);
+		}
+		//	m_ppGameObjects[1]->Render(pd3dCommandList, pCamera);
+	break;
 	}
 
-	if (billboardobj) billboardobj->Render(pd3dCommandList, pCamera);
 
+	//if (billboardobj)
+	//{
+	//	//billboardobj->SetLookAt(pCamera->GetPosition());
+	//	billboardobj->Render(pd3dCommandList, pCamera);
+	//}
 	//m_ppGameObjects[2]->Render(pd3dCommandList, pCamera);
 
 	/*if (m_ppGameObjects[SCENEMANAGER->GetSceneType()])
@@ -982,34 +1218,38 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 void CScene::CheckObjectByObjectCollisions() {
 	//체크는되는듯한데 왜 중단점이 안되지?
 	
+	//for (int i = 1; i < m_nPlayGroundObjects; i++)
+	//{
+	////	if (m_ppPlayGroundObjects[i])
+	////	{
+	//	m_ppPlayGroundObjects[i]->Animate(m_fElapsedTime);
+	//m_ppPlayGroundObjects[i]->UpdateTransform(NULL);
+	//m_ppPlayGroundObjects[i]->GetBoundingBox().Center = m_ppPlayGroundObjects[i]->GetPosition();
+	////	}
+	//}
+	//static BoundingOrientedBox box = PLAYER->GetPlayer()->GetBoundingBox();
+	//
 	for (int i = 1; i < m_nPlayGroundObjects; i++)
-	{
-	//	if (m_ppPlayGroundObjects[i])
-	//	{
-			m_ppPlayGroundObjects[i]->Animate(m_fElapsedTime);
-	m_ppPlayGroundObjects[i]->UpdateTransform(NULL);
-	m_ppPlayGroundObjects[i]->GetBoundingBox().Center = m_ppPlayGroundObjects[i]->GetPosition();
-	//	}
-	}
-	BoundingOrientedBox box = PLAYER->GetPlayer()->GetBoundingBox();
-	
-	for (int i = 1; i < 6; i++)
 	{
 		if (m_ppPlayGroundObjects[i])
 		{
 			BoundingOrientedBox Mapbox = m_ppPlayGroundObjects[i]->GetBoundingBox();
 
-			if (m_ppPlayGroundObjects[i]->GetBoundingBox().Intersects(box))
+			if (m_ppPlayGroundObjects[i]->GetBoundingBox().Intersects(PLAYER->GetPlayer()->GetBoundingBox()))
 			{
 				//PLAYER->GetPlayer()->SetPosition()
 				//PLAYER->GetPlayer()->SetAllowKey(false);
-				//int i = 0;
+				//PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0,0,0));
+
+				PLAYER->GetPlayer()->SetPlayCrashMap(true);
 				//PLAYER->GetPlayer()->SetVelocity( PLAYER->GetPlayer()->GetVelocity().x - 0.5);
-				int i = 0;
+				//int i = 0;
 			}
 			else
 			{
-				PLAYER->GetPlayer()->SetAllowKey(true);
+				PLAYER->GetPlayer()->SetPlayCrashMap(false);
+
+				//PLAYER->GetPlayer()->SetAllowKey(true);
 			}
 		}
 	}

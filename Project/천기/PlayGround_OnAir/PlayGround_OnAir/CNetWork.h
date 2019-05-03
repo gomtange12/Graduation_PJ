@@ -9,7 +9,9 @@ class CNetWork : public CSingleTonBase<CNetWork>
 {
 private:
 	//Server
+	WSADATA	wsadata;
 	SOCKET  g_mysocket;
+	SOCKADDR_IN ServerAddr;
 
 	WSABUF	send_wsabuf;
 	char 	send_buffer[MAX_BUFFER];
@@ -21,18 +23,17 @@ private:
 	int		saved_packet_size = 0;
 
 	int		g_myid;
-	float	TimeElapsed;
 public:
 	CNetWork();
 	~CNetWork();
 
-	void MakeServer(HWND hWnd);
+	void MakeServer(const HWND& hWnd);
 	void SendPacket();
 	void ReadPacket(SOCKET sock);
 	void ProcessPacket(char *ptr);
 	void MatchPkt();
-	void StatePkt(DWORD state,float y);
-	void LookPkt(float y);
+	void StatePkt(DWORD state);
+	void RotePkt(float y);
 
-	void SetTime(float time) { TimeElapsed = time; };
+	
 };

@@ -10,6 +10,11 @@ struct VS_VB_INSTANCE
 {
 	XMFLOAT4X4 m_xmf4x4Transform;
 };
+struct UI_Data
+{
+	XMFLOAT4X4 m_xmf4x4Transform;
+	XMFLOAT2 m_uvCoord;
+};
 class CScene;
 class CShader
 {
@@ -191,23 +196,29 @@ public:
 	int								m_nPlayGroundObjects = 0;
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 };
+class CBillboardObject;
 class CTexturedShader : public CShader
 {
 public:
 	CTexturedShader();
 	virtual ~CTexturedShader();
 
-	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
+	//virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
-
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	//virtual void CreateShader (ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
+
 	virtual D3D12_BLEND_DESC CreateBlendState();
 	virtual D3D12_DEPTH_STENCIL_DESC CreateDepthStencilState();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ID3DBlob **ppd3dShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppd3dShaderBlob);
+	CBillboardObject				**m_ppUIObjects = 0;
+	int								m_nUIObjects = 0;
+	
 	ID3D12Resource *m_pd3dcbUIObjects = NULL;
-	VS_VB_INSTANCE *m_pcbMappedUIObjects = NULL;
+	UI_Data *m_pcbMappedUIObjects = NULL;
 	CScene* m_pScene = NULL;
 };
 class CTexturedUIShader : public CTexturedShader
@@ -264,37 +275,78 @@ protected:
 	CMaterial						*m_pMaterial = NULL;
 #endif
 };
-class CInstancingShader : public CObjectsShader //Grass
+
+//class CGeometeryBillboardShader : public CTexturedShader
+//{
+//public:
+//	CGeometeryBillboardShader();
+//	virtual ~CGeometeryBillboardShader();
+//
+//	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
+//	virtual D3D12_BLEND_DESC CreateBlendState();
+//	virtual D3D12_DEPTH_STENCIL_DESC CreateDepthStencilState();
+//	virtual D3D12_RASTERIZER_DESC CreateRasterizerState();
+//	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ID3DBlob **ppd3dShaderBlob);
+//	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppd3dShaderBlob);
+//	virtual D3D12_SHADER_BYTECODE CreateGeometeryShader(ID3DBlob **ppd3dShaderBlob);
+//
+//	virtual void CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature *pd3dGraphicsRootSignature);
+//
+//	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, void *pContext = NULL);
+//	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+//	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList* pd3dCommandList, XMFLOAT4X4* pxmf4x4World);
+//	virtual void ReleaseShaderVariables();
+//
+//	virtual void ReleaseUploadBuffers();
+//	//virtual void ReleaseObjects();
+//
+//	virtual void OnPrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
+//	virtual void Render(ID3D12GraphicsCommandList *pd3dDevice, std::shared_ptr<CCamera> pCamera);
+//protected:
+//
+//
+//
+//	int m_nStride = 0;
+//	int m_nVertices = 0;
+//
+//
+//	ID3D12Resource* m_pd3dVertexBuffer;
+//	ID3D12Resource* m_pd3dVertexUploadBuffer;
+//
+//
+//
+//	D3D12_VERTEX_BUFFER_VIEW m_pd3dVertexBufferView;
+//
+//#ifdef _WITH_BATCH_MATERIAL
+//	CMaterial						*m_ppMaterial = NULL;
+//#endif
+//};
+
+class CUiShader : public CShader
 {
 public:
-	CInstancingShader();
-	virtual ~CInstancingShader();
-	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
-	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ID3DBlob **ppd3dShaderBlob);
-	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppd3dShaderBlob);
-	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
-	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
-	virtual void ReleaseShaderVariables();
-	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, void* pHeightMap);
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera);
-	virtual	void AnimateObjects(float fTimeElapsed, CCamera* pCamera);
+	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 
-	virtual D3D12_BLEND_DESC CreateBlendState();
-	virtual D3D12_DEPTH_STENCIL_DESC CreateDepthStencilState();
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 
-protected:
-	int m_nGrass;
-	CGameObject	  **m_ppGrass = 0;
-	CTexture *m_pTexture;
-	//인스턴스 데이터를 포함하는 버퍼와 포인터이다.
-	//정점 버퍼와 정점버퍼뷰
-	ID3D12Resource *m_pd3dcbGrassObjects = NULL;
-	VS_VB_INSTANCE *m_pcbMappedGrassObjects = NULL;
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
 
-	////인스턴스 데이터를 포함하는 버퍼와 포인터이다.
-	/*ID3D12Resource *m_pd3dcbGameObjects = NULL;
-	VS_VB_INSTANCE *m_pcbMappedGameObjects = NULL;*/
+private:
+	CTexture* m_pTexture = nullptr;
+};
 
+class CBillBoardShader : public CShader
+{
+public:
+	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 
-	//D3D12_VERTEX_BUFFER_VIEW m_d3dInstancingBufferView;
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
+	CGameObject **m_ppBillBoardObj;
+	int			m_BillboardNum;
+private:
+	CTexture* m_pTexture = nullptr;
 };
