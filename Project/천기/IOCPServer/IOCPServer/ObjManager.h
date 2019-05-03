@@ -10,7 +10,7 @@ private:
 	//std::vector<SoloRoom*> v_soloRoom;
 	
 	int soloRoomNum;
-	
+	float fDistance = 12.25f;
 public:
 	
 
@@ -25,4 +25,5 @@ public:
 	void MovePkt(int id, unsigned char *packet);
 	ObjManager*			GetObjectManager() { return this; }
 	inline Player*&		GetPlayer(unsigned int playerIndex) { return g_clients[playerIndex]; }
+	void RotePkt(int id, unsigned char *packet);
 };

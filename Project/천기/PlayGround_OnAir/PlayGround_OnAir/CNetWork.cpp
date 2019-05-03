@@ -122,6 +122,7 @@ void CNetWork::ProcessPacket(char *ptr)
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		xmf3Shift = XMFLOAT3(pkt->posX, pkt->posY, pkt->posZ);
 		PLAYER->GetPlayer()->Move(xmf3Shift, pkt->velocity);
+		//PLAYER->GetPlayer()->Update(TimeElapsed);
 		//if (other_id == g_myid) {
 		//	g_left_x = pkt->X_POS - 4;
 		//	g_top_y = pkt->Y_POS - 4;
@@ -192,21 +193,23 @@ void CNetWork::MatchPkt()
 
 	SendPacket();
 }
-void CNetWork::StatePkt(DWORD state)
+void CNetWork::StatePkt(DWORD state, float y)
 {
-	cs_packet_state *pkt = reinterpret_cast<cs_packet_state *>(send_buffer);
+	cs_packet_move_state *pkt = reinterpret_cast<cs_packet_move_state *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
-	pkt->type = SC_STATE_INFO;
+	pkt->type = SC_MOVE_STATE_INFO;
 	pkt->state = state;
 
-	pkt->LposX = PLAYER->GetPlayer()->GetLook().x;
-	pkt->LposY = PLAYER->GetPlayer()->GetLook().y;
-	pkt->LposZ = PLAYER->GetPlayer()->GetLook().z;
-
-	pkt->RposX = PLAYER->GetPlayer()->GetRight().x;
-	pkt->RposY = PLAYER->GetPlayer()->GetRight().y;
-	pkt->RposZ = PLAYER->GetPlayer()->GetRight().z;
+	SendPacket();
+}
+void CNetWork::LookPkt(float y)
+{
+	cs_packet_rote_state *pkt = reinterpret_cast<cs_packet_rote_state *>(send_buffer);
+	send_wsabuf.len = sizeof(pkt);
+	pkt->size = sizeof(pkt);
+	pkt->type = SC_ROTE_STATE_INFO;
+	pkt->y = y;
 
 	SendPacket();
 }

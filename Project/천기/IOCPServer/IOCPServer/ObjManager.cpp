@@ -52,9 +52,13 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 {
 	switch (packet[1]) //type
 	{ 
-	case SC_STATE_INFO:
+	case SC_MOVE_STATE_INFO:
 	{
 		MovePkt(id, packet);
+		break;
+	}
+	case SC_ROTE_STATE_INFO: {
+		RotePkt(id, packet);
 		break;
 	}
 	default:
@@ -89,33 +93,53 @@ void ObjManager::ModMatch(int id)
 }
 void ObjManager::MovePkt(int id, unsigned char *packet)
 {
-	cs_packet_state *pkt = reinterpret_cast<cs_packet_state *>(packet);
-	g_clients[id]->m_xmf3Look = XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ);
-	g_clients[id]->m_xmf3Right = XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ);
-	/*if ((g_clients[id]->state == PlayerState::IDLE ||
-		g_clients[id]->state == PlayerState::RUN ||
-		g_clients[id]->state == PlayerState::JUMPROLL ||
-		g_clients[id]->state == PlayerState::HIT) == false)
-		return;*/
+	cs_packet_move_state *pkt = reinterpret_cast<cs_packet_move_state *>(packet);
+	
+
+	//g_clients[id]->m_xmf3Look = XMFLOAT3(g_clients[id]->m_xmf4x4ToParent._31, g_clients[id]->m_xmf4x4ToParent._32, g_clients[id]->m_xmf4x4ToParent._33);
+	//g_clients[id]->m_xmf3Right = XMFLOAT3(g_clients[id]->m_xmf4x4ToParent._11, g_clients[id]->m_xmf4x4ToParent._12, g_clients[id]->m_xmf4x4ToParent._13);
+	
+	//g_clients[id]->m_xmf3Look = Vector3::Normalize(g_clients[id]->m_xmf3Look);
+	//g_clients[id]->m_xmf3Right = Vector3::Normalize(g_clients[id]->m_xmf3Right);
+
 	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
 	float fDistance = 12.25f;
-	if (DIR_FORWARD & pkt->state) {
-		xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Look, fDistance);
+
+	if (DIR_FORWARD & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Look, fDistance);
 		std::wcout << L"╩С ";
 	}
-	if (DIR_BACKWARD & pkt->state) {
-		xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Look, -fDistance);
+	if (DIR_BACKWARD & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Look, -fDistance);
 		std::wcout << L"го ";
 	}
-	if (DIR_LEFT & pkt->state) {
-		xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Right, -fDistance);
+	if (DIR_LEFT & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Right, -fDistance);
 		std::wcout << L"аб ";
 	}
-	if (DIR_RIGHT & pkt->state) {
-		xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Right, fDistance);
+	if (DIR_RIGHT & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Right, fDistance);
 		std::wcout << L"©Л ";
 	}
+	
 
+	//g_clients[id]->m_xmf4x4ToParent = Matrix4x4::Multiply(xmmtxRotate, g_clients[id]->m_xmf4x4ToParent);
+
+	
 	PACKETMANAGER->PosPacket(id, xmf3Shift);
+	
+}
+void ObjManager::RotePkt(int id, unsigned char *packet)
+{
+	cs_packet_rote_state *pkt = reinterpret_cast<cs_packet_rote_state *>(packet);
+
+	if (pkt->y != 0.0f)
+	{
+
+
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&g_clients[id]->m_xmf3Up), XMConvertToRadians(pkt->y));
+		g_clients[id]->m_xmf3Look = Vector3::TransformNormal(g_clients[id]->m_xmf3Look, xmmtxRotate);
+		g_clients[id]->m_xmf3Right = Vector3::TransformNormal(g_clients[id]->m_xmf3Right, xmmtxRotate);
+
+
+	}
+	g_clients[id]->m_xmf3Look = Vector3::Normalize(g_clients[id]->m_xmf3Look);
+	g_clients[id]->m_xmf3Right = Vector3::CrossProduct(g_clients[id]->m_xmf3Up, g_clients[id]->m_xmf3Look, true);
 	
 }

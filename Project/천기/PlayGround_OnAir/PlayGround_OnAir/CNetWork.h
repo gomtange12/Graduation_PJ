@@ -21,6 +21,7 @@ private:
 	int		saved_packet_size = 0;
 
 	int		g_myid;
+	float	TimeElapsed;
 public:
 	CNetWork();
 	~CNetWork();
@@ -30,5 +31,8 @@ public:
 	void ReadPacket(SOCKET sock);
 	void ProcessPacket(char *ptr);
 	void MatchPkt();
-	void StatePkt(DWORD state);
+	void StatePkt(DWORD state,float y);
+	void LookPkt(float y);
+
+	void SetTime(float time) { TimeElapsed = time; };
 };

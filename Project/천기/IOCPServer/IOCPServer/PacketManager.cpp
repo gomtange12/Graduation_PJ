@@ -40,8 +40,8 @@ void PacketManager::PutPlayerPacket(int id)
 		if (true == objectManager->GetPlayer(i)->m_connected) {
 			sc_packet_put_player packet;
 			packet.id = id;
-			packet.x = objectManager->GetPlayer(id)->m_x;
-			packet.y = objectManager->GetPlayer(id)->m_y;
+		/*	packet.x = objectManager->GetPlayer(id)->m_x;
+			packet.y = objectManager->GetPlayer(id)->m_y;*/
 			packet.size = sizeof(sc_packet_put_player);
 			packet.type = SC_PUT_PLAYER;
 			SendPacket(i, &packet);
@@ -52,8 +52,8 @@ void PacketManager::PutPlayerPacket(int id)
 		if (i == id) continue;
 		sc_packet_put_player packet;
 		packet.id = i;
-		packet.x = objectManager->GetPlayer(i)->m_x;
-		packet.y = objectManager->GetPlayer(i)->m_y;
+		/*packet.x = objectManager->GetPlayer(i)->m_x;
+		packet.y = objectManager->GetPlayer(i)->m_y;*/
 		packet.size = sizeof(sc_packet_put_player);
 		packet.type = SC_PUT_PLAYER;
 		SendPacket(id, &packet);
