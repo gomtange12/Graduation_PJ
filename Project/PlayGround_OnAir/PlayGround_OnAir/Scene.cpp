@@ -379,7 +379,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 
 
 	//PLAYER->AddPlayer()
-	m_nPlayGroundObjects = 14;
+	m_nPlayGroundObjects = 15;
 	m_ppPlayGroundObjects = new CGameObject*[m_nPlayGroundObjects];
 
 	CLoadedModelInfo *Floor = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Floor.bin", NULL, false);
@@ -402,10 +402,10 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	CLoadedModelInfo *Floor_Stage = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/바닥.bin", NULL, false);
 	m_ppPlayGroundObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[2]->SetChild(Floor_Stage->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[2]->SetPosition(0.0f, 20, -825.0f); 
+	m_ppPlayGroundObjects[2]->SetPosition(0.0f, 20, -865.0f); 
 	m_ppPlayGroundObjects[2]->SetScale(20.0f, 20.0f, 20.0f);
 	m_ppPlayGroundObjects[2]->SetMesh(Floor_Stage->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[2]->SetOOBB(m_ppPlayGroundObjects[2]->GetPosition(),XMFLOAT3( m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents().x * objScale * 20, m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents().y * objScale * 10, m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents().z * objScale * 60), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[2]->SetOOBB(m_ppPlayGroundObjects[2]->GetPosition(),XMFLOAT3( m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents().x * objScale * 20, m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents().y * objScale * 20, m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents().z * objScale * 70), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 //
 	CLoadedModelInfo *Slide = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/미끄럼틀.bin", NULL, false);
 	m_ppPlayGroundObjects[3] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -473,60 +473,39 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppPlayGroundObjects[10]->SetMesh(Stage->m_pModelRootObject->m_pMesh);
 	m_ppPlayGroundObjects[10]->SetOOBB(m_ppPlayGroundObjects[10]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[10]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo *Spring_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Slide_Speaker_1.bin", NULL, false);
+
+	CLoadedModelInfo *LeftSpring_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Spring_1.bin", NULL, false);
 	m_ppPlayGroundObjects[11] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppPlayGroundObjects[11]->SetChild(Spring_1->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[11]->SetPosition(500.0f, 45, 100.0f); //맵 거꾸로 버그 여기
-	m_ppPlayGroundObjects[11]->SetScale(20.0f, 20.0f, 20.0f);
-	m_ppPlayGroundObjects[11]->SetMesh(Spring_1->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[11]->SetOOBB(m_ppPlayGroundObjects[11]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[11]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[11]->SetChild(LeftSpring_1->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[11]->SetPosition(-400.0f, 20, 700.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[11]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[11]->SetMesh(LeftSpring_1->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[11]->SetOOBB(m_ppPlayGroundObjects[11]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[11]->m_pMesh->GetAABBExtents(), 10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo *Spring_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Spring_1.bin", NULL, false);
+	CLoadedModelInfo *Left_Spring_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Spring_2.bin", NULL, false);
 	m_ppPlayGroundObjects[12] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppPlayGroundObjects[12]->SetChild(Spring_2->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[12]->SetPosition(-700.0f, 20, 600.0f); //맵 거꾸로 버그 여기
-	m_ppPlayGroundObjects[12]->SetScale(20.0f, 20.0f, 20.0f);
-	m_ppPlayGroundObjects[12]->SetMesh(Spring_2->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[12]->SetOOBB(m_ppPlayGroundObjects[12]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[12]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[12]->SetChild(Left_Spring_2->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[12]->SetPosition(-500.0f, 20, 800.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[12]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[12]->SetMesh(Left_Spring_2->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[12]->SetOOBB(m_ppPlayGroundObjects[12]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[12]->m_pMesh->GetAABBExtents(), 10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo *Spring_3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Spring_2.bin", NULL, false);
+	CLoadedModelInfo *Right_Spring_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Spring_1.bin", NULL, false);
 	m_ppPlayGroundObjects[13] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppPlayGroundObjects[13]->SetChild(Spring_3->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[13]->SetPosition(-900.0f, 20, 700.0f); //맵 거꾸로 버그 여기
-	m_ppPlayGroundObjects[13]->SetScale(20.0f, 20.0f, 20.0f);
-	m_ppPlayGroundObjects[13]->SetMesh(Spring_3->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[13]->SetOOBB(m_ppPlayGroundObjects[13]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[13]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[13]->SetChild(Right_Spring_1->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[13]->SetPosition(400.0f, 20, 700.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[13]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[13]->SetMesh(Right_Spring_1->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[13]->SetOOBB(m_ppPlayGroundObjects[13]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[13]->m_pMesh->GetAABBExtents(), 10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	//UI
-	//CTexture *ppUITextures;
-	//ppUITextures = new CTexture(1, RESOURCE_TEXTURE2D, 0);
-	//ppUITextures->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/pg_logo.dds", 0);
+	CLoadedModelInfo *RightSpring_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Spring_2.bin", NULL, false);
+	m_ppPlayGroundObjects[14] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[14]->SetChild(RightSpring_2->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[14]->SetPosition(500.0f, 20, 800.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[14]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[14]->SetMesh(RightSpring_2->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[14]->SetOOBB(m_ppPlayGroundObjects[14]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[14]->m_pMesh->GetAABBExtents(), 10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	//UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
-
-	//CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1); // 텍스쳐 srv
-	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	//CreateShaderResourceViews(pd3dDevice, ppUITextures, 3, true);
-
-	//m_nUIObjects = 2;
-	//m_ppUIObjects = new CGameObject*[m_nUIObjects];
-
-	//CMaterial *ppUIMaterials;
-	//ppUIMaterials = new CMaterial(1);
-	//ppUIMaterials->SetTexture(ppUITextures);
-	//CTexturedRectMesh *pUIMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 15.0f, 30.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	//
-
-	//CBillboardObject *pBillboardObject = NULL;
-
-	//pBillboardObject = new CBillboardObject();
-
-	//pBillboardObject->SetMaterial(1, ppUIMaterials);
-	//pBillboardObject->SetPosition(PLAYER->GetPlayer()->GetPosition().x, PLAYER->GetPlayer()->GetPosition().y+30, PLAYER->GetPlayer()->GetPosition().z); // 셋포지션의 헤이트값 조절해서 바닥에서 자라는지 설정. 풀 월드포지션 설정해주는 부분임
-	//pBillboardObject->(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize * i));
-
-	 //billboardobj = new CBillboardObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	 //billboardobj->SetPosition(PLAYER->GetPlayer()->GetPosition().x, PLAYER->GetPlayer()->GetPosition().y + 30, PLAYER->GetPlayer()->GetPosition().z);
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	
@@ -1185,20 +1164,22 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 //		}
 //	}
 
-	/*switch (SCENEMANAGER->GetSceneType())
+	switch (SCENEMANAGER->GetSceneType())
 	{
 	case MENUSCENE:
-		m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
+		//m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
+	if (m_ppShaders[2]) m_ppShaders[2]->Render(pd3dCommandList, pCamera);
+
 		break;
 	case INGAME:
-		m_ppGameObjects[1]->Render(pd3dCommandList, pCamera);
-		break;
-	}*/
-
-	for (int i = 0; i < m_nPlayGroundObjects; i++)
-	{
-		m_ppPlayGroundObjects[i]->Render(pd3dCommandList, pCamera);
+		for (int i = 0; i < m_nPlayGroundObjects; i++)
+		{
+			m_ppPlayGroundObjects[i]->Render(pd3dCommandList, pCamera);
+		}
+		//	m_ppGameObjects[1]->Render(pd3dCommandList, pCamera);
+	break;
 	}
+
 
 	//if (billboardobj)
 	//{
@@ -1229,7 +1210,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 			
 		}
 	}*/
-	for (int i = 0; i < m_nShaders; i++) if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
+	//for (int i = 0; i < m_nShaders; i++) if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 	//CheckObjectByObjectCollisions();
 
 }

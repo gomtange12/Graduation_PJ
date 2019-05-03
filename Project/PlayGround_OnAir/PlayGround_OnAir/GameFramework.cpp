@@ -162,6 +162,7 @@ void CGameFramework::CreateSwapChain()
 	dxgiSwapChainFullScreenDesc.Windowed = TRUE;
 
 	HRESULT hResult = m_pdxgiFactory->CreateSwapChainForHwnd(m_pd3dCommandQueue, m_hWnd, &dxgiSwapChainDesc, &dxgiSwapChainFullScreenDesc, NULL, (IDXGISwapChain1 **)&m_pdxgiSwapChain);
+
 #else
 	DXGI_SWAP_CHAIN_DESC dxgiSwapChainDesc;
 	::ZeroMemory(&dxgiSwapChainDesc, sizeof(dxgiSwapChainDesc));
@@ -176,11 +177,18 @@ void CGameFramework::CreateSwapChain()
 	dxgiSwapChainDesc.OutputWindow = m_hWnd;
 	dxgiSwapChainDesc.SampleDesc.Count = (m_bMsaa4xEnable) ? 4 : 1;
 	dxgiSwapChainDesc.SampleDesc.Quality = (m_bMsaa4xEnable) ? (m_nMsaa4xQualityLevels - 1) : 0;
-	dxgiSwapChainDesc.Windowed = TRUE;
+	dxgiSwapChainDesc.Windowed = TRUE; //false는 전체모드. 이거 전체모드 할라면 
 	dxgiSwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	HRESULT hResult = m_pdxgiFactory->CreateSwapChain(m_pd3dCommandQueue, &dxgiSwapChainDesc, (IDXGISwapChain **)&m_pdxgiSwapChain);
+	//hResult = m_pdxgiSwapChain->SetFullscreenState(false, NULL);
+	//if (hResult == E_FAIL)
+	//	return;
+	//m_pdxgiSwapChain->GetDesc(&dxgiSwapChainDesc);
+	////SetFullScreenState함수를 호출해주었기 때문에 ResizeBuffers함수를 호출해줘야함.
+	//m_pdxgiSwapChain->ResizeBuffers(m_nSwapChainBuffers, m_nWndClientWidth, m_nWndClientHeight, dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
 #endif
+
 	m_nSwapChainBufferIndex = m_pdxgiSwapChain->GetCurrentBackBufferIndex();
 
 	hResult = m_pdxgiFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_ALT_ENTER);

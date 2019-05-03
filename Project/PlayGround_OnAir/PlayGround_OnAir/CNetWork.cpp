@@ -190,7 +190,7 @@ void CNetWork::ScenePacket(WORD num)
 
 void CNetWork::MatchPacket() 
 {
-	sc_packet_matching *my_packet = reinterpret_cast<sc_packet_matching *>(send_buffer);
+	cs_packet_matching *my_packet = reinterpret_cast<cs_packet_matching *>(send_buffer);
 	send_wsabuf.len = sizeof(my_packet);
 	my_packet->size = sizeof(my_packet);
 	my_packet->type = SC_MATCHING_PLAYER;

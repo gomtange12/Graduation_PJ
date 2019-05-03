@@ -1536,7 +1536,9 @@ void CUiShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 	
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/pg_logo.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/¸Þ´º¾À.dds", 0);
+
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
 	
 
@@ -1556,6 +1558,37 @@ D3D12_SHADER_BYTECODE CUiShader::CreatePixelShader()
 
 
 void CUiShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
+{
+	m_pTexture->UpdateShaderVariables(pd3dCommandList);
+	CShader::Render(pd3dCommandList, pCamera);
+
+	pd3dCommandList->DrawInstanced(6, 1, 0, 0);
+}
+
+D3D12_SHADER_BYTECODE CBillBoardShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSUITextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+
+}
+
+D3D12_SHADER_BYTECODE CBillBoardShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSUITextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+
+void CBillBoardShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_ppBillBoardObj = new CGameObject*[m_BillboardNum];
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/¸Þ´º¾À.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+}
+
+void CBillBoardShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
 {
 	m_pTexture->UpdateShaderVariables(pd3dCommandList);
 	CShader::Render(pd3dCommandList, pCamera);
