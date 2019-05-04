@@ -33,6 +33,7 @@ constexpr int SC_MATCHING_RESULT = 6;
 constexpr int SC_SCENE = 7;
 constexpr int SC_MOVE_STATE_INFO = 8;
 constexpr int SC_ROTE_STATE_INFO = 9;
+
 #pragma pack (push, 1)
 //////////////////////서버/////////////////////////
 struct sc_packet_login_ok {
@@ -77,6 +78,8 @@ struct sc_packet_pos {
 	float posY;
 	float posZ;
 }; 
+
+
 /////////////////////////클라//////////////////////
 struct cs_packet_matching {
 	BYTE size;
