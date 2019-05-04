@@ -104,7 +104,7 @@ void CGameFramework::CreateDirect2DDevice()
 	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(0.3f, 0.0f, 0.0f, 0.5f), &m_pd2dbrBackground);
 	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0x9ACD32, 1.0f)), &m_pd2dbrBorder);
 
-	hResult = m_pdWriteFactory->CreateTextFormat(L"궁서체", NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL, 15.0f, L"en-US", &m_pdwFont);
+	hResult = m_pdWriteFactory->CreateTextFormat(L"맑은 고딕체", NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 15.0f, L"en-US", &m_pdwFont);
 	hResult = m_pdwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	hResult = m_pdwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Purple, 1.0f), &m_pd2dbrText);
@@ -162,7 +162,6 @@ void CGameFramework::CreateSwapChain()
 	dxgiSwapChainFullScreenDesc.Windowed = TRUE;
 
 	HRESULT hResult = m_pdxgiFactory->CreateSwapChainForHwnd(m_pd3dCommandQueue, m_hWnd, &dxgiSwapChainDesc, &dxgiSwapChainFullScreenDesc, NULL, (IDXGISwapChain1 **)&m_pdxgiSwapChain);
-
 #else
 	DXGI_SWAP_CHAIN_DESC dxgiSwapChainDesc;
 	::ZeroMemory(&dxgiSwapChainDesc, sizeof(dxgiSwapChainDesc));
@@ -423,7 +422,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 					m_pCamera = PLAYER->GetPlayer()->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
 					break;
 				case VK_F6: {
-					CNETWORK->MatchPacket();
+					CNETWORK->MatchPkt();
 					break;
 				}
 				case VK_F9:
@@ -568,18 +567,21 @@ void CGameFramework::BuildObjects()
 	//여기가 배치 구문이니 신경써야한다. 
 #ifdef _WITH_TERRAIN_PLAYER
 	PLAYER->Initialize(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+	int i = 0;
 	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(0, 0, 0));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()-> m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
 	PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7,10,7), XMFLOAT4(0, 0, 0, 1));
+	
+	//if (m_pScene) m_pScene->MakeOtherPlayer(m_pd3dDevice, m_pd3dCommandList);
+	//MAKE OTHER PLAYER
+	
 	//PLAYER->GetPlayer()->SetMesh()
 	//PLAYER->GetPlayer()->FindAndSetSkinnedMesh()
-	///if (PLAYER->GetPlayer()->GetRootSkinnedGameObject()->m_pMesh != nullptr)
+	//if (PLAYER->GetPlayer()->GetRootSkinnedGameObject()->m_pMesh != nullptr)
 		//int i = 0;
 	//PLAYER->GetPlayer()->SetCollideBox();
 																									 //PLAYER->MakeOtherPlayers(m_pd3dDevice, m_pd3dCommandList, SCENEMANAGER->m_MapList[INGAME]->GetGraphicsRootSignature(), SCENEMANAGER->m_MapList[INGAME]->m_pTerrain);
-	/*CTerrainPlayer *pPlayer = new CTerrainPlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-	pPlayer->SetPosition(XMFLOAT3(380.0f, m_pScene->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
-	pPlayer->SetScale(XMFLOAT3(15.0f,15.0f,15.0f));*/
+	
 #else
 	CAirplanePlayer *pPlayer = new CAirplanePlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), NULL);
 	pPlayer->SetPosition(XMFLOAT3(425.0f, 240.0f, 640.0f));
@@ -683,6 +685,7 @@ void CGameFramework::ProcessInput()
 					PLAYER->GetPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
 			}
 			if (dwDirection) PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
+			//if (dwDirection) CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
 		}
 	}
 	//PLAYER->GetPlayer()->SetAllowKey(true);
@@ -704,6 +707,8 @@ void CGameFramework::AnimateObjects()
 
 	PLAYER->GetPlayer()->Animate(fTimeElapsed);
 	PLAYER->GetPlayer()->UpdateTransform(NULL);
+
+	
 #ifdef _WITH_DIRECT2D_IMAGE_EFFECT
 	static UINT64 i = 0;
 	if (++i % 15) return;
@@ -791,6 +796,8 @@ void CGameFramework::FrameAdvance()
 	m_pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 #endif
 	if (PLAYER->GetPlayer()!=NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
+	//if (!pOtherPlayer) pOtherPlayer->Render(m_pd3dCommandList, m_pCamera);
+
 	if (m_pScene)
 	{
 		m_pScene->CheckObjectByObjectCollisions();

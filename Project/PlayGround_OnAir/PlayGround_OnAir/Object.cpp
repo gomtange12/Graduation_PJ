@@ -2,6 +2,7 @@
 // File: CGameObject.cpp
 //-----------------------------------------------------------------------------
 
+#include <iostream>
 #include "stdafx.h"
 #include "Object.h"
 #include "Shader.h"
@@ -1164,7 +1165,11 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			{
 				for (int i = 0; i < nChilds; i++)
 				{
+					//std::cout << "gd" << std::endl;
+
 					CGameObject *pChild = CGameObject::LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pGameObject, pInFile, pShader, pnSkinnedMeshes);
+					//std::cout << "gd" << std::endl;
+
 					if (pChild) pGameObject->SetChild(pChild);
 #ifdef _WITH_DEBUG_FRAME_HIERARCHY
 					TCHAR pstrDebug[256] = { 0 };

@@ -618,41 +618,39 @@ CAngrybotObjectsShader::~CAngrybotObjectsShader()
 
 void CAngrybotObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
-	/*int xObjects = 7, zObjects = 7, i = 0;
+	//int xObjects = 1, zObjects = 1, i = 0;
 
-	m_nObjects = (xObjects * 2 + 1) * (zObjects * 2 + 1);
+	//m_nObjects = 1;// (xObjects * 2 + 1) * (zObjects * 2 + 1);
 
-	m_ppObjects = new CGameObject*[m_nObjects];
+	//m_ppObjects = new CGameObject*[m_nObjects];
 
-	float fxPitch = 7.0f * 2.5f;
-	float fzPitch = 7.0f * 2.5f;
+	//float fxPitch = 7.0f * 2.5f;
+	//float fzPitch = 7.0f * 2.5f;
 
-	CLoadedModelInfo *pAngrybotModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Player.bin", NULL, true);
+	//CLoadedModelInfo *pAngrybotModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
 
-	CHeightMapTerrain *pTerrain = (CHeightMapTerrain *)pContext;
+	//CHeightMapTerrain *pTerrain = (CHeightMapTerrain *)pContext;
 
-	int nObjects = 0;
-	for (int x = -xObjects; x <= xObjects; x++)
-	{
-		for (int z = -zObjects; z <= zObjects; z++)
-		{
-			m_ppObjects[nObjects] = new CAngrybotObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-			m_ppObjects[nObjects]->SetChild(pAngrybotModel->m_pModelRootObject, true);
-			m_ppObjects[nObjects]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
-			m_ppObjects[nObjects]->m_pAnimationController->SetTrackAnimationSet(0, (nObjects % 2));
-			m_ppObjects[nObjects]->m_pAnimationController->SetTrackSpeed(0, (nObjects % 2) ? 0.25f : 1.0f);
-			m_ppObjects[nObjects]->m_pAnimationController->SetTrackPosition(0, (nObjects % 3) ? 0.85f : 0.0f);
-			m_ppObjects[nObjects]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-			XMFLOAT3 xmf3Position = XMFLOAT3(fxPitch*x + 390.0f, 0.0f, 730.0f + fzPitch * z);
-			xmf3Position.y = pTerrain->GetHeight(xmf3Position.x, xmf3Position.z);
-			m_ppObjects[nObjects]->SetPosition(xmf3Position);
-			m_ppObjects[nObjects++]->SetScale(2.0f, 2.0f, 2.0f);
-		}
-    }
+	//int nObjects = 0;
+	///*for (int x = -xObjects; x <= xObjects; x++)
+	//{
+	//	for (int z = -zObjects; z <= zObjects; z++)
+	//	{*/
+	//		m_ppObjects[nObjects] = new CAngrybotObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	//		m_ppObjects[nObjects]->SetChild(pAngrybotModel->m_pModelRootObject, true);
+	//		m_ppObjects[nObjects]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
+	//		m_ppObjects[nObjects]->m_pAnimationController->SetTrackAnimationSet(0, (nObjects % 2));
+	//		m_ppObjects[nObjects]->m_pAnimationController->SetTrackSpeed(0, (nObjects % 2) ? 0.25f : 1.0f);
+	//		m_ppObjects[nObjects]->m_pAnimationController->SetTrackPosition(0, (nObjects % 3) ? 0.85f : 0.0f);
+	//		m_ppObjects[nObjects]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+	//		
+	//		m_ppObjects[nObjects]->SetPosition(XMFLOAT3(40,0,0));
+	//		m_ppObjects[nObjects++]->SetScale(2.0f, 2.0f, 2.0f);
+	//	
 
-	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	if (pAngrybotModel) delete pAngrybotModel;*/
+	//if (pAngrybotModel) delete pAngrybotModel;
 }
 
 CMapObjectsShader::CMapObjectsShader()
@@ -1536,7 +1534,9 @@ void CUiShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 	
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/menu.dds", 0);
+
 	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/¸Þ´º¾À.dds", 0);
 
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
@@ -1583,7 +1583,7 @@ void CBillBoardShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 
 	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
-	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/¸Þ´º¾À.dds", 0);
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/menu.dds", 0);
 
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
 }
@@ -1594,4 +1594,88 @@ void CBillBoardShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::
 	CShader::Render(pd3dCommandList, pCamera);
 
 	pd3dCommandList->DrawInstanced(6, 1, 0, 0);
+}
+
+
+D3D12_SHADER_BYTECODE CUIPlayerShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSPlayerUITextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+D3D12_SHADER_BYTECODE CUIPlayerShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSPlayerUITextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+}
+
+void CUIPlayerShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+	
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/¿©_Å°Å¸_L.dds", 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/¸Þ´º¾À.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+}
+
+void CUIOtherPlayerShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/³²R_±âÅ¸_L.dds", 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/¸Þ´º¾À.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+}
+D3D12_SHADER_BYTECODE CUIOtherPlayerShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSOtherPlayerUITextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+D3D12_SHADER_BYTECODE CUIOtherPlayerShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSOtherPlayerUITextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+}
+void CUISKillShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/½ºÅ³_ON.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+}
+D3D12_SHADER_BYTECODE CUISKillShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSSSkillTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+D3D12_SHADER_BYTECODE CUISKillShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSSkillUITextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+}
+void CTimeBarShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/timewhite.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+}
+D3D12_SHADER_BYTECODE CTimeBarShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSSTimeBarTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+D3D12_SHADER_BYTECODE CTimeBarShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSTimeBarTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
 }

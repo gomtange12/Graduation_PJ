@@ -133,6 +133,19 @@ enum SceneState {
 	GAMEOVER,
 	LOADING
 };
+enum AVATARNumber {
+	A, //ÀÓ½Ã¸íÄª
+	B
+};
+enum MAPNumber {
+	PLAYGROUND,
+	CONCERT
+};
+enum ModNumber {
+	SOLO,
+	DUO,
+	SQUAD
+};
 namespace Vector3
 {
 	inline XMFLOAT3 XMVectorToFloat3(XMVECTOR& xmvVector)

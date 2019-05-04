@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Shader.h"
 #include "CObjectManager.h"
+#include "CNetWork.h"
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CPlayer
 //int CPlayer::m_PlayeState = IDLE;
@@ -173,6 +174,7 @@ void CPlayer::Rotate(float x, float y, float z)
 		m_pCamera->Rotate(x, y,z);
 		if (y != 0.0f)
 		{
+			//CNETWORK->RotePkt(y);
 			XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Up), XMConvertToRadians(y));
 			m_xmf3Look = Vector3::TransformNormal(m_xmf3Look, xmmtxRotate);
 			m_xmf3Right = Vector3::TransformNormal(m_xmf3Right, xmmtxRotate);
@@ -616,6 +618,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	}
 
 	//m_ObjType = DYNAMIC;
+	//if(CNETWORK->GetInstance()->)
 	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeytarTest.bin", NULL, true);
 	
 
@@ -780,60 +783,61 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 // CGameObject::UpdateTransform(NULL);
 //}
 
-COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
-{
-	/*m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);
-	m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
-
-	m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_fMaxVelocityXZ = 0.0f;
-	m_fMaxVelocityY = 0.0f;
-	m_fFriction = 0.0f;
-
-	m_fPitch = 0.0f;
-	m_fRoll = 0.0f;
-	m_fYaw = 0.0f;*/
-	if (this != nullptr)
-	{
-		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
-		m_pCamera->SetLookAt(m_xmf3Position);
-		//m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
-
-	}
-
-	//m_ObjType = DYNAMIC;
-	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeytarTest.bin", NULL, true);
-
-
-	SetChild(pPlayerModel->m_pModelRootObject, true);
-	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
-
-	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
-	m_pAnimationController->SetTrackAnimationSet(0, 0);
-
-	m_pAnimationController->SetCallbackKeys(1, 3);
-#ifdef _WITH_SOUND_RESOURCE
-	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Footstep01"));
-	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Footstep02"));
-	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Footstep03"));
-#else
-	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Sound/Footstep01.wav"));
-	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Sound/Footstep02.wav"));
-	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Sound/Footstep03.wav"));
-#endif
-	CAnimationCallbackHandler *pAnimationCallbackHandler = new CSoundCallbackHandler();
-	m_pAnimationController->SetAnimationCallbackHandler(1, pAnimationCallbackHandler);
-
-	if (this != nullptr)
-	{
-		CreateShaderVariables(pd3dDevice, pd3dCommandList);
-		SetPlayerUpdatedContext(pContext);
-		SetCameraUpdatedContext(pContext);
-	}
-	//SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
-	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
-	if (pPlayerModel) delete pPlayerModel;
-}
+//COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+//{
+//	//차후에 리소스 관리 방식을 바꿔야한다
+//	/*m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+//	m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);
+//	m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);
+//	m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
+//
+//	m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
+//	m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);
+//	m_fMaxVelocityXZ = 0.0f;
+//	m_fMaxVelocityY = 0.0f;
+//	m_fFriction = 0.0f;
+//
+//	m_fPitch = 0.0f;
+//	m_fRoll = 0.0f;
+//	m_fYaw = 0.0f;*/
+//	//if (this != nullptr) //일단 카메라 쓰지 않는다
+//	//{
+//	//	//m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
+//	//	//m_pCamera->SetLookAt(m_xmf3Position);
+//	//	//m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
+//
+//	//}
+//
+//	//m_ObjType = DYNAMIC;
+//	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
+//
+//
+//	SetChild(pPlayerModel->m_pModelRootObject, true);
+//	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
+//
+//	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
+//	m_pAnimationController->SetTrackAnimationSet(0, 0);
+//
+//	m_pAnimationController->SetCallbackKeys(1, 3);
+//#ifdef _WITH_SOUND_RESOURCE
+//	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Footstep01"));
+//	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Footstep02"));
+//	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Footstep03"));
+//#else
+//	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Sound/Footstep01.wav"));
+//	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Sound/Footstep02.wav"));
+//	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Sound/Footstep03.wav"));
+//#endif
+//	CAnimationCallbackHandler *pAnimationCallbackHandler = new CSoundCallbackHandler();
+//	m_pAnimationController->SetAnimationCallbackHandler(1, pAnimationCallbackHandler);
+//
+//	if (this != nullptr)
+//	{
+//		//CreateShaderVariables(pd3dDevice, pd3dCommandList);
+//		SetPlayerUpdatedContext(pContext);
+//		//SetCameraUpdatedContext(pContext);
+//	}
+//	//SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
+//	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
+//	if (pPlayerModel) delete pPlayerModel;
+//}

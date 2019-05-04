@@ -40,8 +40,12 @@ protected:
 	
 	std::shared_ptr<CCamera>	m_pCamera;
 	bool m_AllowKey = false;
-	
+	//for 서버로 플레이어 식별
+	int							m_PlayerID{ 0 };
+
 public:
+	int GetClientNum() { return m_PlayerID; }
+	void SetClientNum(int cnum) { m_PlayerID = cnum; }
 	
 	void SetCollimdeBox() {
 		//if ( != nullptr)
@@ -153,13 +157,13 @@ public:
 	//virtual void Animate(float fTimeElapsed);
 	//virtual void UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent);
 };
-class COtherPlayers : public CTerrainPlayer
-{
-public:
-	COtherPlayers(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL); 
-	virtual ~COtherPlayers(){}
-public:
-
-};
+//class COtherPlayers : public CPlayer
+//{
+//public:
+//	COtherPlayers(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL); 
+//	virtual ~COtherPlayers(){}
+//public:
+//
+//};
 
 

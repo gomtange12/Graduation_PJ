@@ -63,7 +63,7 @@ public:
 	ID3D12RootSignature *GetGraphicsRootSignature() { return(m_pd3dGraphicsRootSignature); }
 
     void AnimateObjects(float fTimeElapsed);
-
+	void MakeOtherPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	void ReleaseUploadBuffers();
 	void SetCollideBox();
 
