@@ -45,7 +45,6 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 		std::wcout << "잘못된 매칭 정보입니다\n";
 		break;
 	}
-	
 }
 
 void ObjManager::ProcessPacket(int id, unsigned char *packet)
@@ -96,12 +95,6 @@ void ObjManager::MovePkt(int id, unsigned char *packet)
 	cs_packet_move_state *pkt = reinterpret_cast<cs_packet_move_state *>(packet);
 	
 
-	//g_clients[id]->m_xmf3Look = XMFLOAT3(g_clients[id]->m_xmf4x4ToParent._31, g_clients[id]->m_xmf4x4ToParent._32, g_clients[id]->m_xmf4x4ToParent._33);
-	//g_clients[id]->m_xmf3Right = XMFLOAT3(g_clients[id]->m_xmf4x4ToParent._11, g_clients[id]->m_xmf4x4ToParent._12, g_clients[id]->m_xmf4x4ToParent._13);
-	
-	//g_clients[id]->m_xmf3Look = Vector3::Normalize(g_clients[id]->m_xmf3Look);
-	//g_clients[id]->m_xmf3Right = Vector3::Normalize(g_clients[id]->m_xmf3Right);
-
 	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
 	float fDistance = 12.25f;
 
@@ -118,9 +111,6 @@ void ObjManager::MovePkt(int id, unsigned char *packet)
 		std::wcout << L"우 ";
 	}
 	
-
-	//g_clients[id]->m_xmf4x4ToParent = Matrix4x4::Multiply(xmmtxRotate, g_clients[id]->m_xmf4x4ToParent);
-
 	
 	PACKETMANAGER->PosPacket(id, xmf3Shift);
 	
@@ -129,16 +119,10 @@ void ObjManager::RotePkt(int id, unsigned char *packet)
 {
 	cs_packet_rote_state *pkt = reinterpret_cast<cs_packet_rote_state *>(packet);
 
-	if (pkt->y != 0.0f)
-	{
+	XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&g_clients[id]->m_xmf3Up), XMConvertToRadians(pkt->y));
+	g_clients[id]->m_xmf3Look = Vector3::TransformNormal(g_clients[id]->m_xmf3Look, xmmtxRotate);
+	g_clients[id]->m_xmf3Right = Vector3::TransformNormal(g_clients[id]->m_xmf3Right, xmmtxRotate);
 
-
-		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&g_clients[id]->m_xmf3Up), XMConvertToRadians(pkt->y));
-		g_clients[id]->m_xmf3Look = Vector3::TransformNormal(g_clients[id]->m_xmf3Look, xmmtxRotate);
-		g_clients[id]->m_xmf3Right = Vector3::TransformNormal(g_clients[id]->m_xmf3Right, xmmtxRotate);
-
-
-	}
 	g_clients[id]->m_xmf3Look = Vector3::Normalize(g_clients[id]->m_xmf3Look);
 	g_clients[id]->m_xmf3Right = Vector3::CrossProduct(g_clients[id]->m_xmf3Up, g_clients[id]->m_xmf3Look, true);
 	

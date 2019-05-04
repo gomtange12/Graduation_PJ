@@ -12,8 +12,9 @@ public:
 
 	void SendPacket(int id, void *packet);
 	void LoginPacket(int id);
-	void PutPlayerPacket(int id);
+	//void PutPlayerPacket(int id);
 	void PosPacket(int id, const XMFLOAT3& shift);
 	void ClientDisconnect(int id);
 	void ScenePacket(int num, int roomNum);
+	
 };
