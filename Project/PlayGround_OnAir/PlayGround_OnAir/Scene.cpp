@@ -8,6 +8,7 @@
 #include "CSceneManager.h"
 #include "CObjectManager.h"
 #include "CBillboardObject.h"
+
 #define objScale 6.47
 ID3D12DescriptorHeap *CScene::m_pd3dCbvSrvDescriptorHeap = NULL;
 
@@ -23,6 +24,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvGPUDescriptorNextHandle;
 
 CScene::CScene()
 {
+
 }
 
 CScene::~CScene()
@@ -228,6 +230,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
+
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 //
 	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 50, 130); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
@@ -380,7 +383,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	
 
 	//PLAYER->AddPlayer()
-	m_nPlayGroundObjects = 27;
+	m_nPlayGroundObjects = 29;
 	m_ppPlayGroundObjects = new CGameObject*[m_nPlayGroundObjects];
 	
 
@@ -621,7 +624,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppPlayGroundObjects[26]->SetOOBB(m_ppPlayGroundObjects[26]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[26]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_ppPlayGroundObjects[26]->Rotate(0.0f, 90.0f, 0.0f);
 
-	/*CLoadedModelInfo *LSpot_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spotLight.bin", NULL, false);
+	CLoadedModelInfo *LSpot_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spotLight.bin", NULL, false);
 	m_ppPlayGroundObjects[27] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[27]->SetChild(LSpot_1->m_pModelRootObject, true);
 	m_ppPlayGroundObjects[27]->SetPosition(-1850.0f, 17, 130.0f);
@@ -635,7 +638,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppPlayGroundObjects[28]->SetPosition(-1250.0f, 17, 130.0f);
 	m_ppPlayGroundObjects[28]->SetScale(20.0f, 20.0f, 20.0f);
 	m_ppPlayGroundObjects[28]->SetMesh(LSpot_2->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[28]->SetOOBB(m_ppPlayGroundObjects[28]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[28]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));*/
+	m_ppPlayGroundObjects[28]->SetOOBB(m_ppPlayGroundObjects[28]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[28]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -1361,6 +1364,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		{
 			if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 		}
+	
 		//PLAYER->GetOtherPlayer()->Render(pd3dCommandList, pCamera);
 		//m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
 		//if (m_ppShaders[3]) m_ppShaders[3]->Render(pd3dCommandList, pCamera);

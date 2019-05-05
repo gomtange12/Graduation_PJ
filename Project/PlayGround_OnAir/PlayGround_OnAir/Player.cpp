@@ -48,6 +48,7 @@
 
 
 
+
 CPlayer::CPlayer()
 {
 
@@ -144,7 +145,7 @@ void CPlayer::Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity)
 		{
 			m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
 			//if(m_pCamera!=nullptr)
-				m_pCamera->Move(xmf3Shift);
+			m_pCamera->Move(xmf3Shift);
 		}
 	}
 }
@@ -176,9 +177,11 @@ void CPlayer::Rotate(float x, float y, float z)
 		if (y != 0.0f)
 		{
 			//CNETWORK->RotePkt(y);
+			//서버연결시 주석
 			XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Up), XMConvertToRadians(y));
 			m_xmf3Look = Vector3::TransformNormal(m_xmf3Look, xmmtxRotate);
 			m_xmf3Right = Vector3::TransformNormal(m_xmf3Right, xmmtxRotate);
+			//
 		}
 	}
 	else if (nCurrentCameraMode == SPACESHIP_CAMERA)
@@ -204,9 +207,11 @@ void CPlayer::Rotate(float x, float y, float z)
 		}
 	}
 
+	//서버연결시 주석
 	m_xmf3Look = Vector3::Normalize(m_xmf3Look);
 	m_xmf3Right = Vector3::CrossProduct(m_xmf3Up, m_xmf3Look, true);
 	m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
+	//
 }
 
 
@@ -235,7 +240,7 @@ void CPlayer::Update(float fTimeElapsed)
 	if (m_pPlayerUpdatedContext)
 		OnPlayerUpdateCallback(fTimeElapsed);
 	
-	if (PLAYER->GetPlayer()!=nullptr&& PLAYER->GetOtherPlayer()!=nullptr)
+	if (PLAYER->GetPlayer()!=nullptr)
 	{
 		//if (m_pCamera != nullptr)
 		{
@@ -347,7 +352,7 @@ std::shared_ptr<CCamera> CPlayer::OnChangeCamera(DWORD nNewCameraMode, DWORD nCu
 		//pNewCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
 		pNewCamera->SetTimeLag(0.25f);
 		//pNewCamera->SetOffset(XMFLOAT3(0.0f, 350.0f, -80.0f));
-		pNewCamera->SetOffset(XMFLOAT3(0.0f, 80.0f, -80.0f));
+		pNewCamera->SetOffset(XMFLOAT3(0.0f, 180.0f, -180.0f));
 		if(PLAYER->GetPlayer()!=nullptr)
 			pNewCamera->SetPosition(Vector3::Add(m_xmf3Position, PLAYER->GetPlayer()->GetCamera()->GetOffset()));
 		//pNewCamera->Rotate(-90, 0, 0);
@@ -477,6 +482,8 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr
 	if (nCameraMode == THIRD_PERSON_CAMERA) CGameObject::Render(pd3dCommandList, pCamera);
 }
 
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 
 CAirplanePlayer::CAirplanePlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
@@ -588,9 +595,9 @@ void CSoundCallbackHandler::HandleCallback(void *pCallbackData)
 	OutputDebugString(pstrDebug);
 #endif
 #ifdef _WITH_SOUND_RESOURCE
-   PlaySound(pWavName, ::ghAppInstance, SND_RESOURCE | SND_ASYNC);
+  // PlaySound(pWavName, ::ghAppInstance, SND_RESOURCE | SND_ASYNC);
 #else
-   PlaySound(pWavName, NULL, SND_FILENAME | SND_ASYNC);
+   //PlaySound(pWavName, NULL, SND_FILENAME | SND_ASYNC);
 #endif
 }
 
@@ -621,11 +628,11 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 
 	//m_ObjType = DYNAMIC;
 	//if(CNETWORK->GetInstance()->)
-	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeytarTest.bin", NULL, true);
 	
+	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeytarTest.bin", NULL, true);
 
 	SetChild(pPlayerModel->m_pModelRootObject, true);
-	int i = pPlayerModel->m_pModelRootObject->GetMeshType();
+	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
 	//if(m_pMesh!=nullptr)
 	//this->SetMesh(pPlayerModel->m_pModelRootObject->m_pMesh);
 	
@@ -656,7 +663,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	}
 	//SetOOBB(GetPosition(), m_pMesh->GetAABBExtents(), XMFLOAT4(0, 0, 0, 1));
 	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
-	if (pPlayerModel) delete pPlayerModel;
+	//if (pPlayerModel) delete pPlayerModel;
 	
 }
 
@@ -766,8 +773,10 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 
 	xmf3CameraPosition.y = fHeight;
 	m_pCamera->SetPosition(xmf3CameraPosition);
-	if (m_pCamera->GetMode() == THIRD_PERSON_CAMERA)
+	
+	if (m_pCamera->GetMode() == THIRD_PERSON_CAMERA && m_pCamera != nullptr)
 	{
+
 		std::shared_ptr<CCamera> p3rdPersonCamera = m_pCamera;
 		p3rdPersonCamera->SetLookAt(GetPosition());
 	}
@@ -840,7 +849,9 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	}
 	//SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
-	if (pPlayerModel) delete pPlayerModel;
+
+	//if (pPlayerModel) delete pPlayerModel;
+	
 }
 
 void COtherPlayers::OnPlayerUpdateCallback(float fTimeElapsed)

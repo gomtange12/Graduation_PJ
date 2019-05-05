@@ -2,7 +2,7 @@
 #include "CNetWork.h"
 #include "CSceneManager.h"
 #include "CPlayerManager.h"
-#include "Player.h"
+
 CNetWork::CNetWork()
 {
 }
@@ -81,14 +81,18 @@ void CNetWork::ProcessPacket(char *ptr)
 	{
 		sc_packet_login_ok *packet =
 			reinterpret_cast<sc_packet_login_ok *>(ptr);
-		g_myid = packet->id;
+		myid = packet->id;
+		
 		break;
 	}
 	case SC_SCENE:
 	{
 		sc_packet_scene *paket = reinterpret_cast<sc_packet_scene *>(ptr);
-		int roomNum = paket->roomNum; //플레이어가 가지고있으면 좋을듯
 		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
+
+		PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+		PLAYER->GetOtherPlayer()->SetClientNum(paket->ids);
+		PLAYER->GetPlayer()->SetClientNum(myid);
 		break;
 	}
 	case SC_PUT_PLAYER:
@@ -96,47 +100,44 @@ void CNetWork::ProcessPacket(char *ptr)
 		sc_packet_put_player *pkt = reinterpret_cast<sc_packet_put_player *>(ptr);
 		int id = pkt->id;
 
-		if (id == g_myid) {
+		if (id == PLAYER->GetPlayer()->GetClientNum()) {
 
-			//PLAYER->GetPlayer()-
-			/*player.x = pkt->x;
-			player.y = pkt->y;
-			player.attr |= 16;*/
+	
 		}
 		else if (id < MAX_USER) {
-			//skelaton[id].x = pkt->x;
-			//skelaton[id].y = pkt->y;
-			//skelaton[id].attr |= 16;
+	
 		}
 		else {
-			//npc[id - NPC_START].x = pkt->x;
-			//npc[id - NPC_START].y = pkt->y;
-			//npc[id - NPC_START].attr |= BOB_ATTR_VISIBLE;
+	
 		}
 		break;
 	}
 	case SC_MOVE_PLAYER:
 	{
 		sc_packet_pos *pkt = reinterpret_cast<sc_packet_pos *>(ptr);
-		int other_id = pkt->id;
+		
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		xmf3Shift = XMFLOAT3(pkt->posX, pkt->posY, pkt->posZ);
-		PLAYER->GetPlayer()->Move(xmf3Shift, pkt->velocity);
 		
-		//if (other_id == g_myid) {
-		//	g_left_x = pkt->X_POS - 4;
-		//	g_top_y = pkt->Y_POS - 4;
-		//	player.x = pkt->X_POS;
-		//	player.y = pkt->Y_POS;
-		//}
-		//else if (other_id < MAX_USER) {
-		//	skelaton[other_id].x = pkt->X_POS;
-		//	skelaton[other_id].y = pkt->Y_POS;
-		//}
-		//else {
-		//	//npc[other_id - NPC_START].x = pkt->x;
-		//	//npc[other_id - NPC_START].y = pkt->y;
-		//}
+		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) 
+			PLAYER->GetPlayer()->Move(xmf3Shift, pkt->velocity);
+	
+		if(pkt->id == PLAYER->GetOtherPlayer()->GetClientNum())
+			PLAYER->GetOtherPlayer()->Move(xmf3Shift, pkt->velocity);
+		
+		break;
+	}
+	case SC_VECTOR_INFO:
+	{
+		sc_packet_vector *pkt = reinterpret_cast<sc_packet_vector *>(ptr);
+		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
+			PLAYER->GetPlayer()->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
+			PLAYER->GetPlayer()->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
+		}
+		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
+			PLAYER->GetOtherPlayer()->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
+			PLAYER->GetOtherPlayer()->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
+		}
 		break;
 	}
 
@@ -144,37 +145,9 @@ void CNetWork::ProcessPacket(char *ptr)
 	{
 		sc_packet_remove_player *pkt = reinterpret_cast<sc_packet_remove_player *>(ptr);
 		int other_id = pkt->id;
-		//if (other_id == g_myid) {
-			//player.attr &= ~16;
-		//}
-		//else if (other_id < MAX_USER) {
-			//skelaton[other_id].attr &= ~16;
-		//}
-		//else {
-			//		npc[other_id - NPC_START].attr &= ~BOB_ATTR_VISIBLE;
-		//}
+
 		break;
 	}
-	/*
-	case SC_CHAT:
-	{
-		sc_packet_chat *pkt = reinterpret_cast<sc_packet_chat *>(ptr);
-		int other_id = pkt->id;
-		if (other_id == g_myid) {
-			wcsncpy_s(player.message, pkt->message, 256);
-			player.message_time = GetTickCount();
-		}
-		else if (other_id < NPC_START) {
-			wcsncpy_s(skelaton[other_id].message, pkt->message, 256);
-			skelaton[other_id].message_time = GetTickCount();
-		}
-		else {
-			wcsncpy_s(npc[other_id - NPC_START].message, pkt->message, 256);
-			npc[other_id - NPC_START].message_time = GetTickCount();
-		}
-		break;
-
-	} */
 	default:
 		printf("Unknown PACKET type [%d]\n", ptr[1]);
 	}

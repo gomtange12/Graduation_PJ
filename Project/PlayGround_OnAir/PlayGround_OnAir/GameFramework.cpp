@@ -44,7 +44,7 @@ CGameFramework::CGameFramework()
 	m_pScene = NULL;
 	//m_pPlayer = NULL;
 
-	_tcscpy_s(m_pszFrameRate, _T("LabProject ("));
+	_tcscpy_s(m_pszFrameRate, _T("PlayGround ("));
 }
 
 CGameFramework::~CGameFramework()
@@ -568,15 +568,16 @@ void CGameFramework::BuildObjects()
 #ifdef _WITH_TERRAIN_PLAYER
 	PLAYER->Initialize(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 
-	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(0, 0, 0));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(100, 0, 400));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()-> m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
 	PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7,10,7), XMFLOAT4(0, 0, 0, 1));
 	
-	PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(0, 0, 400));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+	PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(100, 0, 400));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	//PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(PLAYER->GetOtherPlayer()->m_,20, 40)); //박스도 151515배 여기여기0409
 	PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
 
 	PLAYER->GetOtherPlayer()->SetOOBB(PLAYER->GetOtherPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+
 
 	//if (m_pScene) m_pScene->MakeOtherPlayer(m_pd3dDevice, m_pd3dCommandList);
 	//MAKE OTHER PLAYER
@@ -595,6 +596,7 @@ void CGameFramework::BuildObjects()
 	//m_pScene->BuildObjectsAfterPlayer(m_pd3dDevice, m_pd3dCommandList);
 	//m_pScene->m_pPlayer = m_pPlayer;// = pPlayer;// = PLAYER->GetInstance()->GetPlayer();
 	m_pCamera = PLAYER->GetPlayer()->GetCamera();
+	
 	//m_pCamera->SetMode(THIRD_PERSON_CAMERA);
 
 	m_pd3dCommandList->Close();
@@ -659,29 +661,29 @@ void CGameFramework::ProcessInput()
 		}
 
 		//2플레이어
-		if (pKeysBuffer[VK_HANGUL] & 0xF0)
-		{
-			//PLAYER->GetPlayer()->SetPlayerState(RUN);
-			PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-			otherPlayerDirection |= DIR_FORWARD;
+		//if (pKeysBuffer[VK_HANGUL] & 0xF0)
+		//{
+		//	//PLAYER->GetPlayer()->SetPlayerState(RUN);
+		//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+		//	otherPlayerDirection |= DIR_FORWARD;
 
-			//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
-		}
-		if (pKeysBuffer[VK_HELP] & 0xF0)
-		{
-			PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-			otherPlayerDirection |= DIR_BACKWARD;
-		}
-		if (pKeysBuffer[VK_INSERT] & 0xF0)
-		{
-			PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-			otherPlayerDirection |= DIR_LEFT;
-		}
-		if (pKeysBuffer[VK_LCONTROL] & 0xF0)
-		{
-			PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-			otherPlayerDirection |= DIR_RIGHT;
-		}
+		//	//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
+		//}
+		//if (pKeysBuffer[VK_HELP] & 0xF0)
+		//{
+		//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+		//	otherPlayerDirection |= DIR_BACKWARD;
+		//}
+		//if (pKeysBuffer[VK_INSERT] & 0xF0)
+		//{
+		//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+		//	otherPlayerDirection |= DIR_LEFT;
+		//}
+		//if (pKeysBuffer[VK_LCONTROL] & 0xF0)
+		//{
+		//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+		//	otherPlayerDirection |= DIR_RIGHT;
+		//}
 
 		if (pKeysBuffer[VK_PRIOR] & 0xF0) {
 			//PLAYER->GetPlayer()->SetPlayerState(RUN);
@@ -733,10 +735,8 @@ void CGameFramework::ProcessInput()
 			if (dwDirection )
 			{
 				PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
+				//CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
 			}
-			if(otherPlayerDirection)
-				PLAYER->GetOtherPlayer()->Move(otherPlayerDirection, 12.25f, true);
-				//if (dwDirection) CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
 		}
 	}
 	//PLAYER->GetPlayer()->SetAllowKey(true);
