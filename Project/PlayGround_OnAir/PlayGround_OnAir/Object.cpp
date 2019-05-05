@@ -356,6 +356,8 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 				oncePosition = 0.0f;
 				//maxLength = 0.0f;
  				PLAYER->GetPlayer()->SetPlayerState(IDLE);
+				PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
+
 			}
 			//CPlayer::m_PlayerState = CPlayer::PlayerState::IDLE;
 			//CPlayer::SetPlayerState(IDLE);
@@ -1090,7 +1092,7 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 
 	static int call_number = 0;
 	call_number += 1;
-	cout << call_number << endl;
+	//cout << call_number << endl;
 	char pstrToken[64] = { '\0' };
 
 	BYTE nStrLength = 0;
@@ -1108,7 +1110,7 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 
 		if (!strcmp(pstrToken, "<Frame>:"))
 		{
-			cout << "Frame" << endl;
+			//cout << "Frame" << endl;
 
 			pGameObject = new CGameObject();
 
@@ -1121,7 +1123,7 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 		}
 		else if (!strcmp(pstrToken, "<Transform>:")) //이거랑 투페어런트가 안읽히면 쌀알만큼 작아짐
 		{
-			cout << "Transform" << endl;
+		//	cout << "Transform" << endl;
 
 			XMFLOAT3 xmf3Position, xmf3Rotation, xmf3Scale;
 			XMFLOAT4 xmf4Rotation;
@@ -1132,13 +1134,13 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 		}
 		else if (!strcmp(pstrToken, "<TransformMatrix>:"))
 		{
-			cout << "TransformMatrix" << endl;
+			//cout << "TransformMatrix" << endl;
 
 			nReads = (UINT)::fread(&pGameObject->m_xmf4x4ToParent, sizeof(float), 16, pInFile);
 		}
 		else if (!strcmp(pstrToken, "<Mesh>:"))
 		{
-			cout << "Mesh" << endl;
+			//cout << "Mesh" << endl;
 			CStandardMesh *pMesh = new CStandardMesh(pd3dDevice, pd3dCommandList);
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
@@ -1149,7 +1151,7 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 		}
 		else if (!strcmp(pstrToken, "<SkinningInfo>:"))
 		{
-			cout << "SkinningInfo 시작" << endl;
+			//cout << "SkinningInfo 시작" << endl;
 
 			if (pnSkinnedMeshes) (*pnSkinnedMeshes)++;
 
@@ -1163,19 +1165,19 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			pSkinnedMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
 			pGameObject->SetMesh(pSkinnedMesh);
-			cout << "SkinningInfo 끝" << endl;
+			//cout << "SkinningInfo 끝" << endl;
 
 			//pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter()), pSkinnedMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 			//여기pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter().x , pSkinnedMesh->GetAABBCenter().y * 0.5f, pSkinnedMesh->GetAABBCenter().z * 0.5f), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 		}
 		else if (!strcmp(pstrToken, "<Materials>:"))
 		{
-			cout << "Material" << endl;
+			//cout << "Material" << endl;
 			pGameObject->LoadMaterialsFromFile(pd3dDevice, pd3dCommandList, pParent, pInFile, pShader);
 		}
 		else if (!strcmp(pstrToken, "<Children>:"))
 		{
-			cout << "Children 시작" << endl;
+			//cout << "Children 시작" << endl;
 
 			int nChilds = 0;
 			nReads = (UINT)::fread(&nChilds, sizeof(int), 1, pInFile);
@@ -1183,13 +1185,13 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			{
 				for (int i = 0; i < nChilds; i++)
 				{
-					cout << nChilds<<": Children 시작" << endl;
+					//cout << nChilds<<": Children 시작" << endl;
 
 					CGameObject *pChild = CGameObject::LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pGameObject, pInFile, pShader, pnSkinnedMeshes);
 					
 
 					if (pChild) pGameObject->SetChild(pChild);
-					cout << nChilds << ": Set Children" << endl;
+					//cout << nChilds << ": Set Children" << endl;
 
 #ifdef _WITH_DEBUG_FRAME_HIERARCHY
 					TCHAR pstrDebug[256] = { 0 };
@@ -1201,14 +1203,12 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 		}
 		else if (!strcmp(pstrToken, "</Frame>"))
 		{
-			cout <<": Frame" << endl;
+			//cout <<": Frame" << endl;
 
 			break;
 		}
 	}
-	if(!pGameObject)
-		cout << "pGameObj가 null" << endl;
-	else
+	
 		return(pGameObject);
 }
 

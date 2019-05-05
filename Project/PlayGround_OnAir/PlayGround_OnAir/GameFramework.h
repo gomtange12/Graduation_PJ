@@ -38,6 +38,7 @@ public:
 	void WaitForGpuComplete();
 	void MoveToNextFrame();
 	DWORD dwDirection = 0;
+	DWORD otherPlayerDirection = 0;
 
 	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
