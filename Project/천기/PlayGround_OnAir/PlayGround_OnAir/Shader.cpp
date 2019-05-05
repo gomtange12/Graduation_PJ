@@ -1637,7 +1637,7 @@ void CTimeBarShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComma
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 
 	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/timewhite.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/timeBar.dds", 0);
 
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
 
