@@ -52,8 +52,7 @@ public:
 	virtual void ReleaseShaderVariables();
 
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
-	void BuildObjectsAfterPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
-
+	
 	virtual void ReleaseObjects();
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera=NULL);
 	virtual bool ProcessInput(UCHAR *pKeysBuffer);
@@ -63,7 +62,7 @@ public:
 	ID3D12RootSignature *GetGraphicsRootSignature() { return(m_pd3dGraphicsRootSignature); }
 
     void AnimateObjects(float fTimeElapsed);
-	void MakeOtherPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	
 	void ReleaseUploadBuffers();
 	void SetCollideBox();
 
@@ -73,7 +72,7 @@ public:
 
 	static ID3D12DescriptorHeap			*m_pd3dCbvSrvDescriptorHeap;// m_pd3dCbvSrvDescriptorHeap ;
 protected:
-	ID3D12RootSignature				*m_pd3dGraphicsRootSignature = NULL;
+	ID3D12RootSignature					*m_pd3dGraphicsRootSignature = NULL;
 
 
 	static D3D12_CPU_DESCRIPTOR_HANDLE	m_d3dCbvCPUDescriptorStartHandle;

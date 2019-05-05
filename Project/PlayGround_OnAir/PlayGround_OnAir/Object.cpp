@@ -2,13 +2,14 @@
 // File: CGameObject.cpp
 //-----------------------------------------------------------------------------
 
-#include <iostream>
 #include "stdafx.h"
 #include "Object.h"
 #include "Shader.h"
 #include "Scene.h"
 
 #include "CSceneManager.h"
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 CTexture::CTexture(int nTextures, UINT nTextureType, int nSamplers)
@@ -601,14 +602,14 @@ CGameObject::CGameObject()
 	m_xmf4x4ToParent = Matrix4x4::Identity();
 	m_xmf4x4World = Matrix4x4::Identity();
 
-	while (AllObjectList[ObjIndex] != nullptr)
+	/*while (AllObjectList[ObjIndex] != nullptr)
 	{
 		ObjIndex %= MAXOBJECTNUM;
 		++ObjIndex;
 	}
 	AllObjectList[ObjIndex] = this;
 	myIdx = ObjIndex;
-	++ObjIndex;
+	++ObjIndex;*/
 }
 
 CGameObject::CGameObject(int nMaterials) : CGameObject()
@@ -1086,6 +1087,10 @@ void CGameObject::LoadMaterialsFromFile(ID3D12Device *pd3dDevice, ID3D12Graphics
 
 CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, CGameObject *pParent, FILE *pInFile, CShader *pShader, int *pnSkinnedMeshes)
 {
+
+	static int call_number = 0;
+	call_number += 1;
+	cout << call_number << endl;
 	char pstrToken[64] = { '\0' };
 
 	BYTE nStrLength = 0;
@@ -1103,6 +1108,8 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 
 		if (!strcmp(pstrToken, "<Frame>:"))
 		{
+			cout << "Frame" << endl;
+
 			pGameObject = new CGameObject();
 
 			nReads = (UINT)::fread(&nFrame, sizeof(int), 1, pInFile);
@@ -1114,6 +1121,8 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 		}
 		else if (!strcmp(pstrToken, "<Transform>:")) //이거랑 투페어런트가 안읽히면 쌀알만큼 작아짐
 		{
+			cout << "Transform" << endl;
+
 			XMFLOAT3 xmf3Position, xmf3Rotation, xmf3Scale;
 			XMFLOAT4 xmf4Rotation;
 			nReads = (UINT)::fread(&xmf3Position, sizeof(float), 3, pInFile);
@@ -1123,10 +1132,13 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 		}
 		else if (!strcmp(pstrToken, "<TransformMatrix>:"))
 		{
+			cout << "TransformMatrix" << endl;
+
 			nReads = (UINT)::fread(&pGameObject->m_xmf4x4ToParent, sizeof(float), 16, pInFile);
 		}
 		else if (!strcmp(pstrToken, "<Mesh>:"))
 		{
+			cout << "Mesh" << endl;
 			CStandardMesh *pMesh = new CStandardMesh(pd3dDevice, pd3dCommandList);
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
@@ -1137,6 +1149,8 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 		}
 		else if (!strcmp(pstrToken, "<SkinningInfo>:"))
 		{
+			cout << "SkinningInfo 시작" << endl;
+
 			if (pnSkinnedMeshes) (*pnSkinnedMeshes)++;
 
 			CSkinnedMesh *pSkinnedMesh = new CSkinnedMesh(pd3dDevice, pd3dCommandList);
@@ -1149,28 +1163,34 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 			pSkinnedMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
 			pGameObject->SetMesh(pSkinnedMesh);
+			cout << "SkinningInfo 끝" << endl;
 
 			//pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter()), pSkinnedMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 			//여기pGameObject->SetOOBB(XMFLOAT3(pSkinnedMesh->GetAABBCenter().x , pSkinnedMesh->GetAABBCenter().y * 0.5f, pSkinnedMesh->GetAABBCenter().z * 0.5f), XMFLOAT3(100.f, 100.f, 100.f), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.1f));
 		}
 		else if (!strcmp(pstrToken, "<Materials>:"))
 		{
+			cout << "Material" << endl;
 			pGameObject->LoadMaterialsFromFile(pd3dDevice, pd3dCommandList, pParent, pInFile, pShader);
 		}
 		else if (!strcmp(pstrToken, "<Children>:"))
 		{
+			cout << "Children 시작" << endl;
+
 			int nChilds = 0;
 			nReads = (UINT)::fread(&nChilds, sizeof(int), 1, pInFile);
 			if (nChilds > 0)
 			{
 				for (int i = 0; i < nChilds; i++)
 				{
-					//std::cout << "gd" << std::endl;
+					cout << nChilds<<": Children 시작" << endl;
 
 					CGameObject *pChild = CGameObject::LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pGameObject, pInFile, pShader, pnSkinnedMeshes);
-					//std::cout << "gd" << std::endl;
+					
 
 					if (pChild) pGameObject->SetChild(pChild);
+					cout << nChilds << ": Set Children" << endl;
+
 #ifdef _WITH_DEBUG_FRAME_HIERARCHY
 					TCHAR pstrDebug[256] = { 0 };
 					_stprintf_s(pstrDebug, 256, "(Frame: %p) (Parent: %p)\n"), pChild, pGameObject);
@@ -1181,10 +1201,15 @@ CGameObject *CGameObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, I
 		}
 		else if (!strcmp(pstrToken, "</Frame>"))
 		{
+			cout <<": Frame" << endl;
+
 			break;
 		}
 	}
-	return(pGameObject);
+	if(!pGameObject)
+		cout << "pGameObj가 null" << endl;
+	else
+		return(pGameObject);
 }
 
 void CGameObject::PrintFrameInfo(CGameObject *pGameObject, CGameObject *pParent)

@@ -11,9 +11,9 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 	//std::shared_ptr<COtherPlayer>							m_pOtherPlayer = nullptr;
 
 	//std::vector<std::shared_ptr<COtherPlayer>>				m_pOtherPlayer;
-	std::map<E_PLAYERTYPE, vector<CTerrainPlayer*>>		m_PlayerMap;
+	std::map<E_PLAYERTYPE, vector<CTerrainPlayer*>>			m_PlayerMap;
 public:
-	vector<CTerrainPlayer*>						m_vecPlayerList;
+	vector<CTerrainPlayer*>									m_vecPlayerList;
 	CPlayerManager();
 	~CPlayerManager();
 	void Initialize(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);

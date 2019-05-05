@@ -339,14 +339,6 @@ std::shared_ptr<CCamera> CPlayer::OnChangeCamera(DWORD nNewCameraMode, DWORD nCu
 		pNewCamera->SetTimeLag(0.25f);
 		//pNewCamera->SetOffset(XMFLOAT3(0.0f, 350.0f, -80.0f));
 		pNewCamera->SetOffset(XMFLOAT3(0.0f, 80.0f, -80.0f));
-
-		//pNewCamera->SetLookAtPosition(m_xmf3Position);
-		//pNewCamera->SET
-		//pNewCamera->Rotate(0, 90, 0);
-		//pNewCamera->SetLookAt(m_xmf3Position);
-		//pNewCamera->SetCameraRotate(0, 90, 0);
-		//pNewCamera->SetLookAt(m_xmf3Up)
-		
 		pNewCamera->SetPosition(Vector3::Add(m_xmf3Position, m_pCamera->GetOffset()));
 		//pNewCamera->Rotate(-90, 0, 0);
 		pNewCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
@@ -664,7 +656,6 @@ CTerrainPlayer::~CTerrainPlayer()
 
 std::shared_ptr<CCamera> CTerrainPlayer::ChangeCamera(DWORD nNewCameraMode, float fTimeElapsed)
 {
-	//if(PLAYER->GetPlayer()!=NULL)
 	DWORD nCurrentCameraMode = (m_pCamera) ? m_pCamera->GetMode() : 0x00;
 	if (nCurrentCameraMode == nNewCameraMode) return(m_pCamera);
 	switch (nNewCameraMode)
@@ -747,7 +738,6 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 		SetVelocity(xmf3PlayerVelocity);
 		xmf3PlayerPosition.y = fHeight;
 		SetPosition(xmf3PlayerPosition);
-		
 	}
 }
 

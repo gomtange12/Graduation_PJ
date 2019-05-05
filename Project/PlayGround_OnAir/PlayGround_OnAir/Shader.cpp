@@ -674,31 +674,27 @@ CTexturedShader::~CTexturedShader()
 {
 }
 
-//D3D12_INPUT_LAYOUT_DESC CTexturedShader::CreateInputLayout()
-//{
-//	UINT nInputElementDescs = 2;
-//	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
-//
-//
-//	//pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-//	//pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 };
-//
-//	//D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
-//	//d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
-//	//d3dInputLayoutDesc.NumElements = nInputElementDescs;
-//
-//	//return(d3dInputLayoutDesc);
-//	return pd3dInputElementDescs;
-//}
+D3D12_INPUT_LAYOUT_DESC CTexturedShader::CreateInputLayout()
+{
+	UINT nInputElementDescs = 2;
+	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+
+	pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 };
+
+	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
+	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
+	d3dInputLayoutDesc.NumElements = nInputElementDescs;
+
+	return(d3dInputLayoutDesc);
+}
 
 void CTexturedShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	
 	m_pd3dcbUIObjects = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL,
 		sizeof(UI_Data), D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
 	//정점 버퍼(업로드 힙)에 대한 포인터를 저장한다.
 	m_pd3dcbUIObjects->Map(0, NULL, (void **)&m_pcbMappedUIObjects);
-
 }
 
 void CTexturedShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
@@ -714,36 +710,12 @@ void CTexturedShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dComm
 
 void CTexturedShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
-	m_nUIObjects = 1;
-	m_ppUIObjects = new CBillboardObject*[m_nUIObjects];
-	m_ppUIObjects[0] = new CBillboardObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-	CTexturedRectMesh *pRectMesh = new  CTexturedRectMesh(pd3dDevice, pd3dCommandList, 100.0f, 100.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	m_ppUIObjects[0]->SetPosition(0, 0, -400);
-	m_ppUIObjects[0]->SetMesh(pRectMesh);
 	
-	CreateShaderVariables(pd3dDevice, pd3dCommandList);
-
-	CTexture *ppUITextures = new CTexture(1, RESOURCE_TEXTURE2D, 0);
-	//ppUITextures->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"시계로고.dds", 0);
-	ppUITextures->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/pg_logo.dds", 0);
-	CScene::CreateShaderResourceViews(pd3dDevice, ppUITextures, 15, false);
-	//CScene::CreateShaderResourceViews(pd3dDevice, ppUITextures2, 14, false);
-	CMaterial *pUIMaterial = new CMaterial(1);
-	pUIMaterial->SetTexture(ppUITextures, 0);
-	//pUIMaterial->SetTexture(ppUITextures2, 1);
-	
-
-	m_ppUIObjects[0]->SetMaterial(0, pUIMaterial);
-
-
 }
 
 void CTexturedShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
 {
-	UpdateShaderVariables(pd3dCommandList);
 	CShader::Render(pd3dCommandList, pCamera);
-	m_ppUIObjects[0]->Render(pd3dCommandList, pCamera);
-
 }
 
 

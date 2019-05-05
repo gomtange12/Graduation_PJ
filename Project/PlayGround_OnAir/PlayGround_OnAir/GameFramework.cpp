@@ -586,7 +586,7 @@ void CGameFramework::BuildObjects()
 	CAirplanePlayer *pPlayer = new CAirplanePlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), NULL);
 	pPlayer->SetPosition(XMFLOAT3(425.0f, 240.0f, 640.0f));
 #endif
-	m_pScene->BuildObjectsAfterPlayer(m_pd3dDevice, m_pd3dCommandList);
+	//m_pScene->BuildObjectsAfterPlayer(m_pd3dDevice, m_pd3dCommandList);
 	//m_pScene->m_pPlayer = m_pPlayer;// = pPlayer;// = PLAYER->GetInstance()->GetPlayer();
 	m_pCamera = PLAYER->GetPlayer()->GetCamera();
 	//m_pCamera->SetMode(THIRD_PERSON_CAMERA);
