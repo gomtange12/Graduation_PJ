@@ -283,6 +283,11 @@ void CPlayer::Update(float fTimeElapsed)
 		break;
 	case JUMP:
 		m_OnAacting = TRUE;
+		//float jumpTime = fTimeElapsed;
+		//XMFLOAT3 jump{ 0,0,0 };
+		//float newVel = -xmf3Velocity.y;
+		//xmf3Velocity.y += m_xmf3Gravity.y * fTimeElapsed;
+		////m_xmf3Position += 
 		SetTrackAnimationSet(0, JUMP);
 		break;
 	case STUN:
@@ -352,7 +357,9 @@ std::shared_ptr<CCamera> CPlayer::OnChangeCamera(DWORD nNewCameraMode, DWORD nCu
 		//pNewCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
 		pNewCamera->SetTimeLag(0.25f);
 		//pNewCamera->SetOffset(XMFLOAT3(0.0f, 350.0f, -80.0f));
-		pNewCamera->SetOffset(XMFLOAT3(0.0f, 180.0f, -180.0f));
+		//pNewCamera->SetOffset(XMFLOAT3(0.0f, 180.0f, -180.0f));
+		pNewCamera->SetOffset(XMFLOAT3(0.0f, 980.0f, -180.0f));
+
 		if(PLAYER->GetPlayer()!=nullptr)
 			pNewCamera->SetPosition(Vector3::Add(m_xmf3Position, PLAYER->GetPlayer()->GetCamera()->GetOffset()));
 		//pNewCamera->Rotate(-90, 0, 0);
@@ -629,7 +636,8 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	//m_ObjType = DYNAMIC;
 	//if(CNETWORK->GetInstance()->)
 	
-	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeytarTest.bin", NULL, true);
+	m_BoundScale = 1.5;
+	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/keytar_modi.bin", NULL, true);
 
 	SetChild(pPlayerModel->m_pModelRootObject, true);
 	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
@@ -810,6 +818,7 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_fPitch = 0.0f;
 	m_fRoll = 0.0f;
 	m_fYaw = 0.0f;*/
+	//m_BoundScale = 1;
 	if (this != nullptr) //일단 카메라 쓰지 않는다
 	{
 		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);

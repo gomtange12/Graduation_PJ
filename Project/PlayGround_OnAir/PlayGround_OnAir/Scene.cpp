@@ -37,7 +37,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 	m_pLights = new LIGHT[m_nLights];
 	::ZeroMemory(m_pLights, sizeof(LIGHT) * m_nLights);
 
-	m_xmf4GlobalAmbient = XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
+	m_xmf4GlobalAmbient = XMFLOAT4(0.15f, 0.15f, 0.15f, 1.0f);
 	/*m_pLights[0].m_bEnable = true;
 	m_pLights[1].m_fRange = 1000.0f;
 	m_pLights[0].m_nType = DIRECTIONAL_LIGHT;
@@ -627,7 +627,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	CLoadedModelInfo *LSpot_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spotLight.bin", NULL, false);
 	m_ppPlayGroundObjects[27] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[27]->SetChild(LSpot_1->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[27]->SetPosition(-1850.0f, 17, 130.0f);
+	m_ppPlayGroundObjects[27]->SetPosition(0.0f, 17, 330.0f);
 	m_ppPlayGroundObjects[27]->SetScale(20.0f, 20.0f, 20.0f);
 	m_ppPlayGroundObjects[27]->SetMesh(LSpot_1->m_pModelRootObject->m_pMesh);
 	m_ppPlayGroundObjects[27]->SetOOBB(m_ppPlayGroundObjects[27]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[27]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -635,7 +635,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	CLoadedModelInfo *LSpot_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spotLight.bin", NULL, false);
 	m_ppPlayGroundObjects[28] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[28]->SetChild(LSpot_2->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[28]->SetPosition(-1250.0f, 17, 130.0f);
+	m_ppPlayGroundObjects[28]->SetPosition(0.0f, 17, 530.0f);
 	m_ppPlayGroundObjects[28]->SetScale(20.0f, 20.0f, 20.0f);
 	m_ppPlayGroundObjects[28]->SetMesh(LSpot_2->m_pModelRootObject->m_pMesh);
 	m_ppPlayGroundObjects[28]->SetOOBB(m_ppPlayGroundObjects[28]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[28]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -858,7 +858,6 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	//pd3dSamplerDescs[0].ShaderRegister = 0;
 	//pd3dSamplerDescs[0].RegisterSpace = 0;
 	//pd3dSamplerDescs[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
 	//pd3dSamplerDescs[1].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
 	//pd3dSamplerDescs[1].AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
 	//pd3dSamplerDescs[1].AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
@@ -871,7 +870,6 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	//pd3dSamplerDescs[1].ShaderRegister = 1;
 	//pd3dSamplerDescs[1].RegisterSpace = 0;
 	//pd3dSamplerDescs[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
 	//D3D12_ROOT_SIGNATURE_FLAGS d3dRootSignatureFlags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT | D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
 	//D3D12_ROOT_SIGNATURE_DESC d3dRootSignatureDesc;
 	//::ZeroMemory(&d3dRootSignatureDesc, sizeof(D3D12_ROOT_SIGNATURE_DESC));
@@ -880,7 +878,6 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	//d3dRootSignatureDesc.NumStaticSamplers = _countof(pd3dSamplerDescs);
 	//d3dRootSignatureDesc.pStaticSamplers = pd3dSamplerDescs;
 	//d3dRootSignatureDesc.Flags = d3dRootSignatureFlags;
-
 	//ID3DBlob *pd3dSignatureBlob = NULL;
 	//ID3DBlob *pd3dErrorBlob = NULL;
 	//D3D12SerializeRootSignature(&d3dRootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &pd3dSignatureBlob, &pd3dErrorBlob);
