@@ -24,7 +24,7 @@ public:
 	bool m_join; //리조인확인용
 	bool m_match; //매칭확인용
 	int m_id;
-	int roomNumber;
+	int roomNumber=0;
 public:
 	XMFLOAT3					m_xmf3Position  = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	XMFLOAT3					m_xmf3Look;// = XMFLOAT3(0.0f, 0.0f, 1.0f);

@@ -3,6 +3,7 @@
 #include "GameFramework.h"
 #include "CPlayerManager.h"
 #include "Player.h"
+#include "CNetWork.h"
 CPlayerManager::CPlayerManager()
 {
 	m_pPlayer = nullptr;
@@ -18,7 +19,8 @@ void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 {
 	//첫번째 플레이어
 	m_pPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature,pContext);
-	//m_pOtherPlayer = std::make_shared<COtherPlayers>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);
+	m_pOtherPlayer = std::make_shared<COtherPlayers>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);
+
 
 	//4m_pPlayer->SETPO
 	m_vecPlayerList.reserve(m_MaxPlayerNum);

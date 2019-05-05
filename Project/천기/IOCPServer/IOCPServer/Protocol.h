@@ -33,7 +33,7 @@ constexpr int SC_MATCHING_RESULT = 6;
 constexpr int SC_SCENE = 7;
 constexpr int SC_MOVE_STATE_INFO = 8;
 constexpr int SC_ROTE_STATE_INFO = 9;
-
+constexpr int SC_VECTOR_INFO = 10;
 #pragma pack (push, 1)
 //////////////////////서버/////////////////////////
 struct sc_packet_login_ok {
@@ -62,6 +62,7 @@ struct sc_packet_scene {
 	BYTE type;
 	WORD sceneNum;
 	WORD roomNum;
+	char ids; //나중에 여러플레이들 id로 뿌려줘야함
 };
 struct sc_packet_match_result {
 	BYTE size;
@@ -78,7 +79,17 @@ struct sc_packet_pos {
 	float posY;
 	float posZ;
 }; 
-
+struct sc_packet_vector {
+	BYTE size;
+	BYTE type;
+	char id;
+	float RposX;
+	float RposY;
+	float RposZ;
+	float LposX;
+	float LposY;
+	float LposZ;
+};
 
 /////////////////////////클라//////////////////////
 struct cs_packet_matching {

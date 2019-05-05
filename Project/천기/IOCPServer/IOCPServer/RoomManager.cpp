@@ -31,9 +31,10 @@ void RoomManager::SoloRoomMatch(int id)
 						room.emplace_back(soloRooms);
 						
 						for (int k = 0; k < PERSONNEL; ++k) {
-							PACKETMANAGER->ScenePacket(room[i]->m_ids[k], i);
 							objectManager->GetPlayer(room[i]->m_ids[k])->roomNumber = i;
 							objectManager->GetPlayer(room[i]->m_ids[k])->m_match = true;
+							PACKETMANAGER->ScenePacket(room[i]->m_ids[k], i);
+
 						}
 					}
 					break;

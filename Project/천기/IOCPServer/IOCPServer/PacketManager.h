@@ -16,5 +16,5 @@ public:
 	void PosPacket(int id, const XMFLOAT3& shift);
 	void ClientDisconnect(int id);
 	void ScenePacket(int num, int roomNum);
-	
+	void VectorPacket(int id);
 };

@@ -8,6 +8,7 @@
 #include "CSceneManager.h"
 #include "CObjectManager.h"
 #include "CBillboardObject.h"
+
 #define objScale 6.47
 ID3D12DescriptorHeap *CScene::m_pd3dCbvSrvDescriptorHeap = NULL;
 
@@ -23,6 +24,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE	CScene::m_d3dSrvGPUDescriptorNextHandle;
 
 CScene::CScene()
 {
+
 }
 
 CScene::~CScene()
@@ -228,6 +230,7 @@ void CScene::BuildDefaultLightsAndMaterials()
 
 void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
+
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 //
 	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 50, 130); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
@@ -385,7 +388,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	
 
 
-	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/KeytarTest.bin", NULL, true);
+	/*CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/KeytarTest.bin", NULL, true);
 	m_ppPlayGroundObjects[0] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[0]->SetChild(pPlayerModel->m_pModelRootObject, true);
 	m_ppPlayGroundObjects[0]->m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
@@ -393,15 +396,15 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppPlayGroundObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.5f);
 	m_ppPlayGroundObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
 	m_ppPlayGroundObjects[0]->SetPosition(0.0f, 20, 440.0f);
-	m_ppPlayGroundObjects[0]->SetScale(50.0f, 50.0f, 50.0f);
+	m_ppPlayGroundObjects[0]->SetScale(50.0f, 50.0f, 50.0f);*/
 
-	//CLoadedModelInfo *Floor = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Floor.bin", NULL, false);
-	//m_ppPlayGroundObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	//m_ppPlayGroundObjects[0]->SetChild(Floor->m_pModelRootObject, true);
-	//m_ppPlayGroundObjects[0]->SetPosition(0.0f, 0, 0.0f); //맵 거꾸로 버그 여기
-	//m_ppPlayGroundObjects[0]->SetScale(10.0f, 10.0f, 10.0f);
-	//m_ppPlayGroundObjects[0]->SetMesh(Floor->m_pModelRootObject->m_pMesh);
-	//m_ppPlayGroundObjects[0]->SetOOBB(m_ppPlayGroundObjects[0]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[0]->m_pMesh->GetAABBExtents(),60.46), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	CLoadedModelInfo *Floor = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Floor.bin", NULL, false);
+	m_ppPlayGroundObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[0]->SetChild(Floor->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[0]->SetPosition(0.0f, 0, 0.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[0]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[0]->SetMesh(Floor->m_pModelRootObject->m_pMesh);
+	m_ppPlayGroundObjects[0]->SetOOBB(m_ppPlayGroundObjects[0]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[0]->m_pMesh->GetAABBExtents(),60.46), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo *Floor_Slide = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Floor_Slide.bin", NULL, false);
 	m_ppPlayGroundObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -1264,12 +1267,24 @@ bool CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
-		case 'W': m_ppPlayGroundObjects[0]->MoveForward(+3.0f); break;
-		case 'S': m_ppPlayGroundObjects[0]->MoveForward(-3.0f); break;
-		case 'A': m_ppPlayGroundObjects[0]->MoveStrafe(-3.0f); break;
-		case 'D': m_ppPlayGroundObjects[0]->MoveStrafe(+3.0f); break;
-		case 'Q': m_ppPlayGroundObjects[0]->MoveUp(+3.0f); break;
-		case 'R': m_ppPlayGroundObjects[0]->MoveUp(-3.0f); break;
+		case 'W':
+			//PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+			break;
+		case 'S':
+			//m_ppPlayGroundObjects[0]->MoveForward(-3.0f);
+			break;
+		case 'A':
+			//m_ppPlayGroundObjects[0]->MoveStrafe(-3.0f);
+			break;
+		case 'D':
+			//m_ppPlayGroundObjects[0]->MoveStrafe(+3.0f);
+			break;
+		case 'Q':
+			//m_ppPlayGroundObjects[0]->MoveUp(+3.0f);
+			break;
+		case 'R':
+			//m_ppPlayGroundObjects[0]->MoveUp(-3.0f);
+			break;
 		default:
 			break;
 		}
@@ -1349,7 +1364,8 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		{
 			if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 		}
-
+	
+		//PLAYER->GetOtherPlayer()->Render(pd3dCommandList, pCamera);
 		//m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
 		//if (m_ppShaders[3]) m_ppShaders[3]->Render(pd3dCommandList, pCamera);
 

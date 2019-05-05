@@ -62,25 +62,6 @@ void PacketManager::LoginPacket(int id)
 //};
 void PacketManager::PosPacket(int id, const XMFLOAT3& shift)
 {
-	// 포지션값이 변경이되려면
-	
-
-
-	/*for (int i = 0; i < MAX_USER; ++i) {
-		if (true == objectManager->GetPlayer(i)->m_connected) {*/
-			//sc_packet_pos pos_packet;
-			//pos_packet.size = sizeof(sc_packet_pos);
-			//pos_packet.type = SC_MOVE_PLAYER;
-			//pos_packet.id = id;
-			//pos_packet.velocity = true;
-			//pos_packet.posX = shift.x;
-			//pos_packet.posY = shift.y;
-			//pos_packet.posZ = shift.z;
-
-			//SendPacket(id, &pos_packet);
-	//	}
-	//}
-
 			//매칭시 
 			// 같은방에 있는 '모든' id들 에게 나의 변경된 포지션 값을 준다.
 			int roomNum = objectManager->GetPlayer(id)->roomNumber;
@@ -113,12 +94,37 @@ void PacketManager::ClientDisconnect(int id)
 	closesocket(objectManager->GetPlayer(id)->m_socket);
 	objectManager->GetPlayer(id)->m_connected = false;
 }
-void PacketManager::ScenePacket(int id, int roomNum) {
+void PacketManager::ScenePacket(int id, int roomNum) { //Solo 매칭용임 2인용
 	//해당 채널 매칭된 클라 모두에게
 	sc_packet_scene packet;
-	packet.sceneNum = INGAME;
-	packet.roomNum = roomNum;
 	packet.size = sizeof(sc_packet_scene);
 	packet.type = SC_SCENE;
+	packet.sceneNum = INGAME;
+	packet.roomNum = roomNum;
+	for (int i = 0; i < PERSONNEL; ++i) {
+		if (ROOMMANAGER->room[roomNum]->m_ids[i] != id) {
+			packet.ids = ROOMMANAGER->room[roomNum]->m_ids[i];
+			break;
+		}
+	}
 	SendPacket(id, &packet);
+}
+void PacketManager::VectorPacket(int id)
+{
+	int roomNum = objectManager->GetPlayer(id)->roomNumber;
+	for (int i = 0; i < PERSONNEL; ++i) {
+		sc_packet_vector packet;
+		packet.size = sizeof(sc_packet_vector);
+		packet.type = SC_VECTOR_INFO;
+		packet.id = id;
+		packet.RposX = objectManager->GetPlayer(id)->m_xmf4x4ToParent._11;
+		packet.RposY = objectManager->GetPlayer(id)->m_xmf4x4ToParent._12;
+		packet.RposZ = objectManager->GetPlayer(id)->m_xmf4x4ToParent._13;
+		packet.LposX = objectManager->GetPlayer(id)->m_xmf4x4ToParent._31;
+		packet.LposY = objectManager->GetPlayer(id)->m_xmf4x4ToParent._32;
+		packet.LposZ = objectManager->GetPlayer(id)->m_xmf4x4ToParent._33;
+		
+		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &packet);
+	
+	}
 }

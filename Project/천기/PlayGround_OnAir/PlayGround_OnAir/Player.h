@@ -37,22 +37,31 @@ protected:
 	//CCamera						*m_pCamera = NULL;
 	//이넘만들기
 	
-	
+
 	std::shared_ptr<CCamera>	m_pCamera;
+
 	bool m_AllowKey = false;
+	int m_PlayerState = IDLE;
+
 	//for 서버로 플레이어 식별
-	int							m_PlayerID{ 0 };
+
+	int							m_PlayerID=-1;
+	int							m_JoinRoomNum=-1;
 
 public:
+	DWORD dwDirection{ 0 };
 	int GetClientNum() { return m_PlayerID; }
 	void SetClientNum(int cnum) { m_PlayerID = cnum; }
-	
+	int GetRoomNum() { return m_JoinRoomNum; }
+	void SetRoomNum(int rnum) { m_JoinRoomNum = rnum; }
+
+	const DWORD& GetDirection() { return dwDirection; }
+	void SetDirection(DWORD dir) { dwDirection = dir; }
 	void SetCollimdeBox() {
 		//if ( != nullptr)
 		SetOOBB(GetPosition(), XMFLOAT3(0.5, 0.5, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	};
 
-	int m_PlayerState = IDLE;
 	std::shared_ptr<CCamera> GetCamera() { return(m_pCamera); }
 	virtual void SetCamera(std::shared_ptr<CCamera> pCamera) { m_pCamera = pCamera; }
 	void SetYPosition(float ypos) { m_xmf3Position.y = ypos; }
@@ -68,7 +77,9 @@ public:
 	XMFLOAT3 GetLookVector() { return(m_xmf3Look); }
 	XMFLOAT3 GetUpVector() { return(m_xmf3Up); }
 	XMFLOAT3 GetRightVector() { return(m_xmf3Right); }
-
+	void SetLookV(const XMFLOAT3& vector) { m_xmf3Look.x = vector.x, m_xmf3Look.y = vector.y, m_xmf3Look.z = vector.z; }
+	void SetRightV(const XMFLOAT3& vector) { m_xmf3Right.x = vector.x, m_xmf3Right.y = vector.y, m_xmf3Right.z = vector.z; }
+	
 	void SetFriction(float fFriction) { m_fFriction = fFriction; }
 	void SetGravity(const XMFLOAT3& xmf3Gravity) { m_xmf3Gravity = xmf3Gravity; }
 	void SetMaxVelocityXZ(float fMaxVelocity) { m_fMaxVelocityXZ = fMaxVelocity; }
@@ -92,7 +103,7 @@ public:
 	void Rotate(float x, float y, float z);
 	bool IsPlayerCrashMap() { return m_isCrashMap; };
 	void SetPlayCrashMap(bool isCrash);
-	void Update(float fTimeElapsed);
+	virtual void Update(float fTimeElapsed);
 
 	virtual void OnPlayerUpdateCallback(float fTimeElapsed) { }
 	void SetPlayerUpdatedContext(LPVOID pContext) { m_pPlayerUpdatedContext = pContext; }
@@ -157,13 +168,16 @@ public:
 	//virtual void Animate(float fTimeElapsed);
 	//virtual void UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent);
 };
-//class COtherPlayers : public CPlayer
-//{
-//public:
-//	COtherPlayers(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL); 
-//	virtual ~COtherPlayers(){}
-//public:
-//
-//};
+class COtherPlayers : public CPlayer
+{
+public:
+	COtherPlayers(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL); 
+	virtual void OnPlayerUpdateCallback(float fTimeElapsed);
+	virtual void OnCameraUpdateCallback(float fTimeElapsed);
+	virtual void Update(float fTimeElapsed);
+	virtual ~COtherPlayers(){}
+public:
+
+};
 
 

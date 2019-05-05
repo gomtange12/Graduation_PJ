@@ -1,7 +1,7 @@
 #pragma once
 #pragma comment (lib, "ws2_32.lib")
 #include <WinSock2.h>
-
+#include "Player.h"
 #include "..\..\IOCPServer\IOCPServer\Protocol.h"
 //#include "..\..\천기\IOCPServer\IOCPServer\Protocol.h"
 
@@ -22,7 +22,8 @@ private:
 	DWORD	in_packet_size = 0;
 	int		saved_packet_size = 0;
 
-	int		g_myid; //플레이어 식별 id라 플레이어에 있어야돼
+	int myid;
+	
 public:
 	CNetWork();
 	~CNetWork();
