@@ -123,6 +123,20 @@ void CNetWork::ProcessPacket(char *ptr)
 		xmf3Shift = XMFLOAT3(pkt->posX, pkt->posY, pkt->posZ);
 		PLAYER->GetPlayer()->Move(xmf3Shift, pkt->velocity);
 		
+		//if (other_id == g_myid) {
+		//	g_left_x = pkt->X_POS - 4;
+		//	g_top_y = pkt->Y_POS - 4;
+		//	player.x = pkt->X_POS;
+		//	player.y = pkt->Y_POS;
+		//}
+		//else if (other_id < MAX_USER) {
+		//	skelaton[other_id].x = pkt->X_POS;
+		//	skelaton[other_id].y = pkt->Y_POS;
+		//}
+		//else {
+		//	//npc[other_id - NPC_START].x = pkt->x;
+		//	//npc[other_id - NPC_START].y = pkt->y;
+		//}
 		break;
 	}
 

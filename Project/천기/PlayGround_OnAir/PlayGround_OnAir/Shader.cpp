@@ -618,41 +618,39 @@ CAngrybotObjectsShader::~CAngrybotObjectsShader()
 
 void CAngrybotObjectsShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
-	/*int xObjects = 7, zObjects = 7, i = 0;
+	//int xObjects = 1, zObjects = 1, i = 0;
 
-	m_nObjects = (xObjects * 2 + 1) * (zObjects * 2 + 1);
+	//m_nObjects = 1;// (xObjects * 2 + 1) * (zObjects * 2 + 1);
 
-	m_ppObjects = new CGameObject*[m_nObjects];
+	//m_ppObjects = new CGameObject*[m_nObjects];
 
-	float fxPitch = 7.0f * 2.5f;
-	float fzPitch = 7.0f * 2.5f;
+	//float fxPitch = 7.0f * 2.5f;
+	//float fzPitch = 7.0f * 2.5f;
 
-	CLoadedModelInfo *pAngrybotModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Player.bin", NULL, true);
+	//CLoadedModelInfo *pAngrybotModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
 
-	CHeightMapTerrain *pTerrain = (CHeightMapTerrain *)pContext;
+	//CHeightMapTerrain *pTerrain = (CHeightMapTerrain *)pContext;
 
-	int nObjects = 0;
-	for (int x = -xObjects; x <= xObjects; x++)
-	{
-		for (int z = -zObjects; z <= zObjects; z++)
-		{
-			m_ppObjects[nObjects] = new CAngrybotObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-			m_ppObjects[nObjects]->SetChild(pAngrybotModel->m_pModelRootObject, true);
-			m_ppObjects[nObjects]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
-			m_ppObjects[nObjects]->m_pAnimationController->SetTrackAnimationSet(0, (nObjects % 2));
-			m_ppObjects[nObjects]->m_pAnimationController->SetTrackSpeed(0, (nObjects % 2) ? 0.25f : 1.0f);
-			m_ppObjects[nObjects]->m_pAnimationController->SetTrackPosition(0, (nObjects % 3) ? 0.85f : 0.0f);
-			m_ppObjects[nObjects]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
-			XMFLOAT3 xmf3Position = XMFLOAT3(fxPitch*x + 390.0f, 0.0f, 730.0f + fzPitch * z);
-			xmf3Position.y = pTerrain->GetHeight(xmf3Position.x, xmf3Position.z);
-			m_ppObjects[nObjects]->SetPosition(xmf3Position);
-			m_ppObjects[nObjects++]->SetScale(2.0f, 2.0f, 2.0f);
-		}
-    }
+	//int nObjects = 0;
+	///*for (int x = -xObjects; x <= xObjects; x++)
+	//{
+	//	for (int z = -zObjects; z <= zObjects; z++)
+	//	{*/
+	//		m_ppObjects[nObjects] = new CAngrybotObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	//		m_ppObjects[nObjects]->SetChild(pAngrybotModel->m_pModelRootObject, true);
+	//		m_ppObjects[nObjects]->m_pAnimationController = new CAnimationController(1, pAngrybotModel->m_pAnimationSets);
+	//		m_ppObjects[nObjects]->m_pAnimationController->SetTrackAnimationSet(0, (nObjects % 2));
+	//		m_ppObjects[nObjects]->m_pAnimationController->SetTrackSpeed(0, (nObjects % 2) ? 0.25f : 1.0f);
+	//		m_ppObjects[nObjects]->m_pAnimationController->SetTrackPosition(0, (nObjects % 3) ? 0.85f : 0.0f);
+	//		m_ppObjects[nObjects]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pAngrybotModel);
+	//		
+	//		m_ppObjects[nObjects]->SetPosition(XMFLOAT3(40,0,0));
+	//		m_ppObjects[nObjects++]->SetScale(2.0f, 2.0f, 2.0f);
+	//	
 
-	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	if (pAngrybotModel) delete pAngrybotModel;*/
+	//if (pAngrybotModel) delete pAngrybotModel;
 }
 
 CMapObjectsShader::CMapObjectsShader()
@@ -676,31 +674,27 @@ CTexturedShader::~CTexturedShader()
 {
 }
 
-//D3D12_INPUT_LAYOUT_DESC CTexturedShader::CreateInputLayout()
-//{
-//	UINT nInputElementDescs = 2;
-//	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
-//
-//
-//	//pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-//	//pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 };
-//
-//	//D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
-//	//d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
-//	//d3dInputLayoutDesc.NumElements = nInputElementDescs;
-//
-//	//return(d3dInputLayoutDesc);
-//	return pd3dInputElementDescs;
-//}
+D3D12_INPUT_LAYOUT_DESC CTexturedShader::CreateInputLayout()
+{
+	UINT nInputElementDescs = 2;
+	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+
+	pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 };
+
+	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
+	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
+	d3dInputLayoutDesc.NumElements = nInputElementDescs;
+
+	return(d3dInputLayoutDesc);
+}
 
 void CTexturedShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	
 	m_pd3dcbUIObjects = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL,
 		sizeof(UI_Data), D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
 	//정점 버퍼(업로드 힙)에 대한 포인터를 저장한다.
 	m_pd3dcbUIObjects->Map(0, NULL, (void **)&m_pcbMappedUIObjects);
-
 }
 
 void CTexturedShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
@@ -716,36 +710,12 @@ void CTexturedShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dComm
 
 void CTexturedShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
-	m_nUIObjects = 1;
-	m_ppUIObjects = new CBillboardObject*[m_nUIObjects];
-	m_ppUIObjects[0] = new CBillboardObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-	CTexturedRectMesh *pRectMesh = new  CTexturedRectMesh(pd3dDevice, pd3dCommandList, 100.0f, 100.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	m_ppUIObjects[0]->SetPosition(0, 0, -400);
-	m_ppUIObjects[0]->SetMesh(pRectMesh);
 	
-	CreateShaderVariables(pd3dDevice, pd3dCommandList);
-
-	CTexture *ppUITextures = new CTexture(1, RESOURCE_TEXTURE2D, 0);
-	//ppUITextures->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"시계로고.dds", 0);
-	ppUITextures->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/pg_logo.dds", 0);
-	CScene::CreateShaderResourceViews(pd3dDevice, ppUITextures, 15, false);
-	//CScene::CreateShaderResourceViews(pd3dDevice, ppUITextures2, 14, false);
-	CMaterial *pUIMaterial = new CMaterial(1);
-	pUIMaterial->SetTexture(ppUITextures, 0);
-	//pUIMaterial->SetTexture(ppUITextures2, 1);
-	
-
-	m_ppUIObjects[0]->SetMaterial(0, pUIMaterial);
-
-
 }
 
 void CTexturedShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
 {
-	UpdateShaderVariables(pd3dCommandList);
 	CShader::Render(pd3dCommandList, pCamera);
-	m_ppUIObjects[0]->Render(pd3dCommandList, pCamera);
-
 }
 
 
@@ -1536,7 +1506,9 @@ void CUiShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 	
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/menu.dds", 0);
+
 	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/메뉴씬.dds", 0);
 
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
@@ -1583,7 +1555,7 @@ void CBillBoardShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 
 	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
-	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/메뉴씬.dds", 0);
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/menu.dds", 0);
 
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
 }
@@ -1594,4 +1566,88 @@ void CBillBoardShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::
 	CShader::Render(pd3dCommandList, pCamera);
 
 	pd3dCommandList->DrawInstanced(6, 1, 0, 0);
+}
+
+
+D3D12_SHADER_BYTECODE CUIPlayerShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSPlayerUITextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+D3D12_SHADER_BYTECODE CUIPlayerShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSPlayerUITextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+}
+
+void CUIPlayerShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+	
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/여_키타_L.dds", 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/메뉴씬.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+}
+
+void CUIOtherPlayerShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/남R_기타_L.dds", 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/메뉴씬.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+}
+D3D12_SHADER_BYTECODE CUIOtherPlayerShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSOtherPlayerUITextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+D3D12_SHADER_BYTECODE CUIOtherPlayerShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSOtherPlayerUITextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+}
+void CUISKillShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/스킬_ON.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+}
+D3D12_SHADER_BYTECODE CUISKillShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSSSkillTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+D3D12_SHADER_BYTECODE CUISKillShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSSkillUITextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+}
+void CTimeBarShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/timewhite.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+}
+D3D12_SHADER_BYTECODE CTimeBarShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSSTimeBarTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+D3D12_SHADER_BYTECODE CTimeBarShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSTimeBarTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
 }

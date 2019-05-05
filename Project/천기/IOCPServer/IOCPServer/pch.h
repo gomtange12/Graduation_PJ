@@ -49,10 +49,10 @@ enum DIRECTION
 	RIGHT,
 };
 enum SceneState {
-	LOADING,
-	MENUSCENE,
-	INGAME,
-	GAMEOVER
+	MENUSCENE = 0,
+	INGAME = 1,
+	GAMEOVER,
+	LOADING
 };
 enum PlayerState {
 	IDLE,

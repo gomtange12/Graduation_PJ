@@ -16,14 +16,14 @@ CPlayerManager::~CPlayerManager()
 
 void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
+	//첫번째 플레이어
 	m_pPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature,pContext);
+	//m_pOtherPlayer = std::make_shared<COtherPlayers>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);
 
 	//4m_pPlayer->SETPO
 	m_vecPlayerList.reserve(m_MaxPlayerNum);
-	//m_vecPlayerList.emplace_back(m_pOtherPlayer);
-
-	//AddPlayer(m_pOtherPlayer, ENEMY, BASS);
-	MakeOtherPlayers(pd3dDevice,pd3dCommandList,pd3dGraphicsRootSignature, pContext);
+	
+	//MakeOtherPlayers(pd3dDevice,pd3dCommandList,pd3dGraphicsRootSignature, pContext);
 }
 
 void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
@@ -32,7 +32,7 @@ void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsC
 	//m_pOtherPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);
 	//AddPlayer()
 	
-	m_vecPlayerList.emplace_back(new CTerrainPlayer);
+	//m_vecPlayerList.emplace_back(new CTerrainPlayer);
 
 	
 	//AddPlayer()

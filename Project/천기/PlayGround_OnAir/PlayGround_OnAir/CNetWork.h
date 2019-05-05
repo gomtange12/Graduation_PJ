@@ -22,7 +22,7 @@ private:
 	DWORD	in_packet_size = 0;
 	int		saved_packet_size = 0;
 
-	int		g_myid;
+	int		g_myid; //플레이어 식별 id라 플레이어에 있어야돼
 public:
 	CNetWork();
 	~CNetWork();

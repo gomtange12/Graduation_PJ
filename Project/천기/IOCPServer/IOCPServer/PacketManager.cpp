@@ -68,22 +68,22 @@ void PacketManager::PosPacket(int id, const XMFLOAT3& shift)
 
 	/*for (int i = 0; i < MAX_USER; ++i) {
 		if (true == objectManager->GetPlayer(i)->m_connected) {*/
-			sc_packet_pos pos_packet;
-			pos_packet.size = sizeof(sc_packet_pos);
-			pos_packet.type = SC_MOVE_PLAYER;
-			pos_packet.id = id;
-			pos_packet.velocity = true;
-			pos_packet.posX = shift.x;
-			pos_packet.posY = shift.y;
-			pos_packet.posZ = shift.z;
+			//sc_packet_pos pos_packet;
+			//pos_packet.size = sizeof(sc_packet_pos);
+			//pos_packet.type = SC_MOVE_PLAYER;
+			//pos_packet.id = id;
+			//pos_packet.velocity = true;
+			//pos_packet.posX = shift.x;
+			//pos_packet.posY = shift.y;
+			//pos_packet.posZ = shift.z;
 
-			SendPacket(id, &pos_packet);
+			//SendPacket(id, &pos_packet);
 	//	}
 	//}
 
 			//매칭시 
-			// 같은방에 있는 id들 에게 나의 변경된 포지션 값을 준다.
-			/*int roomNum = objectManager->GetPlayer(id)->roomNumber;
+			// 같은방에 있는 '모든' id들 에게 나의 변경된 포지션 값을 준다.
+			int roomNum = objectManager->GetPlayer(id)->roomNumber;
 			for (int i = 0; i < PERSONNEL; ++i) {
 
 				sc_packet_pos pos_packet;
@@ -96,7 +96,7 @@ void PacketManager::PosPacket(int id, const XMFLOAT3& shift)
 				pos_packet.posZ = shift.z;
 				
 				SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pos_packet);
-			}*/
+			}
 }
 void PacketManager::ClientDisconnect(int id)
 {
