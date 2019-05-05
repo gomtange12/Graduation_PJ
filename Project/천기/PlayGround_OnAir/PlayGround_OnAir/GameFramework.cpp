@@ -734,8 +734,8 @@ void CGameFramework::ProcessInput()
 			}
 			if (dwDirection )
 			{
-				PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
-				//CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
+				//PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
+				CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
 			}
 		}
 	}
