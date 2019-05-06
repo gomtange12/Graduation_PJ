@@ -33,11 +33,13 @@ protected:
 	bool						m_isCrashMap{ false };
 	LPVOID						m_pPlayerUpdatedContext = NULL;
 	LPVOID						m_pCameraUpdatedContext = NULL;
-
+	float						m_newYpos{ 0.0f };
+	float						m_oldYpos{ 0.0f };
+	float						m_JumpPower{ 500.0 };
 	//CCamera						*m_pCamera = NULL;
 	//이넘만들기
 	
-
+	int							m_collideBox{ 0 };
 	std::shared_ptr<CCamera>	m_pCamera;
 
 	bool m_AllowKey = false;
@@ -48,7 +50,13 @@ protected:
 	int							m_PlayerID=-1;
 	int							m_JoinRoomNum=-1;
 
+	float m_HeightForCollide{ 0 };
 public:
+	float GetJumpPower() { return m_JumpPower; }
+	void SetJumpPower(float p) { m_JumpPower = p; }
+
+	int GetHeight() { return m_HeightForCollide; }
+	void SetHeight(float h) { m_HeightForCollide = h; }
 	DWORD dwDirection{ 0 };
 	int GetClientNum() { return m_PlayerID; }
 	void SetClientNum(int cnum) { m_PlayerID = cnum; }
@@ -102,6 +110,8 @@ public:
 	void Rotate(float x, float y, float z);
 	bool IsPlayerCrashMap() { return m_isCrashMap; };
 	void SetPlayCrashMap(bool isCrash);
+	void SetCollideNum(int n) { m_collideBox = n; }
+	int GetCollideNum() { return m_collideBox; }
 	virtual void Update(float fTimeElapsed);
 
 	virtual void OnPlayerUpdateCallback(float fTimeElapsed) { }

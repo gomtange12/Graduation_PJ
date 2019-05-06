@@ -130,12 +130,14 @@ enum PlayerState {
 	ATTACK,
 	HAPPY,
 	SAD,
-	BACK_RUN
+	BACK_RUN,
+	FALLING
 };
 
 enum SceneState {
 	MENUSCENE  = 0,
-	INGAME = 1,
+	PLAYGROUNDMAP = 1,
+	CONCERTMAP,
 	GAMEOVER,
 	LOADING
 };
