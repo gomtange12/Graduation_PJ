@@ -238,7 +238,12 @@ void CPlayer::Update(float fTimeElapsed)
 
 	if (m_pPlayerUpdatedContext)
 		OnPlayerUpdateCallback(fTimeElapsed);
-	
+
+	fLength = Vector3::Length(m_xmf3Velocity);
+	float fDeceleration = (m_fFriction * fTimeElapsed);
+	if (fDeceleration > fLength) fDeceleration = fLength;
+	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
+
 	if (PLAYER->GetPlayer()!=nullptr)
 	{
 		//if (m_pCamera != nullptr)
@@ -259,11 +264,7 @@ void CPlayer::Update(float fTimeElapsed)
 	//m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 
 	//m_pCamera->GenerateProjectionMatrix();
-	fLength = Vector3::Length(m_xmf3Velocity);
-	float fDeceleration = (m_fFriction * fTimeElapsed);
-	if (fDeceleration > fLength) fDeceleration = fLength;
-	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
-
+	
 	switch (GetPlayerState())
 	{
 	/*default:

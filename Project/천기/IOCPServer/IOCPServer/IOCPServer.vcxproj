@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AcceptThread.h" />
+    <ClInclude Include="Define.h" />
     <ClInclude Include="Functor.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="IOCPServer.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="SingleTone.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="ThreadManager.h" />
+    <ClInclude Include="TimerThread.h" />
     <ClInclude Include="WorkerThread.h" />
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +187,7 @@
     </ClCompile>
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="ThreadManager.cpp" />
+    <ClCompile Include="TimerThread.cpp" />
     <ClCompile Include="WorkerThread.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -13,11 +13,12 @@ WorkerThread::WorkerThread()
 WorkerThread::~WorkerThread()
 {
 }
-void WorkerThread::Init() 
+void WorkerThread::Init()
 {
 	mythread = std::thread([&]() { WorkerThread::Proc(); });
+	objectManager = ObjManager::GET_INSTANCE()->GetObjectManager();
 }
-void WorkerThread::Proc() 
+void WorkerThread::Proc()
 {
 	while (true)
 	{
@@ -25,7 +26,7 @@ void WorkerThread::Proc()
 		unsigned long long key;
 		stOverEx *over;
 
-		int ret = GetQueuedCompletionStatus(IOCPSERVER->IOCP, &iosize, &key,
+		int ret = GetQueuedCompletionStatus(IOCPSERVER->GetIocp(), &iosize, &key,
 			reinterpret_cast<WSAOVERLAPPED **>(&over), INFINITE);
 		// 에러처리
 		if (0 == ret) {
@@ -81,13 +82,14 @@ void WorkerThread::Proc()
 					rest_data = 0;
 				}
 			}
-			THREADMANAGER->OverlappedRecv(key);
+			objectManager->OverlappedRecv(key);
 		}
-		//상태 점검해야함
-		else {
-			if (OP_SEND == over->m_todo)
-				// 받자 마자 지워줘서 이상한 값이 들어간다.
-				delete over;
+		else if (OP_SEND == over->m_todo) {
+			delete over;
+		}
+		else if (OP_MOVE == over->m_todo) {
+			//objectManager->MoveUpdate(over->id, over->time);
+			delete over;
 		}
 	}
 }

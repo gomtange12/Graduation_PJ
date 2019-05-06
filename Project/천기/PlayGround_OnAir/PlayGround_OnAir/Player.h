@@ -26,8 +26,8 @@ protected:
 
 	XMFLOAT3					m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	XMFLOAT3     				m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	float           			m_fMaxVelocityXZ = 0.0f;
-	float           			m_fMaxVelocityY = 0.0f;
+	float           			m_fMaxVelocityXZ = 0.f;
+	float           			m_fMaxVelocityY = 0.f;
 	float           			m_fFriction = 0.0f;
 	bool						m_OnAacting{ FALSE };
 	bool						m_isCrashMap{ false };

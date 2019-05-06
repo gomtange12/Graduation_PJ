@@ -49,6 +49,9 @@
     <Filter Include="소스 파일\GameObject">
       <UniqueIdentifier>{f1ec75fd-adcb-4218-85de-26eb7ff7e3e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\MyThread\TimerThread">
+      <UniqueIdentifier>{b7f70d7c-f6e0-4051-b046-99e2da69f159}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -96,6 +99,12 @@
     <ClInclude Include="GameObject.h">
       <Filter>소스 파일\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="TimerThread.h">
+      <Filter>소스 파일\MyThread\TimerThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -136,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>소스 파일\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerThread.cpp">
+      <Filter>소스 파일\MyThread\TimerThread</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

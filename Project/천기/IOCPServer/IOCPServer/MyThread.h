@@ -3,7 +3,7 @@
 class MyThread
 {
 private:
-
+	
 public:
 	explicit MyThread();
 	virtual ~MyThread();
@@ -15,7 +15,7 @@ public:
 	virtual void Join() {
 		mythread.join();
 	}
-
+	
 protected:
 	std::thread mythread;
 

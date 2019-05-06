@@ -4,6 +4,7 @@
 class GameObject
 {
 public:
+	XMFLOAT4X4					m_xmf4x4World;
 	XMFLOAT4X4					m_xmf4x4ToParent;
 public:
 	explicit GameObject();

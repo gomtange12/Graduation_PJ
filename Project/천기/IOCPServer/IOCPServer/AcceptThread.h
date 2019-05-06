@@ -2,10 +2,11 @@
 #include "MyThread.h"
 #include "ObjManager.h"
 
+class ObjManager;
 class AcceptThread : public MyThread
 {
 private:
-	ObjManager* objectManager = OBJMANAGER->GetObjectManager();
+	ObjManager* objectManager;
 
 	SOCKET listenSocket;
 	SOCKADDR_IN serverAddr;

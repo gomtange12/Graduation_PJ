@@ -48,6 +48,10 @@ public:
 #endif
 
 private:
+	//
+	bool						m_match = false;
+	XMFLOAT3					prePosition = XMFLOAT3(100.0f, 0.0f, 400.0f);
+	//
 	D3D12_VIEWPORT				m_d3dViewport;
 	D3D12_RECT					m_d3dScissorRect;
 	HINSTANCE					m_hInstance;

@@ -422,7 +422,10 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 					m_pCamera = PLAYER->GetPlayer()->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
 					break;
 				case VK_F6: {
-					CNETWORK->MatchPkt();
+					if (m_match == false) {
+						CNETWORK->MatchPkt();
+						m_match = true;
+					}
 					break;
 				}
 				case VK_F9:
@@ -735,7 +738,7 @@ void CGameFramework::ProcessInput()
 			if (dwDirection )
 			{
 				//PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
-				CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
+				CNETWORK->StatePkt(dwDirection, m_GameTimer.GetTimeElapsed()); //서버에 키상태전송
 			}
 		}
 	}
@@ -854,7 +857,11 @@ void CGameFramework::FrameAdvance()
 #endif
 	if (PLAYER->GetPlayer()!=NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
 	if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
-	cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+	cout << "X: " << PLAYER->GetPlayer()->GetPosition().x << "Y: " << PLAYER->GetPlayer()->GetPosition().y << "Z: " << PLAYER->GetPlayer()->GetPosition().z << endl;
+	if (prePosition.x != PLAYER->GetPlayer()->GetPosition().x && prePosition.z != PLAYER->GetPlayer()->GetPosition().z) {
+		CNETWORK->Pos(PLAYER->GetPlayer()->GetPosition());
+		prePosition = PLAYER->GetPlayer()->GetPosition();
+	}
 	if (m_pScene)
 	{
 		m_pScene->CheckObjectByObjectCollisions();

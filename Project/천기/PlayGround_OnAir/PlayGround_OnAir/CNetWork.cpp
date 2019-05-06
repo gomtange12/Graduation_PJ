@@ -114,7 +114,7 @@ void CNetWork::ProcessPacket(char *ptr)
 	}
 	case SC_MOVE_PLAYER:
 	{
-		sc_packet_pos *pkt = reinterpret_cast<sc_packet_pos *>(ptr);
+		sc_packet_move *pkt = reinterpret_cast<sc_packet_move *>(ptr);
 		
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		xmf3Shift = XMFLOAT3(pkt->posX, pkt->posY, pkt->posZ);
@@ -159,21 +159,21 @@ void CNetWork::MatchPkt()
 	cs_packet_matching *pkt = reinterpret_cast<cs_packet_matching *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
-	pkt->type = SC_MATCHING_PLAYER;
+	pkt->type = CS_MATCHING_PLAYER;
 	pkt->avatar = A;
 	pkt->map = PLAYGROUND;
 	pkt->mod = SOLO;
 
 	SendPacket();
 }
-void CNetWork::StatePkt(DWORD state)
+void CNetWork::StatePkt(DWORD state,float fTime)
 {
 	cs_packet_move_state *pkt = reinterpret_cast<cs_packet_move_state *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
-	pkt->type = SC_MOVE_STATE_INFO;
+	pkt->type = CS_MOVE_STATE_INFO;
 	pkt->state = state;
-
+	pkt->time = fTime;
 	SendPacket();
 }
 void CNetWork::RotePkt(float y)
@@ -181,8 +181,19 @@ void CNetWork::RotePkt(float y)
 	cs_packet_rote_state *pkt = reinterpret_cast<cs_packet_rote_state *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
-	pkt->type = SC_ROTE_STATE_INFO;
+	pkt->type = CS_ROTE_STATE_INFO;
 	pkt->y = y;
-
+	
+	SendPacket();
+}
+void CNetWork::Pos(const XMFLOAT3& pos) 
+{
+	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(send_buffer);
+	send_wsabuf.len = sizeof(pkt);
+	pkt->size = sizeof(pkt);
+	pkt->type = CS_POS_INFO;
+	pkt->x = pos.x;
+	pkt->y = pos.y;
+	pkt->z = pos.z;
 	SendPacket();
 }

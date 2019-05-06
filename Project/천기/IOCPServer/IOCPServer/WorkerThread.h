@@ -2,10 +2,11 @@
 #include "MyThread.h"
 #include "ObjManager.h"
 
+class ObjManager;
 class WorkerThread : public MyThread
 {
 private:
-	ObjManager* objectManager = OBJMANAGER->GetObjectManager();
+	ObjManager* objectManager ;
 public:
 
 	explicit WorkerThread();

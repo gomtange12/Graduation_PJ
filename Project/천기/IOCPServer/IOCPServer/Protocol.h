@@ -14,26 +14,26 @@
 #define SERVER_PORT		3500
 #define MAX_USER		10
 
+//
 const int OP_RECV = 1;
 const int OP_SEND = 2;
-
-
-////=확인용=/////
-constexpr int WORLD_WIDTH = 8;
-constexpr int WORLD_HEIGHT = 8;
-////=확인용=/////
-
+const int OP_MOVE = 3; //가속도 처리용
+//
 
 constexpr int SC_LOGIN_OK = 1;
 constexpr int SC_PUT_PLAYER = 2;
 constexpr int SC_REMOVE_PLAYER = 3;
 constexpr int SC_MOVE_PLAYER = 4;
-constexpr int SC_MATCHING_PLAYER = 5;
-constexpr int SC_MATCHING_RESULT = 6;
-constexpr int SC_SCENE = 7;
-constexpr int SC_MOVE_STATE_INFO = 8;
-constexpr int SC_ROTE_STATE_INFO = 9;
-constexpr int SC_VECTOR_INFO = 10;
+constexpr int SC_MATCHING_RESULT = 5;
+constexpr int SC_SCENE = 6;
+constexpr int CS_ROTE_STATE_INFO = 7;
+constexpr int SC_VECTOR_INFO = 8;
+
+//
+constexpr int CS_MATCHING_PLAYER = 1;
+constexpr int CS_MOVE_STATE_INFO = 2;
+constexpr int CS_POS_INFO = 3;
+
 #pragma pack (push, 1)
 //////////////////////서버/////////////////////////
 struct sc_packet_login_ok {
@@ -70,7 +70,7 @@ struct sc_packet_match_result {
 	char result;
 };
 
-struct sc_packet_pos {
+struct sc_packet_move {
 	BYTE size;
 	BYTE type;
 	WORD id;
@@ -105,9 +105,17 @@ struct cs_packet_move_state {
 	BYTE size;
 	BYTE type;
 	DWORD state;
+	float time;
 };
 struct cs_packet_rote_state {
 	BYTE size;
 	BYTE type;
 	float y;
+};
+struct cs_packet_pos{
+	BYTE size;
+	BYTE type;
+	float x;
+	float y;
+	float z;
 };

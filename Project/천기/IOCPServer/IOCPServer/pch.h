@@ -14,7 +14,6 @@
 #include <array>
 #include <thread>
 
-
 #include "SingleTone.h"
 
 #define IOCPSERVER		IOCPServer::GET_INSTANCE()
@@ -23,51 +22,5 @@
 #define THREADMANAGER	ThreadManager::GET_INSTANCE()
 #define ROOMMANAGER		RoomManager::GET_INSTANCE()
 
-#define PERSONNEL 2
-
-
-//using namespace std;
-enum AVATARNumber {
-	A, //임시명칭
-	B
-};
-enum MAPNumber {
-	PLAYGROUND,
-	CONCERT
-	
-};
-enum ModNumber {
-	SOLO,
-	DUO,
-	SQUAD
-};
-enum DIRECTION
-{
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT,
-};
-enum SceneState {
-	MENUSCENE = 0,
-	INGAME = 1,
-	GAMEOVER,
-	LOADING
-};
-enum PlayerState {
-	IDLE,
-	RUN,
-	JUMP,
-	DEATH,
-	STUN,
-	HIT,
-	JUMPROLL,
-	RUN_JUMP_ATTAK,
-	KICK,
-	ATTACK,
-	HAPPY,
-	SAD,
-	BACK_RUN
-};
 
 #endif //PCH_H

@@ -60,15 +60,15 @@ void PacketManager::LoginPacket(int id)
 //	}	
 //	
 //};
-void PacketManager::PosPacket(int id, const XMFLOAT3& shift)
+void PacketManager::MovePacket(int id, const XMFLOAT3& shift)
 {
 			//매칭시 
 			// 같은방에 있는 '모든' id들 에게 나의 변경된 포지션 값을 준다.
 			int roomNum = objectManager->GetPlayer(id)->roomNumber;
 			for (int i = 0; i < PERSONNEL; ++i) {
 
-				sc_packet_pos pos_packet;
-				pos_packet.size = sizeof(sc_packet_pos);
+				sc_packet_move pos_packet;
+				pos_packet.size = sizeof(sc_packet_move);
 				pos_packet.type = SC_MOVE_PLAYER;
 				pos_packet.id = id;
 				pos_packet.velocity = true;

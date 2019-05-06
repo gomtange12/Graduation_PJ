@@ -13,15 +13,20 @@ ThreadManager::~ThreadManager()
 void ThreadManager::CreateThreads()
 {
 	/*threads.emplace_back(std::thread([&]() { Accept_thread(); }));
-	
+
 	for (int i = 0; i < NUM_THREADS; ++i)
 		threads.emplace_back(std::thread([&]() { Worker_thread(); }));
 	std::cout << "쓰레드 생성\n";*/
+	std::cout << " :: Thereads ::\n";
 
-	AddThread(new AcceptThread);
-	for (int i = 0; i < NUM_THREADS; ++i)
+	AddThread(new AcceptThread);  std::cout << "  AcceptTheread\n";
+
+	for (int i = 0; i < NUM_THREADS; ++i) {
 		AddThread(new WorkerThread);
-	std::cout << "쓰레드 생성\n";
+		std::cout << "  WorkerThread\n";
+	}
+
+	//AddThread(new TimerThread);  std::cout << "  TimerTheread\n";
 }
 void ThreadManager::AddThread(MyThread* myth)
 {
@@ -33,10 +38,4 @@ void ThreadManager::JoinThreads() {
 		th->Join();
 }
 
-void ThreadManager::OverlappedRecv(unsigned int id)
-{
-	DWORD flags = 0;
-	ZeroMemory(&objectManager->GetPlayer(id)->m_RecvOverEx.m_wsaOver, sizeof(WSAOVERLAPPED));
-	WSARecv(objectManager->GetPlayer(id)->m_socket, &objectManager->GetPlayer(id)->m_RecvOverEx.m_wsaBuf, 
-		1, NULL, &flags, &(objectManager->GetPlayer(id)->m_RecvOverEx.m_wsaOver), 0);
-}
+

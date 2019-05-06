@@ -3,13 +3,8 @@
 #include "Protocol.h"
 #include "Functor.h"
 #include "GameObject.h"
+#include "Define.h"
 
-struct stOverEx {
-	WSAOVERLAPPED m_wsaOver;
-	WSABUF m_wsaBuf;
-	unsigned char m_IOCPbuf[MAX_BUFFER]; // IOCP send/recv ¹öÆÛ
-	unsigned char	m_todo;
-};
 ////////////////////////////////
 class Player : public GameObject
 {
@@ -26,12 +21,18 @@ public:
 	int m_id;
 	int roomNumber=0;
 public:
-	XMFLOAT3					m_xmf3Position  = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	XMFLOAT3					m_xmf3Position  = XMFLOAT3(100.0f, 0.0f, 400.0f);
 	XMFLOAT3					m_xmf3Look;// = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	XMFLOAT3					m_xmf3Right;// = XMFLOAT3(1.0f, 0.0f, 0.0f);
 	XMFLOAT3					m_xmf3Up;// = XMFLOAT3(0.0f, 1.0f, 0.0f);
 
 	XMFLOAT3					m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	XMFLOAT3     				m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	XMFLOAT3					m_xmf3Scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
+
+	float           			m_fMaxVelocityXZ = 0.f;
+	float           			m_fMaxVelocityY = 0.f;
+	float           			m_fFriction = 0.0f;
 
 	//bool ready;
 	int avatar;
@@ -45,6 +46,8 @@ public:
 	~Player();
 
 	void Initialize();
-
+	void SetVelocity(const XMFLOAT3& xmf3Velocity) { m_xmf3Velocity = xmf3Velocity; }
+	void move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity);
+	void Transform();
 };
 

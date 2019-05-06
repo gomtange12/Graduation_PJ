@@ -39,6 +39,7 @@ void AcceptThread::Proc()
 	// 3. 수신대기열생성
 	listen(listenSocket, 5);
 
+	objectManager = ObjManager::GET_INSTANCE()->GetObjectManager();
 
 	while (1)
 	{
@@ -47,7 +48,7 @@ void AcceptThread::Proc()
 		ZeroMemory(&clientAddr, sizeof(SOCKADDR_IN));
 
 		clientSocket = WSAAccept(listenSocket, reinterpret_cast<sockaddr *>(&clientAddr), &addrLen, NULL, NULL);
-		std::cout << "클라이언트 접속" << USER_NUM++ << std::endl;
+		std::cout << "Client Accept NUMBER -> : " << USER_NUM++ << std::endl;
 		if (clientSocket == INVALID_SOCKET)
 		{
 			std::cout << "Error - Accept Failure\n";
@@ -73,7 +74,7 @@ void AcceptThread::Proc()
 		objectManager->GetPlayer(id)->m_id = id;
 		objectManager->GetPlayer(id)->m_socket = clientSocket;
 		//
-		CreateIoCompletionPort(reinterpret_cast<HANDLE>(objectManager->GetPlayer(id)->m_socket), IOCPSERVER->IOCP, id, 0);
+		CreateIoCompletionPort(reinterpret_cast<HANDLE>(objectManager->GetPlayer(id)->m_socket), IOCPSERVER->GetIocp(), id, 0);
 		//
 		objectManager->GetPlayer(id)->m_connected = true;
 		objectManager->GetPlayer(id)->m_join = true;
@@ -84,6 +85,6 @@ void AcceptThread::Proc()
 		//PACKETMANAGER->PutPlayerPacket(id);
 		////
 
-		THREADMANAGER->OverlappedRecv(id);
+		OBJMANAGER->OverlappedRecv(id);
 	}
 }

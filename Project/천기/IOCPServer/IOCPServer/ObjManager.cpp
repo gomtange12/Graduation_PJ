@@ -4,6 +4,8 @@
 #include "PacketManager.h"
 #include "RoomManager.h"
 #include "Functor.h"
+#include "ThreadManager.h"
+
 ObjManager::ObjManager() 
 {
 };
@@ -17,11 +19,17 @@ void ObjManager::ClientInit()
 	}
 	soloRoomNum = 0;
 };
-
+void ObjManager::OverlappedRecv(unsigned int id)
+{
+	DWORD flags = 0;
+	ZeroMemory(&g_clients[id]->m_RecvOverEx.m_wsaOver, sizeof(WSAOVERLAPPED));
+	WSARecv(g_clients[id]->m_socket, &g_clients[id]->m_RecvOverEx.m_wsaBuf,
+		1, NULL, &flags, &(g_clients[id]->m_RecvOverEx.m_wsaOver), 0);
+}
 void ObjManager::MatchProcess(int id, unsigned char *packet) 
 {
 	std::cout << "¸ÅÄª¿äÃ» : " << id << std::endl;
-	if (packet[1] == SC_MATCHING_PLAYER) 
+	if (packet[1] == CS_MATCHING_PLAYER) 
 	{ 
 		cs_packet_matching *match = reinterpret_cast<cs_packet_matching *>(packet);
 		g_clients[id]->mod = match->mod;
@@ -51,13 +59,19 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 {
 	switch (packet[1]) //type
 	{ 
-	case SC_MOVE_STATE_INFO:
+	case CS_MOVE_STATE_INFO:
 	{
 		MovePkt(id, packet);
 		break;
 	}
-	case SC_ROTE_STATE_INFO: {
+	case CS_ROTE_STATE_INFO: 
+	{
 		RotePkt(id, packet);
+		break;
+	}
+	case CS_POS_INFO: 
+	{
+		PosPkt(id,packet);
 		break;
 	}
 	default:
@@ -94,25 +108,29 @@ void ObjManager::MovePkt(int id, unsigned char *packet)
 {
 	cs_packet_move_state *pkt = reinterpret_cast<cs_packet_move_state *>(packet);
 	
-
+	Player* player = g_clients[id];
 	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
 	float fDistance = 12.25f;
 
-	if (DIR_FORWARD & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Look, fDistance);
+	if (DIR_FORWARD & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Look, fDistance);
 		std::wcout << L"»ó ";
 	}
-	if (DIR_BACKWARD & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Look, -fDistance);
+	if (DIR_BACKWARD & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Look, -fDistance);
 		std::wcout << L"ÇÏ ";
 	}
-	if (DIR_LEFT & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Right, -fDistance);
+	if (DIR_LEFT & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Right, -fDistance);
 		std::wcout << L"ÁÂ ";
 	}
-	if (DIR_RIGHT & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Right, fDistance);
+	if (DIR_RIGHT & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Right, fDistance);
 		std::wcout << L"¿ì ";
 	}
+
+	player->move(xmf3Shift, true);
+
+	PACKETMANAGER->MovePacket(id, xmf3Shift);
 	
+	//dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_MOVE, GetTickCount()+100);
 	
-	PACKETMANAGER->PosPacket(id, xmf3Shift);
 	
 }
 void ObjManager::RotePkt(int id, unsigned char *packet)
@@ -130,5 +148,58 @@ void ObjManager::RotePkt(int id, unsigned char *packet)
 	g_clients[id]->m_xmf4x4ToParent._31 = g_clients[id]->m_xmf3Look.x; g_clients[id]->m_xmf4x4ToParent._32 = g_clients[id]->m_xmf3Look.y; g_clients[id]->m_xmf4x4ToParent._33 = g_clients[id]->m_xmf3Look.z;
 	
 	PACKETMANAGER->VectorPacket(id);
+
+}
+void ObjManager::PosPkt(int id, unsigned char *packet)
+{
+	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(packet);
+	g_clients[id]->m_xmf3Position.x = pkt->x;
+	g_clients[id]->m_xmf3Position.y = pkt->y;
+	g_clients[id]->m_xmf3Position.z = pkt->z;
+	cout << g_clients[id]->m_xmf3Position.x << " , " << g_clients[id]->m_xmf3Position.y << " , " << g_clients[id]->m_xmf3Position.z << endl;
+}
+void ObjManager::MoveUpdate(int id, unsigned int time)
+{
+	/*timerLock.lock();
+	Player* player = g_clients[id];
+
+	player->m_xmf3Velocity = Vector3::Add(player->m_xmf3Velocity, player->m_xmf3Gravity);
+	float fLength = sqrtf(player->m_xmf3Velocity.x *  player->m_xmf3Velocity.x + player->m_xmf3Velocity.z *  player->m_xmf3Velocity.z);
+	
+	float fMaxVelocityXZ = player->m_fMaxVelocityXZ;
+	if (fLength > player->m_fMaxVelocityXZ)
+	{
+		player->m_xmf3Velocity.x *= (fMaxVelocityXZ / fLength);
+		player->m_xmf3Velocity.z *= (fMaxVelocityXZ / fLength);
+	}
+	float fMaxVelocityY = player->m_fMaxVelocityY;
+	fLength = sqrtf(player->m_xmf3Velocity.y * player->m_xmf3Velocity.y);
+	if (fLength > player->m_fMaxVelocityY) player->m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
+
+	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(player->m_xmf3Velocity, 2, false);
+
+	player->move(xmf3Velocity, false);
+
+	XMFLOAT3 xmf3PlayerPosition = player->m_xmf3Position;
+	float fHeight = 0;
+	if (xmf3PlayerPosition.y < fHeight)
+	{
+		XMFLOAT3 xmf3PlayerVelocity = player->m_xmf3Velocity;
+		xmf3PlayerVelocity.y = 0.0f;
+		player->SetVelocity(xmf3PlayerVelocity);
+		xmf3PlayerPosition.y = fHeight;
+		player->m_xmf3Position = xmf3PlayerPosition;
+	}
+	fLength = Vector3::Length(player->m_xmf3Velocity);
+	float fDeceleration = (player->m_fFriction * time);
+	if (fDeceleration > fLength) fDeceleration = fLength;
+	player->m_xmf3Velocity = Vector3::Add(player->m_xmf3Velocity, Vector3::ScalarProduct(player->m_xmf3Velocity, -fDeceleration, true));
+
+
+	player->Transform();
+
+	cout << player->m_xmf3Position.x << " , " << player->m_xmf3Position.y << " , " << player->m_xmf3Position.z << endl;
+	
+	timerLock.unlock();*/
 
 }
