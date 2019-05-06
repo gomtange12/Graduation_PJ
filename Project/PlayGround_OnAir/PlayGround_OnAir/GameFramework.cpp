@@ -631,8 +631,11 @@ void CGameFramework::ProcessInput()
 	{
 		if (pKeysBuffer[VK_RETURN] & 0xF0)
 		{
-			SCENEMANAGER->SetScene(INGAME);
-
+			SCENEMANAGER->SetScene(PLAYGROUNDMAP);
+		}
+		if (pKeysBuffer[VK_RSHIFT] & 0xF0)
+		{
+			SCENEMANAGER->SetScene(CONCERTMAP);
 		}
 		//PLAYER->GetPlayer()->GetDirectiond() = 0;
 		dwDirection = 0;
@@ -701,6 +704,7 @@ void CGameFramework::ProcessInput()
 			PLAYER->GetPlayer()->SetPlayerState(JUMP);
 			PLAYER->GetOtherPlayer()->SetPlayerState(JUMP);
 
+			PLAYER->GetPlayer()->SetJumpPower(500.0f);
 			//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
 		}
 		if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
@@ -736,7 +740,8 @@ void CGameFramework::ProcessInput()
 			}
 			if (dwDirection )
 			{
-				PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
+				//if(!PLAYER->GetPlayer()->IsPlayerCrashMap())
+					PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
 				//CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
 			}
 		}

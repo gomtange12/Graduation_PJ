@@ -10,6 +10,8 @@
 #include "CBillboardObject.h"
 
 #define objScale 6.47
+#define CONCERTMAPSCALSE 6.47
+
 ID3D12DescriptorHeap *CScene::m_pd3dCbvSrvDescriptorHeap = NULL;
 
 D3D12_CPU_DESCRIPTOR_HANDLE	CScene::m_d3dCbvCPUDescriptorStartHandle;
@@ -239,7 +241,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 //
 	BuildDefaultLightsAndMaterials();
 
-	XMFLOAT3 xmf3Scale(1.0f, 1.0f, 1.0f);
+	XMFLOAT3 xmf3Scale(150.0f, 150.0f, 150.0f);
 	XMFLOAT4 xmf4Color(0.0f, 0.3f, 0.0f, 0.0f);
 	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 	//m_pPlayGroundTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
@@ -268,7 +270,6 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	pAngrybotObjectsShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_pTerrain);
 
 	m_ppShaders[1] = pAngrybotObjectsShader;
- 	CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ALL.bin", NULL, false);
 	
 	CUiShader *pUIShader = new CUiShader();
 	pUIShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -639,6 +640,21 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppPlayGroundObjects[28]->SetScale(20.0f, 20.0f, 20.0f);
 	m_ppPlayGroundObjects[28]->SetMesh(LSpot_2->m_pModelRootObject->m_pMesh);
 	m_ppPlayGroundObjects[28]->SetOOBB(m_ppPlayGroundObjects[28]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[28]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+
+
+//map2
+
+	m_nConcertObjects = 1;
+	m_ppConcertObjects = new CGameObject*[m_nConcertObjects];
+
+	CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/MAP2PIVOTCHANGED.bin", NULL, false);
+	m_ppConcertObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[0]->SetChild(pMapObject->m_pModelRootObject, true);
+	m_ppConcertObjects[0]->SetPosition(0.0f, 0, 0.0f);
+	m_ppConcertObjects[0]->SetScale(100, 100, 100);
+	m_ppConcertObjects[0]->SetMesh(pMapObject->m_pModelRootObject->m_pMesh);
+	//m_ppConcertObjects[0]->SetOOBB(m_ppPlayGroundObjects[28]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[28]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -1352,7 +1368,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 
 
 		break;
-	case INGAME:
+	case PLAYGROUNDMAP:
 		for (int i = 0; i < m_nPlayGroundObjects; i++)
 		{
 			m_ppPlayGroundObjects[i]->Render(pd3dCommandList, pCamera);
@@ -1368,6 +1384,17 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 
 		//	m_ppGameObjects[1]->Render(pd3dCommandList, pCamera);
 	break;
+
+	case CONCERTMAP:
+		for (int i = 3; i < m_nShaders; ++i)
+		{
+			if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
+		}
+		for (int i = 0; i < m_nConcertObjects; i++)
+		{
+			m_ppConcertObjects[i]->Render(pd3dCommandList, pCamera);
+		}
+		break;
 	}
 
 
@@ -1419,29 +1446,39 @@ void CScene::CheckObjectByObjectCollisions() {
 	//}
 	//static BoundingOrientedBox box = PLAYER->GetPlayer()->GetBoundingBox();
 	//
-	for (int i = 1; i < m_nPlayGroundObjects; i++)
+	int num =0;
+	switch (SCENEMANAGER->GetSceneType())
 	{
-		if (m_ppPlayGroundObjects[i])
+	case PLAYGROUNDMAP:
+		for (int i = 1; i < m_nPlayGroundObjects; i++)
 		{
-			BoundingOrientedBox Mapbox = m_ppPlayGroundObjects[i]->GetBoundingBox();
-
-			if (m_ppPlayGroundObjects[i]->GetBoundingBox().Intersects(PLAYER->GetPlayer()->GetBoundingBox()))
+			if (m_ppPlayGroundObjects[i])
 			{
-				//PLAYER->GetPlayer()->SetPosition()
-				//PLAYER->GetPlayer()->SetAllowKey(false);
-				//PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0,0,0));
+				BoundingOrientedBox Mapbox = m_ppPlayGroundObjects[i]->GetBoundingBox();
+				BoundingOrientedBox playerbox = PLAYER->GetPlayer()->GetBoundingBox();
 
-				PLAYER->GetPlayer()->SetPlayCrashMap(true);
-				//PLAYER->GetPlayer()->SetVelocity( PLAYER->GetPlayer()->GetVelocity().x - 0.5);
-				//int i = 0;
-			}
-			else
-			{
-				PLAYER->GetPlayer()->SetPlayCrashMap(false);
+				if (m_ppPlayGroundObjects[i]->GetBoundingBox().Intersects(PLAYER->GetPlayer()->GetBoundingBox()))
+				{
+					//PLAYER->GetPlayer()->SetPosition()
+					//PLAYER->GetPlayer()->SetAllowKey(false);
+					//PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0,0,0));
 
-				//PLAYER->GetPlayer()->SetAllowKey(true);
+					//PLAYER->GetPlayer()->SetCollideNum(i);
+					if (m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.y + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.y <= PLAYER->GetPlayer()->GetBoundingBox().Center.y - PLAYER->GetPlayer()->GetBoundingBox().Extents.y + 10)
+					{
+						PLAYER->GetPlayer()->SetHeight(m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.y + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.y);
+						PLAYER->GetPlayer()->SetPlayCrashMap(true);
+						num++;
+					}
+				}
 			}
 		}
+		if(num == 0)
+			PLAYER->GetPlayer()->SetPlayCrashMap(false);
+	break;
+	case CONCERTMAP:
+		
+		break;
 	}
 
 	
