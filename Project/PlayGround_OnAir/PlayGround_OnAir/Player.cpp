@@ -657,8 +657,8 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	//m_ObjType = DYNAMIC;
 	//if(CNETWORK->GetInstance()->)
 	
-	m_BoundScale = 1.5;
-	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/keytar_modi2.bin", NULL, true);
+	m_BoundScale = 60.0f;
+	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
 
 	SetChild(pPlayerModel->m_pModelRootObject, true);
 	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
@@ -670,7 +670,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
 	//SetOOBB(GetPosition(), XMFLOAT3(1,2,1),  XMFLOAT4(0, 0, 0, 1));
 	m_pAnimationController->SetTrackAnimationSet(0, 0);
-
+	
 	m_pAnimationController->SetCallbackKeys(1, 3);
 #ifdef _WITH_SOUND_RESOURCE
 	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Footstep01"));
@@ -786,11 +786,11 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	if (PLAYER->GetPlayer()->IsPlayerCrashMap())
 	{
 		//if(PLAYER->GetPlayer()->GetPlayerState()== FALLING)
-			fHeight = PLAYER->GetPlayer()->GetHeight();
+		fHeight = PLAYER->GetPlayer()->GetHeight();
 	}
 	else
 	{
-		fHeight = 0;
+		fHeight = 10;
 	}
 	if (xmf3PlayerPosition.y < fHeight)
 	{
