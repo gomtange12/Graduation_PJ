@@ -125,7 +125,7 @@ void ObjManager::MovePkt(int id, unsigned char *packet)
 		std::wcout << L"우 ";
 	}
 
-	player->move(xmf3Shift, true);
+	//player->move(xmf3Shift, true);
 
 	PACKETMANAGER->MovePacket(id, xmf3Shift);
 	
@@ -153,10 +153,32 @@ void ObjManager::RotePkt(int id, unsigned char *packet)
 void ObjManager::PosPkt(int id, unsigned char *packet)
 {
 	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(packet);
-	g_clients[id]->m_xmf3Position.x = pkt->x;
-	g_clients[id]->m_xmf3Position.y = pkt->y;
-	g_clients[id]->m_xmf3Position.z = pkt->z;
+
+	g_clients[id]->SetOOBB(XMFLOAT3(pkt->x, pkt->y, pkt->z),XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+	bool collision = collisionPlayerByPlayer(id);
+	if (collision == true) {
+		//충돌했으니 이전 포지션으로!
+		//충돌 했다! 라는 bool 값만 보내주자
+		//클라에서는 충돌했다라는 bool값이 오면 prePos로 포지션 변경
+	}
+	else {
+		g_clients[id]->m_xmf3Position.x = pkt->x;
+		g_clients[id]->m_xmf3Position.y = pkt->y;
+		g_clients[id]->m_xmf3Position.z = pkt->z;
+	}
+	
 	cout << g_clients[id]->m_xmf3Position.x << " , " << g_clients[id]->m_xmf3Position.y << " , " << g_clients[id]->m_xmf3Position.z << endl;
+}
+bool ObjManager::collisionPlayerByPlayer(int id)
+{
+	int roomNum = g_clients[id]->roomNumber;
+	for (int i = 0; i < PERSONNEL; ++i) {
+		if(id != i)
+			if (g_clients[id]->m_xmOOBB.Intersects(g_clients[i]->m_xmOOBB)) //충돌!
+			{
+				return true;
+			}
+	}
 }
 void ObjManager::MoveUpdate(int id, unsigned int time)
 {

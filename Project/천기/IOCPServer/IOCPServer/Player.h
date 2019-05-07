@@ -40,7 +40,7 @@ public:
 	int map;
 	int state;
 
-
+	BoundingOrientedBox			m_xmOOBB;
 public:
 	Player();
 	~Player();
@@ -49,5 +49,8 @@ public:
 	void SetVelocity(const XMFLOAT3& xmf3Velocity) { m_xmf3Velocity = xmf3Velocity; }
 	void move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity);
 	void Transform();
+	
+	void SetOOBB(XMFLOAT3& xmCenter, XMFLOAT3& xmExtents, XMFLOAT4& xmOrientation) { m_xmOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation); }
+
 };
 
