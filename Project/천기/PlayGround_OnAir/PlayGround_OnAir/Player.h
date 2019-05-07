@@ -56,6 +56,7 @@ protected:
 public:
 	bool						m_match = false;
 
+	CPlayer*		GetCPlayer() { return this; }
 
 	float GetJumpPower() { return m_JumpPower; }
 	void SetJumpPower(float p) { m_JumpPower = p; }

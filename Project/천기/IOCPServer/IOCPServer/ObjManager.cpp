@@ -148,9 +148,6 @@ void ObjManager::PosPkt(int id, unsigned char *packet)
 	g_clients[id]->SetOOBB(XMFLOAT3(pkt->x, pkt->y, pkt->z),XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 	bool collision = collisionPlayerByPlayer(id);
 	if (collision == true) {
-		//충돌했으니 이전 포지션으로!
-		//충돌 했다! 라는 bool 값만 보내주자
-		//클라에서는 충돌했다라는 bool값이 오면 prePos로 포지션 변경
 		PACKETMANAGER->CollisionPacket(id);
 	}
 	else {
@@ -166,8 +163,8 @@ bool ObjManager::collisionPlayerByPlayer(int id)
 	int roomNum = g_clients[id]->roomNumber;
 	for (int i = 0; i < PERSONNEL; ++i) {
 		int otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
-		if(id != otherId)
-			if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //충돌!
+		if (id != otherId) {
+			if (g_clients[id]->m_xmOOBB.Intersects(g_clients[otherId]->m_xmOOBB)) //충돌!
 			{
 				cout << " 충 돌 ";
 				return true;
@@ -175,6 +172,7 @@ bool ObjManager::collisionPlayerByPlayer(int id)
 			else {
 				return false;
 			}
+		}
 	}
 }
 void ObjManager::MoveUpdate(int id, unsigned int time)

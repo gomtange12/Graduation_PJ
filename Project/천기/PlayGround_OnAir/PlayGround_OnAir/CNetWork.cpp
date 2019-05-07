@@ -154,9 +154,18 @@ void CNetWork::ProcessPacket(char *ptr)
 	case SC_COLLISION:
 	{
 		sc_packet_collision *pkt = reinterpret_cast<sc_packet_collision *>(ptr);
-		PLAYER->GetOtherPlayer()->SetPlayerCollision(pkt->check); //충돌체크값 bool변수
-		//여기서 플레이어 포지션을 prePos 로 변경해주고
-		//어떻게 되는지 한번 보고 판단하자
+		PLAYER->GetPlayer()->SetPlayerCollision(pkt->check); //충돌체크값 bool변수
+		if (firstCheck == true) {
+			//PLAYER->GetPlayer()->SetPlayerCollision(pkt->check);
+			PLAYER->GetPlayer()->SetPosition(Vector3::Subtract(PLAYER->GetPlayer()->GetPrePosition(), XMFLOAT3(0.f,0.f,7.f)));
+			cout << "아앜" << endl;
+		}
+		else {
+			//PLAYER->GetOtherPlayer()->SetPlayerCollision(pkt->check);
+			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Subtract(PLAYER->GetOtherPlayer()->GetPrePosition(), XMFLOAT3(0.f, 0.f, 7.f)));
+			cout << "아앜22" << endl;
+		}
+		
 		break;
 	}
 	case SC_REMOVE_PLAYER:
