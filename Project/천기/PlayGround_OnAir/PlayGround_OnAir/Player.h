@@ -44,10 +44,10 @@ protected:
 	int m_PlayerState = IDLE;
 
 	//for 서버로 플레이어 식별
-
+	XMFLOAT3					prePosition = XMFLOAT3(100.0f, 0.0f, 400.0f);
 	int							m_PlayerID=-1;
 	int							m_JoinRoomNum=-1;
-
+	bool						m_playerCollision = false;
 public:
 	DWORD dwDirection{ 0 };
 	int GetClientNum() { return m_PlayerID; }
@@ -61,7 +61,13 @@ public:
 		//if ( != nullptr)
 		SetOOBB(GetPosition(), XMFLOAT3(0.5, 0.5, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	};
-
+	XMFLOAT3 GetPrePosition() { return(prePosition); }
+	void SetPrePosition(const XMFLOAT3& xmf3Position) { Move(XMFLOAT3(xmf3Position.x - prePosition.x, xmf3Position.y - prePosition.y, xmf3Position.z - prePosition.z), false); }
+	bool GetPlayerCollision() const {
+		return m_playerCollision ;}
+	void SetPlayerCollision(bool check) {
+		m_playerCollision = check;
+	}
 	std::shared_ptr<CCamera> GetCamera() { return(m_pCamera); }
 	virtual void SetCamera(std::shared_ptr<CCamera> pCamera) { m_pCamera = pCamera; }
 	void SetYPosition(float ypos) { m_xmf3Position.y = ypos; }

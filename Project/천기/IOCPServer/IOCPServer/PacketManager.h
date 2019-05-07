@@ -17,4 +17,5 @@ public:
 	void ClientDisconnect(int id);
 	void ScenePacket(int num, int roomNum);
 	void VectorPacket(int id);
+	void CollisionPacket(int id);
 };

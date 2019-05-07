@@ -26,14 +26,13 @@ constexpr int SC_REMOVE_PLAYER = 3;
 constexpr int SC_MOVE_PLAYER = 4;
 constexpr int SC_MATCHING_RESULT = 5;
 constexpr int SC_SCENE = 6;
-constexpr int CS_ROTE_STATE_INFO = 7;
-constexpr int SC_VECTOR_INFO = 8;
-
+constexpr int SC_VECTOR_INFO = 7;
+constexpr int SC_COLLISION = 8;
 //
 constexpr int CS_MATCHING_PLAYER = 1;
 constexpr int CS_MOVE_STATE_INFO = 2;
 constexpr int CS_POS_INFO = 3;
-
+constexpr int CS_ROTE_STATE_INFO = 4;
 #pragma pack (push, 1)
 //////////////////////서버/////////////////////////
 struct sc_packet_login_ok {
@@ -90,7 +89,11 @@ struct sc_packet_vector {
 	float LposY;
 	float LposZ;
 };
-
+struct sc_packet_collision {
+	BYTE size;
+	BYTE type;
+	bool check;
+};
 /////////////////////////클라//////////////////////
 struct cs_packet_matching {
 	BYTE size;

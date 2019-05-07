@@ -858,10 +858,12 @@ void CGameFramework::FrameAdvance()
 	if (PLAYER->GetPlayer()!=NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
 	if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
 	cout << "X: " << PLAYER->GetPlayer()->GetPosition().x << "Y: " << PLAYER->GetPlayer()->GetPosition().y << "Z: " << PLAYER->GetPlayer()->GetPosition().z << endl;
-	if (prePosition.x != PLAYER->GetPlayer()->GetPosition().x && prePosition.z != PLAYER->GetPlayer()->GetPosition().z) {
+	
+	if (PLAYER->GetPlayer()->GetPrePosition.x != PLAYER->GetPlayer()->GetPosition().x && PLAYER->GetPlayer()->GetPrePosition.z != PLAYER->GetPlayer()->GetPosition().z) {
 		CNETWORK->Pos(PLAYER->GetPlayer()->GetPosition());
-		prePosition = PLAYER->GetPlayer()->GetPosition();
+		PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
 	}
+
 	if (m_pScene)
 	{
 		m_pScene->CheckObjectByObjectCollisions();

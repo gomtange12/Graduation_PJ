@@ -140,7 +140,14 @@ void CNetWork::ProcessPacket(char *ptr)
 		}
 		break;
 	}
-
+	case SC_COLLISION: 
+	{
+		sc_packet_collision *pkt = reinterpret_cast<sc_packet_collision *>(ptr);
+		PLAYER->GetOtherPlayer()->SetPlayerCollision(pkt->check); //충돌체크값 bool변수
+		//여기서 플레이어 포지션을 prePos 로 변경해주고
+		//어떻게 되는지 한번 보고 판단하자
+		break;
+	}
 	case SC_REMOVE_PLAYER:
 	{
 		sc_packet_remove_player *pkt = reinterpret_cast<sc_packet_remove_player *>(ptr);
