@@ -865,7 +865,7 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	{
 		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
 		m_pCamera->SetLookAt(m_xmf3Position);
-		m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
+		//m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
 
 	}
 

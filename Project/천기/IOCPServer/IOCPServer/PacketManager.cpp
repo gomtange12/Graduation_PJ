@@ -134,4 +134,6 @@ void PacketManager::CollisionPacket(int id) {
 	pkt.size = sizeof(sc_packet_collision);
 	pkt.type = SC_COLLISION;
 	pkt.check = true;
+
+	SendPacket(id, &pkt);
 }
