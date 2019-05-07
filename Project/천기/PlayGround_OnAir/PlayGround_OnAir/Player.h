@@ -26,35 +26,47 @@ protected:
 
 	XMFLOAT3					m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	XMFLOAT3     				m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	float           			m_fMaxVelocityXZ = 0.f;
-	float           			m_fMaxVelocityY = 0.f;
+	float           			m_fMaxVelocityXZ = 0.0f;
+	float           			m_fMaxVelocityY = 0.0f;
 	float           			m_fFriction = 0.0f;
 	bool						m_OnAacting{ FALSE };
 	bool						m_isCrashMap{ false };
 	LPVOID						m_pPlayerUpdatedContext = NULL;
 	LPVOID						m_pCameraUpdatedContext = NULL;
-
+	float						m_newYpos{ 0.0f };
+	float						m_oldYpos{ 0.0f };
+	float						m_JumpPower{ 500.0 };
 	//CCamera						*m_pCamera = NULL;
 	//이넘만들기
 	
-
+	int							m_collideBox{ 0 };
 	std::shared_ptr<CCamera>	m_pCamera;
 
 	bool m_AllowKey = false;
 	int m_PlayerState = IDLE;
 
 	//for 서버로 플레이어 식별
-	XMFLOAT3					prePosition = XMFLOAT3(100.0f, 0.0f, 400.0f);
-	int							m_PlayerID=-1;
-	int							m_JoinRoomNum=-1;
+
+	XMFLOAT3					prePosition =XMFLOAT3(-530.f, 50.f, 745.f);
+	int							m_PlayerID = -1;
+	int							m_JoinRoomNum = -1;
 	bool						m_playerCollision = false;
+
+	float m_HeightForCollide{ 0 };
 public:
+	bool						m_match = false;
+
+
+	float GetJumpPower() { return m_JumpPower; }
+	void SetJumpPower(float p) { m_JumpPower = p; }
+
+	int GetHeight() { return m_HeightForCollide; }
+	void SetHeight(float h) { m_HeightForCollide = h; }
 	DWORD dwDirection{ 0 };
 	int GetClientNum() { return m_PlayerID; }
 	void SetClientNum(int cnum) { m_PlayerID = cnum; }
 	int GetRoomNum() { return m_JoinRoomNum; }
 	void SetRoomNum(int rnum) { m_JoinRoomNum = rnum; }
-
 	const DWORD& GetDirection() { return dwDirection; }
 	void SetDirection(DWORD dir) { dwDirection = dir; }
 	void SetCollimdeBox() {
@@ -62,9 +74,10 @@ public:
 		SetOOBB(GetPosition(), XMFLOAT3(0.5, 0.5, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	};
 	XMFLOAT3 GetPrePosition() { return(prePosition); }
-	void SetPrePosition(const XMFLOAT3& xmf3Position) { Move(XMFLOAT3(xmf3Position.x - prePosition.x, xmf3Position.y - prePosition.y, xmf3Position.z - prePosition.z), false); }
+	void SetPrePosition(const XMFLOAT3& xmf3Position) { prePosition.x = xmf3Position.x, prePosition.y = xmf3Position.y, prePosition.z = xmf3Position.z; };
 	bool GetPlayerCollision() const {
-		return m_playerCollision ;}
+		return m_playerCollision;
+	}
 	void SetPlayerCollision(bool check) {
 		m_playerCollision = check;
 	}
@@ -109,6 +122,8 @@ public:
 	void Rotate(float x, float y, float z);
 	bool IsPlayerCrashMap() { return m_isCrashMap; };
 	void SetPlayCrashMap(bool isCrash);
+	void SetCollideNum(int n) { m_collideBox = n; }
+	int GetCollideNum() { return m_collideBox; }
 	virtual void Update(float fTimeElapsed);
 
 	virtual void OnPlayerUpdateCallback(float fTimeElapsed) { }
@@ -177,7 +192,7 @@ public:
 class COtherPlayers : public CPlayer
 {
 public:
-	COtherPlayers(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL); 
+	COtherPlayers(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	virtual void OnPlayerUpdateCallback(float fTimeElapsed);
 	virtual void OnCameraUpdateCallback(float fTimeElapsed);
 	virtual void Update(float fTimeElapsed);

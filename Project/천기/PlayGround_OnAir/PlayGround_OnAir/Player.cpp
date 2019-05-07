@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Shader.h"
 #include "CObjectManager.h"
+#include "CSceneManager.h"
 #include "CNetWork.h"
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CPlayer
@@ -44,6 +45,7 @@
 //	SetPlayerUpdatedContext(pContext);
 //	SetCameraUpdatedContext(pContext);
 //}
+
 
 
 
@@ -117,12 +119,12 @@ void CPlayer::Move(DWORD dwDirection, float fDistance, bool bUpdateVelocity)
 	if (dwDirection)
 	{
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
-		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, fDistance);
+	/*	if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, fDistance);
 		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Look, -fDistance);
 		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, fDistance);
 		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Right, -fDistance);
 		if (dwDirection & DIR_UP) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, fDistance);
-		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, -fDistance);
+		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3Up, -fDistance);*/
 		if (dwDirection & DIR_JUMP)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(PlayerState::JUMP);
@@ -177,9 +179,9 @@ void CPlayer::Rotate(float x, float y, float z)
 		{
 			CNETWORK->RotePkt(y);
 			//서버연결시 주석
-			/*XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Up), XMConvertToRadians(y));
-			m_xmf3Look = Vector3::TransformNormal(m_xmf3Look, xmmtxRotate);
-			m_xmf3Right = Vector3::TransformNormal(m_xmf3Right, xmmtxRotate);*/
+			//XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Up), XMConvertToRadians(y));
+			//m_xmf3Look = Vector3::TransformNormal(m_xmf3Look, xmmtxRotate);
+			//m_xmf3Right = Vector3::TransformNormal(m_xmf3Right, xmmtxRotate);
 			//
 		}
 	}
@@ -207,9 +209,9 @@ void CPlayer::Rotate(float x, float y, float z)
 	}
 
 	//서버연결시 주석
-	/*m_xmf3Look = Vector3::Normalize(m_xmf3Look);
-	m_xmf3Right = Vector3::CrossProduct(m_xmf3Up, m_xmf3Look, true);
-	m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);*/
+	//m_xmf3Look = Vector3::Normalize(m_xmf3Look);
+	//m_xmf3Right = Vector3::CrossProduct(m_xmf3Up, m_xmf3Look, true);
+	//m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
 	//
 }
 
@@ -217,6 +219,7 @@ void CPlayer::Rotate(float x, float y, float z)
 void CPlayer::SetPlayCrashMap(bool isCrash)
 {
 	m_isCrashMap = isCrash;
+	
 }
 
 void CPlayer::Update(float fTimeElapsed)
@@ -238,12 +241,7 @@ void CPlayer::Update(float fTimeElapsed)
 
 	if (m_pPlayerUpdatedContext)
 		OnPlayerUpdateCallback(fTimeElapsed);
-
-	fLength = Vector3::Length(m_xmf3Velocity);
-	float fDeceleration = (m_fFriction * fTimeElapsed);
-	if (fDeceleration > fLength) fDeceleration = fLength;
-	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
-
+	
 	if (PLAYER->GetPlayer()!=nullptr)
 	{
 		//if (m_pCamera != nullptr)
@@ -264,7 +262,12 @@ void CPlayer::Update(float fTimeElapsed)
 	//m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 
 	//m_pCamera->GenerateProjectionMatrix();
-	
+	fLength = Vector3::Length(m_xmf3Velocity);
+	float fDeceleration = (m_fFriction * fTimeElapsed);
+	if (fDeceleration > fLength) fDeceleration = fLength;
+	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
+
+	//m_JumpPower = 0;
 	switch (GetPlayerState())
 	{
 	/*default:
@@ -283,6 +286,26 @@ void CPlayer::Update(float fTimeElapsed)
 		break;
 	case JUMP:
 		m_OnAacting = TRUE;
+		//float jumpTime = fTimeElapsed;
+		//XMFLOAT3 jump{ 0,0,0 };
+		//float newVel = -xmf3Velocity.y;
+		//xmf3Velocity.y += m_xmf3Gravity.y * fTimeElapsed;
+		////m_xmf3Position += 
+		/*m_xmf3Position.y = m_xmf3Position.y + (m_xmf3Gravity.y * fTimeElapsed);
+		cout << m_xmf3Position.y << endl;*/
+		//m_newYpos = m_xmf3Position.y;
+		//m_xmf3Position.y = m_xmf3Position.y + (m_xmf3Gravity.y* 0.5) * fTimeElapsed ;
+		//m_xmf3Position.y += 7;
+		/*m_newYpos = m_xmf3Position.y + 8;
+		m_newYpos += (m_xmf3Gravity.y * 0.5* fTimeElapsed);
+		m_xmf3Position.y = m_newYpos;*/
+		m_JumpPower += (m_xmf3Gravity.y * 0.1* fTimeElapsed);
+		m_xmf3Position.y += m_JumpPower * fTimeElapsed;
+		if (m_JumpPower < 470)
+			m_PlayerState = FALLING;
+
+		//m_newYpos = 0;
+		cout << m_JumpPower << endl;
 		SetTrackAnimationSet(0, JUMP);
 		break;
 	case STUN:
@@ -319,8 +342,11 @@ void CPlayer::Update(float fTimeElapsed)
 		break;
 	}
 	//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
+	//cout <<"점프 후"<< m_xmf3Position.y << endl;
+
 
 	m_xmOOBB.Center = m_xmf3Position;
+	m_xmOOBB.Center.y = m_xmf3Position.y + GetBoundingBox().Extents.y;
 	//SetTrackAnimationSet(0, 2);
 
 }
@@ -353,6 +379,8 @@ std::shared_ptr<CCamera> CPlayer::OnChangeCamera(DWORD nNewCameraMode, DWORD nCu
 		pNewCamera->SetTimeLag(0.25f);
 		//pNewCamera->SetOffset(XMFLOAT3(0.0f, 350.0f, -80.0f));
 		pNewCamera->SetOffset(XMFLOAT3(0.0f, 180.0f, -180.0f));
+		//pNewCamera->SetOffset(XMFLOAT3(0.0f, 980.0f, -180.0f));
+
 		if(PLAYER->GetPlayer()!=nullptr)
 			pNewCamera->SetPosition(Vector3::Add(m_xmf3Position, PLAYER->GetPlayer()->GetCamera()->GetOffset()));
 		//pNewCamera->Rotate(-90, 0, 0);
@@ -481,6 +509,8 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr
 	DWORD nCameraMode = (pCamera) ? pCamera->GetMode() : 0x00;
 	if (nCameraMode == THIRD_PERSON_CAMERA) CGameObject::Render(pd3dCommandList, pCamera);
 }
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 
@@ -626,11 +656,12 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 
 	//m_ObjType = DYNAMIC;
 	//if(CNETWORK->GetInstance()->)
-	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/keytar2.bin", NULL, true);
 	
+	m_BoundScale = 60.0f;
+	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
 
 	SetChild(pPlayerModel->m_pModelRootObject, true);
-	int i = pPlayerModel->m_pModelRootObject->GetMeshType();
+	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
 	//if(m_pMesh!=nullptr)
 	//this->SetMesh(pPlayerModel->m_pModelRootObject->m_pMesh);
 	
@@ -639,7 +670,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
 	//SetOOBB(GetPosition(), XMFLOAT3(1,2,1),  XMFLOAT4(0, 0, 0, 1));
 	m_pAnimationController->SetTrackAnimationSet(0, 0);
-
+	
 	m_pAnimationController->SetCallbackKeys(1, 3);
 #ifdef _WITH_SOUND_RESOURCE
 	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Footstep01"));
@@ -661,7 +692,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	}
 	//SetOOBB(GetPosition(), m_pMesh->GetAABBExtents(), XMFLOAT4(0, 0, 0, 1));
 	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
-	if (pPlayerModel) delete pPlayerModel;
+	//if (pPlayerModel) delete pPlayerModel;
 	
 }
 
@@ -742,8 +773,25 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
 
-	fHeight = 0;
-
+	/*int num = 0;
+	switch (SCENEMANAGER->GetSceneType())
+	{
+	case PLAYGROUNDMAP:
+		
+		break;
+	case CONCERTMAP:
+		
+		break;
+	}*/
+	if (PLAYER->GetPlayer()->IsPlayerCrashMap())
+	{
+		//if(PLAYER->GetPlayer()->GetPlayerState()== FALLING)
+		fHeight = PLAYER->GetPlayer()->GetHeight();
+	}
+	else
+	{
+		fHeight = 10;
+	}
 	if (xmf3PlayerPosition.y < fHeight)
 	{
 		//if (FindFrame("LFootBone1")->GetPosition().y < fHeight)
@@ -752,8 +800,11 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 		xmf3PlayerVelocity.y = 0.0f;
 		SetVelocity(xmf3PlayerVelocity);
 		xmf3PlayerPosition.y = fHeight;
-		SetPosition(xmf3PlayerPosition);
+		SetPosition(xmf3PlayerPosition);	
 	}
+
+
+
 }
 
 void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
@@ -766,7 +817,8 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
 	//float boundHeight = 
-	fHeight = 255; //여기
+	//fHeight = 255; //여기
+	fHeight = 0;
 	if (xmf3CameraPosition.y <= fHeight)
 
 	xmf3CameraPosition.y = fHeight;
@@ -808,11 +860,12 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_fPitch = 0.0f;
 	m_fRoll = 0.0f;
 	m_fYaw = 0.0f;*/
+	//m_BoundScale = 1;
 	if (this != nullptr) //일단 카메라 쓰지 않는다
 	{
 		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
-		//m_pCamera->SetLookAt(m_xmf3Position);
-		//m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
+		m_pCamera->SetLookAt(m_xmf3Position);
+		m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
 
 	}
 
@@ -847,8 +900,8 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	}
 	//SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
-	if (pPlayerModel) delete pPlayerModel;
 
+	//if (pPlayerModel) delete pPlayerModel;
 	
 }
 
@@ -877,20 +930,20 @@ void COtherPlayers::OnPlayerUpdateCallback(float fTimeElapsed)
 
 void COtherPlayers::OnCameraUpdateCallback(float fTimeElapsed)
 {
-	//CHeightMapTerrain *pTerrain = (CHeightMapTerrain *)m_pCameraUpdatedContext;
-	//XMFLOAT3 xmf3Scale = pTerrain->GetScale();
-	//XMFLOAT3 xmf3CameraPosition = m_pCamera->GetPosition();
-	////xmf3CameraPosition.y += 500;
-	//int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
-	//bool bReverseQuad = ((z % 2) != 0);
-	//float fHeight{ 0 };// = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
-	////float boundHeight = 
-	//fHeight = 255; //여기
-	//if (xmf3CameraPosition.y <= fHeight)
+	CHeightMapTerrain *pTerrain = (CHeightMapTerrain *)m_pCameraUpdatedContext;
+	XMFLOAT3 xmf3Scale = pTerrain->GetScale();
+	XMFLOAT3 xmf3CameraPosition = m_pCamera->GetPosition();
+	//xmf3CameraPosition.y += 500;
+	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
+	bool bReverseQuad = ((z % 2) != 0);
+	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
+	//float boundHeight = 
+	fHeight = 0; //여기
+	if (xmf3CameraPosition.y <= fHeight)
 
-	//	xmf3CameraPosition.y = fHeight;
-	//m_pCamera->SetPosition(xmf3CameraPosition);
-	//
+		xmf3CameraPosition.y = fHeight;
+	m_pCamera->SetPosition(xmf3CameraPosition);
+	
 }
 
 void COtherPlayers::Update(float fTimeElapsed)
@@ -915,10 +968,18 @@ void COtherPlayers::Update(float fTimeElapsed)
 
 	if (PLAYER->GetOtherPlayer() != nullptr)
 	{
-	
-		
-			//m_pCamera = ChangeCamera(/*SPACESHIP_CAMERA*/THIRD_PERSON_CAMERA, 0.0f);
+		DWORD nCurrentCameraMode = m_pCamera->GetMode();
+		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) {
+			m_pCamera->Update(PLAYER->GetOtherPlayer()->GetPosition(), fTimeElapsed);
+			//m_pCamera->Update(PLAYER->GetOtherPlayer()->GetPosition(), fTimeElapsed);
+
+		}
+		if (m_pCameraUpdatedContext) OnCameraUpdateCallback(fTimeElapsed);
+		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->SetLookAt(PLAYER->GetOtherPlayer()->GetPosition());
+		//m_pCamera = ChangeCamera(/SPACESHIP_CAMERA/THIRD_PERSON_CAMERA, 0.0f);
 		m_pCamera->RegenerateViewMatrix();
+			
+		
 		
 	}
 
@@ -948,7 +1009,13 @@ void COtherPlayers::Update(float fTimeElapsed)
 		break;
 	case JUMP:
 		m_OnAacting = TRUE;
+		m_newYpos = m_xmf3Position.y + 9;
+		m_newYpos += (m_xmf3Gravity.y * 0.5)* fTimeElapsed;
+		m_xmf3Position.y = m_newYpos;
+		m_newYpos = 0;
 		SetTrackAnimationSet(0, JUMP);
+		//m_xmf3Position.y += (9.8) * fTimeElapsed + fTimeElapsed * m_xmf3Velocity.y;
+		//cout << m_xmf3Position.y << endl; 
 		break;
 	case STUN:
 		m_OnAacting = TRUE;

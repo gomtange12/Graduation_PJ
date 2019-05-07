@@ -112,18 +112,10 @@ void ObjManager::MovePkt(int id, unsigned char *packet)
 	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
 	float fDistance = 12.25f;
 
-	if (DIR_FORWARD & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Look, fDistance);
-		std::wcout << L"상 ";
-	}
-	if (DIR_BACKWARD & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Look, -fDistance);
-		std::wcout << L"하 ";
-	}
-	if (DIR_LEFT & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Right, -fDistance);
-		std::wcout << L"좌 ";
-	}
-	if (DIR_RIGHT & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Right, fDistance);
-		std::wcout << L"우 ";
-	}
+	if (DIR_FORWARD & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Look, fDistance);}
+	if (DIR_BACKWARD & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Look, -fDistance);}
+	if (DIR_LEFT & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Right, -fDistance);}
+	if (DIR_RIGHT & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Right, fDistance);}
 
 	//player->move(xmf3Shift, true);
 
@@ -153,7 +145,6 @@ void ObjManager::RotePkt(int id, unsigned char *packet)
 void ObjManager::PosPkt(int id, unsigned char *packet)
 {
 	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(packet);
-
 	g_clients[id]->SetOOBB(XMFLOAT3(pkt->x, pkt->y, pkt->z),XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 	bool collision = collisionPlayerByPlayer(id);
 	if (collision == true) {
@@ -168,15 +159,17 @@ void ObjManager::PosPkt(int id, unsigned char *packet)
 		g_clients[id]->m_xmf3Position.z = pkt->z;
 	}
 	
-	cout << g_clients[id]->m_xmf3Position.x << " , " << g_clients[id]->m_xmf3Position.y << " , " << g_clients[id]->m_xmf3Position.z << endl;
+	//cout << g_clients[id]->m_xmf3Position.x << " , " << g_clients[id]->m_xmf3Position.y << " , " << g_clients[id]->m_xmf3Position.z << endl;
 }
 bool ObjManager::collisionPlayerByPlayer(int id)
 {
 	int roomNum = g_clients[id]->roomNumber;
 	for (int i = 0; i < PERSONNEL; ++i) {
-		if(id != ROOMMANAGER->room[roomNum]->m_ids[i])
-			if (g_clients[id]->m_xmOOBB.Intersects(g_clients[i]->m_xmOOBB)) //충돌!
+		int otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
+		if(id != otherId)
+			if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //충돌!
 			{
+				cout << " 충 돌 ";
 				return true;
 			}
 			else {

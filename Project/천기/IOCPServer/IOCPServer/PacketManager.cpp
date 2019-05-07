@@ -26,12 +26,13 @@ void PacketManager::SendPacket(int id, void *packet)
 			printf("오류");
 	}
 };
-void PacketManager::LoginPacket(int id) 
+void PacketManager::LoginPacket(int id,bool check) 
 {
 	sc_packet_login_ok pkt;
 	pkt.id = id;
 	pkt.size = sizeof(sc_packet_login_ok);
 	pkt.type = SC_LOGIN_OK;
+	pkt.check = check;
 	SendPacket(id, &pkt);
 }
 //void PacketManager::PutPlayerPacket(int id) //필요없을듯
@@ -99,7 +100,7 @@ void PacketManager::ScenePacket(int id, int roomNum) { //Solo 매칭용임 2인용
 	sc_packet_scene pkt;
 	pkt.size = sizeof(sc_packet_scene);
 	pkt.type = SC_SCENE;
-	pkt.sceneNum = INGAME;
+	pkt.sceneNum = PLAYGROUNDMAP;
 	pkt.roomNum = roomNum;
 	for (int i = 0; i < PERSONNEL; ++i) {
 		if (ROOMMANAGER->room[roomNum]->m_ids[i] != id) {

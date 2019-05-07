@@ -1,19 +1,14 @@
 #pragma once
-#include "pch.h"
+
 #include "Protocol.h"
 
 #define PERSONNEL 2
-
-class GameObject;
 
 struct stOverEx {
 	WSAOVERLAPPED m_wsaOver;
 	WSABUF m_wsaBuf;
 	unsigned char m_IOCPbuf[MAX_BUFFER]; // IOCP send/recv ¹öÆÛ
 	unsigned char	m_todo;
-	//GameObject* target;
-	int id;
-	u_int time;
 };
 enum ThreadNum {
 	ACCEPT_TH,
@@ -44,7 +39,8 @@ enum DIRECTION
 };
 enum SceneState {
 	MENUSCENE = 0,
-	INGAME = 1,
+	PLAYGROUNDMAP = 1,
+	CONCERTMAP,
 	GAMEOVER,
 	LOADING
 };

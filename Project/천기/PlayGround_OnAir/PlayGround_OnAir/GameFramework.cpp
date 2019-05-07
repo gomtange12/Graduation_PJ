@@ -44,7 +44,7 @@ CGameFramework::CGameFramework()
 	m_pScene = NULL;
 	//m_pPlayer = NULL;
 
-	_tcscpy_s(m_pszFrameRate, _T("LabProject ("));
+	_tcscpy_s(m_pszFrameRate, _T("PlayGround ("));
 }
 
 CGameFramework::~CGameFramework()
@@ -422,9 +422,9 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 					m_pCamera = PLAYER->GetPlayer()->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
 					break;
 				case VK_F6: {
-					if (m_match == false) {
+					if (m_ready == false) {
 						CNETWORK->MatchPkt();
-						m_match = true;
+						m_ready = true;
 					}
 					break;
 				}
@@ -546,52 +546,53 @@ void CGameFramework::BuildObjects()
 		m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
 		//m_pScene->SetCollideBox();
 	}
-		//SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
-	//SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
-
-	//for (auto&& p : SCENEMANAGER->m_MapList)
-	//{
-	//	//p.second->CreateShaderResourceViews(m_pd3dDevice,nullptr,)
-	//	p.second->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
-	//}
-
-
-	//m_pScene = new CScene();
-	//if (m_pScene) m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
 	//SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
-	//SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
+//SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
 
-	//for (auto& p : SCENEMANAGER->m_MapList)
-	//{
-	//	//p.second->CreateShaderResourceViews(m_pd3dDevice,nullptr,)
-	//	p.second->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
-	//}
+//for (auto&& p : SCENEMANAGER->m_MapList)
+//{
+//	//p.second->CreateShaderResourceViews(m_pd3dDevice,nullptr,)
+//	p.second->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
+//}
 
-	//여기가 배치 구문이니 신경써야한다. 
+
+//m_pScene = new CScene();
+//if (m_pScene) m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
+//SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
+//SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
+
+//for (auto& p : SCENEMANAGER->m_MapList)
+//{
+//	//p.second->CreateShaderResourceViews(m_pd3dDevice,nullptr,)
+//	p.second->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
+//}
+
+//여기가 배치 구문이니 신경써야한다. 
 #ifdef _WITH_TERRAIN_PLAYER
 	PLAYER->Initialize(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 
-	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(100, 0, 400));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
-	PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()-> m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
-	PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7,10,7), XMFLOAT4(0, 0, 0, 1));
-	
-	PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(100, 0, 400));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
-	//PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(PLAYER->GetOtherPlayer()->m_,20, 40)); //박스도 151515배 여기여기0409
-	PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
+	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(-530, 50, 745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+	PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
+	PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 
+	PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(1060, 10, 745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+	//PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(40,20, 40)); //박스도 151515배 여기여기0409
+	//PLAYER->GetOtherPlayer()->Rotate(0,90,0); //박스도 151515배 여기여기0409
+
+	PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
 	PLAYER->GetOtherPlayer()->SetOOBB(PLAYER->GetOtherPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 
 
 	//if (m_pScene) m_pScene->MakeOtherPlayer(m_pd3dDevice, m_pd3dCommandList);
 	//MAKE OTHER PLAYER
-	
+
 	//PLAYER->GetPlayer()->SetMesh()
 	//PLAYER->GetPlayer()->FindAndSetSkinnedMesh()
 	//if (PLAYER->GetPlayer()->GetRootSkinnedGameObject()->m_pMesh != nullptr)
 		//int i = 0;
 	//PLAYER->GetPlayer()->SetCollideBox();
 																									 //PLAYER->MakeOtherPlayers(m_pd3dDevice, m_pd3dCommandList, SCENEMANAGER->m_MapList[INGAME]->GetGraphicsRootSignature(), SCENEMANAGER->m_MapList[INGAME]->m_pTerrain);
-	
+
 #else
 	CAirplanePlayer *pPlayer = new CAirplanePlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), NULL);
 	pPlayer->SetPosition(XMFLOAT3(425.0f, 240.0f, 640.0f));
@@ -599,7 +600,7 @@ void CGameFramework::BuildObjects()
 	//m_pScene->BuildObjectsAfterPlayer(m_pd3dDevice, m_pd3dCommandList);
 	//m_pScene->m_pPlayer = m_pPlayer;// = pPlayer;// = PLAYER->GetInstance()->GetPlayer();
 	m_pCamera = PLAYER->GetPlayer()->GetCamera();
-	
+	CNETWORK->SetGameFrameWork(GetCGameFramework());
 	//m_pCamera->SetMode(THIRD_PERSON_CAMERA);
 
 	m_pd3dCommandList->Close();
@@ -632,8 +633,11 @@ void CGameFramework::ProcessInput()
 	{
 		if (pKeysBuffer[VK_RETURN] & 0xF0)
 		{
-			SCENEMANAGER->SetScene(INGAME);
-
+			SCENEMANAGER->SetScene(PLAYGROUNDMAP);
+		}
+		if (pKeysBuffer[VK_RSHIFT] & 0xF0)
+		{
+			SCENEMANAGER->SetScene(CONCERTMAP);
 		}
 		//PLAYER->GetPlayer()->GetDirectiond() = 0;
 		dwDirection = 0;
@@ -702,6 +706,7 @@ void CGameFramework::ProcessInput()
 			PLAYER->GetPlayer()->SetPlayerState(JUMP);
 			PLAYER->GetOtherPlayer()->SetPlayerState(JUMP);
 
+			PLAYER->GetPlayer()->SetJumpPower(500.0f);
 			//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
 		}
 		if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
@@ -737,8 +742,9 @@ void CGameFramework::ProcessInput()
 			}
 			if (dwDirection )
 			{
-				//PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
-				CNETWORK->StatePkt(dwDirection, m_GameTimer.GetTimeElapsed()); //서버에 키상태전송
+				//if(!PLAYER->GetPlayer()->IsPlayerCrashMap())
+					//PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
+				CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
 			}
 		}
 	}
@@ -844,6 +850,7 @@ void CGameFramework::FrameAdvance()
 	m_pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	m_pd3dCommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
+	
 	if (m_pScene)
 	{
 		m_pScene->Render(m_pd3dCommandList, m_pCamera);
@@ -857,13 +864,13 @@ void CGameFramework::FrameAdvance()
 #endif
 	if (PLAYER->GetPlayer()!=NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
 	if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
-	cout << "X: " << PLAYER->GetPlayer()->GetPosition().x << "Y: " << PLAYER->GetPlayer()->GetPosition().y << "Z: " << PLAYER->GetPlayer()->GetPosition().z << endl;
-	
-	if (PLAYER->GetPlayer()->GetPrePosition.x != PLAYER->GetPlayer()->GetPosition().x && PLAYER->GetPlayer()->GetPrePosition.z != PLAYER->GetPlayer()->GetPosition().z) {
-		CNETWORK->Pos(PLAYER->GetPlayer()->GetPosition());
-		PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
+	//cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+	if (PLAYER->GetPlayer()->m_match == true) {
+		if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
+			CNETWORK->Pos(PLAYER->GetPlayer()->GetPosition());
+			PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
+		}
 	}
-
 	if (m_pScene)
 	{
 		m_pScene->CheckObjectByObjectCollisions();

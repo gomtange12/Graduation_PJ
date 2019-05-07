@@ -13,12 +13,12 @@ CNetWork::~CNetWork()
 
 void CNetWork::MakeServer(const HWND& hWnd)
 {
-	
+
 	WSAStartup(MAKEWORD(2, 2), &wsadata);
 
 	g_mysocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0);
 
-	
+
 	ZeroMemory(&ServerAddr, sizeof(SOCKADDR_IN));
 	ServerAddr.sin_family = AF_INET;
 	ServerAddr.sin_port = htons(SERVER_PORT);
@@ -82,7 +82,7 @@ void CNetWork::ProcessPacket(char *ptr)
 		sc_packet_login_ok *packet =
 			reinterpret_cast<sc_packet_login_ok *>(ptr);
 		myid = packet->id;
-		
+		firstCheck = packet->check;
 		break;
 	}
 	case SC_SCENE:
@@ -90,9 +90,20 @@ void CNetWork::ProcessPacket(char *ptr)
 		sc_packet_scene *paket = reinterpret_cast<sc_packet_scene *>(ptr);
 		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
 
-		PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
-		PLAYER->GetOtherPlayer()->SetClientNum(paket->ids);
-		PLAYER->GetPlayer()->SetClientNum(myid);
+		if (firstCheck == true) {
+			PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+			PLAYER->GetOtherPlayer()->SetClientNum(paket->ids);
+			PLAYER->GetPlayer()->SetClientNum(myid);
+			CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
+		}
+		else if (firstCheck == false) {
+			PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+			PLAYER->GetOtherPlayer()->SetClientNum(myid);
+			PLAYER->GetPlayer()->SetClientNum(paket->ids);
+			CNetCGameFramework->SetCamera(PLAYER->GetOtherPlayer()->GetCamera());
+		}
+		
+			PLAYER->GetPlayer()->m_match = true;
 		break;
 	}
 	case SC_PUT_PLAYER:
@@ -102,29 +113,29 @@ void CNetWork::ProcessPacket(char *ptr)
 
 		if (id == PLAYER->GetPlayer()->GetClientNum()) {
 
-	
+
 		}
 		else if (id < MAX_USER) {
-	
+
 		}
 		else {
-	
+
 		}
 		break;
 	}
 	case SC_MOVE_PLAYER:
 	{
 		sc_packet_move *pkt = reinterpret_cast<sc_packet_move *>(ptr);
-		
+
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		xmf3Shift = XMFLOAT3(pkt->posX, pkt->posY, pkt->posZ);
-		
-		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) 
+
+		if (pkt->id == PLAYER->GetPlayer()->GetClientNum())
 			PLAYER->GetPlayer()->Move(xmf3Shift, pkt->velocity);
-	
-		if(pkt->id == PLAYER->GetOtherPlayer()->GetClientNum())
+
+		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum())
 			PLAYER->GetOtherPlayer()->Move(xmf3Shift, pkt->velocity);
-		
+
 		break;
 	}
 	case SC_VECTOR_INFO:
@@ -140,7 +151,7 @@ void CNetWork::ProcessPacket(char *ptr)
 		}
 		break;
 	}
-	case SC_COLLISION: 
+	case SC_COLLISION:
 	{
 		sc_packet_collision *pkt = reinterpret_cast<sc_packet_collision *>(ptr);
 		PLAYER->GetOtherPlayer()->SetPlayerCollision(pkt->check); //충돌체크값 bool변수
@@ -173,14 +184,14 @@ void CNetWork::MatchPkt()
 
 	SendPacket();
 }
-void CNetWork::StatePkt(DWORD state,float fTime)
+void CNetWork::StatePkt(DWORD state)
 {
 	cs_packet_move_state *pkt = reinterpret_cast<cs_packet_move_state *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_MOVE_STATE_INFO;
 	pkt->state = state;
-	pkt->time = fTime;
+
 	SendPacket();
 }
 void CNetWork::RotePkt(float y)
@@ -190,10 +201,10 @@ void CNetWork::RotePkt(float y)
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_ROTE_STATE_INFO;
 	pkt->y = y;
-	
+
 	SendPacket();
 }
-void CNetWork::Pos(const XMFLOAT3& pos) 
+void CNetWork::Pos(const XMFLOAT3& pos)
 {
 	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);

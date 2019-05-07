@@ -29,19 +29,18 @@ constexpr int SC_SCENE = 6;
 constexpr int SC_VECTOR_INFO = 7;
 constexpr int SC_COLLISION = 8;
 //
-constexpr int CS_MATCHING_PLAYER = 1;
-constexpr int CS_MOVE_STATE_INFO = 2;
-constexpr int CS_POS_INFO = 3;
-constexpr int CS_ROTE_STATE_INFO = 4;
+constexpr int CS_MATCHING_PLAYER = 9;
+constexpr int CS_MOVE_STATE_INFO = 10;
+constexpr int CS_POS_INFO = 11;
+constexpr int CS_ROTE_STATE_INFO = 12;
+
 #pragma pack (push, 1)
 //////////////////////¼­¹ö/////////////////////////
 struct sc_packet_login_ok {
 	BYTE size;
 	BYTE type;
 	char id;
-	float posX;
-	float posY;
-	float posZ;
+	bool check;
 };
 struct sc_packet_put_player {
 	BYTE size;
@@ -108,7 +107,6 @@ struct cs_packet_move_state {
 	BYTE size;
 	BYTE type;
 	DWORD state;
-	float time;
 };
 struct cs_packet_rote_state {
 	BYTE size;

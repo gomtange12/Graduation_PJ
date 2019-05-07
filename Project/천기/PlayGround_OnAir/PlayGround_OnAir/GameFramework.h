@@ -14,6 +14,9 @@ public:
 	CGameFramework();
 	~CGameFramework();
 
+	CGameFramework*			GetCGameFramework() { return this; }
+	void SetCamera(const shared_ptr<CCamera>& camera) { m_pCamera = camera; };
+
 	bool OnCreate(HINSTANCE hInstance, HWND hMainWnd);
 	void OnDestroy();
 
@@ -48,10 +51,8 @@ public:
 #endif
 
 private:
-	//
-	bool						m_match = false;
-	
-	//
+	bool						m_ready = false;
+
 	D3D12_VIEWPORT				m_d3dViewport;
 	D3D12_RECT					m_d3dScissorRect;
 	HINSTANCE					m_hInstance;

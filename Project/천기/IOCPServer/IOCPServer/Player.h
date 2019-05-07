@@ -20,8 +20,9 @@ public:
 	bool m_match; //매칭확인용
 	int m_id;
 	int roomNumber=0;
+	
 public:
-	XMFLOAT3					m_xmf3Position  = XMFLOAT3(100.0f, 0.0f, 400.0f);
+	XMFLOAT3					m_xmf3Position  = XMFLOAT3(-530, 50, 745);
 	XMFLOAT3					m_xmf3Look;// = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	XMFLOAT3					m_xmf3Right;// = XMFLOAT3(1.0f, 0.0f, 0.0f);
 	XMFLOAT3					m_xmf3Up;// = XMFLOAT3(0.0f, 1.0f, 0.0f);

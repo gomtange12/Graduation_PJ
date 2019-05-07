@@ -104,8 +104,14 @@ public:
 	int									m_nUIObjects = 0;
 	CGameObject							**m_ppUIObjects = NULL;
 
+
+public:
 	int									m_nPlayGroundObjects = 0;
 	CGameObject							**m_ppPlayGroundObjects = NULL;
+
+	int									m_nConcertObjects = 0;
+	CGameObject							**m_ppConcertObjects = NULL;
+public:
 
 	int									m_MapGameObjects = 0;
 	CGameObject							**m_ppMapObjects = NULL;

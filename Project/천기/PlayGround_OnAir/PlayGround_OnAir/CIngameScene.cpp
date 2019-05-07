@@ -4,7 +4,7 @@
 
 CInGameScene::CInGameScene()
 {
-	m_SceneType = INGAME;
+	m_SceneType = PLAYGROUNDMAP;
 
 	
 }

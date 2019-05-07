@@ -13,6 +13,7 @@ private:
 	SOCKET clientSocket;
 
 	int USER_NUM = 0;
+	bool first = true;
 public:
 
 	explicit AcceptThread();

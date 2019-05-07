@@ -2,6 +2,7 @@
 #pragma comment (lib, "ws2_32.lib")
 #include <WinSock2.h>
 #include "Player.h"
+#include "GameFramework.h"
 #include "..\..\IOCPServer\IOCPServer\Protocol.h"
 //#include "..\..\Ãµ±â\IOCPServer\IOCPServer\Protocol.h"
 
@@ -23,18 +24,24 @@ private:
 	int		saved_packet_size = 0;
 
 	int myid;
-	
+	bool firstCheck;
+
+	CGameFramework*			CNetCGameFramework;
+
 public:
 	CNetWork();
 	~CNetWork();
 
+	void SetGameFrameWork(CGameFramework* CGFramwork) { CNetCGameFramework = CGFramwork; };
+
+	bool GetFirstCheck() const { return firstCheck; }
 	void MakeServer(const HWND& hWnd);
 	void SendPacket();
 	void ReadPacket(SOCKET sock);
 	void ProcessPacket(char *ptr);
 	void MatchPkt();
-	void StatePkt(DWORD state, float fTime);
+	void StatePkt(DWORD state);
 	void RotePkt(float y);
 	void Pos(const XMFLOAT3& pos);
-	
+
 };

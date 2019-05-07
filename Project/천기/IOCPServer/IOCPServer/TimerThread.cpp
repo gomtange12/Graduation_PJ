@@ -25,8 +25,8 @@ void TimerThread::Proc()
 			timerLock.unlock();
 			stOverEx *ex = new stOverEx;
 			ex->m_todo = ev.type;
-			ex->id = ev.id;
-			ex->time = GetTickCount();
+			//ex->id = ev.id;
+			//ex->time = GetTickCount();
 			PostQueuedCompletionStatus(IOCPSERVER->GetIocp(), 1, NULL, &ex->m_wsaOver);
 		}
 	}

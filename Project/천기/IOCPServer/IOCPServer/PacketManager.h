@@ -11,7 +11,7 @@ public:
 	~PacketManager();
 
 	void SendPacket(int id, void *packet);
-	void LoginPacket(int id);
+	void LoginPacket(int id, bool check);
 	//void PutPlayerPacket(int id);
 	void MovePacket(int id, const XMFLOAT3& shift);
 	void ClientDisconnect(int id);
