@@ -53,10 +53,14 @@ protected:
 	bool						m_playerCollision = false;
 
 	float m_HeightForCollide{ 0 };
+
+	bool                        m_IsPlayerInConcert = true;
+public:
+	bool GetPlayerInConcert() { return m_IsPlayerInConcert; }
+	void SetPlayerInConocert(bool inConcert) { m_IsPlayerInConcert = inConcert; }
 public:
 	bool						m_match = false;
 
-	CPlayer*		GetCPlayer() { return this; }
 
 	float GetJumpPower() { return m_JumpPower; }
 	void SetJumpPower(float p) { m_JumpPower = p; }

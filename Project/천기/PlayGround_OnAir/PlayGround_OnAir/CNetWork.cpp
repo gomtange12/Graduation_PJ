@@ -102,8 +102,8 @@ void CNetWork::ProcessPacket(char *ptr)
 			PLAYER->GetPlayer()->SetClientNum(paket->ids);
 			CNetCGameFramework->SetCamera(PLAYER->GetOtherPlayer()->GetCamera());
 		}
-		
-			PLAYER->GetPlayer()->m_match = true;
+
+		PLAYER->GetPlayer()->m_match = true;
 		break;
 	}
 	case SC_PUT_PLAYER:
@@ -157,15 +157,15 @@ void CNetWork::ProcessPacket(char *ptr)
 		PLAYER->GetPlayer()->SetPlayerCollision(pkt->check); //충돌체크값 bool변수
 		if (firstCheck == true) {
 			//PLAYER->GetPlayer()->SetPlayerCollision(pkt->check);
-			PLAYER->GetPlayer()->SetPosition(Vector3::Subtract(PLAYER->GetPlayer()->GetPrePosition(), XMFLOAT3(0.f,0.f,7.f)));
+			//PLAYER->GetPlayer()->SetPosition(Vector3::Subtract(PLAYER->GetPlayer()->GetPrePosition(), XMFLOAT3(0.f, 0.f, 1.f)));
 			cout << "아앜" << endl;
 		}
 		else {
 			//PLAYER->GetOtherPlayer()->SetPlayerCollision(pkt->check);
-			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Subtract(PLAYER->GetOtherPlayer()->GetPrePosition(), XMFLOAT3(0.f, 0.f, 7.f)));
+			//PLAYER->GetOtherPlayer()->SetPosition(Vector3::Subtract(PLAYER->GetOtherPlayer()->GetPrePosition(), XMFLOAT3(0.f, 0.f, 1.f)));
 			cout << "아앜22" << endl;
 		}
-		
+
 		break;
 	}
 	case SC_REMOVE_PLAYER:
