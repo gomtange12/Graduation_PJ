@@ -173,7 +173,7 @@ void CNetWork::StatePkt(DWORD state, float fTime)
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_MOVE_STATE_INFO;
 	pkt->state = state;
-	pkt->time = fTime;
+	//pkt->time = fTime;
 	SendPacket();
 }
 void CNetWork::RotePkt(float y)

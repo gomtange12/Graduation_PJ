@@ -645,16 +645,24 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 
 //map2
 
-	m_nConcertObjects = 1;
+	m_nConcertObjects = 2;
 	m_ppConcertObjects = new CGameObject*[m_nConcertObjects];
 
-	CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/MAP2PIVOTCHANGED.bin", NULL, false);
+	CLoadedModelInfo *ConcertFloorObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ConcertFloor.bin", NULL, false);
 	m_ppConcertObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppConcertObjects[0]->SetChild(pMapObject->m_pModelRootObject, true);
+	m_ppConcertObjects[0]->SetChild(ConcertFloorObject->m_pModelRootObject, true);
 	m_ppConcertObjects[0]->SetPosition(0.0f, 0, 0.0f);
-	m_ppConcertObjects[0]->SetScale(100, 100, 100);
-	m_ppConcertObjects[0]->SetMesh(pMapObject->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[0]->SetOOBB(m_ppPlayGroundObjects[28]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[28]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[0]->SetScale(150, 150, 150);
+	m_ppConcertObjects[0]->SetMesh(ConcertFloorObject->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[0]->SetOOBB(m_ppConcertObjects[0]->GetPosition(), XMFLOAT3(m_ppConcertObjects[0]->m_pMesh->GetAABBExtents().x * 2.54 * 150, m_ppConcertObjects[0]->m_pMesh->GetAABBExtents().z * 2.54 * 150, m_ppConcertObjects[0]->m_pMesh->GetAABBExtents().y * 2.54 * 150), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo *pMapObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/MAP2PIVOTCHANGED.bin", NULL, false);
+	m_ppConcertObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[1]->SetChild(pMapObject->m_pModelRootObject, true);
+	m_ppConcertObjects[1]->SetPosition(0.0f, 0, 0.0f);
+	m_ppConcertObjects[1]->SetScale(150, 150, 150);
+	m_ppConcertObjects[1]->SetMesh(pMapObject->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[1]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 100), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -1336,27 +1344,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 	pCamera->SetViewportsAndScissorRects(pd3dCommandList);
 	pCamera->UpdateShaderVariables(pd3dCommandList);
 	UpdateShaderVariables(pd3dCommandList);
-	//billboardobj->UpdateShaderVariable(pd3dCommandList);
 
-//	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
-//	pd3dCommandList->SetGraphicsRootConstantBufferView(2, d3dcbLightsGpuVirtualAddress); //Lights
-//
-//	if (m_pSkyBox) m_pSkyBox->Render(pd3dCommandList, pCamera);
-//	
-//	//if (m_pTerrain) m_pTerrain->Render(pd3dCommandList, pCamera);
-//
-//	for (int i = 0; i < m_nGameObjects; i++)
-//	{
-//		if (m_ppGameObjects[i])
-//		{
-////			m_ppGameObjects[i]->Animate(m_fElapsedTime);
-//			m_ppGameObjects[i]->UpdateTransform(NULL);
-//			//if (m_MapNum == 0)
-//			{
-//				m_ppGameObjects[i]->Render(pd3dCommandList, pCamera);
-//			}
-//		}
-//	}
 
 	switch (SCENEMANAGER->GetSceneType())
 	{
@@ -1377,59 +1365,18 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		{
 			if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 		}
-	
-		//PLAYER->GetOtherPlayer()->Render(pd3dCommandList, pCamera);
-		//m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
-		//if (m_ppShaders[3]) m_ppShaders[3]->Render(pd3dCommandList, pCamera);
-
-		//	m_ppGameObjects[1]->Render(pd3dCommandList, pCamera);
-	break;
-
+		break;
 	case CONCERTMAP:
 		for (int i = 3; i < m_nShaders; ++i)
 		{
 			if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 		}
-		for (int i = 0; i < m_nConcertObjects; i++)
+		for (int i = 1; i < m_nConcertObjects; i++)
 		{
 			m_ppConcertObjects[i]->Render(pd3dCommandList, pCamera);
 		}
 		break;
 	}
-
-
-	//if (billboardobj)
-	//{
-	//	//billboardobj->SetLookAt(pCamera->GetPosition());
-	//	billboardobj->Render(pd3dCommandList, pCamera);
-	//}
-	//m_ppGameObjects[2]->Render(pd3dCommandList, pCamera);
-
-	/*if (m_ppGameObjects[SCENEMANAGER->GetSceneType()])
-		m_ppGameObjects[SCENEMANAGER->GetSceneType()]->Render(pd3dCommandList, pCamera);*/
-	//XMFLOAT3 pos = PLAYER->GetPlayer()->GetPosition();
-	//XMFLOAT3 MAPpos = m_ppGameObjects[0]->GetPosition();
-	//XMFLOAT3 otherplayerpos = m_ppGameObjects[2]->GetPosition();
-
-	/*for (auto p = PLAYER->m_vecPlayerList.begin(); p!= PLAYER->m_vecPlayerList.end(); ++p)
-	{
-		(*p)->Render(pd3dCommandList, pCamera);
-	}*/
-	/*for (int i = 0; i < PLAYER->GetPlayerMap()[ENEMY].size(); ++i)
-	{
-		PLAYER->GetPlayerMap()[ENEMY][i]->Render(pd3dCommandList, pCamera);
-	}*/
-	/*for (int i = 0; i < OBJECTMANAGER->GetObjlist[MAP].size(); ++i)
-	{
-		
-		for (auto iter = OBJECTMANAGER->GetObjlist[MAP]->begin(); iter != OBJECTMANAGER->GetObjlist[MAP].end(); ++iter)
-		{
-			
-		}
-	}*/
-	//for (int i = 0; i < m_nShaders; i++) if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
-	//CheckObjectByObjectCollisions();
-
 }
 
 void CScene::CheckObjectByObjectCollisions() {
@@ -1478,46 +1425,38 @@ void CScene::CheckObjectByObjectCollisions() {
 	break;
 	case CONCERTMAP:
 		
+		if (m_ppConcertObjects[0])
+		{
+
+			BoundingOrientedBox playerbox = PLAYER->GetPlayer()->GetBoundingBox();
+
+			if (m_ppConcertObjects[0]->GetBoundingBox().Contains(PLAYER->GetPlayer()->GetBoundingBox()))
+			{ 
+				std::cout<<"익스텐트 곱하게하기"<< m_ppConcertObjects[0]->GetBoundingBox().Extents.y * objScale * 100  << std::endl;
+				std::cout<<"와이값"<< m_ppConcertObjects[0]->GetBoundingBox().Extents.y + m_ppConcertObjects[0]->GetBoundingBox().Center.y << std::endl;
+				std::cout<<"플레이어 센터값"<< PLAYER->GetPlayer()->GetBoundingBox().Center.y - PLAYER->GetPlayer()->GetBoundingBox().Extents.y + 10 << std::endl;
+				//이 안에 오브젝트 충돌을 넣어야할수도
+				PLAYER->GetPlayer()->SetPlayerInConocert(true);
+				if (m_ppConcertObjects[0]->GetBoundingBox().Intersects(PLAYER->GetPlayer()->GetBoundingBox()))
+				{
+					if (m_ppConcertObjects[0]->GetBoundingBox().Extents.y + m_ppConcertObjects[0]->GetBoundingBox().Center.y <= PLAYER->GetPlayer()->GetBoundingBox().Center.y - PLAYER->GetPlayer()->GetBoundingBox().Extents.y + 10)
+					{
+						PLAYER->GetPlayer()->SetHeight(m_ppConcertObjects[0]->GetBoundingBox().Extents.y + m_ppConcertObjects[0]->GetBoundingBox().Center.y);
+						PLAYER->GetPlayer()->SetPlayCrashMap(true);
+						num++;
+					}
+				}
+			}
+			else if (!m_ppConcertObjects[0]->GetBoundingBox().Contains(PLAYER->GetPlayer()->GetBoundingBox()))
+			{ //이 안에 오브젝트 충돌을 넣어야할수도
+				PLAYER->GetPlayer()->SetPlayerInConocert(false);
+			}
+		}
+		if (num == 0)
+			PLAYER->GetPlayer()->SetPlayCrashMap(false);
 		break;
 	}
 
-	
-	//PLAYER->GetPlayer()->SetCollimdeBox();
-
-	//XMFLOAT3 playeroobb = PLAYER->GetPlayer()->GetBoundingBox().Center;
-	//XMFLOAT3 playeroobbex = PLAYER->GetPlayer()->GetBoundingBox().Extents;
-
-	//XMFLOAT3 objoobb = m_ppGameObjects[SCENEMANAGER->GetSceneType()]->GetBoundingBox().Center;
-	//XMFLOAT3 objoobbex = m_ppGameObjects[SCENEMANAGER->GetSceneType()]->GetBoundingBox().Extents;
-	//
-	//XMFLOAT3 tempCenter = XMFLOAT3(playeroobb.x + objoobbex.x,
-	//	playeroobb.y + objoobbex.y,
-	//	playeroobb.z + objoobbex.z);
-
-
-
-	////PLAYER->GetPlayer()->SetOOBB(tempCenter, playeroobbex, XMFLOAT4(0, 0, 0, 1));
-	//m_ppGameObjects[SCENEMANAGER->GetSceneType()]->SetOOBB(objoobb, playeroobbex, XMFLOAT4(0, 0, 0, 1));
-	//
-	//auto playerBox = PLAYER->GetPlayer()->GetBoundingBox();
-	//auto objBox = m_ppGameObjects[SCENEMANAGER->GetSceneType()]->GetBoundingBox();
-
-	//if (playerBox.Contains(objBox))
-	//{
-	//	PLAYER->GetPlayer()->SetAllowKey(false);
-	//}
-	//else
-	//{
-	//	PLAYER->GetPlayer()->SetAllowKey(true);
-	//}
-	//BoundingOrientedBox Mapbox = m_ppGameObjects[SCENEMANAGER->GetSceneType()]->GetBoundingBox();
-
-	//if (PLAYER->GetPlayer()->m_xmOOBB.Intersects(m_ppGameObjects[SCENEMANAGER->GetSceneType()]->m_xmOOBB)){
-	//	
-	//	int i = 0;
-	//	//PLAYER->GetPlayer()->SetPosition(XMFLOAT3(900.0f, 900.0f, 900.0f));
-	//}
-	
 
 }
 

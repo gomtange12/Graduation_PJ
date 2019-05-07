@@ -378,7 +378,7 @@ std::shared_ptr<CCamera> CPlayer::OnChangeCamera(DWORD nNewCameraMode, DWORD nCu
 		//pNewCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
 		pNewCamera->SetTimeLag(0.25f);
 		//pNewCamera->SetOffset(XMFLOAT3(0.0f, 350.0f, -80.0f));
-		pNewCamera->SetOffset(XMFLOAT3(0.0f, 180.0f, -180.0f));
+		pNewCamera->SetOffset(XMFLOAT3(0.0f, 250.0f, -180.0f));
 		//pNewCamera->SetOffset(XMFLOAT3(0.0f, 980.0f, -180.0f));
 
 		if(PLAYER->GetPlayer()!=nullptr)
@@ -818,15 +818,13 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
 	//float boundHeight = 
 	//fHeight = 255; //여기
-	fHeight = 0;
+	fHeight = 10;
 	if (xmf3CameraPosition.y <= fHeight)
-
-	xmf3CameraPosition.y = fHeight;
+		xmf3CameraPosition.y = fHeight;
 	m_pCamera->SetPosition(xmf3CameraPosition);
 	
 	if (m_pCamera->GetMode() == THIRD_PERSON_CAMERA && m_pCamera != nullptr)
 	{
-
 		std::shared_ptr<CCamera> p3rdPersonCamera = m_pCamera;
 		p3rdPersonCamera->SetLookAt(GetPosition());
 	}
@@ -864,8 +862,8 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	if (this != nullptr) //일단 카메라 쓰지 않는다
 	{
 		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
-		//m_pCamera->SetLookAt(m_xmf3Position);
-		//m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
+		m_pCamera->SetLookAt(m_xmf3Position);
+		m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
 
 	}
 
@@ -930,19 +928,19 @@ void COtherPlayers::OnPlayerUpdateCallback(float fTimeElapsed)
 
 void COtherPlayers::OnCameraUpdateCallback(float fTimeElapsed)
 {
-	//CHeightMapTerrain *pTerrain = (CHeightMapTerrain *)m_pCameraUpdatedContext;
-	//XMFLOAT3 xmf3Scale = pTerrain->GetScale();
-	//XMFLOAT3 xmf3CameraPosition = m_pCamera->GetPosition();
-	////xmf3CameraPosition.y += 500;
-	//int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
-	//bool bReverseQuad = ((z % 2) != 0);
-	//float fHeight{ 0 };// = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
-	////float boundHeight = 
-	//fHeight = 255; //여기
-	//if (xmf3CameraPosition.y <= fHeight)
+	CHeightMapTerrain *pTerrain = (CHeightMapTerrain *)m_pCameraUpdatedContext;
+	XMFLOAT3 xmf3Scale = pTerrain->GetScale();
+	XMFLOAT3 xmf3CameraPosition = m_pCamera->GetPosition();
+	//xmf3CameraPosition.y += 500;
+	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
+	bool bReverseQuad = ((z % 2) != 0);
+	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
+	//float boundHeight = 
+	fHeight = 255; //여기
+	if (xmf3CameraPosition.y <= fHeight)
 
-	//	xmf3CameraPosition.y = fHeight;
-	//m_pCamera->SetPosition(xmf3CameraPosition);
+		xmf3CameraPosition.y = fHeight;
+	m_pCamera->SetPosition(xmf3CameraPosition);
 	//
 }
 
@@ -968,10 +966,15 @@ void COtherPlayers::Update(float fTimeElapsed)
 
 	if (PLAYER->GetOtherPlayer() != nullptr)
 	{
-
-			//m_pCamera = ChangeCamera(/*SPACESHIP_CAMERA*/THIRD_PERSON_CAMERA, 0.0f);
+		DWORD nCurrentCameraMode = m_pCamera->GetMode();
+		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) {
+			m_pCamera->Update(PLAYER->GetOtherPlayer()->GetPosition(), fTimeElapsed);
+		}
+		if (m_pCameraUpdatedContext) OnCameraUpdateCallback(fTimeElapsed);
+		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->SetLookAt(PLAYER->GetOtherPlayer()->GetPosition());
+		//m_pCamera = ChangeCamera(/SPACESHIP_CAMERA/THIRD_PERSON_CAMERA, 0.0f);
 		m_pCamera->RegenerateViewMatrix();
-		
+
 	}
 
 	//m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);

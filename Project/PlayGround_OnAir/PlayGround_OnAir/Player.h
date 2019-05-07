@@ -35,10 +35,10 @@ protected:
 	LPVOID						m_pCameraUpdatedContext = NULL;
 	float						m_newYpos{ 0.0f };
 	float						m_oldYpos{ 0.0f };
-	float						m_JumpPower{ 500.0 };
+	float						m_JumpPower{ 300.0 };
 	//CCamera						*m_pCamera = NULL;
 	//이넘만들기
-	
+	bool						m_IsPlayerInConcert = true;
 	int							m_collideBox{ 0 };
 	std::shared_ptr<CCamera>	m_pCamera;
 
@@ -52,6 +52,8 @@ protected:
 
 	float m_HeightForCollide{ 0 };
 public:
+	bool GetPlayerInConcert() { return m_IsPlayerInConcert; }
+	void SetPlayerInConocert(bool inConcert) { m_IsPlayerInConcert = inConcert; }
 	float GetJumpPower() { return m_JumpPower; }
 	void SetJumpPower(float p) { m_JumpPower = p; }
 
