@@ -30,7 +30,7 @@ void RoomManager::SoloRoomMatch(int id)
 						if (j == PERSONNEL - 1)//풀방이면
 						{
 							room[i]->m_full = true;
-							std::cout << "RoomNumber : " << RNumber << " Machig Success" << std::endl;
+							std::cout << "RoomNumber : " << RNumber << " ----> Machig Success" << std::endl;
 							Room* soloRooms = new Room; //풀방이니 미리 다음방 생성
 							soloRooms->RoomNumber = ++RNumber;
 							room.emplace_back(soloRooms);

@@ -36,6 +36,10 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 		//g_clients[id]->ready = match->ready;
 		g_clients[id]->avatar = match->avatar;
 		g_clients[id]->map = match->map;
+
+		if (g_clients[id]->avatar == B) {
+			g_clients[id]->m_xmf3Position = XMFLOAT3(1060, 10, 745);
+		}
 	}
 	switch (g_clients[id]->map)
 	{
@@ -146,28 +150,39 @@ void ObjManager::RotePkt(int id, unsigned char *packet)
 void ObjManager::PosPkt(int id, unsigned char *packet)
 {
 	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(packet);
+	//workLock.lock();
 	g_clients[id]->SetOOBB(XMFLOAT3(pkt->x, pkt->y, pkt->z),XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 	bool collision = collisionPlayerByPlayer(id);
+
 	if (collision == true) {
-		PACKETMANAGER->CollisionPacket(id);
+		g_clients[id]->m_xmf3Position.x = pkt->x + 13;
+		g_clients[id]->m_xmf3Position.y = pkt->y;
+		g_clients[id]->m_xmf3Position.z = pkt->z + 13;
+		g_clients[id]->SetOOBB(XMFLOAT3(pkt->x + 13, pkt->y, pkt->z + 13), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+		std::cout << "A" << g_clients[id]->m_xmf3Position.x << " " << g_clients[id]->m_xmf3Position.z << std::endl;
+			
 	}
 	else {
 		g_clients[id]->m_xmf3Position.x = pkt->x;
 		g_clients[id]->m_xmf3Position.y = pkt->y;
 		g_clients[id]->m_xmf3Position.z = pkt->z;
+		
 	}
+	//workLock.unlock();
 	
-	//cout << g_clients[id]->m_xmf3Position.x << " , " << g_clients[id]->m_xmf3Position.y << " , " << g_clients[id]->m_xmf3Position.z << endl;
+	std::cout << g_clients[id]->m_xmOOBB.Center.x << " , "  << g_clients[id]->m_xmOOBB.Center.z << std::endl;
 }
 bool ObjManager::collisionPlayerByPlayer(int id)
 {
+	
 	int roomNum = g_clients[id]->roomNumber;
 	for (int i = 0; i < PERSONNEL; ++i) {
 		int otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
 		if (id != otherId) {
 			if (g_clients[id]->m_xmOOBB.Intersects(g_clients[otherId]->m_xmOOBB)) //충돌!
 			{
-				std::cout << " 충 돌 ";
+				PACKETMANAGER->CollisionPacket(id, otherId);
+				
 				return true;
 			}
 			else {
@@ -175,6 +190,7 @@ bool ObjManager::collisionPlayerByPlayer(int id)
 			}
 		}
 	}
+	
 }
 void ObjManager::MoveUpdate(int id, unsigned int time)
 {

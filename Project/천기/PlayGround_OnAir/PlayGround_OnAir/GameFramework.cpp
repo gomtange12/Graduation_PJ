@@ -703,16 +703,25 @@ void CGameFramework::ProcessInput()
 		}
 		if (pKeysBuffer[VK_SPACE] & 0xF0)
 		{
-			PLAYER->GetPlayer()->SetPlayerState(JUMP);
-			PLAYER->GetOtherPlayer()->SetPlayerState(JUMP);
-
-			PLAYER->GetPlayer()->SetJumpPower(500.0f);
+			if (CNETWORK->GetFirstCheck() == true || CNETWORK->myid % 2 == 0) {
+				PLAYER->GetPlayer()->SetPlayerState(JUMP);
+				PLAYER->GetPlayer()->SetJumpPower(500.0f);
+			}
+			else {
+				PLAYER->GetOtherPlayer()->SetPlayerState(JUMP);
+				PLAYER->GetOtherPlayer()->SetJumpPower(500.0f);
+			}
+			
 			//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
 		}
 		if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
 		{
-			PLAYER->GetPlayer()->SetPlayerState(ATTACK);
-			PLAYER->GetOtherPlayer()->SetPlayerState(ATTACK);
+			if (CNETWORK->GetFirstCheck() == true || CNETWORK->myid % 2 == 0) {
+				PLAYER->GetPlayer()->SetPlayerState(ATTACK);
+			}
+			else {
+				PLAYER->GetOtherPlayer()->SetPlayerState(ATTACK);
+			}
 
 		}
 
@@ -818,22 +827,26 @@ void CGameFramework::MoveToNextFrame()
 void CGameFramework::FrameAdvance()
 {    
 	m_GameTimer.Tick(60.0f);
-	
-	ProcessInput();
 
-	if (CNETWORK->GetFirstCheck() == true) {
+	if(PLAYER->GetPlayer()->IsPlayerCrashMap() == false)
+		ProcessInput();
+	
+
+	if (CNETWORK->GetFirstCheck() == true || CNETWORK->myid % 2 == 0) {
 		if (PLAYER->GetPlayer()->m_match == true) {
 			if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
 				CNETWORK->Pos(PLAYER->GetPlayer()->GetPosition());
 				PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
+				cout << "--A" << PLAYER->GetPlayer()->GetPosition().x << " " << PLAYER->GetPlayer()->GetPosition().z << endl;
 			}
 		}
 	}
 	else {
-		if (PLAYER->GetPlayer()->m_match == true) {
+		if (PLAYER->GetOtherPlayer()->m_match == true) {
 			if (PLAYER->GetOtherPlayer()->GetPrePosition().x != PLAYER->GetOtherPlayer()->GetPosition().x || PLAYER->GetOtherPlayer()->GetPrePosition().z != PLAYER->GetOtherPlayer()->GetPosition().z) {
 				CNETWORK->Pos(PLAYER->GetOtherPlayer()->GetPosition());
 				PLAYER->GetOtherPlayer()->SetPrePosition(PLAYER->GetOtherPlayer()->GetPosition());
+				cout << "--B" << PLAYER->GetOtherPlayer()->GetPosition().x << " " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
 			}
 		}
 	}

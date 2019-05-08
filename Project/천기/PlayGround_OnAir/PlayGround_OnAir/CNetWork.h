@@ -23,12 +23,13 @@ private:
 	DWORD	in_packet_size = 0;
 	int		saved_packet_size = 0;
 
-	int myid;
 	bool firstCheck;
 
 	CGameFramework*			CNetCGameFramework;
 
 public:
+	int myid;
+
 	CNetWork();
 	~CNetWork();
 

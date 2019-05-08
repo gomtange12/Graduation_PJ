@@ -1476,6 +1476,12 @@ void CScene::CheckObjectByObjectCollisions() {
 						PLAYER->GetPlayer()->SetPlayCrashMap(true);
 						num++;
 					}
+					/*if (m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.x + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.x <= PLAYER->GetPlayer()->GetBoundingBox().Center.x - PLAYER->GetPlayer()->GetBoundingBox().Extents.x + 10)
+					{
+						PLAYER->GetPlayer()->SetHeight(m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.x + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.x);
+						PLAYER->GetPlayer()->SetPlayCrashMap(true);
+						num++;
+					}*/
 				}
 			}
 		}

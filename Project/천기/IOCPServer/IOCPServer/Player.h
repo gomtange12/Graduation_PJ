@@ -18,6 +18,7 @@ public:
 	bool m_connected; //연결상태
 	bool m_join; //리조인확인용
 	bool m_match; //매칭확인용
+	
 	int m_id;
 	int roomNumber=0;
 	

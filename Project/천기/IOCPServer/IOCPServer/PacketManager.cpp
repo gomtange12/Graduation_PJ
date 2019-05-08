@@ -129,11 +129,13 @@ void PacketManager::VectorPacket(int id)
 	
 	}
 }
-void PacketManager::CollisionPacket(int id) {
+void PacketManager::CollisionPacket(int id, int otherId) {
 	sc_packet_collision pkt;
 	pkt.size = sizeof(sc_packet_collision);
 	pkt.type = SC_COLLISION;
+	pkt.id = id;
 	pkt.check = true;
 
 	SendPacket(id, &pkt);
+	SendPacket(otherId, &pkt);
 }

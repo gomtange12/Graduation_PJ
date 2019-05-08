@@ -12,7 +12,7 @@ private:
 	int soloRoomNum;
 	float fDistance = 12.25f;
 
-	std::mutex timerLock;
+	std::mutex workLock;
 public:
 
 
