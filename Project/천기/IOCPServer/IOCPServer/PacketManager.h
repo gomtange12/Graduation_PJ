@@ -18,5 +18,5 @@ public:
 	void ScenePacket(int num, int roomNum);
 	void VectorPacket(int id);
 	void CollisionPacket(int id, int otherId);
-	
+	void KeyPacket(int id, bool jump, bool attack, bool skill);
 };

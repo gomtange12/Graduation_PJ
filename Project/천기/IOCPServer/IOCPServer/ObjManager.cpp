@@ -78,6 +78,10 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 		PosPkt(id,packet);
 		break;
 	}
+	case CS_KEY_INFO:
+	{
+		KeyPkt(id, packet);
+	}
 	default:
 		break;
 	}
@@ -159,7 +163,7 @@ void ObjManager::PosPkt(int id, unsigned char *packet)
 		g_clients[id]->m_xmf3Position.y = pkt->y;
 		g_clients[id]->m_xmf3Position.z = pkt->z + 13;
 		g_clients[id]->SetOOBB(XMFLOAT3(pkt->x + 13, pkt->y, pkt->z + 13), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
-		std::cout << "A" << g_clients[id]->m_xmf3Position.x << " " << g_clients[id]->m_xmf3Position.z << std::endl;
+		std::cout << g_clients[id]->m_xmf3Position.x << " " << g_clients[id]->m_xmf3Position.z << std::endl;
 			
 	}
 	else {
@@ -170,7 +174,7 @@ void ObjManager::PosPkt(int id, unsigned char *packet)
 	}
 	//workLock.unlock();
 	
-	std::cout << g_clients[id]->m_xmOOBB.Center.x << " , "  << g_clients[id]->m_xmOOBB.Center.z << std::endl;
+	//std::cout << g_clients[id]->m_xmOOBB.Center.x << " , "  << g_clients[id]->m_xmOOBB.Center.z << std::endl;
 }
 bool ObjManager::collisionPlayerByPlayer(int id)
 {
@@ -188,6 +192,29 @@ bool ObjManager::collisionPlayerByPlayer(int id)
 			else {
 				return false;
 			}
+		}
+	}
+	
+}
+void ObjManager::KeyPkt(int id, unsigned char *packet)
+{
+	cs_packet_key *pkt = reinterpret_cast<cs_packet_key *>(packet);
+
+	PACKETMANAGER->KeyPacket(id, pkt->jump, pkt->attack , pkt->skill);
+
+	if (pkt->attack == true) 
+	{
+		int roomNum = g_clients[id]->roomNumber;
+		int otherId;
+		for (int i = 0; i < PERSONNEL; ++i) {
+			if(id != ROOMMANAGER->room[roomNum]->m_ids[i])
+				otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
+		}
+		float a = g_clients[id]->m_xmf3Position.x - g_clients[otherId]->m_xmf3Position.x;
+		float b = g_clients[id]->m_xmf3Position.z - g_clients[otherId]->m_xmf3Position.z;
+		float fLength = sqrtf((a * a) + (b*b));
+		if (fLength <= 30) {
+			std::cout << "hit!" << std::endl;
 		}
 	}
 	

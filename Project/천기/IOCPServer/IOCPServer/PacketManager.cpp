@@ -139,3 +139,17 @@ void PacketManager::CollisionPacket(int id, int otherId) {
 	SendPacket(id, &pkt);
 	SendPacket(otherId, &pkt);
 }
+void PacketManager::KeyPacket(int id, bool jump, bool attack, bool skill)
+{
+	int roomNum = objectManager->GetPlayer(id)->roomNumber;
+	for (int i = 0; i < PERSONNEL; ++i) {
+		sc_packet_key pkt;
+		pkt.size = sizeof(sc_packet_key);
+		pkt.type = SC_KEY_INFO;
+		pkt.id = id;
+		pkt.jump = jump;
+		pkt.attack = attack;
+		pkt.skill = skill;
+		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
+	}
+}

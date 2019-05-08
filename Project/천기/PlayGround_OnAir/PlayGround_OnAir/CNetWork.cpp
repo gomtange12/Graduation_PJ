@@ -203,7 +203,26 @@ void CNetWork::ProcessPacket(char *ptr)
 
 		break;
 	}
+	case SC_KEY_INFO: 
+	{
+		sc_packet_key *pkt = reinterpret_cast<sc_packet_key *>(ptr);
+		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
+			if (pkt->jump == true) {
+				PLAYER->GetPlayer()->SetPlayerState(JUMP);
+				PLAYER->GetPlayer()->SetJumpPower(500.0f);
+			}
+			if (pkt->attack == true) PLAYER->GetPlayer()->SetPlayerState(ATTACK);
 
+		}
+		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
+			if (pkt->jump == true) {
+				PLAYER->GetOtherPlayer()->SetPlayerState(JUMP);
+				PLAYER->GetOtherPlayer()->SetJumpPower(500.0f);
+			}
+			if (pkt->attack == true) PLAYER->GetOtherPlayer()->SetPlayerState(ATTACK);
+		}
+		break;
+	}
 	case SC_REMOVE_PLAYER:
 	{
 		sc_packet_remove_player *pkt = reinterpret_cast<sc_packet_remove_player *>(ptr);
@@ -254,7 +273,7 @@ void CNetWork::RotePkt(float y)
 
 	SendPacket();
 }
-void CNetWork::Pos(const XMFLOAT3& pos)
+void CNetWork::PosPkt(const XMFLOAT3& pos)
 {
 	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
@@ -263,5 +282,16 @@ void CNetWork::Pos(const XMFLOAT3& pos)
 	pkt->x = pos.x;
 	pkt->y = pos.y;
 	pkt->z = pos.z;
+	SendPacket();
+}
+void CNetWork::KeyPkt(bool jump, bool attack, bool skill) 
+{
+	cs_packet_key *pkt = reinterpret_cast<cs_packet_key *>(send_buffer);
+	send_wsabuf.len = sizeof(pkt);
+	pkt->size = sizeof(pkt);
+	pkt->type = CS_KEY_INFO;
+	pkt->jump = jump;
+	pkt->attack = attack;
+	pkt->skill = skill;
 	SendPacket();
 }

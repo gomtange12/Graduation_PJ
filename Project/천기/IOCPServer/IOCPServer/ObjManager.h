@@ -30,7 +30,7 @@ public:
 	inline Player*&		GetPlayer(unsigned int playerIndex) { return g_clients[playerIndex]; }
 	void RotePkt(int id, unsigned char *packet);
 	void PosPkt(int id, unsigned char *packet);
-
 	bool collisionPlayerByPlayer(int id);
+	void KeyPkt(int id, unsigned char *packet);
 	void MoveUpdate(int player, unsigned int time);
 };

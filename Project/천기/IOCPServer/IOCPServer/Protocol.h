@@ -28,14 +28,13 @@ constexpr int SC_MATCHING_RESULT = 5;
 constexpr int SC_SCENE = 6;
 constexpr int SC_VECTOR_INFO = 7;
 constexpr int SC_COLLISION = 8;
-
+constexpr int SC_KEY_INFO = 14;
 //
 constexpr int CS_MATCHING_PLAYER = 9;
 constexpr int CS_MOVE_STATE_INFO = 10;
 constexpr int CS_POS_INFO = 11;
 constexpr int CS_ROTE_STATE_INFO = 12;
-constexpr int CS_JUMP_INFO = 13;
-constexpr int CS_ATTACK_INFO = 14;
+constexpr int CS_KEY_INFO = 13;
 #pragma pack (push, 1)
 //////////////////////서버/////////////////////////
 struct sc_packet_login_ok {
@@ -96,7 +95,14 @@ struct sc_packet_collision {
 	char id;
 	bool check;
 };
-
+struct sc_packet_key {
+	BYTE size;
+	BYTE type;
+	char id;
+	bool jump;
+	bool attack;
+	bool skill;
+};
 /////////////////////////클라//////////////////////
 struct cs_packet_matching {
 	BYTE size;
@@ -124,10 +130,10 @@ struct cs_packet_pos{
 	float y;
 	float z;
 };
-struct cs_packet_jump {
+struct cs_packet_key {
 	BYTE size;
 	BYTE type;
-	float x;
-	float y;
-	float z;
+	bool jump;
+	bool attack;
+	bool skill;
 };
