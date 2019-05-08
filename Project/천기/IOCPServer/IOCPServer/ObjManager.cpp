@@ -28,7 +28,7 @@ void ObjManager::OverlappedRecv(unsigned int id)
 }
 void ObjManager::MatchProcess(int id, unsigned char *packet) 
 {
-	std::cout << "매칭요청 : " << id << std::endl;
+	std::cout << "Machig Request --- " << std::endl;
 	if (packet[1] == CS_MATCHING_PLAYER) 
 	{ 
 		cs_packet_matching *match = reinterpret_cast<cs_packet_matching *>(packet);
@@ -99,10 +99,11 @@ void ObjManager::ModMatch(int id)
 		std::wcout << L"정의되지 않은 패킷 도착!!\n";
 		break;
 	}
-	std::cout << "캐릭터 : " << g_clients[id]->avatar << std::endl;
-	std::cout << "맵 : " << g_clients[id]->map << std::endl;
-	std::cout << "모드 : " << g_clients[id]->mod << std::endl;
-	std::cout << "아이디 : " << id << std::endl;
+	std::cout << "ID : " << id << std::endl;
+	std::cout << "Avatar : " << g_clients[id]->avatar << std::endl;
+	std::cout << "Map : " << g_clients[id]->map << std::endl;
+	std::cout << "Mod : " << g_clients[id]->mod << std::endl;
+	
 }
 void ObjManager::MovePkt(int id, unsigned char *packet)
 {
@@ -166,7 +167,7 @@ bool ObjManager::collisionPlayerByPlayer(int id)
 		if (id != otherId) {
 			if (g_clients[id]->m_xmOOBB.Intersects(g_clients[otherId]->m_xmOOBB)) //충돌!
 			{
-				cout << " 충 돌 ";
+				std::cout << " 충 돌 ";
 				return true;
 			}
 			else {

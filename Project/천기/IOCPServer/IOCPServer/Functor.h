@@ -4,7 +4,7 @@
 #include <DirectXCollision.h>
 
 
-using namespace std;
+
 using namespace DirectX;
 
 #pragma comment(lib, "d3d12.lib") 

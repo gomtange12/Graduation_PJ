@@ -30,6 +30,7 @@ void RoomManager::SoloRoomMatch(int id)
 						if (j == PERSONNEL - 1)//풀방이면
 						{
 							room[i]->m_full = true;
+							std::cout << "RoomNumber : " << RNumber << " Machig Success" << std::endl;
 							Room* soloRooms = new Room; //풀방이니 미리 다음방 생성
 							soloRooms->RoomNumber = ++RNumber;
 							room.emplace_back(soloRooms);
@@ -38,7 +39,6 @@ void RoomManager::SoloRoomMatch(int id)
 								objectManager->GetPlayer(room[i]->m_ids[k])->roomNumber = i;
 								objectManager->GetPlayer(room[i]->m_ids[k])->m_match = true;
 								PACKETMANAGER->ScenePacket(room[i]->m_ids[k], i);
-
 							}
 							break;
 						}

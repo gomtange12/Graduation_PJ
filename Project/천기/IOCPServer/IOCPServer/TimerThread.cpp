@@ -15,9 +15,11 @@ void TimerThread::Init()
 }
 void TimerThread::Proc()
 {
-	while (true) {
+	while (true) 
+	{
 		std::this_thread::sleep_for(std::chrono::duration<float>(0.01f));
-		while (false == timerQueue.empty()) {
+		while (false == timerQueue.empty())
+		{
 			if (timerQueue.top().time >= GetTickCount()) break;
 			timerLock.lock();
 			Event ev = timerQueue.top();
