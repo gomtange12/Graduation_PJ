@@ -19,4 +19,5 @@ public:
 	void VectorPacket(int id);
 	void CollisionPacket(int id, int otherId);
 	void KeyPacket(int id, bool jump, bool attack, bool skill);
+	void AttackPacKet(int id);
 };

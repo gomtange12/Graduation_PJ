@@ -739,8 +739,14 @@ void CGameFramework::ProcessInput()
 			{
 				//if(!PLAYER->GetPlayer()->IsPlayerCrashMap())
 					//PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
-				if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::STUN && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::STUN)
-					CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
+				if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
+					if(PLAYER->GetPlayer()->GetPlayerState() != PlayerState::STUN)
+						CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
+				}
+				if (PLAYER->GetOtherPlayer()->GetClientNum() == CNETWORK->myid) {
+					if (PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::STUN)
+						CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
+				}
 			}
 		}
 	}
@@ -820,22 +826,23 @@ void CGameFramework::FrameAdvance()
 			ProcessInput();
 	}
 	
-
-	if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
-		if (PLAYER->GetPlayer()->m_match == true) {
-			if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
-				CNETWORK->PosPkt(PLAYER->GetPlayer()->GetPosition());
-				PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
-				cout << "--A : " << PLAYER->GetPlayer()->GetPosition().x << " " << PLAYER->GetPlayer()->GetPosition().z << endl;
+	if (GetTickCount() % 2 == 0) {
+		if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
+			if (PLAYER->GetPlayer()->m_match == true) {
+				if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
+					CNETWORK->PosPkt(PLAYER->GetPlayer()->GetPosition());
+					PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
+					//cout << "--A : " << PLAYER->GetPlayer()->GetPosition().x << " " << PLAYER->GetPlayer()->GetPosition().z << endl;
+				}
 			}
 		}
-	}
-	else {
-		if (PLAYER->GetOtherPlayer()->m_match == true) {
-			if (PLAYER->GetOtherPlayer()->GetPrePosition().x != PLAYER->GetOtherPlayer()->GetPosition().x || PLAYER->GetOtherPlayer()->GetPrePosition().z != PLAYER->GetOtherPlayer()->GetPosition().z) {
-				CNETWORK->PosPkt(PLAYER->GetOtherPlayer()->GetPosition());
-				PLAYER->GetOtherPlayer()->SetPrePosition(PLAYER->GetOtherPlayer()->GetPosition());
-				cout << "--B : " << PLAYER->GetOtherPlayer()->GetPosition().x << " " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+		else {
+			if (PLAYER->GetOtherPlayer()->m_match == true) {
+				if (PLAYER->GetOtherPlayer()->GetPrePosition().x != PLAYER->GetOtherPlayer()->GetPosition().x || PLAYER->GetOtherPlayer()->GetPrePosition().z != PLAYER->GetOtherPlayer()->GetPosition().z) {
+					CNETWORK->PosPkt(PLAYER->GetOtherPlayer()->GetPosition());
+					PLAYER->GetOtherPlayer()->SetPrePosition(PLAYER->GetOtherPlayer()->GetPosition());
+					//cout << "--B : " << PLAYER->GetOtherPlayer()->GetPosition().x << " " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+				}
 			}
 		}
 	}

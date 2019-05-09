@@ -29,6 +29,7 @@ constexpr int SC_SCENE = 6;
 constexpr int SC_VECTOR_INFO = 7;
 constexpr int SC_COLLISION = 8;
 constexpr int SC_KEY_INFO = 14;
+constexpr int SC_ATTACK_INFO = 15;
 //
 constexpr int CS_MATCHING_PLAYER = 9;
 constexpr int CS_MOVE_STATE_INFO = 10;
@@ -102,6 +103,12 @@ struct sc_packet_key {
 	bool jump;
 	bool attack;
 	bool skill;
+};
+struct sc_packet_attack
+{
+	BYTE size;
+	BYTE type;
+	char id;
 };
 /////////////////////////Å¬¶ó//////////////////////
 struct cs_packet_matching {

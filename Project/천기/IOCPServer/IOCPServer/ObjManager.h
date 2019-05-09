@@ -10,7 +10,7 @@ private:
 	std::array<Player*, MAX_USER>		g_clients;
 	
 	int soloRoomNum;
-	float fDistance = 12.25f;
+	float fDistance = 40.0f;
 
 	std::mutex workLock;
 	

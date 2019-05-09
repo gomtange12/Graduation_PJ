@@ -78,6 +78,7 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 	case CS_KEY_INFO:
 	{
 		KeyPkt(id, packet);
+		break;
 	}
 	default:
 		break;
@@ -151,18 +152,16 @@ void ObjManager::RotePkt(int id, unsigned char *packet)
 void ObjManager::PosPkt(int id, unsigned char *packet)
 {
 	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(packet);
-	//workLock.lock();
-	g_clients[id]->m_xmOOBB.Center = XMFLOAT3(pkt->x, pkt->y, pkt->z);
+	
+	g_clients[id]->m_xmOOBB.Center = XMFLOAT3(pkt->x, 0.f, 0.f);
 	bool collision = collisionPlayerByPlayer(id);
 
 	if (collision == true) {
 		g_clients[id]->m_xmf3Position.x = pkt->x;
 		g_clients[id]->m_xmf3Position.y = pkt->y;
 		g_clients[id]->m_xmf3Position.z = pkt->z;
-		float fDistance = 40.0f;
-		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Look, -fDistance);
-		g_clients[id]->m_xmf3Position = Vector3::Add(g_clients[id]->m_xmf3Position, xmf3Shift, -fDistance);
+		
+		g_clients[id]->m_xmf3Position = Vector3::Add(g_clients[id]->m_xmf3Position, g_clients[id]->m_xmf3Look, -fDistance);
 		g_clients[id]->m_xmOOBB.Center = XMFLOAT3(g_clients[id]->m_xmf3Position.x, g_clients[id]->m_xmf3Position.y, g_clients[id]->m_xmf3Position.z);
 		//std::cout << g_clients[id]->m_xmf3Position.x << " " << g_clients[id]->m_xmf3Position.z << std::endl;
 			
@@ -173,29 +172,30 @@ void ObjManager::PosPkt(int id, unsigned char *packet)
 		g_clients[id]->m_xmf3Position.z = pkt->z;
 		
 	}
-	//workLock.unlock();
 	
-	std::wcout <<"my "<< g_clients[id]->m_xmOOBB.Center.x << " , "  << g_clients[id]->m_xmOOBB.Center.z << std::endl;
 }
 bool ObjManager::collisionPlayerByPlayer(int id)
 {
 	
 	int roomNum = g_clients[id]->roomNumber;
+	int otherId;
 	for (int i = 0; i < PERSONNEL; ++i) {
-		int otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
-		if (id != otherId) {
-			if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //충돌!
-			{
-				PACKETMANAGER->CollisionPacket(id, otherId);
-				
-				return true;
-			}
-			else {
-				std::wcout <<"other "<< g_clients[otherId]->m_xmOOBB.Center.x << " , " << g_clients[otherId]->m_xmOOBB.Center.z << std::endl;
-				return false;
-			}
-		}
+		if (id != ROOMMANAGER->room[roomNum]->m_ids[i])
+			otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
 	}
+			
+	if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //충돌!
+	{
+		PACKETMANAGER->CollisionPacket(id, otherId);
+		g_clients[otherId]->m_xmf3Position = Vector3::Add(g_clients[otherId]->m_xmf3Position, g_clients[otherId]->m_xmf3Look, -fDistance);
+		g_clients[otherId]->m_xmOOBB.Center = XMFLOAT3(g_clients[otherId]->m_xmf3Position.x, 0.f, 0.f);
+		return true;
+	}
+	else {
+		
+		return false;
+	}
+	
 	
 }
 void ObjManager::KeyPkt(int id, unsigned char *packet)
@@ -212,11 +212,11 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 			if(id != ROOMMANAGER->room[roomNum]->m_ids[i])
 				otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
 		}
-		float a = g_clients[id]->m_xmf3Position.x - g_clients[otherId]->m_xmf3Position.x;
-		float b = g_clients[id]->m_xmf3Position.z - g_clients[otherId]->m_xmf3Position.z;
-		float fLength = sqrtf((a * a) + (b*b));
-		if (fLength <= 30.0f) {
-			std::cout << "hit!" << std::endl;
+		//float a = g_clients[id]->m_xmf3Position.x - g_clients[otherId]->m_xmf3Position.x;
+		//float b = g_clients[id]->m_xmf3Position.z - g_clients[otherId]->m_xmf3Position.z;
+		float fLength = sqrtf(pow(g_clients[id]->m_xmf3Position.x-g_clients[otherId]->m_xmf3Position.x,2) + pow(g_clients[id]->m_xmf3Position.z-g_clients[otherId]->m_xmf3Position.z,2));
+		if (fLength <= 130.0f) {
+			PACKETMANAGER->AttackPacKet(otherId);
 		}
 	}
 	

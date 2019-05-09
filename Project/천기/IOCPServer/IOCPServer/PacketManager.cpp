@@ -64,20 +64,21 @@ void PacketManager::MovePacket(int id, const XMFLOAT3& shift)
 {
 	//매칭시 
 			// 같은방에 있는 '모든' id들 에게 나의 변경된 포지션 값을 준다.
+	sc_packet_move pkt;
+	pkt.size = sizeof(sc_packet_move);
+	pkt.type = SC_MOVE_PLAYER;
+	pkt.id = id;
+	pkt.velocity = true;
+	pkt.posX = shift.x;
+	pkt.posY = shift.y;
+	pkt.posZ = shift.z;
+
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
 	for (int i = 0; i < PERSONNEL; ++i) {
-
-		sc_packet_move pkt;
-		pkt.size = sizeof(sc_packet_move);
-		pkt.type = SC_MOVE_PLAYER;
-		pkt.id = id;
-		pkt.velocity = true;
-		pkt.posX = shift.x;
-		pkt.posY = shift.y;
-		pkt.posZ = shift.z;
-
 		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 	}
+
+		
 }
 void PacketManager::ClientDisconnect(int id)
 {
@@ -114,22 +115,23 @@ void PacketManager::ScenePacket(int id, int roomNum, int avatar) { //Solo 매칭용
 }
 void PacketManager::VectorPacket(int id)
 {
+	sc_packet_vector pkt;
+	pkt.size = sizeof(sc_packet_vector);
+	pkt.type = SC_VECTOR_INFO;
+	pkt.id = id;
+	pkt.RposX = objectManager->GetPlayer(id)->m_xmf4x4ToParent._11;
+	pkt.RposY = objectManager->GetPlayer(id)->m_xmf4x4ToParent._12;
+	pkt.RposZ = objectManager->GetPlayer(id)->m_xmf4x4ToParent._13;
+	pkt.LposX = objectManager->GetPlayer(id)->m_xmf4x4ToParent._31;
+	pkt.LposY = objectManager->GetPlayer(id)->m_xmf4x4ToParent._32;
+	pkt.LposZ = objectManager->GetPlayer(id)->m_xmf4x4ToParent._33;
+
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
 	for (int i = 0; i < PERSONNEL; ++i) {
-		sc_packet_vector pkt;
-		pkt.size = sizeof(sc_packet_vector);
-		pkt.type = SC_VECTOR_INFO;
-		pkt.id = id;
-		pkt.RposX = objectManager->GetPlayer(id)->m_xmf4x4ToParent._11;
-		pkt.RposY = objectManager->GetPlayer(id)->m_xmf4x4ToParent._12;
-		pkt.RposZ = objectManager->GetPlayer(id)->m_xmf4x4ToParent._13;
-		pkt.LposX = objectManager->GetPlayer(id)->m_xmf4x4ToParent._31;
-		pkt.LposY = objectManager->GetPlayer(id)->m_xmf4x4ToParent._32;
-		pkt.LposZ = objectManager->GetPlayer(id)->m_xmf4x4ToParent._33;
-		
 		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
-	
+
 	}
+		
 }
 void PacketManager::CollisionPacket(int id, int otherId) {
 	sc_packet_collision pkt;
@@ -143,15 +145,27 @@ void PacketManager::CollisionPacket(int id, int otherId) {
 }
 void PacketManager::KeyPacket(int id, bool jump, bool attack, bool skill)
 {
+	sc_packet_key pkt;
+	pkt.size = sizeof(sc_packet_key);
+	pkt.type = SC_KEY_INFO;
+	pkt.id = id;
+	pkt.jump = jump;
+	pkt.attack = attack;
+	pkt.skill = skill;
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
 	for (int i = 0; i < PERSONNEL; ++i) {
-		sc_packet_key pkt;
-		pkt.size = sizeof(sc_packet_key);
-		pkt.type = SC_KEY_INFO;
-		pkt.id = id;
-		pkt.jump = jump;
-		pkt.attack = attack;
-		pkt.skill = skill;
+		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
+	}
+}
+void PacketManager::AttackPacKet(int id) 
+{
+	sc_packet_attack pkt;
+	pkt.size = sizeof(sc_packet_attack);
+	pkt.type = SC_ATTACK_INFO;
+	pkt.id = id;
+
+	int roomNum = objectManager->GetPlayer(id)->roomNumber;
+	for (int i = 0; i < PERSONNEL; ++i) {
 		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 	}
 }

@@ -165,21 +165,17 @@ void CNetWork::ProcessPacket(char *ptr)
 
 		if (PLAYER->GetPlayer()->GetClientNum() == myid) {
 			if (pkt->id == myid) { //내가가서 충돌
-				//xmf3Shift=Vector3::Add(xmf3Shift, PLAYER->GetPlayer()->GetLookVector(), -fDistance);
 				PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -fDistance));
 			}
 			else { //상대가와서 충돌
-				//xmf3Shift = Vector3::Add(xmf3Shift, PLAYER->GetOtherPlayer()->GetLookVector(), fDistance);
 				PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -fDistance));
 			}
 		}
 		else {
 			if (pkt->id == myid) {
-				//xmf3Shift = Vector3::Add(xmf3Shift, PLAYER->GetOtherPlayer()->GetLookVector(), fDistance);
 				PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -fDistance));
 			}
 			else {
-				//xmf3Shift = Vector3::Add(xmf3Shift, PLAYER->GetPlayer()->GetLookVector(), fDistance);
 				PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -fDistance));
 
 			}
@@ -210,6 +206,15 @@ void CNetWork::ProcessPacket(char *ptr)
 		}
 		break;
 	}
+	case SC_ATTACK_INFO: {
+		sc_packet_attack *pkt = reinterpret_cast<sc_packet_attack *>(ptr);
+		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
+			PLAYER->GetOtherPlayer()->SetPlayerState(PlayerState::STUN);
+		}
+		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
+			PLAYER->GetOtherPlayer()->SetPlayerState(PlayerState::STUN);
+		}
+	}
 	case SC_REMOVE_PLAYER:
 	{
 		sc_packet_remove_player *pkt = reinterpret_cast<sc_packet_remove_player *>(ptr);
@@ -217,6 +222,7 @@ void CNetWork::ProcessPacket(char *ptr)
 
 		break;
 	}
+
 	default:
 		printf("Unknown PACKET type [%d]\n", ptr[1]);
 	}
@@ -260,7 +266,7 @@ void CNetWork::RotePkt(float y)
 
 	SendPacket();
 }
-void CNetWork::PosPkt(const XMFLOAT3& pos)
+void CNetWork::PosPkt(XMFLOAT3 pos)
 {
 	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
