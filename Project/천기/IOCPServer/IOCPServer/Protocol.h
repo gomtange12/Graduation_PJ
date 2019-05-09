@@ -41,7 +41,6 @@ struct sc_packet_login_ok {
 	BYTE size;
 	BYTE type;
 	char id;
-	bool check;
 };
 struct sc_packet_put_player {
 	BYTE size;
@@ -62,6 +61,7 @@ struct sc_packet_scene {
 	WORD sceneNum;
 	WORD roomNum;
 	char ids; //나중에 여러플레이들 id로 뿌려줘야함
+	char avatar;
 };
 struct sc_packet_match_result {
 	BYTE size;

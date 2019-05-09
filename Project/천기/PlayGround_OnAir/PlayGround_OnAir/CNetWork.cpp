@@ -82,27 +82,30 @@ void CNetWork::ProcessPacket(char *ptr)
 		sc_packet_login_ok *packet =
 			reinterpret_cast<sc_packet_login_ok *>(ptr);
 		myid = packet->id;
-		firstCheck = packet->check;
+		//firstCheck = packet->check;
 		break;
 	}
 	case SC_SCENE:
 	{
 		sc_packet_scene *paket = reinterpret_cast<sc_packet_scene *>(ptr);
 		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
-
-		if (firstCheck == true || myid % 2 == 0) {
+	
+		if (paket->avatar == A) {
 			PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
-			PLAYER->GetOtherPlayer()->SetClientNum(paket->ids);
 			PLAYER->GetPlayer()->SetClientNum(myid);
+			PLAYER->GetOtherPlayer()->SetClientNum(paket->ids);
 			PLAYER->GetPlayer()->m_match = true;
+			
 			CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
 		}
-		else {
+		else if(paket->avatar == B){
 			PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 			PLAYER->GetOtherPlayer()->SetClientNum(myid);
 			PLAYER->GetPlayer()->SetClientNum(paket->ids);
 			PLAYER->GetOtherPlayer()->m_match = true;
+			
 			CNetCGameFramework->SetCamera(PLAYER->GetOtherPlayer()->GetCamera());
+			
 		}
 
 		
@@ -156,51 +159,35 @@ void CNetWork::ProcessPacket(char *ptr)
 	case SC_COLLISION:
 	{
 		sc_packet_collision *pkt = reinterpret_cast<sc_packet_collision *>(ptr);
-		//PLAYER->GetPlayer()->SetPlayerCollision(pkt->check); //충돌체크값 bool변수
-		//
-		//if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
-		//	
-		//}
-		//if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
-	
-		//}
-		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
-
 		
-	
-		if (firstCheck == true) {
+		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		float fDistance = 40.0f;
+
+		if (PLAYER->GetPlayer()->GetClientNum() == myid) {
 			if (pkt->id == myid) { //내가가서 충돌
-				xmf3Shift = PLAYER->GetPlayer()->GetPosition();
-				PLAYER->GetPlayer()->SetPosition(XMFLOAT3(xmf3Shift.x+13, xmf3Shift.y, xmf3Shift.z+13));
-				PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
-				PLAYER->GetOtherPlayer()->SetPlayerState(PlayerState::STUN);
-				cout << "A" << PLAYER->GetPlayer()->GetPosition().x << " " << PLAYER->GetPlayer()->GetPosition().z << endl;
+				//xmf3Shift=Vector3::Add(xmf3Shift, PLAYER->GetPlayer()->GetLookVector(), -fDistance);
+				PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -fDistance));
 			}
 			else { //상대가와서 충돌
-				xmf3Shift = PLAYER->GetOtherPlayer()->GetPosition();
-				PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(xmf3Shift.x + 13, xmf3Shift.y, xmf3Shift.z + 13));
-				PLAYER->GetOtherPlayer()->SetPlayerState(PlayerState::STUN);
-				PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
-				
+				//xmf3Shift = Vector3::Add(xmf3Shift, PLAYER->GetOtherPlayer()->GetLookVector(), fDistance);
+				PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -fDistance));
 			}
 		}
 		else {
 			if (pkt->id == myid) {
-				xmf3Shift = PLAYER->GetOtherPlayer()->GetPosition();
-				PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(xmf3Shift.x + 13, xmf3Shift.y, xmf3Shift.z + 13));
-				PLAYER->GetOtherPlayer()->SetPlayerState(PlayerState::STUN);
-				PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
-				cout << "B" << PLAYER->GetOtherPlayer()->GetPosition().x << " " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+				//xmf3Shift = Vector3::Add(xmf3Shift, PLAYER->GetOtherPlayer()->GetLookVector(), fDistance);
+				PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -fDistance));
 			}
 			else {
-				xmf3Shift = PLAYER->GetPlayer()->GetPosition();
-				PLAYER->GetPlayer()->SetPosition(XMFLOAT3(xmf3Shift.x + 13, xmf3Shift.y, xmf3Shift.z + 13));
-				PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
-				PLAYER->GetOtherPlayer()->SetPlayerState(PlayerState::STUN);
+				//xmf3Shift = Vector3::Add(xmf3Shift, PLAYER->GetPlayer()->GetLookVector(), fDistance);
+				PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -fDistance));
 
 			}
 		}
-
+		PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
+		PLAYER->GetOtherPlayer()->SetPlayerState(PlayerState::STUN);
+		PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
+		PLAYER->GetOtherPlayer()->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
 		break;
 	}
 	case SC_KEY_INFO: 
@@ -242,12 +229,12 @@ void CNetWork::MatchPkt()
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_MATCHING_PLAYER;
-	if (firstCheck == true || myid % 2 ==0) {
-		pkt->avatar = A;
-	}
-	else {
-		pkt->avatar = B;
-	}
+	//if (firstCheck == true || myid % 2 ==0) {
+	//	pkt->avatar = A;
+	//}
+	//else {
+	//	pkt->avatar = B;
+	//}
 	pkt->map = PLAYGROUND;
 	pkt->mod = SOLO;
 

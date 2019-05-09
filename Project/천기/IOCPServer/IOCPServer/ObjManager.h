@@ -13,6 +13,7 @@ private:
 	float fDistance = 12.25f;
 
 	std::mutex workLock;
+	
 public:
 
 

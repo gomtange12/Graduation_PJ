@@ -82,9 +82,8 @@ void AcceptThread::Proc()
 
 		//로그인 + 다른 사용자 접속 처리 
 		
-		PACKETMANAGER->LoginPacket(id, first);
-		if(first == true)
-			first = false;
+		PACKETMANAGER->LoginPacket(id);
+	
 		//PACKETMANAGER->PutPlayerPacket(id);
 		////
 

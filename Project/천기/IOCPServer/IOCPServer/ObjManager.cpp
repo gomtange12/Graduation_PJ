@@ -31,15 +31,12 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 	std::cout << "Machig Request --- " << std::endl;
 	if (packet[1] == CS_MATCHING_PLAYER) 
 	{ 
+
 		cs_packet_matching *match = reinterpret_cast<cs_packet_matching *>(packet);
 		g_clients[id]->mod = match->mod;
 		//g_clients[id]->ready = match->ready;
-		g_clients[id]->avatar = match->avatar;
 		g_clients[id]->map = match->map;
 
-		if (g_clients[id]->avatar == B) {
-			g_clients[id]->m_xmf3Position = XMFLOAT3(1060, 10, 745);
-		}
 	}
 	switch (g_clients[id]->map)
 	{
@@ -155,15 +152,19 @@ void ObjManager::PosPkt(int id, unsigned char *packet)
 {
 	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(packet);
 	//workLock.lock();
-	g_clients[id]->SetOOBB(XMFLOAT3(pkt->x, pkt->y, pkt->z),XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+	g_clients[id]->m_xmOOBB.Center = XMFLOAT3(pkt->x, pkt->y, pkt->z);
 	bool collision = collisionPlayerByPlayer(id);
 
 	if (collision == true) {
-		g_clients[id]->m_xmf3Position.x = pkt->x + 13;
+		g_clients[id]->m_xmf3Position.x = pkt->x;
 		g_clients[id]->m_xmf3Position.y = pkt->y;
-		g_clients[id]->m_xmf3Position.z = pkt->z + 13;
-		g_clients[id]->SetOOBB(XMFLOAT3(pkt->x + 13, pkt->y, pkt->z + 13), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
-		std::cout << g_clients[id]->m_xmf3Position.x << " " << g_clients[id]->m_xmf3Position.z << std::endl;
+		g_clients[id]->m_xmf3Position.z = pkt->z;
+		float fDistance = 40.0f;
+		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		xmf3Shift = Vector3::Add(xmf3Shift, g_clients[id]->m_xmf3Look, -fDistance);
+		g_clients[id]->m_xmf3Position = Vector3::Add(g_clients[id]->m_xmf3Position, xmf3Shift, -fDistance);
+		g_clients[id]->m_xmOOBB.Center = XMFLOAT3(g_clients[id]->m_xmf3Position.x, g_clients[id]->m_xmf3Position.y, g_clients[id]->m_xmf3Position.z);
+		//std::cout << g_clients[id]->m_xmf3Position.x << " " << g_clients[id]->m_xmf3Position.z << std::endl;
 			
 	}
 	else {
@@ -174,7 +175,7 @@ void ObjManager::PosPkt(int id, unsigned char *packet)
 	}
 	//workLock.unlock();
 	
-	//std::cout << g_clients[id]->m_xmOOBB.Center.x << " , "  << g_clients[id]->m_xmOOBB.Center.z << std::endl;
+	std::wcout <<"my "<< g_clients[id]->m_xmOOBB.Center.x << " , "  << g_clients[id]->m_xmOOBB.Center.z << std::endl;
 }
 bool ObjManager::collisionPlayerByPlayer(int id)
 {
@@ -183,13 +184,14 @@ bool ObjManager::collisionPlayerByPlayer(int id)
 	for (int i = 0; i < PERSONNEL; ++i) {
 		int otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
 		if (id != otherId) {
-			if (g_clients[id]->m_xmOOBB.Intersects(g_clients[otherId]->m_xmOOBB)) //충돌!
+			if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //충돌!
 			{
 				PACKETMANAGER->CollisionPacket(id, otherId);
 				
 				return true;
 			}
 			else {
+				std::wcout <<"other "<< g_clients[otherId]->m_xmOOBB.Center.x << " , " << g_clients[otherId]->m_xmOOBB.Center.z << std::endl;
 				return false;
 			}
 		}
@@ -213,7 +215,7 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 		float a = g_clients[id]->m_xmf3Position.x - g_clients[otherId]->m_xmf3Position.x;
 		float b = g_clients[id]->m_xmf3Position.z - g_clients[otherId]->m_xmf3Position.z;
 		float fLength = sqrtf((a * a) + (b*b));
-		if (fLength <= 30) {
+		if (fLength <= 30.0f) {
 			std::cout << "hit!" << std::endl;
 		}
 	}

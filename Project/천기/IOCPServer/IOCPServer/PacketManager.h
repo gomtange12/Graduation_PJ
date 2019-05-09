@@ -11,11 +11,11 @@ public:
 	~PacketManager();
 
 	void SendPacket(int id, void *packet);
-	void LoginPacket(int id, bool check);
+	void LoginPacket(int id);
 	//void PutPlayerPacket(int id);
 	void MovePacket(int id, const XMFLOAT3& shift);
 	void ClientDisconnect(int id);
-	void ScenePacket(int num, int roomNum);
+	void ScenePacket(int num, int roomNum, int avatar);
 	void VectorPacket(int id);
 	void CollisionPacket(int id, int otherId);
 	void KeyPacket(int id, bool jump, bool attack, bool skill);

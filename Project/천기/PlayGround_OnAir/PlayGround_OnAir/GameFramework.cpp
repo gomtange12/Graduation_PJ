@@ -739,7 +739,8 @@ void CGameFramework::ProcessInput()
 			{
 				//if(!PLAYER->GetPlayer()->IsPlayerCrashMap())
 					//PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
-				CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
+				if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::STUN && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::STUN)
+					CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
 			}
 		}
 	}
@@ -814,16 +815,18 @@ void CGameFramework::FrameAdvance()
 {    
 	m_GameTimer.Tick(60.0f);
 
-	if(PLAYER->GetPlayer()->IsPlayerCrashMap() == false)
-		ProcessInput();
+	if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
+		
+			ProcessInput();
+	}
 	
 
-	if (CNETWORK->GetFirstCheck() == true || CNETWORK->myid % 2 == 0) {
+	if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
 		if (PLAYER->GetPlayer()->m_match == true) {
 			if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
 				CNETWORK->PosPkt(PLAYER->GetPlayer()->GetPosition());
 				PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
-				cout << "--A" << PLAYER->GetPlayer()->GetPosition().x << " " << PLAYER->GetPlayer()->GetPosition().z << endl;
+				cout << "--A : " << PLAYER->GetPlayer()->GetPosition().x << " " << PLAYER->GetPlayer()->GetPosition().z << endl;
 			}
 		}
 	}
@@ -832,7 +835,7 @@ void CGameFramework::FrameAdvance()
 			if (PLAYER->GetOtherPlayer()->GetPrePosition().x != PLAYER->GetOtherPlayer()->GetPosition().x || PLAYER->GetOtherPlayer()->GetPrePosition().z != PLAYER->GetOtherPlayer()->GetPosition().z) {
 				CNETWORK->PosPkt(PLAYER->GetOtherPlayer()->GetPosition());
 				PLAYER->GetOtherPlayer()->SetPrePosition(PLAYER->GetOtherPlayer()->GetPosition());
-				cout << "--B" << PLAYER->GetOtherPlayer()->GetPosition().x << " " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+				cout << "--B : " << PLAYER->GetOtherPlayer()->GetPosition().x << " " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
 			}
 		}
 	}
