@@ -1452,11 +1452,14 @@ void CScene::CheckObjectByObjectCollisions() {
 	//}
 	//static BoundingOrientedBox box = PLAYER->GetPlayer()->GetBoundingBox();
 	//
+	
 	int num = 0;
+	XMFLOAT3 xmf3Shift{ 0.0,0.0,0.0 };
+	XMFLOAT3 xmf3PlayerPosition = PLAYER->GetPlayer()->GetPosition();
 	switch (SCENEMANAGER->GetSceneType())
 	{
 	case PLAYGROUNDMAP:
-		for (int i = 1; i < m_nPlayGroundObjects; i++)
+		for (int i = 0; i < m_nPlayGroundObjects; i++)
 		{
 			if (m_ppPlayGroundObjects[i])
 			{
@@ -1474,19 +1477,25 @@ void CScene::CheckObjectByObjectCollisions() {
 					{
 						PLAYER->GetPlayer()->SetHeight(m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.y + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.y);
 						PLAYER->GetPlayer()->SetPlayCrashMap(true);
+						PLAYER->GetPlayer()->SetCollisionState(false);
+
 						num++;
 					}
-					/*if (m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.x + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.x <= PLAYER->GetPlayer()->GetBoundingBox().Center.x - PLAYER->GetPlayer()->GetBoundingBox().Extents.x + 10)
-					{
-						PLAYER->GetPlayer()->SetHeight(m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.x + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.x);
-						PLAYER->GetPlayer()->SetPlayCrashMap(true);
-						num++;
-					}*/
+
 				}
+				if (m_ppPlayGroundObjects[i]->GetBoundingBox().Contains(PLAYER->GetPlayer()->GetBoundingBox()))
+				{
+					PLAYER->GetPlayer()->SetCollisionState(true);
+				}
+
+
 			}
 		}
 		if (num == 0)
+		{
 			PLAYER->GetPlayer()->SetPlayCrashMap(false);
+
+		}
 		break;
 	case CONCERTMAP:
 

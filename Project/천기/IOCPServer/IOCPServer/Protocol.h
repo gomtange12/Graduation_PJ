@@ -12,7 +12,7 @@
 
 #define MAX_BUFFER		1024
 #define SERVER_PORT		4000
-#define MAX_USER		10
+#define MAX_USER		20
 
 //
 const int OP_RECV = 1;

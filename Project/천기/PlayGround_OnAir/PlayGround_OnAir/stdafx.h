@@ -153,6 +153,11 @@ enum ModNumber {
 	DUO,
 	SQUAD
 };
+enum Result {
+	ING,
+	WIN,
+	LOSE
+};
 namespace Vector3
 {
 	inline XMFLOAT3 XMVectorToFloat3(XMVECTOR& xmvVector)

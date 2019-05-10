@@ -55,12 +55,15 @@ protected:
 	float m_HeightForCollide{ 0 };
 
 	bool                        m_IsPlayerInConcert = true;
+	bool						XZcollision=false;
 public:
 	bool GetPlayerInConcert() { return m_IsPlayerInConcert; }
 	void SetPlayerInConocert(bool inConcert) { m_IsPlayerInConcert = inConcert; }
 public:
 	bool						m_match = false;
 	
+	bool GetCollisionState() { return XZcollision; }
+	void SetCollisionState(bool check) { XZcollision = check; }
 
 	float GetJumpPower() { return m_JumpPower; }
 	void SetJumpPower(float p) { m_JumpPower = p; }

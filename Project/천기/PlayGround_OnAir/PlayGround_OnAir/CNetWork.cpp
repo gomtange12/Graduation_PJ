@@ -193,7 +193,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
 			if (pkt->jump == true) {
 				PLAYER->GetPlayer()->SetPlayerState(JUMP);
-				PLAYER->GetPlayer()->SetJumpPower(500.0f);
+				PLAYER->GetPlayer()->SetJumpPower(450.0f);
 			}
 			if (pkt->attack == true) 
 				PLAYER->GetPlayer()->SetPlayerState(ATTACK);
@@ -202,7 +202,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
 			if (pkt->jump == true) {
 				PLAYER->GetOtherPlayer()->SetPlayerState(JUMP);
-				PLAYER->GetOtherPlayer()->SetJumpPower(500.0f);
+				PLAYER->GetOtherPlayer()->SetJumpPower(450.0f);
 			}
 			if (pkt->attack == true) 
 				PLAYER->GetOtherPlayer()->SetPlayerState(ATTACK);
@@ -235,6 +235,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		}
 		break;
 	}
+	
 	case SC_REMOVE_PLAYER:
 	{
 		sc_packet_remove_player *pkt = reinterpret_cast<sc_packet_remove_player *>(ptr);

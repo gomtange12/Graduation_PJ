@@ -224,6 +224,14 @@ void CPlayer::SetPlayCrashMap(bool isCrash)
 
 void CPlayer::Update(float fTimeElapsed)
 {
+	if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
+		if (PLAYER->GetPlayer()->GetCollisionState() == true)
+		{
+			PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -30.f));
+			PLAYER->GetPlayer()->SetCollisionState(false);
+
+		}
+	}
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
 	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);
 	float fMaxVelocityXZ = m_fMaxVelocityXZ;
@@ -771,16 +779,17 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	int z = (int)(xmf3PlayerPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
+	XMFLOAT3 xmf3Shift{ 0.0,0.0,0.0 };
 
 	/*int num = 0;
 	switch (SCENEMANAGER->GetSceneType())
 	{
 	case PLAYGROUNDMAP:
-		
-		break;
+
+	   break;
 	case CONCERTMAP:
-		
-		break;
+
+	   break;
 	}*/
 	if (PLAYER->GetPlayer()->IsPlayerCrashMap())
 	{
@@ -790,16 +799,25 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	else
 	{
 		fHeight = 10;
+
 	}
+	//if (PLAYER->GetPlayer()->GetCollisionState())
+	//{
+	//   xmf3Shift = Vector3::Add(xmf3Shift, GetLookVector(), 5.25f);
+	//   xmf3PlayerPosition = Vector3::Add(xmf3PlayerPosition, xmf3Shift, -12.25f);
+	//   //SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), xmf3Shift, -12.25f));
+	//   SetPosition(xmf3PlayerPosition);
+	//}
+	
 	if (xmf3PlayerPosition.y < fHeight)
 	{
 		//if (FindFrame("LFootBone1")->GetPosition().y < fHeight)
-		//	FindFrame("LFootBone1")->SetPosition(xmf3PlayerPosition);
+		//   FindFrame("LFootBone1")->SetPosition(xmf3PlayerPosition);
 		XMFLOAT3 xmf3PlayerVelocity = GetVelocity();
 		xmf3PlayerVelocity.y = 0.0f;
 		SetVelocity(xmf3PlayerVelocity);
 		xmf3PlayerPosition.y = fHeight;
-		SetPosition(xmf3PlayerPosition);	
+		SetPosition(xmf3PlayerPosition);
 	}
 
 
