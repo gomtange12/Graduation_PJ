@@ -31,6 +31,7 @@ constexpr int SC_COLLISION = 8;
 constexpr int SC_KEY_INFO = 14;
 constexpr int SC_ATTACK_INFO = 15;\
 constexpr int SC_LOBBY_IN = 17;
+constexpr int SC_RESULT_INFO = 18;
 //
 constexpr int CS_MATCHING_PLAYER = 9;
 constexpr int CS_MOVE_STATE_INFO = 10;
@@ -117,6 +118,12 @@ struct sc_packet_lobby {
 	BYTE size;
 	BYTE type;
 	bool out;
+};
+struct sc_packet_result {
+	BYTE size;
+	BYTE type;
+	char id;
+	
 };
 /////////////////////////Å¬¶ó//////////////////////
 struct cs_packet_matching {

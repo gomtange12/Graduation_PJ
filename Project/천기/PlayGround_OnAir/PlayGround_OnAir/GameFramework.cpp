@@ -433,6 +433,10 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 					CNETWORK->LobbyPkt(true);
 					break;
 				}
+				case VK_F8: {
+					PLAYER->GetOtherPlayer()->SetPlayerState(HAPPY);
+					break;
+				}
 				case VK_F9:
 					ChangeSwapChainState();
 					break;

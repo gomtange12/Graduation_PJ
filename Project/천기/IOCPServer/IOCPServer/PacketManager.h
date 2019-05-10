@@ -21,4 +21,5 @@ public:
 	void KeyPacket(int id, bool jump, bool attack, bool skill);
 	void AttackPacKet(int id);
 	void LobbyPacket(int id);
+	void ResultPacket(int id);
 };

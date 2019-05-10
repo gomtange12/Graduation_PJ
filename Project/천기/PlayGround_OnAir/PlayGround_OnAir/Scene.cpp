@@ -246,7 +246,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 	//m_pPlayGroundTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 
-	m_nShaders = 7;
+	m_nShaders = 9;
 	m_ppShaders = new CShader*[m_nShaders];
 
 	/*CHellicopterObjectsShader *pHellicopterObjectsShader = new CHellicopterObjectsShader();
@@ -297,6 +297,15 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	pTimeBarUIShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
 	m_ppShaders[6] = pTimeBarUIShader;
 
+	CWinUIShader *pWinUIShader = new CWinUIShader();
+	pWinUIShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pWinUIShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
+	m_ppShaders[7] = pWinUIShader;
+
+	CLoseUIShader *pLoseUIShader = new CLoseUIShader();
+	pLoseUIShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pLoseUIShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
+	m_ppShaders[8] = pLoseUIShader;
 	/*CTexturedShader* pTexturedShader = new CTexturedShader();
 	pTexturedShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	pTexturedShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
@@ -1380,11 +1389,26 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		{
 			m_ppPlayGroundObjects[i]->Render(pd3dCommandList, pCamera);
 		}
-		for (int i = 3; i < m_nShaders; ++i)
+		for (int i = 3; i < 7; ++i)
 		{
 			if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 		}
-	
+		if (PLAYER->GetPlayer()->GetPlayerState() == HAPPY) {
+			if (m_ppShaders[7])
+				m_ppShaders[7]->Render(pd3dCommandList, pCamera);
+		}
+		if (PLAYER->GetOtherPlayer()->GetPlayerState() == HAPPY) {
+			if (m_ppShaders[7])
+				m_ppShaders[7]->Render(pd3dCommandList, pCamera);
+		}
+		if (PLAYER->GetPlayer()->GetPlayerState() == SAD) {
+			if (m_ppShaders[8])
+				m_ppShaders[8]->Render(pd3dCommandList, pCamera);
+		}
+		if (PLAYER->GetOtherPlayer()->GetPlayerState() == SAD) {
+			if (m_ppShaders[8])
+				m_ppShaders[8]->Render(pd3dCommandList, pCamera);
+		}
 		//PLAYER->GetOtherPlayer()->Render(pd3dCommandList, pCamera);
 		//m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
 		//if (m_ppShaders[3]) m_ppShaders[3]->Render(pd3dCommandList, pCamera);
@@ -1400,6 +1424,22 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		for (int i = 0; i < m_nConcertObjects; i++)
 		{
 			m_ppConcertObjects[i]->Render(pd3dCommandList, pCamera);
+		}
+		if (PLAYER->GetPlayer()->GetPlayerState() == HAPPY) {
+			if (m_ppShaders[7])
+				m_ppShaders[7]->Render(pd3dCommandList, pCamera);
+		}
+		if (PLAYER->GetOtherPlayer()->GetPlayerState() == HAPPY) {
+			if (m_ppShaders[7])
+				m_ppShaders[7]->Render(pd3dCommandList, pCamera);
+		}
+		if (PLAYER->GetPlayer()->GetPlayerState() == SAD) {
+			if (m_ppShaders[8])
+				m_ppShaders[8]->Render(pd3dCommandList, pCamera);
+		}
+		if (PLAYER->GetOtherPlayer()->GetPlayerState() == SAD) {
+			if (m_ppShaders[8])
+				m_ppShaders[8]->Render(pd3dCommandList, pCamera);
 		}
 		break;
 	}

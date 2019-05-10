@@ -169,8 +169,8 @@ void PacketManager::AttackPacKet(int id)
 		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 	}
 }
-void PacketManager::LobbyPacket(int id) {
-
+void PacketManager::LobbyPacket(int id) 
+{
 	sc_packet_lobby pkt;
 	pkt.size = sizeof(sc_packet_lobby);
 	pkt.type = SC_LOBBY_IN;
@@ -186,5 +186,18 @@ void PacketManager::LobbyPacket(int id) {
 	ROOMMANAGER->room[roomNum]->m_full == false;
 	for (int i = 0; i < SOLO_NUM; ++i) {
 		ROOMMANAGER->room[roomNum]->m_ids[i] = -1;
+	}
+}
+void PacketManager::ResultPacket(int id)
+{
+	sc_packet_result pkt;
+	pkt.size = sizeof(sc_packet_result);
+	pkt.type = SC_RESULT_INFO;
+	pkt.id = id; //lose id È®ÀÎ¿ë
+
+
+	int roomNum = objectManager->GetPlayer(id)->roomNumber;
+	for (int i = 0; i < SOLO_NUM; ++i) {
+		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 	}
 }

@@ -154,9 +154,9 @@ enum ModNumber {
 	SQUAD
 };
 enum Result {
-	ING,
+	LOSE,
 	WIN,
-	LOSE
+	ING
 };
 namespace Vector3
 {

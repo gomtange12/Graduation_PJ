@@ -1651,3 +1651,47 @@ D3D12_SHADER_BYTECODE CTimeBarShader::CreateVertexShader()
 {
 	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSTimeBarTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
 }
+D3D12_SHADER_BYTECODE CWinUIShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSWinTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+
+D3D12_SHADER_BYTECODE CWinUIShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSWinTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+
+}
+
+void CWinUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/win.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+}
+D3D12_SHADER_BYTECODE CLoseUIShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSLoseTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+
+D3D12_SHADER_BYTECODE CLoseUIShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSLoseTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+
+}
+
+void CLoseUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/lose.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+}

@@ -59,3 +59,8 @@ enum PlayerState {
 	SAD,
 	BACK_RUN,
 };
+enum Result {
+	LOSE,
+	WIN,
+	ING
+};

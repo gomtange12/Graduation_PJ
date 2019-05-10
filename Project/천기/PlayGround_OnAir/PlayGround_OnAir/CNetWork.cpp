@@ -235,7 +235,22 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		}
 		break;
 	}
-	
+	case SC_RESULT_INFO: 
+	{
+		sc_packet_result *pkt = reinterpret_cast<sc_packet_result *>(ptr);
+		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
+			PLAYER->GetPlayer()->SetPlayerState(SAD);
+			PLAYER->GetOtherPlayer()->SetPlayerState(HAPPY);
+			
+			
+		}
+		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
+			PLAYER->GetOtherPlayer()->SetPlayerState(SAD);
+			PLAYER->GetPlayer()->SetPlayerState(HAPPY);
+			
+		}
+		break;
+	}
 	case SC_REMOVE_PLAYER:
 	{
 		sc_packet_remove_player *pkt = reinterpret_cast<sc_packet_remove_player *>(ptr);
