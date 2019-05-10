@@ -22,7 +22,7 @@ void CNetWork::MakeServer(const HWND& hWnd)
 	ZeroMemory(&ServerAddr, sizeof(SOCKADDR_IN));
 	ServerAddr.sin_family = AF_INET;
 	ServerAddr.sin_port = htons(SERVER_PORT);
-	ServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	ServerAddr.sin_addr.s_addr = inet_addr(IP_ADDR);
 
 	int Result = WSAConnect(g_mysocket, (sockaddr *)&ServerAddr, sizeof(ServerAddr), NULL, NULL, NULL, NULL);
 
@@ -72,7 +72,7 @@ void CNetWork::ReadPacket(SOCKET sock)
 		}
 	}
 }
-void CNetWork::ProcessPacket(char *ptr)
+void CNetWork::ProcessPacket(unsigned char *ptr)
 {
 	static bool first_time = true;
 	switch (ptr[1])
@@ -180,10 +180,11 @@ void CNetWork::ProcessPacket(char *ptr)
 
 			}
 		}
-		PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
-		PLAYER->GetOtherPlayer()->SetPlayerState(PlayerState::STUN);
+	
 		PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
 		PLAYER->GetOtherPlayer()->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
+		PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
+		PLAYER->GetOtherPlayer()->SetPlayerState(PlayerState::STUN);
 		break;
 	}
 	case SC_KEY_INFO: 
@@ -273,10 +274,13 @@ void CNetWork::PosPkt(const XMFLOAT3& pos)
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_POS_INFO;
 	pkt->x = pos.x;
-	pkt->y = pos.y;
-	pkt->z = pos.z;
+	//pkt->y = pos.y;
+	int z =pos.z;
+	pkt->z = z;
 	cout << "pkt->z " << pkt->z << endl;
+
 	SendPacket();
+	
 }
 void CNetWork::KeyPkt(bool jump, bool attack, bool skill) 
 {

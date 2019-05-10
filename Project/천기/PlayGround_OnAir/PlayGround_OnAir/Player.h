@@ -47,7 +47,7 @@ protected:
 
 	//for 서버로 플레이어 식별
 
-	XMFLOAT3					prePosition =XMFLOAT3(-530.f, 50.f, 745.f);
+	XMFLOAT3					prePosition =XMFLOAT3(0.f, 0.f, 0.f);
 	int							m_PlayerID = -1;
 	int							m_JoinRoomNum = -1;
 	bool						m_playerCollision = false;

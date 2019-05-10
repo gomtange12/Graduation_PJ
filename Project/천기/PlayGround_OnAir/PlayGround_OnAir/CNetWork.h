@@ -6,6 +6,8 @@
 #include "..\..\IOCPServer\IOCPServer\Protocol.h"
 //#include "..\..\Ãµ±â\IOCPServer\IOCPServer\Protocol.h"
 
+#define IP_ADDR "127.0.0.1"
+
 class CNetWork : public CSingleTonBase<CNetWork>
 {
 private:
@@ -18,7 +20,7 @@ private:
 	char 	send_buffer[MAX_BUFFER];
 	WSABUF	recv_wsabuf;
 	char	recv_buffer[MAX_BUFFER];
-	char	packet_buffer[MAX_BUFFER];
+	unsigned char	packet_buffer[MAX_BUFFER];
 
 	DWORD	in_packet_size = 0;
 	int		saved_packet_size = 0;
@@ -39,7 +41,7 @@ public:
 	void MakeServer(const HWND& hWnd);
 	void SendPacket();
 	void ReadPacket(SOCKET sock);
-	void ProcessPacket(char *ptr);
+	void ProcessPacket(unsigned char *ptr);
 	void MatchPkt();
 	void StatePkt(DWORD state);
 	void RotePkt(float y);

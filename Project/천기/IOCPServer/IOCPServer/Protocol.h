@@ -11,7 +11,7 @@
 //
 
 #define MAX_BUFFER		1024
-#define SERVER_PORT		3500
+#define SERVER_PORT		4000
 #define MAX_USER		10
 
 //
@@ -33,10 +33,12 @@ constexpr int SC_ATTACK_INFO = 15;
 //
 constexpr int CS_MATCHING_PLAYER = 9;
 constexpr int CS_MOVE_STATE_INFO = 10;
-constexpr int CS_POS_INFO = 11;
+constexpr int CS_POS_INFO = 16;
 constexpr int CS_ROTE_STATE_INFO = 12;
 constexpr int CS_KEY_INFO = 13;
+
 #pragma pack (push, 1)
+
 //////////////////////¼­¹ö/////////////////////////
 struct sc_packet_login_ok {
 	BYTE size;
@@ -130,12 +132,13 @@ struct cs_packet_rote_state {
 	BYTE type;
 	float y;
 };
+
 struct cs_packet_pos{
 	BYTE size;
 	BYTE type;
 	float x;
-	float y;
-	float z;
+	//float y;
+	int z;
 };
 struct cs_packet_key {
 	BYTE size;
@@ -144,3 +147,4 @@ struct cs_packet_key {
 	bool attack;
 	bool skill;
 };
+#pragma pack(pop)
