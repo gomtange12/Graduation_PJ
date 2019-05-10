@@ -34,5 +34,6 @@ public:
 	
 	bool collisionPlayerByPlayer(int id);
 	void KeyPkt(int id, unsigned char *packet);
+	void LobbyPkt(int id, unsigned char *packet);
 	void MoveUpdate(int player, unsigned int time);
 };

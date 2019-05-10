@@ -301,8 +301,7 @@ void CPlayer::Update(float fTimeElapsed)
 		m_xmf3Position.y = m_newYpos;*/
 		m_JumpPower += (m_xmf3Gravity.y * 0.1* fTimeElapsed);
 		m_xmf3Position.y += m_JumpPower * fTimeElapsed;
-		if (m_JumpPower < 470)
-			m_PlayerState = FALLING;
+		
 
 		//m_newYpos = 0;
 		cout << m_JumpPower << endl;
@@ -320,9 +319,9 @@ void CPlayer::Update(float fTimeElapsed)
 		m_OnAacting = TRUE;
 		SetTrackAnimationSet(0, RUN_JUMP_ATTAK);
 		break;
-	case KICK:
+	case ATTACK_3:
 		m_OnAacting = TRUE;
-		SetTrackAnimationSet(0, KICK);
+		SetTrackAnimationSet(0, ATTACK_3);
 		break;
 	case ATTACK:
 		m_OnAacting = TRUE;
@@ -1029,9 +1028,9 @@ void COtherPlayers::Update(float fTimeElapsed)
 		m_OnAacting = TRUE;
 		SetTrackAnimationSet(0, RUN_JUMP_ATTAK);
 		break;
-	case KICK:
+	case ATTACK_3:
 		m_OnAacting = TRUE;
-		SetTrackAnimationSet(0, KICK);
+		SetTrackAnimationSet(0, ATTACK_3);
 		break;
 	case ATTACK:
 		m_OnAacting = TRUE;

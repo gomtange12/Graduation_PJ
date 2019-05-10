@@ -2,7 +2,7 @@
 
 #include "Protocol.h"
 
-#define PERSONNEL 2
+#define SOLO_NUM 2
 
 struct stOverEx {
 	WSAOVERLAPPED m_wsaOver;
@@ -53,9 +53,9 @@ enum PlayerState {
 	HIT,
 	JUMPROLL,
 	RUN_JUMP_ATTAK,
-	KICK,
 	ATTACK,
+	ATTACK_3,
 	HAPPY,
 	SAD,
-	BACK_RUN
+	BACK_RUN,
 };

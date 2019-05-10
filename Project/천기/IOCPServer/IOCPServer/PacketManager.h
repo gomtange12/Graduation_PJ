@@ -15,9 +15,10 @@ public:
 	//void PutPlayerPacket(int id);
 	void MovePacket(int id, const XMFLOAT3& shift);
 	void ClientDisconnect(int id);
-	void ScenePacket(int num, int roomNum, int avatar);
+	void IngamePacket(int num, int roomNum, int avatar);
 	void VectorPacket(int id);
 	void CollisionPacket(int id, int otherId);
 	void KeyPacket(int id, bool jump, bool attack, bool skill);
 	void AttackPacKet(int id);
+	void LobbyPacket(int id);
 };

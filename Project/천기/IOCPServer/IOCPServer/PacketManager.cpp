@@ -74,7 +74,7 @@ void PacketManager::MovePacket(int id, const XMFLOAT3& shift)
 	pkt.posZ = shift.z;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < PERSONNEL; ++i) {
+	for (int i = 0; i < SOLO_NUM; ++i) {
 		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 	}
 
@@ -95,7 +95,7 @@ void PacketManager::ClientDisconnect(int id)
 	closesocket(objectManager->GetPlayer(id)->m_socket);
 	objectManager->GetPlayer(id)->m_connected = false;
 }
-void PacketManager::ScenePacket(int id, int roomNum, int avatar) { //Solo 매칭용임 2인용
+void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo 매칭용임 2인용
 	//해당 채널 매칭된 클라 모두에게
 	sc_packet_scene pkt;
 	pkt.size = sizeof(sc_packet_scene);
@@ -127,7 +127,7 @@ void PacketManager::VectorPacket(int id)
 	pkt.LposZ = objectManager->GetPlayer(id)->m_xmf4x4ToParent._33;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < PERSONNEL; ++i) {
+	for (int i = 0; i < SOLO_NUM; ++i) {
 		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 
 	}
@@ -153,7 +153,7 @@ void PacketManager::KeyPacket(int id, bool jump, bool attack, bool skill)
 	pkt.attack = attack;
 	pkt.skill = skill;
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < PERSONNEL; ++i) {
+	for (int i = 0; i < SOLO_NUM; ++i) {
 		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 	}
 }
@@ -165,7 +165,26 @@ void PacketManager::AttackPacKet(int id)
 	pkt.id = id;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < PERSONNEL; ++i) {
+	for (int i = 0; i < SOLO_NUM; ++i) {
 		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
+	}
+}
+void PacketManager::LobbyPacket(int id) {
+
+	sc_packet_lobby pkt;
+	pkt.size = sizeof(sc_packet_lobby);
+	pkt.type = SC_LOBBY_IN;
+	pkt.out = true;
+
+	int roomNum = objectManager->GetPlayer(id)->roomNumber;
+	for (int i = 0; i < SOLO_NUM; ++i) {
+		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
+	}
+
+	
+	//방 초기화
+	ROOMMANAGER->room[roomNum]->m_full == false;
+	for (int i = 0; i < SOLO_NUM; ++i) {
+		ROOMMANAGER->room[roomNum]->m_ids[i] = -1;
 	}
 }

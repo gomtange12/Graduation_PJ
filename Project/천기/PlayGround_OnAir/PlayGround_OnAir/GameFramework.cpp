@@ -424,8 +424,13 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 				case VK_F6: {
 					if (m_ready == false) {
 						CNETWORK->MatchPkt();
+						cout << "매칭!";
 						m_ready = true;
 					}
+					break;
+				}
+				case VK_F7: {
+					CNETWORK->LobbyPkt(true);
 					break;
 				}
 				case VK_F9:
@@ -737,15 +742,13 @@ void CGameFramework::ProcessInput()
 			}
 			if (dwDirection )
 			{
-				//if(!PLAYER->GetPlayer()->IsPlayerCrashMap())
-					//PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
 				if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
 					if(PLAYER->GetPlayer()->GetPlayerState() != PlayerState::STUN)
-						CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
+						CNETWORK->StatePkt(dwDirection); 
 				}
 				if (PLAYER->GetOtherPlayer()->GetClientNum() == CNETWORK->myid) {
 					if (PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::STUN)
-						CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
+						CNETWORK->StatePkt(dwDirection); 
 				}
 			}
 		}

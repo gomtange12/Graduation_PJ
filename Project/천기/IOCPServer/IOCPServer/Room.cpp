@@ -5,7 +5,7 @@
 Room::Room()
 {
 	m_full = false;
-	for (int i = 0; i < PERSONNEL; ++i) {
+	for (int i = 0; i < SOLO_NUM; ++i) {
 		m_ids[i] = -1;
 	}
 }

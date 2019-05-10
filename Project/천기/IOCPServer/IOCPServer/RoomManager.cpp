@@ -23,11 +23,11 @@ void RoomManager::SoloRoomMatch(int id)
 	//빈방을 찾음
 	for (int i = 0; i < room.size(); ++i) {
 		if (room[i]->m_full == false) {
-			for (int j = 0; j < PERSONNEL; ++j) { //아이디를 넣어줌
+			for (int j = 0; j < SOLO_NUM; ++j) { //아이디를 넣어줌
 				if (room[i]->m_ids[j] < 0) {
 					if (room[i]->m_ids[j] != id) {
 						room[i]->m_ids[j] = id;
-						if (j == PERSONNEL - 1)//풀방이면
+						if (j == SOLO_NUM - 1)//풀방이면
 						{
 							room[i]->m_full = true;
 							std::cout << "RoomNumber : " << RNumber << " ----> Machig Success" << std::endl;
@@ -48,11 +48,11 @@ void RoomManager::SoloRoomMatch(int id)
 								objectManager->GetPlayer(room[i]->m_ids[1])->m_xmf3Position.y,
 								objectManager->GetPlayer(room[i]->m_ids[1])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
 							////
-							for (int k = 0; k < PERSONNEL; ++k) {
+							for (int k = 0; k < SOLO_NUM; ++k) {
 								objectManager->GetPlayer(room[i]->m_ids[k])->roomNumber = i;
 								objectManager->GetPlayer(room[i]->m_ids[k])->m_match = true;
 								
-								PACKETMANAGER->ScenePacket(room[i]->m_ids[k], i, objectManager->GetPlayer(room[i]->m_ids[k])->avatar);
+								PACKETMANAGER->IngamePacket(room[i]->m_ids[k], i, objectManager->GetPlayer(room[i]->m_ids[k])->avatar);
 							}
 							break;
 						}

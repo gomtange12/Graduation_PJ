@@ -80,6 +80,11 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 		KeyPkt(id, packet);
 		break;
 	}
+	case CS_LOBBY_OUT:
+	{
+		LobbyPkt(id, packet);
+		break;
+	}
 	default:
 		break;
 	}
@@ -179,7 +184,7 @@ bool ObjManager::collisionPlayerByPlayer(int id)
 	
 	int roomNum = g_clients[id]->roomNumber;
 	int otherId;
-	for (int i = 0; i < PERSONNEL; ++i) {
+	for (int i = 0; i < SOLO_NUM; ++i) {
 		if (id != ROOMMANAGER->room[roomNum]->m_ids[i])
 			otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
 	}
@@ -208,7 +213,7 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 	{
 		int roomNum = g_clients[id]->roomNumber;
 		int otherId;
-		for (int i = 0; i < PERSONNEL; ++i) {
+		for (int i = 0; i < SOLO_NUM; ++i) {
 			if(id != ROOMMANAGER->room[roomNum]->m_ids[i])
 				otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
 		}
@@ -218,6 +223,28 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 		}
 	}
 	
+}
+void ObjManager::LobbyPkt(int id, unsigned char *packet)
+{
+	cs_packet_lobby_out *pkt = reinterpret_cast<cs_packet_lobby_out *>(packet);
+
+	g_clients[id]->gameEnd = pkt->out;
+
+	int roomNum = g_clients[id]->roomNumber;
+	int otherId;
+	for (int i = 0; i < SOLO_NUM; ++i) {
+		if (id != ROOMMANAGER->room[roomNum]->m_ids[i])
+			otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
+	}
+
+	if (g_clients[id]->gameEnd == pkt->out && g_clients[otherId]->gameEnd == pkt->out) {
+		PACKETMANAGER->LobbyPacket(id);
+		g_clients[id]->gameEnd = false;
+		g_clients[otherId]->gameEnd = false;
+		g_clients[id]->m_match = false;
+		g_clients[otherId]->m_match = false;
+	}
+
 }
 void ObjManager::MoveUpdate(int id, unsigned int time)
 {

@@ -29,14 +29,15 @@ constexpr int SC_SCENE = 6;
 constexpr int SC_VECTOR_INFO = 7;
 constexpr int SC_COLLISION = 8;
 constexpr int SC_KEY_INFO = 14;
-constexpr int SC_ATTACK_INFO = 15;
+constexpr int SC_ATTACK_INFO = 15;\
+constexpr int SC_LOBBY_IN = 17;
 //
 constexpr int CS_MATCHING_PLAYER = 9;
 constexpr int CS_MOVE_STATE_INFO = 10;
-constexpr int CS_POS_INFO = 16;
+constexpr int CS_POS_INFO = 11;
 constexpr int CS_ROTE_STATE_INFO = 12;
 constexpr int CS_KEY_INFO = 13;
-
+constexpr int CS_LOBBY_OUT = 16;
 #pragma pack (push, 1)
 
 //////////////////////서버/////////////////////////
@@ -112,6 +113,11 @@ struct sc_packet_attack
 	BYTE type;
 	char id;
 };
+struct sc_packet_lobby {
+	BYTE size;
+	BYTE type;
+	bool out;
+};
 /////////////////////////클라//////////////////////
 struct cs_packet_matching {
 	BYTE size;
@@ -146,5 +152,10 @@ struct cs_packet_key {
 	bool jump;
 	bool attack;
 	bool skill;
+};
+struct cs_packet_lobby_out {
+	BYTE size;
+	BYTE type;
+	bool out;
 };
 #pragma pack(pop)

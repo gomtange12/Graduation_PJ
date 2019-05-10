@@ -47,4 +47,5 @@ public:
 	void RotePkt(float y);
 	void PosPkt(const XMFLOAT3& pos);
 	void KeyPkt(bool jump, bool attack, bool skill);
+	void LobbyPkt(bool out);
 };

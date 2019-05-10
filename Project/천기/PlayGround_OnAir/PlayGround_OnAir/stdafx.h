@@ -126,12 +126,11 @@ enum PlayerState {
 	HIT,
 	JUMPROLL,
 	RUN_JUMP_ATTAK,
-	KICK,
 	ATTACK,
+	ATTACK_3,
 	HAPPY,
 	SAD,
 	BACK_RUN,
-	FALLING
 };
 
 enum SceneState {
