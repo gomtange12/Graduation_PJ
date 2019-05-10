@@ -5,17 +5,15 @@
 
 struct Event
 {
-	u_int time;
+	unsigned int time;
 	int type;
 	int id;
-	//GameObject* target;
-
 };
 class Comp
 {
 public:
 	Comp() {};
-	bool operator() (const Event& lhs, const Event& rhs) const {
+	bool operator() (Event lhs, Event rhs) const {
 		return (lhs.time > rhs.time);
 	}
 

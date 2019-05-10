@@ -209,6 +209,8 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 
 	PACKETMANAGER->KeyPacket(id, pkt->jump, pkt->attack , pkt->skill);
 
+	dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_ALLPOS, GetTickCount() + 1000);
+
 	if (pkt->attack == true) 
 	{
 		int roomNum = g_clients[id]->roomNumber;
@@ -220,6 +222,9 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 		float fLength = sqrtf(pow(g_clients[id]->m_xmf3Position.x-g_clients[otherId]->m_xmf3Position.x,2) + pow(g_clients[id]->m_xmf3Position.z-g_clients[otherId]->m_xmf3Position.z,2));
 		if (fLength <= 180.0f) {
 			PACKETMANAGER->AttackPacKet(otherId);
+			--g_clients[otherId]->hp;
+			if (g_clients[otherId]->hp <= 0)
+				PACKETMANAGER->ResultPacket(otherId);
 		}
 	}
 	

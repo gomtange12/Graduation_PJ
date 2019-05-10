@@ -651,7 +651,7 @@ void CGameFramework::ProcessInput()
 		//PLAYER->GetPlayer()->GetDirectiond() = 0;
 		dwDirection = 0;
 		otherPlayerDirection = 0;
-		if (pKeysBuffer[VK_UP] & 0xF0)
+		if (pKeysBuffer[0x57] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			//PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
@@ -660,17 +660,17 @@ void CGameFramework::ProcessInput()
 
 			//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
 		}
-		if (pKeysBuffer[VK_DOWN] & 0xF0)
+		if (pKeysBuffer[0x53] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			dwDirection |= DIR_BACKWARD;
 		}
-		if (pKeysBuffer[VK_LEFT] & 0xF0) 
+		if (pKeysBuffer[0x41] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			dwDirection |= DIR_LEFT;
-		} 
-		if (pKeysBuffer[VK_RIGHT] & 0xF0) 
+		}
+		if (pKeysBuffer[0x44] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			dwDirection |= DIR_RIGHT;

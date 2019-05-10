@@ -17,7 +17,7 @@
 //
 const int OP_RECV = 1;
 const int OP_SEND = 2;
-const int OP_MOVE = 3; //가속도 처리용
+const int OP_ALLPOS = 3; 
 //
 
 constexpr int SC_LOGIN_OK = 1;
@@ -32,6 +32,7 @@ constexpr int SC_KEY_INFO = 14;
 constexpr int SC_ATTACK_INFO = 15;\
 constexpr int SC_LOBBY_IN = 17;
 constexpr int SC_RESULT_INFO = 18;
+constexpr int SC_ALL_POS = 19;
 //
 constexpr int CS_MATCHING_PLAYER = 9;
 constexpr int CS_MOVE_STATE_INFO = 10;
@@ -125,6 +126,13 @@ struct sc_packet_result {
 	char id;
 	
 };
+struct sc_packet_allpos {
+	BYTE size;
+	BYTE type;
+	char id;
+	float posX;
+	float posZ;
+};
 /////////////////////////클라//////////////////////
 struct cs_packet_matching {
 	BYTE size;
@@ -164,5 +172,5 @@ struct cs_packet_lobby_out {
 	BYTE size;
 	BYTE type;
 	bool out;
-};
+}; 
 #pragma pack(pop)

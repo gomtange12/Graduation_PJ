@@ -251,6 +251,20 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		}
 		break;
 	}
+	case SC_ALL_POS:
+	{
+		sc_packet_allpos *pkt = reinterpret_cast<sc_packet_allpos *>(ptr);
+		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
+			PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(pkt->posX, PLAYER->GetOtherPlayer()->GetPosition().y,pkt->posZ));
+
+			
+		}
+		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
+			PLAYER->GetPlayer()->SetPosition(XMFLOAT3(pkt->posX, PLAYER->GetPlayer()->GetPosition().y, pkt->posZ));
+
+		}
+		break;
+	}
 	case SC_REMOVE_PLAYER:
 	{
 		sc_packet_remove_player *pkt = reinterpret_cast<sc_packet_remove_player *>(ptr);

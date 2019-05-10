@@ -22,4 +22,5 @@ public:
 	void AttackPacKet(int id);
 	void LobbyPacket(int id);
 	void ResultPacket(int id);
+	void AllPos(int id);
 };

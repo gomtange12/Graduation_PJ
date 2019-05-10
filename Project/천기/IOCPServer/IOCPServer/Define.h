@@ -9,11 +9,13 @@ struct stOverEx {
 	WSABUF m_wsaBuf;
 	unsigned char m_IOCPbuf[MAX_BUFFER]; // IOCP send/recv ¹öÆÛ
 	unsigned char	m_todo;
+	int id;
 };
 enum ThreadNum {
 	ACCEPT_TH,
 	WORKER_TH01,
 	WORKER_TH02,
+	WORKER_TH03,
 	TIMER_TH
 };
 enum AVATARNumber {

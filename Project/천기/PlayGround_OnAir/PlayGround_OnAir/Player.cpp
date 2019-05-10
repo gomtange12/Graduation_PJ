@@ -229,9 +229,9 @@ void CPlayer::Update(float fTimeElapsed)
 		{
 			PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -30.f));
 			PLAYER->GetPlayer()->SetCollisionState(false);
-
 		}
 	}
+
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
 	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);
 	float fMaxVelocityXZ = m_fMaxVelocityXZ;
@@ -796,11 +796,11 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 		//if(PLAYER->GetPlayer()->GetPlayerState()== FALLING)
 		fHeight = PLAYER->GetPlayer()->GetHeight();
 	}
-	else
-	{
+	else {
 		fHeight = 10;
-
 	}
+
+	
 	//if (PLAYER->GetPlayer()->GetCollisionState())
 	//{
 	//   xmf3Shift = Vector3::Add(xmf3Shift, GetLookVector(), 5.25f);
@@ -931,8 +931,14 @@ void COtherPlayers::OnPlayerUpdateCallback(float fTimeElapsed)
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
 
-	fHeight = 20;
-
+	if (PLAYER->GetOtherPlayer()->IsPlayerCrashMap())
+	{
+		//if(PLAYER->GetPlayer()->GetPlayerState()== FALLING)
+		fHeight = PLAYER->GetOtherPlayer()->GetHeight();
+	}
+	else {
+		fHeight = 10;
+	}
 	if (xmf3PlayerPosition.y < fHeight)
 	{
 		//if (FindFrame("LFootBone1")->GetPosition().y < fHeight)
@@ -965,6 +971,15 @@ void COtherPlayers::OnCameraUpdateCallback(float fTimeElapsed)
 
 void COtherPlayers::Update(float fTimeElapsed)
 {
+	if (PLAYER->GetOtherPlayer()->IsPlayerCrashMap() == false) {
+		if (PLAYER->GetOtherPlayer()->GetCollisionState() == true)
+		{
+			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -30.f));
+			
+			PLAYER->GetOtherPlayer()->SetCollisionState(false);
+			
+		}
+	}
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
 	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);
 	float fMaxVelocityXZ = m_fMaxVelocityXZ;
@@ -1070,4 +1085,5 @@ void COtherPlayers::Update(float fTimeElapsed)
 	//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 
 	m_xmOOBB.Center = m_xmf3Position;
+	m_xmOOBB.Center.y = m_xmf3Position.y + GetBoundingBox().Extents.y;
 }

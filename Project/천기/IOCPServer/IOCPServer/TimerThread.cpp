@@ -15,6 +15,7 @@ void TimerThread::Init()
 }
 void TimerThread::Proc()
 {
+	
 	while (true) 
 	{
 		std::this_thread::sleep_for(std::chrono::duration<float>(0.01f));
@@ -27,8 +28,8 @@ void TimerThread::Proc()
 			timerLock.unlock();
 			stOverEx *ex = new stOverEx;
 			ex->m_todo = ev.type;
-			//ex->id = ev.id;
-			//ex->time = GetTickCount();
+			ex->id = ev.id;
+			
 			PostQueuedCompletionStatus(IOCPSERVER->GetIocp(), 1, NULL, &ex->m_wsaOver);
 		}
 	}

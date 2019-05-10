@@ -23,10 +23,10 @@ void ThreadManager::CreateThreads()
 
 	for (int i = 0; i < NUM_THREADS; ++i) {
 		AddThread(new WorkerThread);
-		std::cout << "  WorkerThread\n";
+		
 	}
-
-	//AddThread(new TimerThread);  std::cout << "  TimerTheread\n";
+	std::cout << "  WorkerThreads\n";
+	AddThread(new TimerThread);  //std::cout << "  TimerTheread\n";
 }
 void ThreadManager::AddThread(MyThread* myth)
 {

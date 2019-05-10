@@ -87,10 +87,11 @@ void WorkerThread::Proc()
 		else if (OP_SEND == over->m_todo) {
 			delete over;
 		}
-		//else if (OP_MOVE == over->m_todo) {
-		//	//objectManager->MoveUpdate(over->id, over->time);
-		//	delete over;
-		//}
+		else if (OP_ALLPOS == over->m_todo) {
+			PACKETMANAGER->AllPos(over->id);
+			std::cout << "TIME" << std::endl;
+			delete over;
+		}
 	}
 }
 void WorkerThread::error_display(const char *msg, int err_no)

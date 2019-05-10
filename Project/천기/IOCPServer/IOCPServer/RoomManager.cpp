@@ -2,6 +2,7 @@
 #include "RoomManager.h"
 #include "PacketManager.h"
 #include "Player.h"
+#include "ThreadManager.h"
 RoomManager::RoomManager()
 {
 }
@@ -54,6 +55,9 @@ void RoomManager::SoloRoomMatch(int id)
 								
 								PACKETMANAGER->IngamePacket(room[i]->m_ids[k], i, objectManager->GetPlayer(room[i]->m_ids[k])->avatar);
 							}
+							
+							
+
 							break;
 						}
 					}
