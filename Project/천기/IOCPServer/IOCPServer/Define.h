@@ -20,11 +20,11 @@ enum AVATARNumber {
 	A, //ÀÓ½Ã¸íÄª
 	B
 };
-enum MAPNumber {
-	PLAYGROUND,
-	CONCERT
-
-};
+//enum MAPNumber {
+//	PLAYGROUND,
+//	CONCERT
+//
+//};
 enum ModNumber {
 	SOLO,
 	DUO,

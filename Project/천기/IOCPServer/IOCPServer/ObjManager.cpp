@@ -40,12 +40,12 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 	}
 	switch (g_clients[id]->map)
 	{
-	case PLAYGROUND:
+	case PLAYGROUNDMAP:
 	{
 		ModMatch(id);
 		break;
 	}
-	case CONCERT:
+	case CONCERTMAP:
 	{
 		//ModMatch(id);
 		break;
@@ -72,7 +72,7 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 	}
 	case CS_POS_INFO: 
 	{
-		PosPkt(id,packet);
+		PosPkt(id, packet);
 		break;
 	}
 	case CS_KEY_INFO:
@@ -152,7 +152,7 @@ void ObjManager::RotePkt(int id, unsigned char *packet)
 void ObjManager::PosPkt(int id, unsigned char *packet)
 {
 	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(packet);
-	
+	std::cout << pkt->z;
 	g_clients[id]->m_xmOOBB.Center = XMFLOAT3(pkt->x, 0.f, 0.f);
 	bool collision = collisionPlayerByPlayer(id);
 
@@ -212,8 +212,6 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 			if(id != ROOMMANAGER->room[roomNum]->m_ids[i])
 				otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
 		}
-		//float a = g_clients[id]->m_xmf3Position.x - g_clients[otherId]->m_xmf3Position.x;
-		//float b = g_clients[id]->m_xmf3Position.z - g_clients[otherId]->m_xmf3Position.z;
 		float fLength = sqrtf(pow(g_clients[id]->m_xmf3Position.x-g_clients[otherId]->m_xmf3Position.x,2) + pow(g_clients[id]->m_xmf3Position.z-g_clients[otherId]->m_xmf3Position.z,2));
 		if (fLength <= 130.0f) {
 			PACKETMANAGER->AttackPacKet(otherId);

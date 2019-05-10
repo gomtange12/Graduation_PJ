@@ -241,7 +241,7 @@ void CNetWork::MatchPkt()
 	//else {
 	//	pkt->avatar = B;
 	//}
-	pkt->map = PLAYGROUND;
+	pkt->map = PLAYGROUNDMAP;
 	pkt->mod = SOLO;
 
 	SendPacket();
@@ -266,7 +266,7 @@ void CNetWork::RotePkt(float y)
 
 	SendPacket();
 }
-void CNetWork::PosPkt(XMFLOAT3 pos)
+void CNetWork::PosPkt(const XMFLOAT3& pos)
 {
 	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
@@ -275,6 +275,7 @@ void CNetWork::PosPkt(XMFLOAT3 pos)
 	pkt->x = pos.x;
 	pkt->y = pos.y;
 	pkt->z = pos.z;
+	cout << "pkt->z " << pkt->z << endl;
 	SendPacket();
 }
 void CNetWork::KeyPkt(bool jump, bool attack, bool skill) 

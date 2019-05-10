@@ -821,18 +821,24 @@ void CGameFramework::FrameAdvance()
 {    
 	m_GameTimer.Tick(60.0f);
 
-	if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
-		
+	if (SCENEMANAGER->GetSceneType() == PLAYGROUNDMAP) {
+		//if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
+
 			ProcessInput();
+		//}
 	}
 	
-	if (GetTickCount() % 2 == 0) {
+
+
+    AnimateObjects();
+
+	if (GetTickCount() % 3 == 0) {
 		if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
 			if (PLAYER->GetPlayer()->m_match == true) {
 				if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
 					CNETWORK->PosPkt(PLAYER->GetPlayer()->GetPosition());
 					PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
-					//cout << "--A : " << PLAYER->GetPlayer()->GetPosition().x << " " << PLAYER->GetPlayer()->GetPosition().z << endl;
+					cout << "--A : "<< PLAYER->GetPlayer()->GetPosition().z << endl;
 				}
 			}
 		}
@@ -841,13 +847,11 @@ void CGameFramework::FrameAdvance()
 				if (PLAYER->GetOtherPlayer()->GetPrePosition().x != PLAYER->GetOtherPlayer()->GetPosition().x || PLAYER->GetOtherPlayer()->GetPrePosition().z != PLAYER->GetOtherPlayer()->GetPosition().z) {
 					CNETWORK->PosPkt(PLAYER->GetOtherPlayer()->GetPosition());
 					PLAYER->GetOtherPlayer()->SetPrePosition(PLAYER->GetOtherPlayer()->GetPosition());
-					//cout << "--B : " << PLAYER->GetOtherPlayer()->GetPosition().x << " " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+					cout << "--B : " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
 				}
 			}
 		}
 	}
-
-    AnimateObjects();
 
 	HRESULT hResult = m_pd3dCommandAllocator->Reset();
 	hResult = m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);

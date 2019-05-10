@@ -59,7 +59,7 @@ struct sc_packet_remove_player {
 struct sc_packet_scene {
 	BYTE size;
 	BYTE type;
-	WORD sceneNum;
+	char sceneNum;
 	WORD roomNum;
 	char ids; //나중에 여러플레이들 id로 뿌려줘야함
 	char avatar;

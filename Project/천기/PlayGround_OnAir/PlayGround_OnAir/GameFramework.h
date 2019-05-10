@@ -47,12 +47,12 @@ public:
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
+	bool						m_ready = false;
 #ifdef _WITH_DIRECT2D
 	void CreateDirect2DDevice();
 #endif
 
 private:
-	bool						m_ready = false;
 
 	D3D12_VIEWPORT				m_d3dViewport;
 	D3D12_RECT					m_d3dScissorRect;
