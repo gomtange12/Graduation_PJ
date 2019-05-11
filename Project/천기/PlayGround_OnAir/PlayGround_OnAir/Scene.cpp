@@ -393,7 +393,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 
 
 //PLAYER->AddPlayer()
-	m_nPlayGroundObjects = 29;
+	m_nPlayGroundObjects = 38;
 	m_ppPlayGroundObjects = new CGameObject*[m_nPlayGroundObjects];
 
 
@@ -463,7 +463,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[6]->SetPosition(2530.0f, 10, 720.0f); //맵 거꾸로 버그 여기
 	m_ppPlayGroundObjects[6]->SetScale(6.0f, 6.0f, 6.0f);
 	m_ppPlayGroundObjects[6]->SetMesh(LeftSeeSaw->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[6]->SetOOBB(m_ppPlayGroundObjects[6]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().x * objScale * 4, m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().y * objScale * 6, m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().z * objScale * 55), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[6]->SetOOBB(m_ppPlayGroundObjects[6]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().x * objScale * 4, m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().y * objScale * 6, m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().z * objScale * 35), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo *RightSeeSaw = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/SeeSaw.bin", NULL, false);
 	m_ppPlayGroundObjects[7] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -471,7 +471,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[7]->SetPosition(530.0f, 10, 720.0f); //맵 거꾸로 버그 여기
 	m_ppPlayGroundObjects[7]->SetScale(6.0f, 6.0f, 6.0f);
 	m_ppPlayGroundObjects[7]->SetMesh(RightSeeSaw->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[7]->SetOOBB(m_ppPlayGroundObjects[7]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().x * objScale * 4, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().y * objScale * 6, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().z * objScale * 55), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[7]->SetOOBB(m_ppPlayGroundObjects[7]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().x * objScale * 4, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().y * objScale * 6, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().z * objScale * 35), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	//충돌여기
 
@@ -494,8 +494,8 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	CLoadedModelInfo *Stage = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Stage.bin", NULL, false);
 	m_ppPlayGroundObjects[10] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[10]->SetChild(Stage->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[10]->SetPosition(1500.0f, 45, 180.0f); //맵 거꾸로 버그 여기
-	m_ppPlayGroundObjects[10]->SetScale(20.0f, 20.0f, 20.0f);
+	m_ppPlayGroundObjects[10]->SetPosition(1500.0f, 200.f, 10.0f); //맵 거꾸로 버그 여기
+	m_ppPlayGroundObjects[10]->SetScale(10.0f, 10.0f, 10.0f);
 	m_ppPlayGroundObjects[10]->SetMesh(Stage->m_pModelRootObject->m_pMesh);
 	m_ppPlayGroundObjects[10]->SetOOBB(m_ppPlayGroundObjects[10]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[10]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
@@ -538,34 +538,34 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[15]->SetPosition(630.0f, 40, 200.0f);
 	m_ppPlayGroundObjects[15]->SetScale(20.0f, 20.0f, 20.0f);
 	m_ppPlayGroundObjects[15]->SetMesh(Chair_1->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[15]->SetOOBB(m_ppPlayGroundObjects[15]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[15]->m_pMesh->GetAABBExtents().x * objScale * 20, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().y * objScale * 4, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().z * objScale * 55), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[15]->SetOOBB(m_ppPlayGroundObjects[15]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[15]->m_pMesh->GetAABBExtents().x * objScale * 10, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().y * objScale * 4, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().z * objScale * 20), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_ppPlayGroundObjects[15]->Rotate(0.0f, -13.0f, 0.0f);
-
+	
 	CLoadedModelInfo *Chair_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Chair_1.bin", NULL, false);
 	m_ppPlayGroundObjects[16] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[16]->SetChild(Chair_2->m_pModelRootObject, true);
 	m_ppPlayGroundObjects[16]->SetPosition(2600.0f, 40, 160.0f);
 	m_ppPlayGroundObjects[16]->SetScale(20.0f, 20.0f, 20.0f);
 	m_ppPlayGroundObjects[16]->SetMesh(Chair_2->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[16]->SetOOBB(m_ppPlayGroundObjects[16]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents().x * objScale * 20, m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents().y * objScale * 4, m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents().z * objScale * 55), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[16]->SetOOBB(m_ppPlayGroundObjects[16]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents().x * objScale * 10, m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents().y * objScale * 4, m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents().z * objScale * 20), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_ppPlayGroundObjects[16]->Rotate(0.0f, -83.0f, 0.0f);
 
 	CLoadedModelInfo *Street_Lamp_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Street_Lamp_1.bin", NULL, false);
 	m_ppPlayGroundObjects[17] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[17]->SetChild(Street_Lamp_1->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[17]->SetPosition(2700.0f, 180, -100.0f);
+	m_ppPlayGroundObjects[17]->SetPosition(2700.0f, 180, 100.0f);
 	m_ppPlayGroundObjects[17]->SetScale(20.0f, 30.0f, 20.0f);
 	m_ppPlayGroundObjects[17]->SetMesh(Street_Lamp_1->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[17]->SetOOBB(m_ppPlayGroundObjects[17]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[17]->m_pMesh->GetAABBExtents().x * objScale * 20, m_ppPlayGroundObjects[17]->m_pMesh->GetAABBExtents().y * objScale * 4, m_ppPlayGroundObjects[17]->m_pMesh->GetAABBExtents().z * objScale * 55), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[17]->SetOOBB(m_ppPlayGroundObjects[17]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[17]->m_pMesh->GetAABBExtents().x * objScale * 5, m_ppPlayGroundObjects[17]->m_pMesh->GetAABBExtents().y * objScale * 54, m_ppPlayGroundObjects[17]->m_pMesh->GetAABBExtents().z * objScale * 5), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_ppPlayGroundObjects[17]->Rotate(0.0f, -83.0f, 0.0f);
 
 	CLoadedModelInfo *Street_Lamp_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Street_Lamp_1.bin", NULL, false);
 	m_ppPlayGroundObjects[18] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[18]->SetChild(Street_Lamp_2->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[18]->SetPosition(700.0f, 180, 100.0f);
+	m_ppPlayGroundObjects[18]->SetPosition(500.0f, 180, 100.0f);
 	m_ppPlayGroundObjects[18]->SetScale(20.0f, 30.0f, 20.0f);
 	m_ppPlayGroundObjects[18]->SetMesh(Street_Lamp_2->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[18]->SetOOBB(m_ppPlayGroundObjects[18]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[18]->m_pMesh->GetAABBExtents().x * objScale * 20, m_ppPlayGroundObjects[18]->m_pMesh->GetAABBExtents().y * objScale * 4, m_ppPlayGroundObjects[18]->m_pMesh->GetAABBExtents().z * objScale * 55), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[18]->SetOOBB(m_ppPlayGroundObjects[18]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[18]->m_pMesh->GetAABBExtents().x * objScale * 5, m_ppPlayGroundObjects[18]->m_pMesh->GetAABBExtents().y * objScale * 54, m_ppPlayGroundObjects[18]->m_pMesh->GetAABBExtents().z * objScale * 5), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo *Stage_Speaker_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Stage_Speaker_1.bin", NULL, false);
 	m_ppPlayGroundObjects[19] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -603,55 +603,132 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	CLoadedModelInfo *RSpot_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Spot_1.bin", NULL, false);
 	m_ppPlayGroundObjects[23] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[23]->SetChild(RSpot_1->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[23]->SetPosition(1585.0f, 17, 1130.0f);
+	m_ppPlayGroundObjects[23]->SetPosition(1595.0f, 0.f, 1130.0f);
 	m_ppPlayGroundObjects[23]->SetScale(20.0f, 20.0f, 20.0f);
 	m_ppPlayGroundObjects[23]->SetMesh(RSpot_1->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[23]->SetOOBB(m_ppPlayGroundObjects[23]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[23]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	//m_ppPlayGroundObjects[23]->SetOOBB(m_ppPlayGroundObjects[23]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[23]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo *RSpot_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Spot_1.bin", NULL, false);
 	m_ppPlayGroundObjects[24] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[24]->SetChild(RSpot_2->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[24]->SetPosition(1750.0f, 17, 1130.0f);
+	m_ppPlayGroundObjects[24]->SetPosition(1770.0f, 0.f, 1130.0f);
 	m_ppPlayGroundObjects[24]->SetScale(20.0f, 20.0f, 20.0f);
 	m_ppPlayGroundObjects[24]->SetMesh(RSpot_2->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[24]->SetOOBB(m_ppPlayGroundObjects[24]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[24]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	//m_ppPlayGroundObjects[24]->SetOOBB(m_ppPlayGroundObjects[24]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[24]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo *RSpot_3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spotLight.bin", NULL, false);
+	CLoadedModelInfo *RSpot_3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spot.bin", NULL, false);
 	m_ppPlayGroundObjects[25] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[25]->SetChild(RSpot_3->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[25]->SetPosition(1340.0f, 17, 1380.0f);
-	m_ppPlayGroundObjects[25]->SetScale(20.0f, 20.0f, 20.0f);
+	m_ppPlayGroundObjects[25]->SetPosition(2280.0f, 70, 1697.0f);
+	m_ppPlayGroundObjects[25]->SetScale(15.0f, 15.0f, 15.0f);
 	m_ppPlayGroundObjects[25]->SetMesh(RSpot_3->m_pModelRootObject->m_pMesh);
 	//m_ppPlayGroundObjects[25]->SetOOBB(m_ppPlayGroundObjects[25]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[25]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
-	//m_ppPlayGroundObjects[25]->Rotate(0.0f, 90.0f, 0.0f);
+	m_ppPlayGroundObjects[25]->Rotate(0.0f, 90.0f, 0.0f);
 
-	CLoadedModelInfo *RSpot_4 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spotLight.bin", NULL, false);
+	CLoadedModelInfo *RSpot_4 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spot.bin", NULL, false);
 	m_ppPlayGroundObjects[26] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[26]->SetChild(RSpot_4->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[26]->SetPosition(1340.0f, 17, 1540.0f);
-	m_ppPlayGroundObjects[26]->SetScale(20.0f, 20.0f, 20.0f);
+	m_ppPlayGroundObjects[26]->SetPosition(2280.0f, 70, 1870.0f);
+	m_ppPlayGroundObjects[26]->SetScale(15.0f, 15.0f, 15.0f);
 	m_ppPlayGroundObjects[26]->SetMesh(RSpot_4->m_pModelRootObject->m_pMesh);
 	//m_ppPlayGroundObjects[26]->SetOOBB(m_ppPlayGroundObjects[26]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[26]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
-	//m_ppPlayGroundObjects[26]->Rotate(0.0f, 90.0f, 0.0f);
+	m_ppPlayGroundObjects[26]->Rotate(0.0f, 90.0f, 0.0f);
 
-	CLoadedModelInfo *LSpot_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spotLight.bin", NULL, false);
+	CLoadedModelInfo *LSpot_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spot.bin", NULL, false);
 	m_ppPlayGroundObjects[27] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[27]->SetChild(LSpot_1->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[27]->SetPosition(1500.0f, 17, 1330.0f);
-	m_ppPlayGroundObjects[27]->SetScale(20.0f, 20.0f, 20.0f);
+	m_ppPlayGroundObjects[27]->SetPosition(480.0f, 70, 1450.0f);
+	m_ppPlayGroundObjects[27]->SetScale(15.0f, 15.0f, 15.0f);
 	m_ppPlayGroundObjects[27]->SetMesh(LSpot_1->m_pModelRootObject->m_pMesh);
 	//m_ppPlayGroundObjects[27]->SetOOBB(m_ppPlayGroundObjects[27]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[27]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo *LSpot_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spotLight.bin", NULL, false);
+	CLoadedModelInfo *LSpot_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spot.bin", NULL, false);
 	m_ppPlayGroundObjects[28] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[28]->SetChild(LSpot_2->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[28]->SetPosition(1500.0f, 17, 1530.0f);
-	m_ppPlayGroundObjects[28]->SetScale(20.0f, 20.0f, 20.0f);
+	m_ppPlayGroundObjects[28]->SetPosition(315.0f, 70, 1450.0f);
+	m_ppPlayGroundObjects[28]->SetScale(15.0f, 15.0f, 15.0f);
 	m_ppPlayGroundObjects[28]->SetMesh(LSpot_2->m_pModelRootObject->m_pMesh);
 	//m_ppPlayGroundObjects[28]->SetOOBB(m_ppPlayGroundObjects[28]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[28]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
+	CLoadedModelInfo *LSpot_3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spot.bin", NULL, false);
+	m_ppPlayGroundObjects[29] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[29]->SetChild(LSpot_3->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[29]->SetPosition(722.0f, 70, 1700.0f);
+	m_ppPlayGroundObjects[29]->SetScale(15.0f, 15.0f, 15.0f);
+	m_ppPlayGroundObjects[29]->SetMesh(LSpot_3->m_pModelRootObject->m_pMesh);
+	//m_ppPlayGroundObjects[29]->SetOOBB(m_ppPlayGroundObjects[27]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[27]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[29]->Rotate(0.0f, -90.0f, 0.0f);
 
+	CLoadedModelInfo *LSpot_4 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spot.bin", NULL, false);
+	m_ppPlayGroundObjects[30] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[30]->SetChild(LSpot_4->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[30]->SetPosition(722.0f, 70, 1860.0f);
+	m_ppPlayGroundObjects[30]->SetScale(15.0f, 15.0f, 15.0f);
+	m_ppPlayGroundObjects[30]->SetMesh(LSpot_4->m_pModelRootObject->m_pMesh);
+	//m_ppPlayGroundObjects[30]->SetOOBB(m_ppPlayGroundObjects[28]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[28]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[30]->Rotate(0.0f, -90.0f, 0.0f);
 
+	CLoadedModelInfo *Grass = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Grass.bin", NULL, false);
+	m_ppPlayGroundObjects[31] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[31]->SetChild(Grass->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[31]->SetPosition(-100.0f, -1000.f, -550.0f);
+	m_ppPlayGroundObjects[31]->SetScale(9.5f, 9.5f, 9.5f);
+	m_ppPlayGroundObjects[31]->SetMesh(Grass->m_pModelRootObject->m_pMesh);
+
+	/////
+	CLoadedModelInfo *CenterSpot_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spot.bin", NULL, false);
+	m_ppPlayGroundObjects[32] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[32]->SetChild(CenterSpot_1->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[32]->SetPosition(1845.0f, 20.f, 1294.0f);
+	m_ppPlayGroundObjects[32]->SetScale(15.0f, 15.0f, 15.0f);
+	m_ppPlayGroundObjects[32]->SetMesh(CenterSpot_1->m_pModelRootObject->m_pMesh);
+	//m_ppPlayGroundObjects[32]->SetOOBB(m_ppPlayGroundObjects[32]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[32]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[32]->Rotate(0.0f, -90.0f, 0.0f);
+	
+	CLoadedModelInfo *CenterSpot_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spot.bin", NULL, false);
+	m_ppPlayGroundObjects[33] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[33]->SetChild(CenterSpot_2->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[33]->SetPosition(1160.0f, 20.f, 1294.0f);
+	m_ppPlayGroundObjects[33]->SetScale(15.0f, 15.0f, 15.0f);
+	m_ppPlayGroundObjects[33]->SetMesh(CenterSpot_2->m_pModelRootObject->m_pMesh);
+	//m_ppPlayGroundObjects[33]->SetOOBB(m_ppPlayGroundObjects[33]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[33]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[33]->Rotate(0.0f, 90.0f, 0.0f);
+	
+	CLoadedModelInfo *CenterSpot_3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spot.bin", NULL, false);
+	m_ppPlayGroundObjects[34] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[34]->SetChild(CenterSpot_3->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[34]->SetPosition(1160.0f, 20, 708.0f);
+	m_ppPlayGroundObjects[34]->SetScale(15.0f, 15.0f, 15.0f);
+	m_ppPlayGroundObjects[34]->SetMesh(CenterSpot_3->m_pModelRootObject->m_pMesh);
+	//m_ppPlayGroundObjects[34]->SetOOBB(m_ppPlayGroundObjects[34]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[34]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[34]->Rotate(0.0f, 90.0f, 0.0f);
+	
+	CLoadedModelInfo *CenterSpot_4 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spot.bin", NULL, false);
+	m_ppPlayGroundObjects[35] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[35]->SetChild(CenterSpot_4->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[35]->SetPosition(1845.0f, 20, 708.0f);
+	m_ppPlayGroundObjects[35]->SetScale(15.0f, 15.0f, 15.0f);
+	m_ppPlayGroundObjects[35]->SetMesh(CenterSpot_4->m_pModelRootObject->m_pMesh);
+	//m_ppPlayGroundObjects[35]->SetOOBB(m_ppPlayGroundObjects[35]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[35]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[35]->Rotate(0.0f, -90.0f, 0.0f);
+	
+	CLoadedModelInfo *St_Spot_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spot.bin", NULL, false);
+	m_ppPlayGroundObjects[36] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[36]->SetChild(St_Spot_1->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[36]->SetPosition(1780.0f, 70, 212.0f);
+	m_ppPlayGroundObjects[36]->SetScale(15.0f, 15.0f, 15.0f);
+	m_ppPlayGroundObjects[36]->SetMesh(St_Spot_1->m_pModelRootObject->m_pMesh);
+	//m_ppPlayGroundObjects[36]->SetOOBB(m_ppPlayGroundObjects[36]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[36]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[36]->Rotate(0.0f, 180.0f, 0.0f);
+	
+	CLoadedModelInfo *St_Spot_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/spot.bin", NULL, false);
+	m_ppPlayGroundObjects[37] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppPlayGroundObjects[37]->SetChild(St_Spot_2->m_pModelRootObject, true);
+	m_ppPlayGroundObjects[37]->SetPosition(1225.0f, 70, 212.0f);
+	m_ppPlayGroundObjects[37]->SetScale(15.0f, 15.0f, 15.0f);
+	m_ppPlayGroundObjects[37]->SetMesh(St_Spot_2->m_pModelRootObject->m_pMesh);
+	//m_ppPlayGroundObjects[37]->SetOOBB(m_ppPlayGroundObjects[37]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[37]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[37]->Rotate(0.0f, 180.0f, 0.0f);
 	//map2
 
 	m_nConcertObjects = 2;
@@ -704,7 +781,19 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	if (RSpot_3) delete RSpot_3;
 	if (RSpot_4) delete RSpot_4;
 
+	if (LSpot_1) delete LSpot_1;
+	if (LSpot_2) delete LSpot_2;
+	if (LSpot_3) delete LSpot_3;
+	if (LSpot_4) delete LSpot_4;
 
+	if (Grass) delete Grass;
+
+	if (CenterSpot_1) delete CenterSpot_1;
+	if (CenterSpot_2) delete CenterSpot_2;
+	if (CenterSpot_3) delete CenterSpot_3;
+	if (CenterSpot_4) delete CenterSpot_4;
+	if (St_Spot_1) delete St_Spot_1;
+	if (St_Spot_2) delete St_Spot_2;
 
 	//if (pMapObject) delete pMapObject;
 	//if (pPlayGroundMapObject) delete pPlayGroundMapObject;
