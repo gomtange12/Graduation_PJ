@@ -419,9 +419,9 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 				case VK_F2:
 				case VK_F3:
 				case VK_F4:
-					m_pCamera = PLAYER->GetPlayer()->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
+					//m_pCamera = PLAYER->GetPlayer()->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
 					break;
-				case VK_F6: {
+				case VK_F5: {
 					if (m_ready == false) {
 						CNETWORK->MatchPkt();
 						cout << "¸ÅÄª!";
@@ -433,11 +433,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 					CNETWORK->LobbyPkt(true);
 					break;
 				}
-				case VK_F8: {
-					PLAYER->GetOtherPlayer()->SetPlayerState(HAPPY);
-					break;
-				}
-				case VK_F9:
+				case VK_F11:
 					ChangeSwapChainState();
 					break;
 				case '1':
@@ -640,10 +636,6 @@ void CGameFramework::ProcessInput()
 		bProcessedByScene = m_pScene->ProcessInput(pKeysBuffer);
 	if (!bProcessedByScene&& PLAYER->GetPlayer()->GetAllowKey())
 	{
-		if (pKeysBuffer[VK_RETURN] & 0xF0)
-		{
-			SCENEMANAGER->SetScene(PLAYGROUNDMAP);
-		}
 		if (pKeysBuffer[VK_RSHIFT] & 0xF0)
 		{
 			SCENEMANAGER->SetScene(CONCERTMAP);
@@ -701,15 +693,15 @@ void CGameFramework::ProcessInput()
 		//	otherPlayerDirection |= DIR_RIGHT;
 		//}
 
-		if (pKeysBuffer[VK_PRIOR] & 0xF0) {
-			//PLAYER->GetPlayer()->SetPlayerState(RUN);
-			dwDirection |= DIR_UP;
-		} 
-		if (pKeysBuffer[VK_NEXT] & 0xF0)
-		{
-			//PLAYER->GetPlayer()->SetPlayerState(RUN); 
-			dwDirection |= DIR_DOWN;
-		}
+		//if (pKeysBuffer[VK_PRIOR] & 0xF0) {
+		//	//PLAYER->GetPlayer()->SetPlayerState(RUN);
+		//	dwDirection |= DIR_UP;
+		//} 
+		//if (pKeysBuffer[VK_NEXT] & 0xF0)
+		//{
+		//	//PLAYER->GetPlayer()->SetPlayerState(RUN); 
+		//	dwDirection |= DIR_DOWN;
+		//}
 		if (pKeysBuffer[VK_SPACE] & 0xF0)
 		{
 			CNETWORK->KeyPkt(true,false,false);
@@ -791,7 +783,7 @@ void CGameFramework::AnimateObjects()
 	static float fColors[4] = { 0.0f, 0.478f, 0.8f, 1.0f };
 	fColors[1] += 0.01f;
 	if (fColors[1] > 1.0f) fColors[1] = 0.0f;
-	m_pd2dfxGaussianBlur->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, 0.3f + fColors[1] * 10.0f);
+	//m_pd2dfxGaussianBlur->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, 0.3f + fColors[1] * 10.0f);
 #endif
 }
 

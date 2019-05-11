@@ -26,7 +26,7 @@ void ThreadManager::CreateThreads()
 		
 	}
 	std::cout << "  WorkerThreads\n";
-	AddThread(new TimerThread);  //std::cout << "  TimerTheread\n";
+	AddThread(new TimerThread);  std::cout << "  TimerTheread\n";
 }
 void ThreadManager::AddThread(MyThread* myth)
 {

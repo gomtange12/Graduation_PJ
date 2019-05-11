@@ -62,19 +62,19 @@ using Microsoft::WRL::ComPtr;
 
 extern HINSTANCE						ghAppInstance;
 
-//#define _WITH_SWAPCHAIN_FULLSCREEN_STATE
-#define _WITH_DIRECT2D
-#ifdef _WITH_DIRECT2D
-//#define _WITH_DIRECT2D_IMAGE_EFFECT
-#endif
+////#define _WITH_SWAPCHAIN_FULLSCREEN_STATE
+//#define _WITH_DIRECT2D
+//#ifdef _WITH_DIRECT2D
+////#define _WITH_DIRECT2D_IMAGE_EFFECT
+//#endif
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
 #else
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console") 
 #endif
 
-#define FRAME_BUFFER_WIDTH		640
-#define FRAME_BUFFER_HEIGHT		480
+#define FRAME_BUFFER_WIDTH		1280
+#define FRAME_BUFFER_HEIGHT		720
 #define MIRAHEIGHT				10
 //#define _WITH_CB_GAMEOBJECT_32BIT_CONSTANTS
 //#define _WITH_CB_GAMEOBJECT_ROOT_DESCRIPTOR

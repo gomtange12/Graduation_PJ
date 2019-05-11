@@ -385,7 +385,7 @@ std::shared_ptr<CCamera> CPlayer::OnChangeCamera(DWORD nNewCameraMode, DWORD nCu
 		//pNewCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
 		pNewCamera->SetTimeLag(0.25f);
 		//pNewCamera->SetOffset(XMFLOAT3(0.0f, 350.0f, -80.0f));
-		pNewCamera->SetOffset(XMFLOAT3(0.0f, 180.0f, -180.0f));
+		pNewCamera->SetOffset(XMFLOAT3(0.0f, 330.0f, -310.0f));
 		//pNewCamera->SetOffset(XMFLOAT3(0.0f, 980.0f, -180.0f));
 
 		if(PLAYER->GetPlayer()!=nullptr)
