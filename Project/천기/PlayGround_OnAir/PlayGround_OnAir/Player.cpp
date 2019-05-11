@@ -980,6 +980,7 @@ void COtherPlayers::Update(float fTimeElapsed)
 			
 		}
 	}
+
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
 	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);
 	float fMaxVelocityXZ = m_fMaxVelocityXZ;
@@ -1040,12 +1041,10 @@ void COtherPlayers::Update(float fTimeElapsed)
 		//m_OnAacting = FALSE;
 		break;
 	case JUMP:
-		m_OnAacting = TRUE;
-		m_newYpos = m_xmf3Position.y + 9;
-		m_newYpos += (m_xmf3Gravity.y * 0.5)* fTimeElapsed;
-		m_xmf3Position.y = m_newYpos;
-		m_newYpos = 0;
+		m_JumpPower += (m_xmf3Gravity.y * 0.1* fTimeElapsed);
+		m_xmf3Position.y += m_JumpPower * fTimeElapsed;
 		SetTrackAnimationSet(0, JUMP);
+		
 		//m_xmf3Position.y += (9.8) * fTimeElapsed + fTimeElapsed * m_xmf3Velocity.y;
 		//cout << m_xmf3Position.y << endl; 
 		break;

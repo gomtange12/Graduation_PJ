@@ -23,7 +23,7 @@ CTexture::CTexture(int nTextures, UINT nTextureType, int nSamplers)
 		m_ppd3dTextureUploadBuffers = new ID3D12Resource*[m_nTextures];
 		m_ppd3dTextures = new ID3D12Resource*[m_nTextures];
 	}
-
+	
 	m_nSamplers = nSamplers;
 	if (m_nSamplers > 0) m_pd3dSamplerGpuDescriptorHandles = new D3D12_GPU_DESCRIPTOR_HANDLE[m_nSamplers];
 }

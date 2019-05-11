@@ -132,7 +132,7 @@ struct sc_packet_allpos {
 	BYTE type;
 	char id;
 	float posX;
-	float posZ;
+	int posZ;
 };
 /////////////////////////Å¬¶ó//////////////////////
 struct cs_packet_matching {

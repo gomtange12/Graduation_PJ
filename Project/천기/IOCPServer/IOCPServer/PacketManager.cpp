@@ -3,6 +3,7 @@
 #include "PacketManager.h"
 #include "Player.h"
 #include "RoomManager.h"
+#include "ThreadManager.h"
 PacketManager::PacketManager()
 {
 };
@@ -22,8 +23,8 @@ void PacketManager::SendPacket(int id, void *packet)
 	int ret = WSASend(objectManager->GetPlayer(id)->m_socket, &ex->m_wsaBuf, 1, NULL, 0, &ex->m_wsaOver, 0);
 	if (0 != ret) {
 		int err_no = WSAGetLastError();
-		if (WSA_IO_PENDING != err_no)
-			printf("오류");
+		if (WSA_IO_PENDING != err_no);
+			//printf("오류");
 	}
 };
 void PacketManager::LoginPacket(int id) 
@@ -82,16 +83,30 @@ void PacketManager::MovePacket(int id, const XMFLOAT3& shift)
 }
 void PacketManager::ClientDisconnect(int id)
 {
-	for (int i = 0; i < MAX_USER; ++i) {
-		if (false == objectManager->GetPlayer(i)->m_connected) continue;
-		if (i == id) continue;
-		sc_packet_remove_player pkt;
-		pkt.id = id;
-		pkt.size = sizeof(sc_packet_remove_player);
-		pkt.type = SC_REMOVE_PLAYER;
-		SendPacket(i, &pkt);
+	//int otherId;
+	//int roomNum = objectManager->GetPlayer(id)->roomNumber;
+	//for (int i = 0; i < SOLO_NUM; ++i) {
+	//	if (id != ROOMMANAGER->room[roomNum]->m_ids[i])
+	//		otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
+	//}
+	//
+	//sc_packet_remove_player pkt;
+	//pkt.id = id;
+	//pkt.size = sizeof(sc_packet_remove_player);
+	//pkt.type = SC_REMOVE_PLAYER;
 
-	}
+	//LobbyPacket(id);
+	//objectManager->GetPlayer(id)->gameEnd = false;
+	//objectManager->GetPlayer(otherId)->gameEnd = false;
+	//objectManager->GetPlayer(id)->m_match = false;
+	//objectManager->GetPlayer(otherId)->m_match = false;
+	//objectManager->GetPlayer(id)->hp = 6;
+	//objectManager->GetPlayer(otherId)->hp = 6;
+	//ROOMMANAGER->room[roomNum]->m_full = false;
+	//dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->PopTimer(roomNum);
+
+	//SendPacket(otherId, &pkt);
+
 	closesocket(objectManager->GetPlayer(id)->m_socket);
 	objectManager->GetPlayer(id)->m_connected = false;
 }

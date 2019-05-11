@@ -249,8 +249,8 @@ void ObjManager::LobbyPkt(int id, unsigned char *packet)
 		g_clients[otherId]->gameEnd = false;
 		g_clients[id]->m_match = false;
 		g_clients[otherId]->m_match = false;
-		g_clients[id]->hp = 6;
-		g_clients[otherId]->hp =6;
+		g_clients[id]->hp = 8;
+		g_clients[otherId]->hp =8;
 	}
 
 }

@@ -31,8 +31,9 @@ void WorkerThread::Proc()
 		// 에러처리
 		if (0 == ret) {
 			int err_no = GetLastError();
-			if (64 == err_no)
+			if (64 == err_no) {
 				PACKETMANAGER->ClientDisconnect(key);
+			}
 			else error_display("GQCS : ", err_no);
 			continue;
 		}
@@ -97,7 +98,7 @@ void WorkerThread::Proc()
 			PACKETMANAGER->AllPos(over->id);
 			//std::cout << over->roomNum << " : ROOM SYNC" << std::endl;
 			if(ROOMMANAGER->room[over->roomNum]->m_full == true)
-				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(over->id, OP_ALLPOS, over->roomNum, GetTickCount() + 1500);
+				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(over->id, OP_ALLPOS, over->roomNum, GetTickCount() + 2000);
 			delete over;
 		}
 		
