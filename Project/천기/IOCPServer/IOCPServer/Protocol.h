@@ -18,6 +18,7 @@
 const int OP_RECV = 1;
 const int OP_SEND = 2;
 const int OP_ALLPOS = 3; 
+const int OP_STOP = 4;
 //
 
 constexpr int SC_LOGIN_OK = 1;

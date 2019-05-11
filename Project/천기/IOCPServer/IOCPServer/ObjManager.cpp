@@ -209,8 +209,8 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 
 	PACKETMANAGER->KeyPacket(id, pkt->jump, pkt->attack , pkt->skill);
 
-	dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_ALLPOS, GetTickCount() + 1000);
-
+	
+		
 	if (pkt->attack == true) 
 	{
 		int roomNum = g_clients[id]->roomNumber;
@@ -243,11 +243,14 @@ void ObjManager::LobbyPkt(int id, unsigned char *packet)
 	}
 
 	if (g_clients[id]->gameEnd == pkt->out && g_clients[otherId]->gameEnd == pkt->out) {
+		dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->PopTimer(roomNum);
 		PACKETMANAGER->LobbyPacket(id);
 		g_clients[id]->gameEnd = false;
 		g_clients[otherId]->gameEnd = false;
 		g_clients[id]->m_match = false;
 		g_clients[otherId]->m_match = false;
+		g_clients[id]->hp = 6;
+		g_clients[otherId]->hp =6;
 	}
 
 }

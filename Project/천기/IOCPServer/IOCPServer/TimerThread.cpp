@@ -29,14 +29,24 @@ void TimerThread::Proc()
 			stOverEx *ex = new stOverEx;
 			ex->m_todo = ev.type;
 			ex->id = ev.id;
-			
+			ex->roomNum = ev.roomN;
 			PostQueuedCompletionStatus(IOCPSERVER->GetIocp(), 1, NULL, &ex->m_wsaOver);
 		}
 	}
 }
-void TimerThread::AddTimer(int id, int type, unsigned int time) 
+void TimerThread::AddTimer(int id, int type, int roomN, unsigned int time)
 {
 	timerLock.lock();
-	timerQueue.push(Event{ time, type, id });
+	timerQueue.push(Event{ time, type, id ,roomN});
 	timerLock.unlock();
+}
+void TimerThread::PopTimer(int roomN)
+{
+	timerLock.lock();
+	timerQueue.pop();
+	timerLock.unlock();
+	stOverEx *ex = new stOverEx;
+	ex->m_todo = OP_STOP;
+	ex->roomNum = roomN;
+	PostQueuedCompletionStatus(IOCPSERVER->GetIocp(), 1, NULL, &ex->m_wsaOver);
 }

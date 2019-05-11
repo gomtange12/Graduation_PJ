@@ -5,7 +5,7 @@
 #include "IOCPServer.h"
 #include "Player.h"
 #include "ThreadManager.h"
-
+#include "RoomManager.h"
 WorkerThread::WorkerThread()
 {
 }
@@ -87,11 +87,18 @@ void WorkerThread::Proc()
 		else if (OP_SEND == over->m_todo) {
 			delete over;
 		}
+		else if (OP_STOP == over->m_todo) {
+			if (ROOMMANAGER->room[over->roomNum]->m_full == false)
+				delete over;
+		}
 		else if (OP_ALLPOS == over->m_todo) {
 			PACKETMANAGER->AllPos(over->id);
-			std::cout << "TIME" << std::endl;
+			std::cout << over->roomNum << " ¹ø ¹æ SYNC" << std::endl;
+			if(ROOMMANAGER->room[over->roomNum]->m_full == true)
+				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(over->id, OP_ALLPOS, over->roomNum, GetTickCount() + 1500);
 			delete over;
 		}
+		
 	}
 }
 void WorkerThread::error_display(const char *msg, int err_no)

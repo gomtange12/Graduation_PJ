@@ -8,6 +8,7 @@ struct Event
 	unsigned int time;
 	int type;
 	int id;
+	int roomN;
 };
 class Comp
 {
@@ -31,6 +32,7 @@ public:
 	virtual void Init();
 	virtual void Proc();
 
-	void AddTimer(int id, int type, unsigned int time);
+	void AddTimer(int id, int type, int roomN, unsigned int time);
+	void PopTimer(int roomN);
 };
 

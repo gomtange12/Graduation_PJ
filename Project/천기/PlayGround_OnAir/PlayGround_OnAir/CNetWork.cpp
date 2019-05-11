@@ -277,8 +277,6 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		printf("Unknown PACKET type [%d]\n", ptr[1]);
 	}
 }
-
-
 void CNetWork::MatchPkt()
 {
 	cs_packet_matching *pkt = reinterpret_cast<cs_packet_matching *>(send_buffer);
