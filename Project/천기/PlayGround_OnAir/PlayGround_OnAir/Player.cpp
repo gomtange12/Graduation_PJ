@@ -312,7 +312,7 @@ void CPlayer::Update(float fTimeElapsed)
 		
 
 		//m_newYpos = 0;
-		cout << m_JumpPower << endl;
+		//cout << m_JumpPower << endl;
 		SetTrackAnimationSet(0, JUMP);
 		break;
 	case STUN:

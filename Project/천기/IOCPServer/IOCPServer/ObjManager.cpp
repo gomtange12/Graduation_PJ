@@ -209,8 +209,6 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 
 	PACKETMANAGER->KeyPacket(id, pkt->jump, pkt->attack , pkt->skill);
 
-	
-		
 	if (pkt->attack == true) 
 	{
 		int roomNum = g_clients[id]->roomNumber;
@@ -223,8 +221,7 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 		if (fLength <= 180.0f) {
 			PACKETMANAGER->AttackPacKet(otherId);
 			--g_clients[otherId]->hp;
-			if (g_clients[otherId]->hp <= 0)
-				PACKETMANAGER->ResultPacket(otherId);
+			if (g_clients[otherId]->hp <= 0) PACKETMANAGER->ResultPacket(otherId);
 		}
 	}
 	

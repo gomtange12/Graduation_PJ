@@ -463,7 +463,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[6]->SetPosition(2530.0f, 10, 720.0f); //맵 거꾸로 버그 여기
 	m_ppPlayGroundObjects[6]->SetScale(6.0f, 6.0f, 6.0f);
 	m_ppPlayGroundObjects[6]->SetMesh(LeftSeeSaw->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[6]->SetOOBB(m_ppPlayGroundObjects[6]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().x * objScale * 4, m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().y * objScale * 6, m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().z * objScale * 35), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[6]->SetOOBB(m_ppPlayGroundObjects[6]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().x * objScale * 4, 40, m_ppPlayGroundObjects[6]->m_pMesh->GetAABBExtents().z * objScale * 35), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo *RightSeeSaw = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/SeeSaw.bin", NULL, false);
 	m_ppPlayGroundObjects[7] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -471,7 +471,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[7]->SetPosition(530.0f, 10, 720.0f); //맵 거꾸로 버그 여기
 	m_ppPlayGroundObjects[7]->SetScale(6.0f, 6.0f, 6.0f);
 	m_ppPlayGroundObjects[7]->SetMesh(RightSeeSaw->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[7]->SetOOBB(m_ppPlayGroundObjects[7]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().x * objScale * 4, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().y * objScale * 6, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().z * objScale * 35), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[7]->SetOOBB(m_ppPlayGroundObjects[7]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().x * objScale * 4, 40, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().z * objScale * 35), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	//충돌여기
 
@@ -538,7 +538,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[15]->SetPosition(630.0f, 40, 200.0f);
 	m_ppPlayGroundObjects[15]->SetScale(20.0f, 20.0f, 20.0f);
 	m_ppPlayGroundObjects[15]->SetMesh(Chair_1->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[15]->SetOOBB(m_ppPlayGroundObjects[15]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[15]->m_pMesh->GetAABBExtents().x * objScale * 10, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().y * objScale * 4, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().z * objScale * 20), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[15]->SetOOBB(m_ppPlayGroundObjects[15]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[15]->m_pMesh->GetAABBExtents().x * objScale * 10, 40, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().z * objScale * 20), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_ppPlayGroundObjects[15]->Rotate(0.0f, -13.0f, 0.0f);
 	
 	CLoadedModelInfo *Chair_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Chair_1.bin", NULL, false);
@@ -547,7 +547,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[16]->SetPosition(2600.0f, 40, 160.0f);
 	m_ppPlayGroundObjects[16]->SetScale(20.0f, 20.0f, 20.0f);
 	m_ppPlayGroundObjects[16]->SetMesh(Chair_2->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[16]->SetOOBB(m_ppPlayGroundObjects[16]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents().x * objScale * 10, m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents().y * objScale * 4, m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents().z * objScale * 20), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[16]->SetOOBB(m_ppPlayGroundObjects[16]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents().x * objScale * 10, 40, m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents().z * objScale * 20), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_ppPlayGroundObjects[16]->Rotate(0.0f, -83.0f, 0.0f);
 
 	CLoadedModelInfo *Street_Lamp_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Street_Lamp_1.bin", NULL, false);
@@ -1511,7 +1511,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		break;
 
 	case CONCERTMAP:
-		for (int i = 3; i < m_nShaders; ++i)
+		for (int i = 3; i < 7; ++i)
 		{
 			if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 		}
@@ -1519,21 +1519,26 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		{
 			m_ppConcertObjects[i]->Render(pd3dCommandList, pCamera);
 		}
-		if (PLAYER->GetPlayer()->GetPlayerState() == HAPPY) {
-			if (m_ppShaders[7])
-				m_ppShaders[7]->Render(pd3dCommandList, pCamera);
+		if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
+			if (PLAYER->GetPlayer()->GetPlayerState() == HAPPY) {
+				if (m_ppShaders[8])
+					m_ppShaders[8]->Render(pd3dCommandList, pCamera);
+			}
+			if (PLAYER->GetPlayer()->GetPlayerState() == SAD) {
+				if (m_ppShaders[7])
+					m_ppShaders[7]->Render(pd3dCommandList, pCamera);
+			}
 		}
-		if (PLAYER->GetOtherPlayer()->GetPlayerState() == HAPPY) {
-			if (m_ppShaders[7])
-				m_ppShaders[7]->Render(pd3dCommandList, pCamera);
-		}
-		if (PLAYER->GetPlayer()->GetPlayerState() == SAD) {
-			if (m_ppShaders[8])
-				m_ppShaders[8]->Render(pd3dCommandList, pCamera);
-		}
-		if (PLAYER->GetOtherPlayer()->GetPlayerState() == SAD) {
-			if (m_ppShaders[8])
-				m_ppShaders[8]->Render(pd3dCommandList, pCamera);
+		else {
+			if (PLAYER->GetOtherPlayer()->GetPlayerState() == HAPPY) {
+				if (m_ppShaders[8])
+					m_ppShaders[8]->Render(pd3dCommandList, pCamera);
+			}
+
+			if (PLAYER->GetOtherPlayer()->GetPlayerState() == SAD) {
+				if (m_ppShaders[7])
+					m_ppShaders[7]->Render(pd3dCommandList, pCamera);
+			}
 		}
 		break;
 	}
@@ -1665,9 +1670,9 @@ void CScene::CheckObjectByObjectCollisions() {
 
 			if (m_ppConcertObjects[0]->GetBoundingBox().Contains(PLAYER->GetPlayer()->GetBoundingBox()))
 			{
-				std::cout << "익스텐트 곱하게하기" << m_ppConcertObjects[0]->GetBoundingBox().Extents.y * objScale * 100 << std::endl;
-				std::cout << "와이값" << m_ppConcertObjects[0]->GetBoundingBox().Extents.y + m_ppConcertObjects[0]->GetBoundingBox().Center.y << std::endl;
-				std::cout << "플레이어 센터값" << PLAYER->GetPlayer()->GetBoundingBox().Center.y - PLAYER->GetPlayer()->GetBoundingBox().Extents.y + 10 << std::endl;
+				//std::cout << "익스텐트 곱하게하기" << m_ppConcertObjects[0]->GetBoundingBox().Extents.y * objScale * 100 << std::endl;
+				//std::cout << "와이값" << m_ppConcertObjects[0]->GetBoundingBox().Extents.y + m_ppConcertObjects[0]->GetBoundingBox().Center.y << std::endl;
+				//std::cout << "플레이어 센터값" << PLAYER->GetPlayer()->GetBoundingBox().Center.y - PLAYER->GetPlayer()->GetBoundingBox().Extents.y + 10 << std::endl;
 				//이 안에 오브젝트 충돌을 넣어야할수도
 				PLAYER->GetPlayer()->SetPlayerInConocert(true);
 				if (m_ppConcertObjects[0]->GetBoundingBox().Intersects(PLAYER->GetPlayer()->GetBoundingBox()))

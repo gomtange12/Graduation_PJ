@@ -634,11 +634,13 @@ void CGameFramework::ProcessInput()
 	bool bProcessedByScene = false;
 	if (GetKeyboardState(pKeysBuffer) && m_pScene)
 		bProcessedByScene = m_pScene->ProcessInput(pKeysBuffer);
-	if (!bProcessedByScene&& PLAYER->GetPlayer()->GetAllowKey())
+	if (!bProcessedByScene || PLAYER->GetPlayer()->GetAllowKey() || PLAYER->GetOtherPlayer()->GetAllowKey())
 	{
 		if (pKeysBuffer[VK_RSHIFT] & 0xF0)
 		{
 			SCENEMANAGER->SetScene(CONCERTMAP);
+			//PLAYER->GetPlayer()->SetPosition(XMFLOAT3());
+			//PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3());
 		}
 		//PLAYER->GetPlayer()->GetDirectiond() = 0;
 		dwDirection = 0;
@@ -820,7 +822,7 @@ void CGameFramework::FrameAdvance()
 {    
 	m_GameTimer.Tick(60.0f);
 
-	if (SCENEMANAGER->GetSceneType() == PLAYGROUNDMAP) {
+	if (SCENEMANAGER->GetSceneType() == PLAYGROUNDMAP || SCENEMANAGER->GetSceneType() == CONCERTMAP) {
 		//if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
 
 			ProcessInput();
@@ -831,7 +833,7 @@ void CGameFramework::FrameAdvance()
 
     AnimateObjects();
 
-	if (GetTickCount() % 1000 == 0) {
+	if (GetTickCount() % 500 == 0) {
 		if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
 			if (PLAYER->GetPlayer()->m_match == true) {
 				if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
