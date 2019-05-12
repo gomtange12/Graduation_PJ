@@ -411,7 +411,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[0]->SetChild(Floor->m_pModelRootObject, true);
 	m_ppPlayGroundObjects[0]->SetPosition(1500.0f, 0, 1000.0f); //맵 거꾸로 버그 여기
-	m_ppPlayGroundObjects[0]->SetScale(10.0f, 10.0f, 10.0f);
+	m_ppPlayGroundObjects[0]->SetScale(15.0f, 15.0f, 15.0f);
 	m_ppPlayGroundObjects[0]->SetMesh(Floor->m_pModelRootObject->m_pMesh);
 	m_ppPlayGroundObjects[0]->SetOOBB(m_ppPlayGroundObjects[0]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[0]->m_pMesh->GetAABBExtents(), 60.46), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 	
@@ -671,8 +671,8 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	CLoadedModelInfo *Grass = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Grass.bin", NULL, false);
 	m_ppPlayGroundObjects[31] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[31]->SetChild(Grass->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[31]->SetPosition(-100.0f, -1000.f, -550.0f);
-	m_ppPlayGroundObjects[31]->SetScale(9.5f, 9.5f, 9.5f);
+	m_ppPlayGroundObjects[31]->SetPosition(-100.0f, -2000.f, -550.0f);
+	m_ppPlayGroundObjects[31]->SetScale(9.5f, 19.5f, 9.5f);
 	m_ppPlayGroundObjects[31]->SetMesh(Grass->m_pModelRootObject->m_pMesh);
 
 	/////
