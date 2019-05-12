@@ -139,8 +139,7 @@ void ObjManager::MovePkt(int id, unsigned char *packet)
 	PACKETMANAGER->MovePacket(id, xmf3Shift);
 	
 	//dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_MOVE, GetTickCount()+100);
-	
-	
+
 }
 void ObjManager::RotePkt(int id, unsigned char *packet)
 {
@@ -163,7 +162,7 @@ void ObjManager::PosXPkt(int id, unsigned char *packet)
 {
 	cs_packet_posx *pkt = reinterpret_cast<cs_packet_posx *>(packet);
 	
-	g_clients[id]->m_xmOOBB.Center = XMFLOAT3(pkt->x+5, 0.0f, g_clients[id]->m_xmf3Position.z+5);
+	g_clients[id]->m_xmOOBB.Center = XMFLOAT3(pkt->x+7, 0.0f, g_clients[id]->m_xmf3Position.z+7);
 	bool collision = collisionPlayerByPlayer(id);
 
 	if (collision == true) {

@@ -239,6 +239,5 @@ void PacketManager::AllPos(int id)
 
 	SendPacket(id, &pkt);
 	SendPacket(otherId, &pkt);
-	std::cout << "id " << id << std::endl;
-	std::cout << "otherId " << otherId << std::endl;
+
 }

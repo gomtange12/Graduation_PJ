@@ -98,7 +98,7 @@ void WorkerThread::Proc()
 			PACKETMANAGER->AllPos(over->id);
 			//std::cout << over->roomNum << " : ROOM SYNC" << std::endl;
 			if(ROOMMANAGER->room[over->roomNum]->m_full == true)
-				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(over->id, OP_ALLPOS, over->roomNum, GetTickCount() + 500);
+				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(over->id, OP_ALLPOS, over->roomNum, GetTickCount() + 4000);
 			delete over;
 		}
 		
