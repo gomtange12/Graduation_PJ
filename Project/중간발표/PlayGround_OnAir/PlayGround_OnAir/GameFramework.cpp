@@ -709,11 +709,14 @@ void CGameFramework::ProcessInput()
 			CNETWORK->KeyPkt(true,false,false);
 			//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
 		}
-		if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
-		{
-			CNETWORK->KeyPkt(false, true, false);
+		if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::HAPPY && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::HAPPY) {
+			if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::ATTACK && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::ATTACK) {
+				if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
+				{
+					CNETWORK->KeyPkt(false, true, false);
+				}
+			}
 		}
-
 		float cxDelta = 0.0f, cyDelta = 0.0f;
 		POINT ptCursorPos;
 		if (GetCapture() == m_hWnd)
