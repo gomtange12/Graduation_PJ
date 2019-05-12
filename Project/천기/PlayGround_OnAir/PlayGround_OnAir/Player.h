@@ -51,7 +51,7 @@ protected:
 	int							m_PlayerID = -1;
 	int							m_JoinRoomNum = -1;
 	bool						m_playerCollision = false;
-
+	
 	float m_HeightForCollide{ 0 };
 
 	bool                        m_IsPlayerInConcert = true;

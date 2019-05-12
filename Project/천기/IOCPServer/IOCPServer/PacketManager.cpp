@@ -236,6 +236,9 @@ void PacketManager::AllPos(int id)
 	pkt.Oid = otherId;
 	pkt.MposX = objectManager->GetPlayer(id)->m_xmf3Position.x;
 	pkt.MposZ = objectManager->GetPlayer(id)->m_xmf3Position.z;
+
 	SendPacket(id, &pkt);
 	SendPacket(otherId, &pkt);
+	std::cout << "id " << id << std::endl;
+	std::cout << "otherId " << otherId << std::endl;
 }

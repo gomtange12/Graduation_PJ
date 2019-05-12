@@ -31,7 +31,7 @@ void RoomManager::SoloRoomMatch(int id)
 						if (j == SOLO_NUM - 1)//풀방이면
 						{
 							room[i]->m_full = true;
-							dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_ALLPOS, RNumber, GetTickCount() + 3000);
+							dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(room[i]->m_ids[0], OP_ALLPOS, RNumber, GetTickCount() + 500);
 							std::cout << "RoomNumber : " << RNumber << " ----> Machig Success" << std::endl;
 							Room* soloRooms = new Room; //풀방이니 미리 다음방 생성
 							soloRooms->RoomNumber = ++RNumber;

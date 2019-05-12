@@ -95,7 +95,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 			PLAYER->GetPlayer()->SetClientNum(myid);
 			PLAYER->GetOtherPlayer()->SetClientNum(paket->ids);
 			PLAYER->GetPlayer()->m_match = true;
-			
+			myAvater = A;
 			CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
 		}
 		else if(paket->avatar == B){
@@ -103,7 +103,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 			PLAYER->GetOtherPlayer()->SetClientNum(myid);
 			PLAYER->GetPlayer()->SetClientNum(paket->ids);
 			PLAYER->GetOtherPlayer()->m_match = true;
-			
+			myAvater = B;
 			CNetCGameFramework->SetCamera(PLAYER->GetOtherPlayer()->GetCamera());
 			
 		}
@@ -254,15 +254,16 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	case SC_ALL_POS:
 	{
 		sc_packet_allpos *pkt = reinterpret_cast<sc_packet_allpos *>(ptr);
-		if (pkt->myid == PLAYER->GetPlayer()->GetClientNum()) {
-			PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(pkt->OposX, PLAYER->GetOtherPlayer()->GetPosition().y,pkt->OposZ));
 
-			
+		if (myid == PLAYER->GetPlayer()->GetClientNum()) {
+			PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(pkt->OposX, PLAYER->GetOtherPlayer()->GetPosition().y, pkt->OposZ));	
+			cout << "A" << endl;
 		}
-		if (pkt->Oid == PLAYER->GetOtherPlayer()->GetClientNum()) {
+		else {
 			PLAYER->GetPlayer()->SetPosition(XMFLOAT3(pkt->MposX, PLAYER->GetPlayer()->GetPosition().y, pkt->MposZ));
-
+			cout << "B" << endl;
 		}
+
 		break;
 	}
 	case SC_REMOVE_PLAYER:
