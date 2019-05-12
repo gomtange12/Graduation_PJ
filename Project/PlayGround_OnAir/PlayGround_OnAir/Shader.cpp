@@ -1651,3 +1651,4 @@ D3D12_SHADER_BYTECODE CTimeBarShader::CreateVertexShader()
 {
 	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSTimeBarTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
 }
+

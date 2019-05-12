@@ -156,6 +156,9 @@
     <ClInclude Include="CNetWork.h">
       <Filter>소스 파일\CNetwork</Filter>
     </ClInclude>
+    <ClInclude Include="CShadowShader.h">
+      <Filter>소스 파일\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Player.cpp">
@@ -227,6 +230,9 @@
     <ClCompile Include="CNetWork.cpp">
       <Filter>소스 파일\CNetwork</Filter>
     </ClCompile>
+    <ClCompile Include="CShadowShader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PlayGround_OnAir.rc">
@@ -249,6 +255,9 @@
       <Filter>소스 파일\헤더 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="Light.hlsl">
+      <Filter>소스 파일\헤더 파일\HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="ShadowShader.hlsl">
       <Filter>소스 파일\헤더 파일\HLSL</Filter>
     </FxCompile>
   </ItemGroup>

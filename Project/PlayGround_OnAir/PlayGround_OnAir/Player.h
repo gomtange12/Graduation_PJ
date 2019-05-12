@@ -38,7 +38,6 @@ protected:
 	float						m_JumpPower{ 300.0 };
 	//CCamera						*m_pCamera = NULL;
 	//이넘만들기
-	bool						m_IsPlayerInConcert = true;
 	int							m_collideBox{ 0 };
 	std::shared_ptr<CCamera>	m_pCamera;
 
@@ -51,6 +50,7 @@ protected:
 	int							m_JoinRoomNum=-1;
 
 	float m_HeightForCollide{ 0 };
+	bool						m_IsPlayerInConcert = true;
 public:
 	bool GetPlayerInConcert() { return m_IsPlayerInConcert; }
 	void SetPlayerInConocert(bool inConcert) { m_IsPlayerInConcert = inConcert; }

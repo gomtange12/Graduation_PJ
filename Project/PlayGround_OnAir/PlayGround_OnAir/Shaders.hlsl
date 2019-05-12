@@ -250,6 +250,7 @@ cbuffer cbCameraInfo : register(b1)
 cbuffer cbGameObjectInfo : register(b2)
 {
 	matrix					gmtxGameObject : packoffset(c0);
+	//matrix					gmtxShadowGameObject : packoffset(c0); //여기그림자
 	MATERIAL				gMaterial : packoffset(c4);
 	uint					gnTexturesMask : packoffset(c8);
 };
@@ -465,4 +466,21 @@ float4 PSSkyBox(VS_SKYBOX_CUBEMAP_OUTPUT input) : SV_TARGET
 
 	return(cColor);
 }
-////0322
+
+//struct VS_SHADOWINPUT {
+//	float3 position : POSITION;
+//};
+//struct VS_SHADOWOUTPUT {
+//	float4 position : SV_POSITION;
+//};
+////SHADOW
+//VS_SHADOWOUTPUT VSPlanarShadow(VS_SHADOWINPUT input)
+//{
+//	VS_SHADOWOUTPUT output = (VS_SHADOWOUTPUT)0;
+//	output.position = mul(float4(input.position, 1.0f), mul(mul(gmtxGameObject, gmtxView), gmtxProjection));
+//
+//	return (output);
+//}
+//float4 PSPlanarShadow(VS_STANDARD_OUTPUT input) : SV_Target {
+//	return(float4(0.6f,0.6f,0.6f,1.0f));
+//}

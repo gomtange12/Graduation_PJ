@@ -622,14 +622,14 @@ CGameObject::CGameObject(int nMaterials) : CGameObject()
 		m_ppMaterials = new CMaterial*[m_nMaterials];
 		for(int i = 0; i < m_nMaterials; i++) m_ppMaterials[i] = NULL;
 	}
-	while (AllObjectList[ObjIndex] != nullptr)
-	{
-		ObjIndex %= MAXOBJECTNUM;
-		++ObjIndex;
-	}
-	AllObjectList[ObjIndex] = this;
-	myIdx = ObjIndex;
-	++ObjIndex;
+	//while (AllObjectList[ObjIndex] != nullptr)
+	//{
+	//	ObjIndex %= MAXOBJECTNUM;
+	//	++ObjIndex;
+	//}
+	//AllObjectList[ObjIndex] = this;
+	//myIdx = ObjIndex;
+	//++ObjIndex;
 }
 
 CGameObject::~CGameObject()
@@ -840,6 +840,15 @@ void CGameObject::UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandLis
 	XMFLOAT4X4 xmf4x4World;
 	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(pxmf4x4World)));
 	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4World, 0);
+
+	/*XMFLOAT4X4 xmf4x4ShadowMatrix;
+	XMFLOAT4 xmLightPos(0.0f, 35.0f, 0.f, 1.0f);
+	XMFLOAT4 xmPlane(0.0f, 1.0f, 0.0f, 0.0f);
+	for(int i = 0;i<)
+	xmf4x4ShadowMatrix = XMMatrixShadow(xmPlane, xmLightPos);
+	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(pxmf4x4World)));
+	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4World, 0);*/
+
 }
 
 void CGameObject::UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, CMaterial *pMaterial)
@@ -1614,4 +1623,12 @@ void CAngrybotObject::Animate(float fTimeElapsed)
 
 MapObject::MapObject(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 {
+}
+
+void MapObject::UpdateShaderVariable(ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT4X4 * pxmf4x4World)
+{
+	CGameObject::UpdateShaderVariable(pd3dCommandList, pxmf4x4World);
+	XMFLOAT4X4 xmf4x4World;
+	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(pxmf4x4World)));
+	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4World, 0);
 }

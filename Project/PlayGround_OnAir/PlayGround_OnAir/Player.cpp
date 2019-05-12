@@ -658,7 +658,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	//if(CNETWORK->GetInstance()->)
 	
 	m_BoundScale = 60.0f;
-	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
+	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/다시받은키타.bin", NULL, true);
 
 	SetChild(pPlayerModel->m_pModelRootObject, true);
 	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
