@@ -45,7 +45,8 @@ public:
 	void MatchPkt();
 	void StatePkt(DWORD state);
 	void RotePkt(float y);
-	void PosPkt(const XMFLOAT3& pos);
+	void PosXPkt(const XMFLOAT3& pos);
+	void PosZPkt(const XMFLOAT3& pos);
 	void KeyPkt(bool jump, bool attack, bool skill);
 	void LobbyPkt(bool out);
 };

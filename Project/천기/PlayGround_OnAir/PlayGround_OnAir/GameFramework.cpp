@@ -833,11 +833,12 @@ void CGameFramework::FrameAdvance()
 
     AnimateObjects();
 
-	if (GetTickCount() % 500 == 0) {
+	if (GetTickCount() % 9 == 0) {
 		if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
 			if (PLAYER->GetPlayer()->m_match == true) {
 				if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
-					CNETWORK->PosPkt(PLAYER->GetPlayer()->GetPosition());
+					CNETWORK->PosXPkt(PLAYER->GetPlayer()->GetPosition());
+					CNETWORK->PosZPkt(PLAYER->GetPlayer()->GetPosition());
 					PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
 					cout << "--A : "<< PLAYER->GetPlayer()->GetPosition().z << endl;
 				}
@@ -846,7 +847,8 @@ void CGameFramework::FrameAdvance()
 		else {
 			if (PLAYER->GetOtherPlayer()->m_match == true) {
 				if (PLAYER->GetOtherPlayer()->GetPrePosition().x != PLAYER->GetOtherPlayer()->GetPosition().x || PLAYER->GetOtherPlayer()->GetPrePosition().z != PLAYER->GetOtherPlayer()->GetPosition().z) {
-					CNETWORK->PosPkt(PLAYER->GetOtherPlayer()->GetPosition());
+					CNETWORK->PosXPkt(PLAYER->GetOtherPlayer()->GetPosition());
+					CNETWORK->PosZPkt(PLAYER->GetOtherPlayer()->GetPosition());
 					PLAYER->GetOtherPlayer()->SetPrePosition(PLAYER->GetOtherPlayer()->GetPosition());
 					cout << "--B : " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
 				}

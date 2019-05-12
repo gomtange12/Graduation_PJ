@@ -254,13 +254,13 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	case SC_ALL_POS:
 	{
 		sc_packet_allpos *pkt = reinterpret_cast<sc_packet_allpos *>(ptr);
-		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
-			PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(pkt->posX, PLAYER->GetOtherPlayer()->GetPosition().y,pkt->posZ));
+		if (pkt->myid == PLAYER->GetPlayer()->GetClientNum()) {
+			PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(pkt->OposX, PLAYER->GetOtherPlayer()->GetPosition().y,pkt->OposZ));
 
 			
 		}
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
-			PLAYER->GetPlayer()->SetPosition(XMFLOAT3(pkt->posX, PLAYER->GetPlayer()->GetPosition().y, pkt->posZ));
+		if (pkt->Oid == PLAYER->GetOtherPlayer()->GetClientNum()) {
+			PLAYER->GetPlayer()->SetPosition(XMFLOAT3(pkt->MposX, PLAYER->GetPlayer()->GetPosition().y, pkt->MposZ));
 
 		}
 		break;
@@ -318,20 +318,31 @@ void CNetWork::RotePkt(float y)
 
 	SendPacket();
 }
-void CNetWork::PosPkt(const XMFLOAT3& pos)
+void CNetWork::PosXPkt(const XMFLOAT3& pos)
 {
-	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(send_buffer);
+	cs_packet_posx *pkt = reinterpret_cast<cs_packet_posx *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
-	pkt->type = CS_POS_INFO;
+	pkt->type = CS_POSX_INFO;
 	pkt->x = pos.x;
-	//pkt->y = pos.y;
-	int z =pos.z;
-	pkt->z = z;
-	cout << "pkt->z " << pkt->z << endl;
+	//pkt->z = pos.z;
+	//cout << "pkt->z " << pkt->z << endl;
 
 	SendPacket();
 	
+}
+void CNetWork::PosZPkt(const XMFLOAT3& pos)
+{
+	cs_packet_posz *pkt = reinterpret_cast<cs_packet_posz *>(send_buffer);
+	send_wsabuf.len = sizeof(pkt);
+	pkt->size = sizeof(pkt);
+	pkt->type = CS_POSZ_INFO;
+	//pkt->x = pos.x;
+	pkt->z = pos.z;
+	//cout << "pkt->z " << pkt->z << endl;
+
+	SendPacket();
+
 }
 void CNetWork::KeyPkt(bool jump, bool attack, bool skill) 
 {

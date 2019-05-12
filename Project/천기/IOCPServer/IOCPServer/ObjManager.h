@@ -30,8 +30,9 @@ public:
 	ObjManager*			GetObjectManager() { return this; }
 	inline Player*&		GetPlayer(unsigned int playerIndex) { return g_clients[playerIndex]; }
 	void RotePkt(int id, unsigned char *packet);
-	void PosPkt(int id, unsigned char *packet);
-	
+	void PosXPkt(int id, unsigned char *packet);
+	void PosZPkt(int id, unsigned char *packet);
+
 	bool collisionPlayerByPlayer(int id);
 	void KeyPkt(int id, unsigned char *packet);
 	void LobbyPkt(int id, unsigned char *packet);
