@@ -227,7 +227,7 @@ void CPlayer::Update(float fTimeElapsed)
 	if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
 		if (PLAYER->GetPlayer()->GetCollisionState() == true)
 		{
-			PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -30.f));
+			PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -6.f));
 			PLAYER->GetPlayer()->SetCollisionState(false);
 		}
 	}
@@ -974,7 +974,7 @@ void COtherPlayers::Update(float fTimeElapsed)
 	if (PLAYER->GetOtherPlayer()->IsPlayerCrashMap() == false) {
 		if (PLAYER->GetOtherPlayer()->GetCollisionState() == true)
 		{
-			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -30.f));
+			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -6.f));
 			
 			PLAYER->GetOtherPlayer()->SetCollisionState(false);
 			
