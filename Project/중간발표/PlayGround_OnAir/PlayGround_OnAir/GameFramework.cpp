@@ -836,7 +836,7 @@ void CGameFramework::FrameAdvance()
 
     AnimateObjects();
 
-	if (GetTickCount() % 500 == 0) {
+	if (GetTickCount() % 4 == 0) {
 		if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
 			if (PLAYER->GetPlayer()->m_match == true) {
 				if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
