@@ -6,7 +6,7 @@
 #include "..\..\IOCPServer\IOCPServer\Protocol.h"
 //#include "..\..\Ãµ±â\IOCPServer\IOCPServer\Protocol.h"
 
-#define IP_ADDR "127.0.0.1"
+#define IP_ADDR "192.168.22.79"
 
 class CNetWork : public CSingleTonBase<CNetWork>
 {
