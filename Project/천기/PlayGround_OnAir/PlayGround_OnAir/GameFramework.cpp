@@ -706,14 +706,17 @@ void CGameFramework::ProcessInput()
 		//}
 		if (pKeysBuffer[VK_SPACE] & 0xF0)
 		{
-			CNETWORK->KeyPkt(true,false,false);
+			CNETWORK->KeyPkt(true, false, false);
 			//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
 		}
-		if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
-		{
-			CNETWORK->KeyPkt(false, true, false);
+		if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::HAPPY && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::HAPPY) {
+			if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::ATTACK && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::ATTACK) {
+				if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
+				{
+					CNETWORK->KeyPkt(false, true, false);
+				}
+			}
 		}
-
 		float cxDelta = 0.0f, cyDelta = 0.0f;
 		POINT ptCursorPos;
 		if (GetCapture() == m_hWnd)
@@ -725,7 +728,7 @@ void CGameFramework::ProcessInput()
 			SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
 		}
 
-		if ((otherPlayerDirection != 0)||(dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
+		if ((otherPlayerDirection != 0) || (dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
 		{
 			if (cxDelta || cyDelta)
 			{
@@ -733,20 +736,21 @@ void CGameFramework::ProcessInput()
 				//	PLAYER->GetPlayer()->Rotate(cyDelta, 0.0f, -cxDelta);
 				if (pKeysBuffer[VK_RBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설
 				{
+
 					PLAYER->GetPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
 					PLAYER->GetOtherPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
 
 				}
 			}
-			if (dwDirection )
+			if (dwDirection)
 			{
 				if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
-					if(PLAYER->GetPlayer()->GetPlayerState() != PlayerState::STUN)
-						CNETWORK->StatePkt(dwDirection); 
+					if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetOtherPlayer()->GetPlayerState() == RUN)
+						CNETWORK->StatePkt(dwDirection);
 				}
 				if (PLAYER->GetOtherPlayer()->GetClientNum() == CNETWORK->myid) {
-					if (PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::STUN)
-						CNETWORK->StatePkt(dwDirection); 
+					if (PLAYER->GetOtherPlayer()->GetPlayerState() == IDLE || PLAYER->GetOtherPlayer()->GetPlayerState() == RUN)
+						CNETWORK->StatePkt(dwDirection);
 				}
 			}
 		}
@@ -836,22 +840,20 @@ void CGameFramework::FrameAdvance()
 	if (GetTickCount() % 4 == 0) {
 		if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
 			if (PLAYER->GetPlayer()->m_match == true) {
-				//if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
-					CNETWORK->PosXPkt(PLAYER->GetPlayer()->GetPosition());
-					CNETWORK->PosZPkt(PLAYER->GetPlayer()->GetPosition());
-					//PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
-					cout << "--A : "<< PLAYER->GetPlayer()->GetPosition().z << endl;
-				//}
+				if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
+					CNETWORK->PosPkt(PLAYER->GetPlayer()->GetPosition());
+					PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
+					//cout << "--A : "<< PLAYER->GetPlayer()->GetPosition().z << endl;
+				}
 			}
 		}
 		else {
 			if (PLAYER->GetOtherPlayer()->m_match == true) {
-				//if (PLAYER->GetOtherPlayer()->GetPrePosition().x != PLAYER->GetOtherPlayer()->GetPosition().x || PLAYER->GetOtherPlayer()->GetPrePosition().z != PLAYER->GetOtherPlayer()->GetPosition().z) {
-					CNETWORK->PosXPkt(PLAYER->GetOtherPlayer()->GetPosition());
-					CNETWORK->PosZPkt(PLAYER->GetOtherPlayer()->GetPosition());
-				//	PLAYER->GetOtherPlayer()->SetPrePosition(PLAYER->GetOtherPlayer()->GetPosition());
-					cout << "--B : " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
-				//}
+				if (PLAYER->GetOtherPlayer()->GetPrePosition().x != PLAYER->GetOtherPlayer()->GetPosition().x || PLAYER->GetOtherPlayer()->GetPrePosition().z != PLAYER->GetOtherPlayer()->GetPosition().z) {
+					CNETWORK->PosPkt(PLAYER->GetOtherPlayer()->GetPosition());
+					PLAYER->GetOtherPlayer()->SetPrePosition(PLAYER->GetOtherPlayer()->GetPosition());
+					//cout << "--B : " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+				}
 			}
 		}
 	}
@@ -974,7 +976,9 @@ void CGameFramework::FrameAdvance()
 	m_GameTimer.GetFrameRate(m_pszFrameRate + 12, 37);
 	size_t nLength = _tcslen(m_pszFrameRate);
 	XMFLOAT3 xmf3Position = PLAYER->GetPlayer()->GetPosition();
-	_stprintf_s(m_pszFrameRate + nLength, 70 - nLength, _T("(%4f, %4f, %4f)"), xmf3Position.x, xmf3Position.y, xmf3Position.z);
+	//_stprintf_s(m_pszFrameRate + nLength, 70 - nLength, _T("(%4f, %4f, %4f)"), xmf3Position.x, xmf3Position.y, xmf3Position.z);
+	_stprintf_s(m_pszFrameRate + nLength, 70 - nLength, _T(" "));
+
 	::SetWindowText(m_hWnd, m_pszFrameRate);
 }
 

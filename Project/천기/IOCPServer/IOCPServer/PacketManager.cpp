@@ -221,23 +221,15 @@ void PacketManager::AllPos(int id)
 	int otherId;
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
 	for (int i = 0; i < SOLO_NUM; ++i) {
-		if (id != ROOMMANAGER->room[roomNum]->m_ids[i]) 
+		if(id!=ROOMMANAGER->room[roomNum]->m_ids[i])
 			otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
-
 	}
 	sc_packet_allpos pkt;
 	pkt.size = sizeof(sc_packet_allpos);
 	pkt.type = SC_ALL_POS;
-	
-	pkt.myid = id;
-	pkt.OposX = objectManager->GetPlayer(otherId)->m_xmf3Position.x; 
-	pkt.OposZ = objectManager->GetPlayer(otherId)->m_xmf3Position.z;
-
-	pkt.Oid = otherId;
-	pkt.MposX = objectManager->GetPlayer(id)->m_xmf3Position.x;
-	pkt.MposZ = objectManager->GetPlayer(id)->m_xmf3Position.z;
-
+	pkt.id = id;
+	pkt.posX = objectManager->GetPlayer(otherId)->m_xmf3Position.x;
+	pkt.posZ = objectManager->GetPlayer(otherId)->m_xmf3Position.z;
 	SendPacket(id, &pkt);
 	SendPacket(otherId, &pkt);
-
 }

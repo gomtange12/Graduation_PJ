@@ -62,10 +62,10 @@ using Microsoft::WRL::ComPtr;
 
 extern HINSTANCE						ghAppInstance;
 
-////#define _WITH_SWAPCHAIN_FULLSCREEN_STATE
+//#define _WITH_SWAPCHAIN_FULLSCREEN_STATE
 //#define _WITH_DIRECT2D
 //#ifdef _WITH_DIRECT2D
-////#define _WITH_DIRECT2D_IMAGE_EFFECT
+//#define _WITH_DIRECT2D_IMAGE_EFFECT
 //#endif
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 

@@ -748,7 +748,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppConcertObjects[1]->SetPosition(1500.0f, 0, 1000.0f);
 	m_ppConcertObjects[1]->SetScale(150, 150, 150);
 	m_ppConcertObjects[1]->SetMesh(pMapObject->m_pModelRootObject->m_pMesh);
-	m_ppConcertObjects[1]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 100), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[1]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
@@ -1480,7 +1480,11 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		}
 		for (int i = 3; i < 7; ++i)
 		{
-			if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
+			if (i != 5)
+			{
+
+				if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
+			}
 		}
 		if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
 			if (PLAYER->GetPlayer()->GetPlayerState() == HAPPY) {
@@ -1700,9 +1704,9 @@ void CScene::CheckObjectByObjectCollisions() {
 
 			if (m_ppConcertObjects[0]->GetBoundingBox().Contains(PLAYER->GetOtherPlayer()->GetBoundingBox()))
 			{
-				std::cout << "익스텐트 곱하게하기" << m_ppConcertObjects[0]->GetBoundingBox().Extents.y * objScale * 100 << std::endl;
-				std::cout << "와이값" << m_ppConcertObjects[0]->GetBoundingBox().Extents.y + m_ppConcertObjects[0]->GetBoundingBox().Center.y << std::endl;
-				std::cout << "플레이어 센터값" << PLAYER->GetOtherPlayer()->GetBoundingBox().Center.y - PLAYER->GetOtherPlayer()->GetBoundingBox().Extents.y + 10 << std::endl;
+				//std::cout << "익스텐트 곱하게하기" << m_ppConcertObjects[0]->GetBoundingBox().Extents.y * objScale * 100 << std::endl;
+				//std::cout << "와이값" << m_ppConcertObjects[0]->GetBoundingBox().Extents.y + m_ppConcertObjects[0]->GetBoundingBox().Center.y << std::endl;
+				//std::cout << "플레이어 센터값" << PLAYER->GetOtherPlayer()->GetBoundingBox().Center.y - PLAYER->GetOtherPlayer()->GetBoundingBox().Extents.y + 10 << std::endl;
 				//이 안에 오브젝트 충돌을 넣어야할수도
 				PLAYER->GetOtherPlayer()->SetPlayerInConocert(true);
 				if (m_ppConcertObjects[0]->GetBoundingBox().Intersects(PLAYER->GetOtherPlayer()->GetBoundingBox()))

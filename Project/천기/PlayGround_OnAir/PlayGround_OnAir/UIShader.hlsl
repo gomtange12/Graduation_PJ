@@ -486,10 +486,10 @@ VS_TEXTURED_OUTPUT VSPlayerUITextured(uint nVertexID : SV_VertexID)
 	//화면 전체
 	if (nVertexID == 0) { output.position = float4(-0.9f, +1.0f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
 	if (nVertexID == 1) { output.position = float4(-0.7f, +1.0f, 0.0f, 1.0f); output.uv = float2(1.f, 0.f); }
-	if (nVertexID == 2) { output.position = float4(-0.7f, 0.8f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+	if (nVertexID == 2) { output.position = float4(-0.7f, 0.7f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
 	if (nVertexID == 3) { output.position = float4(-0.9f, +1.0f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
-	if (nVertexID == 4) { output.position = float4(-0.7f, +0.8f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
-	if (nVertexID == 5) { output.position = float4(-0.9f, +0.8f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
+	if (nVertexID == 4) { output.position = float4(-0.7f, +0.7f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+	if (nVertexID == 5) { output.position = float4(-0.9f, +0.7f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
 
 	return output;
 
@@ -518,10 +518,10 @@ VS_TEXTURED_OUTPUT VSOtherPlayerUITextured(uint nVertexID : SV_VertexID)
 	//화면 전체
 	if (nVertexID == 0) { output.position = float4(+0.7f, +1.0f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
 	if (nVertexID == 1) { output.position = float4(+0.9f, +1.0f, 0.0f, 1.0f); output.uv = float2(1.f, 0.f); }
-	if (nVertexID == 2) { output.position = float4(+0.9f, 0.8f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+	if (nVertexID == 2) { output.position = float4(+0.9f, 0.7f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
 	if (nVertexID == 3) { output.position = float4(+0.7f, +1.0f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
-	if (nVertexID == 4) { output.position = float4(+0.9f, +0.8f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
-	if (nVertexID == 5) { output.position = float4(+0.7f, 0.8f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
+	if (nVertexID == 4) { output.position = float4(+0.9f, +0.7f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+	if (nVertexID == 5) { output.position = float4(+0.7f, 0.7f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
 
 	return output;
 
@@ -578,12 +578,12 @@ VS_TEXTURED_OUTPUT VSTimeBarTextured(uint nVertexID : SV_VertexID)
 	if (nVertexID == 5) { output.position = float4(-1.0f, +0.5f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
 	*/
 	//화면 전체
-	if (nVertexID == 0) { output.position = float4(-0.3f, +0.8f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
-	if (nVertexID == 1) { output.position = float4(+0.3f, +0.8f, 0.0f, 1.0f); output.uv = float2(1.f, 0.f); }
-	if (nVertexID == 2) { output.position = float4(+0.3f, +0.7f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
-	if (nVertexID == 3) { output.position = float4(-0.3f, +0.8f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
-	if (nVertexID == 4) { output.position = float4(+0.3f, +0.7f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
-	if (nVertexID == 5) { output.position = float4(-0.3f, +0.7f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
+	if (nVertexID == 0) { output.position = float4(-0.3f, +0.95f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
+	if (nVertexID == 1) { output.position = float4(+0.3f, +0.95f, 0.0f, 1.0f); output.uv = float2(1.f, 0.f); }
+	if (nVertexID == 2) { output.position = float4(+0.3f, +0.8f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+	if (nVertexID == 3) { output.position = float4(-0.3f, +0.95f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
+	if (nVertexID == 4) { output.position = float4(+0.3f, +0.8f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+	if (nVertexID == 5) { output.position = float4(-0.3f, +0.8f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
 
 	return output;
 

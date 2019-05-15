@@ -227,7 +227,7 @@ void CPlayer::Update(float fTimeElapsed)
 	if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
 		if (PLAYER->GetPlayer()->GetCollisionState() == true)
 		{
-			PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -30.f));
+			PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -6.f));
 			PLAYER->GetPlayer()->SetCollisionState(false);
 		}
 	}
@@ -282,13 +282,16 @@ void CPlayer::Update(float fTimeElapsed)
 		SetTrackAnimationSet(0, IDLE);
 		break;*/
 	case IDLE:
+		m_OnAacting = FALSE;
+		SetTrackAnimationSet(0, IDLE);
+		break;
 	case RUN:
 		//if (!m_OnAacting)
 		//{
-			SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
-			m_OnAacting = FALSE;
+			//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
+		m_OnAacting = FALSE;
 		//}
-		//SetTrackAnimationSet(0, RUN);
+		SetTrackAnimationSet(0, RUN);
 		//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		//m_OnAacting = FALSE;
 		break;
@@ -974,7 +977,7 @@ void COtherPlayers::Update(float fTimeElapsed)
 	if (PLAYER->GetOtherPlayer()->IsPlayerCrashMap() == false) {
 		if (PLAYER->GetOtherPlayer()->GetCollisionState() == true)
 		{
-			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -30.f));
+			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -6.f));
 			
 			PLAYER->GetOtherPlayer()->SetCollisionState(false);
 			
@@ -1030,13 +1033,16 @@ void COtherPlayers::Update(float fTimeElapsed)
 			SetTrackAnimationSet(0, IDLE);
 			break;*/
 	case IDLE:
+		m_OnAacting = FALSE;
+		SetTrackAnimationSet(0, IDLE);
+		break;
 	case RUN:
 		//if (!m_OnAacting)
 		//{
-		SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
+			//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		m_OnAacting = FALSE;
 		//}
-		//SetTrackAnimationSet(0, RUN);
+		SetTrackAnimationSet(0, RUN);
 		//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		//m_OnAacting = FALSE;
 		break;

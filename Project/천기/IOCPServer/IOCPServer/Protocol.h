@@ -37,11 +37,10 @@ constexpr int SC_ALL_POS = 19;
 //
 constexpr int CS_MATCHING_PLAYER = 9;
 constexpr int CS_MOVE_STATE_INFO = 10;
-constexpr int CS_POSX_INFO = 11;
+constexpr int CS_POS_INFO = 11;
 constexpr int CS_ROTE_STATE_INFO = 12;
 constexpr int CS_KEY_INFO = 13;
 constexpr int CS_LOBBY_OUT = 16;
-constexpr int CS_POSZ_INFO = 20;
 #pragma pack (push, 1)
 
 //////////////////////서버/////////////////////////
@@ -131,12 +130,9 @@ struct sc_packet_result {
 struct sc_packet_allpos {
 	BYTE size;
 	BYTE type;
-	float OposX;
-	char Oid;
-	float OposZ;
-	float MposX;
-	char myid;
-	float MposZ;
+	char id;
+	float posX;
+	int posZ;
 };
 /////////////////////////클라//////////////////////
 struct cs_packet_matching {
@@ -159,17 +155,12 @@ struct cs_packet_rote_state {
 	float y;
 };
 
-struct cs_packet_posx{
+struct cs_packet_pos{
 	BYTE size;
 	BYTE type;
 	float x;
-	//float z;
-};
-struct cs_packet_posz {
-	BYTE size;
-	BYTE type;
-	//float x;
-	float z;
+	//float y;
+	int z;
 };
 struct cs_packet_key {
 	BYTE size;

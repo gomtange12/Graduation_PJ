@@ -345,7 +345,7 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //원래꺼
 			PLAYER->GetPlayer()->SetAllowKey(false);
 			PLAYER->GetOtherPlayer()->SetAllowKey(false);
-			m_fPosition += 0.0000001;;
+			m_fPosition += 0.00001;
 
 			//sol) m_fPosition += fDelta * speed; 프레임 고정시
 			if (m_fPosition >= maxLength)

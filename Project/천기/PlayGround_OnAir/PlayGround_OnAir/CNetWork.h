@@ -6,7 +6,7 @@
 #include "..\..\IOCPServer\IOCPServer\Protocol.h"
 //#include "..\..\Ãµ±â\IOCPServer\IOCPServer\Protocol.h"
 
-#define IP_ADDR "127.0.0.1"
+#define IP_ADDR "192.168.22.79"
 
 class CNetWork : public CSingleTonBase<CNetWork>
 {
@@ -31,7 +31,6 @@ private:
 
 public:
 	int myid;
-	int myAvater;
 
 	CNetWork();
 	~CNetWork();
@@ -46,8 +45,7 @@ public:
 	void MatchPkt();
 	void StatePkt(DWORD state);
 	void RotePkt(float y);
-	void PosXPkt(const XMFLOAT3& pos);
-	void PosZPkt(const XMFLOAT3& pos);
+	void PosPkt(const XMFLOAT3& pos);
 	void KeyPkt(bool jump, bool attack, bool skill);
 	void LobbyPkt(bool out);
 };
