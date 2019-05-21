@@ -12,9 +12,6 @@ RoomManager::~RoomManager()
 }
 void RoomManager::SoloRoomMatch(int id) 
 {
-	//버그 있음!!!!!!!!!!!
-	// 예외처리 하나 추가 해야함
-	// 같은 아이디 일경우!  xxxx
 	if (room.size() == 0) {//맨처음 방생성
 		Room* soloRooms = new Room;
 		soloRooms->RoomNumber = RNumber;
@@ -31,7 +28,7 @@ void RoomManager::SoloRoomMatch(int id)
 						if (j == SOLO_NUM - 1)//풀방이면
 						{
 							room[i]->m_full = true;
-							//dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_ALLPOS, RNumber, GetTickCount() + 4000);
+				
 							std::cout << "RoomNumber : " << RNumber << " ----> Machig Success" << std::endl;
 							Room* soloRooms = new Room; //풀방이니 미리 다음방 생성
 							soloRooms->RoomNumber = ++RNumber;
@@ -50,6 +47,7 @@ void RoomManager::SoloRoomMatch(int id)
 								objectManager->GetPlayer(room[i]->m_ids[1])->m_xmf3Position.y,
 								objectManager->GetPlayer(room[i]->m_ids[1])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
 							////
+
 							for (int k = 0; k < SOLO_NUM; ++k) {
 								objectManager->GetPlayer(room[i]->m_ids[k])->roomNumber = i;
 								objectManager->GetPlayer(room[i]->m_ids[k])->m_match = true;
@@ -57,9 +55,6 @@ void RoomManager::SoloRoomMatch(int id)
 								PACKETMANAGER->IngamePacket(room[i]->m_ids[k], i, objectManager->GetPlayer(room[i]->m_ids[k])->avatar);
 							}
 							
-
-
-							break;
 						}
 					}
 					break;

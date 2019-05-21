@@ -217,7 +217,7 @@ void ObjManager::LobbyPkt(int id, unsigned char *packet)
 	}
 
 	if (g_clients[id]->gameEnd == true && g_clients[otherId]->gameEnd == true) {
-		//dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->PopTimer(roomNum);
+		
 		PACKETMANAGER->LobbyPacket(id);
 		//ÃÊ±âÈ­
 		g_clients[id]->gameEnd = false;

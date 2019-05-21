@@ -58,10 +58,10 @@ void AcceptThread::Proc()
 		int id = -1;
 		for (int i = 0; i < MAX_USER; ++i)
 			if (false == objectManager->GetPlayer(i)->m_connected) {
-				if (false == objectManager->GetPlayer(i)->m_join) {
+				
 					id = i;
 					break;
-				}
+				
 			}
 
 		if (-1 == id) {
@@ -77,7 +77,7 @@ void AcceptThread::Proc()
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(objectManager->GetPlayer(id)->m_socket), IOCPSERVER->GetIocp(), id, 0);
 		//
 		objectManager->GetPlayer(id)->m_connected = true;
-		objectManager->GetPlayer(id)->m_join = true;
+	
 		////
 
 		//로그인 + 다른 사용자 접속 처리 

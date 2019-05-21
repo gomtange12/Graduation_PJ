@@ -18,12 +18,12 @@
 const int OP_RECV = 1;
 const int OP_SEND = 2;
 //const int OP_ALLPOS = 3;  //동기화 테스트용
-const int OP_STOP = 4;
+//const int OP_STOP = 4;
 //
 
 constexpr int SC_LOGIN_OK = 1;
 //constexpr int SC_PUT_PLAYER = 2; //재접용으로 쓸까?
-constexpr int SC_REMOVE_PLAYER = 3;
+//constexpr int SC_REMOVE_PLAYER = 3; //사용x
 constexpr int SC_MOVE_PLAYER = 4;
 constexpr int SC_MATCHING_RESULT = 5;
 constexpr int SC_SCENE = 6;

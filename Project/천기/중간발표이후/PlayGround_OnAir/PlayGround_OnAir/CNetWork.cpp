@@ -111,23 +111,6 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		
 		break;
 	}
-	case SC_PUT_PLAYER:
-	{
-		sc_packet_put_player *pkt = reinterpret_cast<sc_packet_put_player *>(ptr);
-		int id = pkt->id;
-
-		if (id == PLAYER->GetPlayer()->GetClientNum()) {
-
-
-		}
-		else if (id < MAX_USER) {
-
-		}
-		else {
-
-		}
-		break;
-	}
 	case SC_MOVE_PLAYER:
 	{
 		sc_packet_move *pkt = reinterpret_cast<sc_packet_move *>(ptr);
@@ -271,17 +254,6 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		}
 		break;
 	}*/
-	case SC_REMOVE_PLAYER:
-	{
-		sc_packet_remove_player *pkt = reinterpret_cast<sc_packet_remove_player *>(ptr);
-	/*	if(pkt->id == PLAYER->GetPlayer()->GetClientNum()){
-
-		}
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
-
-		}*/
-		break;
-	}
 
 	default:
 		printf("Unknown PACKET type [%d]\n", ptr[1]);
