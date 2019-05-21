@@ -41,18 +41,18 @@ void Player::Initialize() {
 }
 void Player::move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity) 
 {
-	if (this != nullptr)
+	/*if (this != nullptr)
 	{
 		if (bUpdateVelocity)
 		{
 			m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
 		}
 		else
-		{
+		{*/
 			m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
 		
-		}
-	}
+	/*	}
+	}*/
 }
 void Player::Transform() {
 	m_xmf4x4ToParent._11 = m_xmf3Right.x; m_xmf4x4ToParent._12 = m_xmf3Right.y; m_xmf4x4ToParent._13 = m_xmf3Right.z;

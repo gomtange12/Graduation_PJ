@@ -13,7 +13,7 @@ public:
 	void SendPacket(int id, void *packet);
 	void LoginPacket(int id);
 	//void PutPlayerPacket(int id);
-	void MovePacket(XMFLOAT3 xmf3shift, int id);
+	void MovePacket( int id);
 	void ClientDisconnect(int id);
 	void IngamePacket(int num, int roomNum, int avatar);
 	void VectorPacket(int id);
@@ -22,5 +22,5 @@ public:
 	void AttackPacKet(int id);
 	void LobbyPacket(int id);
 	void ResultPacket(int id);
-	void AllPos(int id);
+	
 };

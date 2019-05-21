@@ -134,17 +134,16 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		xmf3Shift = XMFLOAT3(pkt->posX, pkt->posY, pkt->posZ);
-
 		
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
-			//PLAYER->GetPlayer()->SetPosition(xmf3Shift);
-			PLAYER->GetPlayer()->Move(xmf3Shift, pkt->velocity);
+			PLAYER->GetPlayer()->SetPosition(xmf3Shift);
+			//PLAYER->GetPlayer()->Move(xmf3Shift, pkt->velocity);
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 		}
 
 		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
-			//PLAYER->GetOtherPlayer()->SetPosition(xmf3Shift);
-			PLAYER->GetOtherPlayer()->Move(xmf3Shift, pkt->velocity);
+			PLAYER->GetOtherPlayer()->SetPosition(xmf3Shift);
+			//PLAYER->GetOtherPlayer()->Move(xmf3Shift, pkt->velocity);
 			PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
 		}
 
@@ -200,7 +199,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
 			if (pkt->jump == true) {
 				PLAYER->GetPlayer()->SetPlayerState(JUMP);
-				PLAYER->GetPlayer()->SetJumpPower(450.0f);
+				PLAYER->GetPlayer()->SetJumpPower(45.0f);
 			}
 			if (pkt->attack == true) 
 				PLAYER->GetPlayer()->SetPlayerState(ATTACK);
@@ -209,7 +208,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
 			if (pkt->jump == true) {
 				PLAYER->GetOtherPlayer()->SetPlayerState(JUMP);
-				PLAYER->GetOtherPlayer()->SetJumpPower(450.0f);
+				PLAYER->GetOtherPlayer()->SetJumpPower(45.0f);
 			}
 			if (pkt->attack == true) 
 				PLAYER->GetOtherPlayer()->SetPlayerState(ATTACK);
@@ -230,16 +229,16 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_lobby *pkt = reinterpret_cast<sc_packet_lobby *>(ptr);
 
-		if (pkt->out == true) {
-			SCENEMANAGER->SetScene(MENUSCENE);
-			PLAYER->GetPlayer()->m_match = false;
-			PLAYER->GetOtherPlayer()->m_match = false;
-			PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));
-			PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
-			PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(440.0f, 50, 1745));
-			PLAYER->GetOtherPlayer()->SetOOBB(PLAYER->GetOtherPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
-			CNetCGameFramework->m_ready = false;
-		}
+		SCENEMANAGER->SetScene(MENUSCENE);
+		PLAYER->GetPlayer()->m_match = false;
+		PLAYER->GetOtherPlayer()->m_match = false;
+		PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));
+		PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
+		PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(440.0f, 10, 1745));
+		PLAYER->GetOtherPlayer()->SetOOBB(PLAYER->GetOtherPlayer()->GetPosition(), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
+		CNetCGameFramework->m_ready = false;
+			
+		
 		break;
 	}
 	case SC_RESULT_INFO: 
@@ -258,7 +257,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		}
 		break;
 	}
-	case SC_ALL_POS:
+	/*case SC_ALL_POS:
 	{
 		sc_packet_allpos *pkt = reinterpret_cast<sc_packet_allpos *>(ptr);
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
@@ -271,7 +270,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 
 		}
 		break;
-	}
+	}*/
 	case SC_REMOVE_PLAYER:
 	{
 		sc_packet_remove_player *pkt = reinterpret_cast<sc_packet_remove_player *>(ptr);
@@ -325,21 +324,7 @@ void CNetWork::RotePkt(float y)
 
 	SendPacket();
 }
-void CNetWork::PosPkt(const XMFLOAT3& pos)
-{
-	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(send_buffer);
-	send_wsabuf.len = sizeof(pkt);
-	pkt->size = sizeof(pkt);
-	pkt->type = CS_POS_INFO;
-	pkt->x = pos.x;
-	//pkt->y = pos.y;
-	int z =pos.z;
-	pkt->z = z;
-	cout << "pkt->z " << pkt->z << endl;
 
-	SendPacket();
-	
-}
 void CNetWork::KeyPkt(bool jump, bool attack, bool skill) 
 {
 	cs_packet_key *pkt = reinterpret_cast<cs_packet_key *>(send_buffer);
@@ -351,13 +336,12 @@ void CNetWork::KeyPkt(bool jump, bool attack, bool skill)
 	pkt->skill = skill;
 	SendPacket();
 }
-void CNetWork::LobbyPkt(bool out)
+void CNetWork::LobbyPkt()
 {
 	cs_packet_lobby_out *pkt = reinterpret_cast<cs_packet_lobby_out *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_LOBBY_OUT;
-	pkt->out = out;
 
 	SendPacket();
 }

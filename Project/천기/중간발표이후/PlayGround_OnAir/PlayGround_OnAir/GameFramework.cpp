@@ -430,7 +430,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 					break;
 				}
 				case VK_F7: {
-					CNETWORK->LobbyPkt(true);
+					CNETWORK->LobbyPkt();
 					break;
 				}
 				case VK_F11:
@@ -578,14 +578,14 @@ void CGameFramework::BuildObjects()
 
 	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
-	PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+	PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
 	
-	PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(440.0f, 50, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+	PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(440.0f, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	//PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(40,20, 40)); //박스도 151515배 여기여기0409
 	//PLAYER->GetOtherPlayer()->Rotate(0,90,0); //박스도 151515배 여기여기0409
 
 	PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
-	PLAYER->GetOtherPlayer()->SetOOBB(PLAYER->GetOtherPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+	PLAYER->GetOtherPlayer()->SetOOBB(PLAYER->GetOtherPlayer()->GetPosition(), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
 
 
 	//if (m_pScene) m_pScene->MakeOtherPlayer(m_pd3dDevice, m_pd3dCommandList);
@@ -704,10 +704,20 @@ void CGameFramework::ProcessInput()
 		//	//PLAYER->GetPlayer()->SetPlayerState(RUN); 
 		//	dwDirection |= DIR_DOWN;
 		//}
-		if (PLAYER->GetPlayer()->GetPlayerState() != JUMP && PLAYER->GetOtherPlayer()->GetPlayerState() != JUMP) {
-			if (pKeysBuffer[VK_SPACE] & 0xF0)
-			{
-				CNETWORK->KeyPkt(true, false, false);
+		if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
+			if (PLAYER->GetPlayer()->GetPlayerState() != JUMP) {
+				if (pKeysBuffer[VK_SPACE] & 0xF0)
+				{
+					CNETWORK->KeyPkt(true, false, false);
+				}
+			}
+		}
+		if (PLAYER->GetOtherPlayer()->GetClientNum() == CNETWORK->myid) {
+			if (PLAYER->GetOtherPlayer()->GetPlayerState() != JUMP) {
+				if (pKeysBuffer[VK_SPACE] & 0xF0)
+				{
+					CNETWORK->KeyPkt(true, false, false);
+				}
 			}
 		}
 		if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::HAPPY && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::HAPPY) {
@@ -744,13 +754,13 @@ void CGameFramework::ProcessInput()
 			if (dwDirection )
 			{
 				if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
-					if(PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetOtherPlayer()->GetPlayerState() == RUN)
-						CNETWORK->StatePkt(dwDirection); 
+					if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetOtherPlayer()->GetPlayerState() == RUN)
+						CNETWORK->StatePkt(dwDirection);
 				}
 				if (PLAYER->GetOtherPlayer()->GetClientNum() == CNETWORK->myid) {
 					if (PLAYER->GetOtherPlayer()->GetPlayerState() == IDLE || PLAYER->GetOtherPlayer()->GetPlayerState() == RUN)
-						CNETWORK->StatePkt(dwDirection); 
-				}
+						CNETWORK->StatePkt(dwDirection);
+				}	
 			}
 		}
 	}
@@ -836,26 +846,26 @@ void CGameFramework::FrameAdvance()
 
     AnimateObjects();
 
-	if (GetTickCount() % 4 == 0) {
-		if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
-			if (PLAYER->GetPlayer()->m_match == true) {
-				if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
-					//CNETWORK->PosPkt(PLAYER->GetPlayer()->GetPosition());
-					PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
-					//cout << "--A : "<< PLAYER->GetPlayer()->GetPosition().z << endl;
-				}
-			}
-		}
-		else {
-			if (PLAYER->GetOtherPlayer()->m_match == true) {
-				if (PLAYER->GetOtherPlayer()->GetPrePosition().x != PLAYER->GetOtherPlayer()->GetPosition().x || PLAYER->GetOtherPlayer()->GetPrePosition().z != PLAYER->GetOtherPlayer()->GetPosition().z) {
-					//CNETWORK->PosPkt(PLAYER->GetOtherPlayer()->GetPosition());
-					PLAYER->GetOtherPlayer()->SetPrePosition(PLAYER->GetOtherPlayer()->GetPosition());
-					//cout << "--B : " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
-				}
-			}
-		}
-	}
+	//if (GetTickCount() % 4 == 0) {
+	//	if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
+	//		if (PLAYER->GetPlayer()->m_match == true) {
+	//			if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
+	//				//CNETWORK->PosPkt(PLAYER->GetPlayer()->GetPosition());
+	//				PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
+	//				//cout << "--A : "<< PLAYER->GetPlayer()->GetPosition().z << endl;
+	//			}
+	//		}
+	//	}
+	//	else {
+	//		if (PLAYER->GetOtherPlayer()->m_match == true) {
+	//			if (PLAYER->GetOtherPlayer()->GetPrePosition().x != PLAYER->GetOtherPlayer()->GetPosition().x || PLAYER->GetOtherPlayer()->GetPrePosition().z != PLAYER->GetOtherPlayer()->GetPosition().z) {
+	//				//CNETWORK->PosPkt(PLAYER->GetOtherPlayer()->GetPosition());
+	//				PLAYER->GetOtherPlayer()->SetPrePosition(PLAYER->GetOtherPlayer()->GetPosition());
+	//				//cout << "--B : " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+	//			}
+	//		}
+	//	}
+	//}
 
 	HRESULT hResult = m_pd3dCommandAllocator->Reset();
 	hResult = m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);

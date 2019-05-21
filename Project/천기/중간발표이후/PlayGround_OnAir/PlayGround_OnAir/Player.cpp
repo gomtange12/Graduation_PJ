@@ -232,20 +232,20 @@ void CPlayer::Update(float fTimeElapsed)
 		}
 	}
 
-	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
-	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);
-	float fMaxVelocityXZ = m_fMaxVelocityXZ;
-	if (fLength > m_fMaxVelocityXZ)
-	{
-		m_xmf3Velocity.x *= (fMaxVelocityXZ / fLength);
-		m_xmf3Velocity.z *= (fMaxVelocityXZ / fLength);
-	}
-	float fMaxVelocityY = m_fMaxVelocityY;
-	fLength = sqrtf(m_xmf3Velocity.y * m_xmf3Velocity.y);
-	if (fLength > m_fMaxVelocityY) m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
+	//m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
+	//float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);
+	//float fMaxVelocityXZ = m_fMaxVelocityXZ;
+	//if (fLength > m_fMaxVelocityXZ)
+	//{
+	//	m_xmf3Velocity.x *= (fMaxVelocityXZ / fLength);
+	//	m_xmf3Velocity.z *= (fMaxVelocityXZ / fLength);
+	//}
+	//float fMaxVelocityY = m_fMaxVelocityY;
+	//fLength = sqrtf(m_xmf3Velocity.y * m_xmf3Velocity.y);
+	//if (fLength > m_fMaxVelocityY) m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
 
-	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(m_xmf3Velocity, 0.02, false);
-	Move(xmf3Velocity, false);
+	//XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(m_xmf3Velocity, 0.02, false);
+	//Move(xmf3Velocity, false);
 
 	if (m_pPlayerUpdatedContext)
 		OnPlayerUpdateCallback(fTimeElapsed);
@@ -270,12 +270,11 @@ void CPlayer::Update(float fTimeElapsed)
 	//m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 
 	//m_pCamera->GenerateProjectionMatrix();
-	fLength = Vector3::Length(m_xmf3Velocity);
-	float fDeceleration = (m_fFriction * 0.02);
-	if (fDeceleration > fLength) fDeceleration = fLength;
-	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
-	if(GetTickCount()%3000 ==0)
-	cout << GetPosition().x << " " << GetPosition().z << endl;
+	//fLength = Vector3::Length(m_xmf3Velocity);
+	//float fDeceleration = (m_fFriction * 0.02);
+	//if (fDeceleration > fLength) fDeceleration = fLength;
+	//m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
+	
 	//m_JumpPower = 0;
 	switch (GetPlayerState())
 	{
@@ -288,7 +287,7 @@ void CPlayer::Update(float fTimeElapsed)
 		//if (!m_OnAacting)
 		//{
 			//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
-			m_OnAacting = FALSE;
+			m_OnAacting = TRUE;
 		//}
 		SetTrackAnimationSet(0, RUN);
 		//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
@@ -983,21 +982,21 @@ void COtherPlayers::Update(float fTimeElapsed)
 		}
 	}
 
-	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
-	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);
-	float fMaxVelocityXZ = m_fMaxVelocityXZ;
-	if (fLength > m_fMaxVelocityXZ)
-	{
-		m_xmf3Velocity.x *= (fMaxVelocityXZ / fLength);
-		m_xmf3Velocity.z *= (fMaxVelocityXZ / fLength);
-	}
-	float fMaxVelocityY = m_fMaxVelocityY;
-	fLength = sqrtf(m_xmf3Velocity.y * m_xmf3Velocity.y);
-	if (fLength > m_fMaxVelocityY) m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
+	//m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
+	//float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);
+	//float fMaxVelocityXZ = m_fMaxVelocityXZ;
+	//if (fLength > m_fMaxVelocityXZ)
+	//{
+	//	m_xmf3Velocity.x *= (fMaxVelocityXZ / fLength);
+	//	m_xmf3Velocity.z *= (fMaxVelocityXZ / fLength);
+	//}
+	//float fMaxVelocityY = m_fMaxVelocityY;
+	//fLength = sqrtf(m_xmf3Velocity.y * m_xmf3Velocity.y);
+	//if (fLength > m_fMaxVelocityY) m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
 
-	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(m_xmf3Velocity, 0.02, false);
+	//XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(m_xmf3Velocity, 0.02, false);
 	
-	Move(xmf3Velocity, false);
+	//Move(xmf3Velocity, false);
 
 	if (m_pPlayerUpdatedContext)
 		OnPlayerUpdateCallback(fTimeElapsed);
@@ -1022,13 +1021,11 @@ void COtherPlayers::Update(float fTimeElapsed)
 	//m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 
 	//m_pCamera->GenerateProjectionMatrix();
-	fLength = Vector3::Length(m_xmf3Velocity);
-	float fDeceleration = (m_fFriction * 0.02);
+	//fLength = Vector3::Length(m_xmf3Velocity);
+	//float fDeceleration = (m_fFriction * 0.02);
+	//if (fDeceleration > fLength) fDeceleration = fLength;
+	//m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 
-	if (fDeceleration > fLength) fDeceleration = fLength;
-	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
-	if (GetTickCount() % 3000 == 0)
-	cout << GetPosition().x << " " << GetPosition().z << endl;
 	switch (GetPlayerState())
 	{
 		/*default:
@@ -1047,6 +1044,30 @@ void COtherPlayers::Update(float fTimeElapsed)
 		SetTrackAnimationSet(0, RUN);
 		//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		//m_OnAacting = FALSE;
+		break;
+		break;
+	case JUMP:
+		m_OnAacting = TRUE;
+		//float jumpTime = fTimeElapsed;
+		//XMFLOAT3 jump{ 0,0,0 };
+		//float newVel = -xmf3Velocity.y;
+		//xmf3Velocity.y += m_xmf3Gravity.y * fTimeElapsed;
+		////m_xmf3Position += 
+		/*m_xmf3Position.y = m_xmf3Position.y + (m_xmf3Gravity.y * fTimeElapsed);
+		cout << m_xmf3Position.y << endl;*/
+		//m_newYpos = m_xmf3Position.y;
+		//m_xmf3Position.y = m_xmf3Position.y + (m_xmf3Gravity.y* 0.5) * fTimeElapsed ;
+		//m_xmf3Position.y += 7;
+		/*m_newYpos = m_xmf3Position.y + 8;
+		m_newYpos += (m_xmf3Gravity.y * 0.5* fTimeElapsed);
+		m_xmf3Position.y = m_newYpos;*/
+		m_JumpPower += (m_xmf3Gravity.y * 0.1* fTimeElapsed);
+		m_xmf3Position.y += m_JumpPower * fTimeElapsed;
+
+
+		//m_newYpos = 0;
+		//cout << m_JumpPower << endl;
+		SetTrackAnimationSet(0, JUMP);
 		break;
 	case STUN:
 		m_OnAacting = TRUE;

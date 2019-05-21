@@ -17,12 +17,12 @@
 //
 const int OP_RECV = 1;
 const int OP_SEND = 2;
-const int OP_ALLPOS = 3; 
+//const int OP_ALLPOS = 3;  //동기화 테스트용
 const int OP_STOP = 4;
 //
 
 constexpr int SC_LOGIN_OK = 1;
-constexpr int SC_PUT_PLAYER = 2;
+//constexpr int SC_PUT_PLAYER = 2; //재접용으로 쓸까?
 constexpr int SC_REMOVE_PLAYER = 3;
 constexpr int SC_MOVE_PLAYER = 4;
 constexpr int SC_MATCHING_RESULT = 5;
@@ -33,11 +33,11 @@ constexpr int SC_KEY_INFO = 14;
 constexpr int SC_ATTACK_INFO = 15;\
 constexpr int SC_LOBBY_IN = 17;
 constexpr int SC_RESULT_INFO = 18;
-constexpr int SC_ALL_POS = 19;
+//constexpr int SC_ALL_POS = 19;
 //
 constexpr int CS_MATCHING_PLAYER = 9;
 constexpr int CS_MOVE_STATE_INFO = 10;
-constexpr int CS_POS_INFO = 11;
+//constexpr int CS_POS_INFO = 11;
 constexpr int CS_ROTE_STATE_INFO = 12;
 constexpr int CS_KEY_INFO = 13;
 constexpr int CS_LOBBY_OUT = 16;
@@ -119,7 +119,6 @@ struct sc_packet_attack
 struct sc_packet_lobby {
 	BYTE size;
 	BYTE type;
-	bool out;
 };
 struct sc_packet_result {
 	BYTE size;
@@ -155,13 +154,6 @@ struct cs_packet_rote_state {
 	float y;
 };
 
-struct cs_packet_pos{
-	BYTE size;
-	BYTE type;
-	float x;
-	//float y;
-	int z;
-};
 struct cs_packet_key {
 	BYTE size;
 	BYTE type;
@@ -172,6 +164,5 @@ struct cs_packet_key {
 struct cs_packet_lobby_out {
 	BYTE size;
 	BYTE type;
-	bool out;
 }; 
 #pragma pack(pop)

@@ -35,44 +35,19 @@ void PacketManager::LoginPacket(int id)
 	pkt.type = SC_LOGIN_OK;
 	SendPacket(id, &pkt);
 }
-//void PacketManager::PutPlayerPacket(int id) //필요없을듯
-//{
-//	for (int i = 0; i < MAX_USER; ++i) {
-//		if (true == objectManager->GetPlayer(i)->m_connected) {
-//			sc_packet_put_player packet;
-//			packet.id = id;
-//		/*	packet.x = objectManager->GetPlayer(id)->m_x;
-//			packet.y = objectManager->GetPlayer(id)->m_y;*/
-//			packet.size = sizeof(sc_packet_put_player);
-//			packet.type = SC_PUT_PLAYER;
-//			SendPacket(i, &packet);
-//		}
-//	}
-//	for (int i = 0; i < MAX_USER; ++i) {
-//		if (false == objectManager->GetPlayer(i)->m_connected) continue;
-//		if (i == id) continue;
-//		sc_packet_put_player packet;
-//		packet.id = i;
-//		/*packet.x = objectManager->GetPlayer(i)->m_x;
-//		packet.y = objectManager->GetPlayer(i)->m_y;*/
-//		packet.size = sizeof(sc_packet_put_player);
-//		packet.type = SC_PUT_PLAYER;
-//		SendPacket(id, &packet);
-//	}	
-//	
-//};
-void PacketManager::MovePacket(XMFLOAT3 xmf3Shift, int id)
+
+void PacketManager::MovePacket(int id)
 {
 	//매칭시 
-			// 같은방에 있는 '모든' id들 에게 나의 변경된 포지션 값을 준다.
+	// 같은방에 있는 '모든' id들 에게 나의 변경된 포지션 값을 준다.
 	sc_packet_move pkt;
 	pkt.size = sizeof(sc_packet_move);
 	pkt.type = SC_MOVE_PLAYER;
 	pkt.id = id;
 	pkt.velocity = true;
-	pkt.posX = xmf3Shift.x;
-	pkt.posY = xmf3Shift.y;
-	pkt.posZ = xmf3Shift.z;
+	pkt.posX = objectManager->GetPlayer(id)->m_xmf3Position.x;
+	pkt.posY = objectManager->GetPlayer(id)->m_xmf3Position.y;
+	pkt.posZ = objectManager->GetPlayer(id)->m_xmf3Position.z;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
 	for (int i = 0; i < SOLO_NUM; ++i) {
@@ -189,7 +164,6 @@ void PacketManager::LobbyPacket(int id)
 	sc_packet_lobby pkt;
 	pkt.size = sizeof(sc_packet_lobby);
 	pkt.type = SC_LOBBY_IN;
-	pkt.out = true;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
 	for (int i = 0; i < SOLO_NUM; ++i) {
@@ -215,21 +189,4 @@ void PacketManager::ResultPacket(int id)
 	for (int i = 0; i < SOLO_NUM; ++i) {
 		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 	}
-}
-void PacketManager::AllPos(int id) 
-{
-	int otherId;
-	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_NUM; ++i) {
-		if(id!=ROOMMANAGER->room[roomNum]->m_ids[i])
-			otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
-	}
-	sc_packet_allpos pkt;
-	pkt.size = sizeof(sc_packet_allpos);
-	pkt.type = SC_ALL_POS;
-	pkt.id = id;
-	pkt.posX = objectManager->GetPlayer(otherId)->m_xmf3Position.x;
-	pkt.posZ = objectManager->GetPlayer(otherId)->m_xmf3Position.z;
-	SendPacket(id, &pkt);
-	SendPacket(otherId, &pkt);
 }

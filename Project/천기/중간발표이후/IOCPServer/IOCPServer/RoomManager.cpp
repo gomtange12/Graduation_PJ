@@ -39,13 +39,13 @@ void RoomManager::SoloRoomMatch(int id)
 							
 							//// 매칭 디폴트값
 							objectManager->GetPlayer(room[i]->m_ids[0])->avatar = A;
-							objectManager->GetPlayer(room[i]->m_ids[0])->m_xmf3Position = XMFLOAT3(-530, 10, 745);
+							objectManager->GetPlayer(room[i]->m_ids[0])->m_xmf3Position = XMFLOAT3(2560, 10, 1745);
 							objectManager->GetPlayer(room[i]->m_ids[0])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_ids[0])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_ids[0])->m_xmf3Position.y,
 								objectManager->GetPlayer(room[i]->m_ids[0])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
 
 							objectManager->GetPlayer(room[i]->m_ids[1])->avatar = B;
-							objectManager->GetPlayer(room[i]->m_ids[1])->m_xmf3Position = XMFLOAT3(1060, 10, 745);
+							objectManager->GetPlayer(room[i]->m_ids[1])->m_xmf3Position = XMFLOAT3(440.0f, 10, 1745);
 							objectManager->GetPlayer(room[i]->m_ids[1])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_ids[1])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_ids[1])->m_xmf3Position.y,
 								objectManager->GetPlayer(room[i]->m_ids[1])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
