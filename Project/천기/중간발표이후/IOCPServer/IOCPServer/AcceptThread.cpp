@@ -81,11 +81,7 @@ void AcceptThread::Proc()
 		////
 
 		//로그인 + 다른 사용자 접속 처리 
-		
 		PACKETMANAGER->LoginPacket(id);
-	
-		//PACKETMANAGER->PutPlayerPacket(id);
-		////
 
 		OBJMANAGER->OverlappedRecv(id);
 	}
