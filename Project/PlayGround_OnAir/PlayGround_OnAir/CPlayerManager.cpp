@@ -15,6 +15,11 @@ CPlayerManager::~CPlayerManager()
 {
 }
 
+void CPlayerManager::MakePlayerResource(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	//m_PlayerMap.emplace(PLAYEROBJ,)
+}
+
 void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
 	//첫번째 플레이어
