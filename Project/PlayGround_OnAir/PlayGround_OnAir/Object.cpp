@@ -628,7 +628,7 @@ CGameObject::CGameObject(int nMaterials) : CGameObject()
 	//	++ObjIndex;
 	//}
 	//AllObjectList[ObjIndex] = this;
-	//myIdx = ObjIndex;
+	myIdx = ObjIndex;
 	//++ObjIndex;
 }
 

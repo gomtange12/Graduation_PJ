@@ -20,31 +20,30 @@ void CObjectManager::AddGameObject(OBJTYPE objType, char* fname, ID3D12Device *p
 
 //있나 없나 확인
 	CLoadedModelInfo* obj = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, fname, nullptr, false);
-	
 	CGameObject* gameObject = new CGameObject();
 
 	auto iter = m_ObjMap.find(objType);
+
 	if (iter != m_ObjMap.end()) //있으면 리스트에 넣음
 	{
-		obj->SetPosition(XMFLOAT3(0,0,0));
-		
-		obj->SetObjType(objType);
-		obj->SetHp(20);//temp
-		if (objType == MAPOBJ)
-		{
-			
-		}
-
-		m_ObjMap[objType].emplace_back(obj);
+		gameObject->SetPosition(XMFLOAT3(0,0,0));
+		gameObject->SetObjType(objType);
+		gameObject->SetHp(20);//temp
+		gameObject->SetMesh(obj->m_pModelRootObject->m_pMesh);//temp
+		gameObject->SetOOBB(gameObject->GetPosition(), gameObject->m_pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+		m_ObjMap[objType].emplace_back(gameObject);
 		m_ObjMap[objType].begin();
 	}
 	else //없으면 리스트를 만들어서 넣음
 	{
-		obj->SetPosition(XMFLOAT3(0, 0, 0));
+		gameObject->SetPosition(XMFLOAT3(0, 0, 0));
+		gameObject->SetObjType(objType);
+		gameObject->SetHp(20);//temp
+		gameObject->SetMesh(obj->m_pModelRootObject->m_pMesh);//temp
+		gameObject->SetOOBB(gameObject->GetPosition(), gameObject->m_pMesh->GetAABBExtents(), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-		obj->SetObjType(objType);
-		obj->SetHp(20);//temp
-		ObjList.emplace_back(obj);
+
+		ObjList.emplace_back(gameObject);
 		m_ObjMap.insert(std::make_pair(objType, ObjList));
 
 	}
@@ -61,11 +60,11 @@ void CObjectManager::SetObjlist(vector<CGameObject*>& Obj)
 CGameObject* CObjectManager::FindGameObject(OBJTYPE objType, int idx)
 {
 	//_ObjMap.find(obj)
-	/*for (unsigned int i = 0; i < m_ObjMap[objType].size(); ++i)
+	for (unsigned int i = 0; i < m_ObjMap[objType].size(); ++i)
 	{
 		if (m_ObjMap[objType][i]->GetMyIdx() == idx)
 			return m_ObjMap[objType][i];
-	}*/
+	}
 	return NULL;
 
 }

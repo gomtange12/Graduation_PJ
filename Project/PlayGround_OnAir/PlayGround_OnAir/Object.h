@@ -458,7 +458,7 @@ public:
 public:
 	CAnimationController 			*m_pAnimationController = NULL;
 	CSkinningBoneTransforms 		*m_pSkinningBoneTransforms = NULL;
-
+	int GetMyIdx() { return myIdx; }
 	CGameObject *GetRootSkinnedGameObject();
 
 	void SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet);

@@ -103,6 +103,7 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 #define SCENEMANAGER	 CSceneManager::GetInstance()
 #define OBJECTMANAGER	 CObjectManager::GetInstance()
 #define CNETWORK	CNetWork::GetInstance()
+#define objScale 6.47
 
 #define MAXOBJECTNUM 100
 #define   WM_SOCKET            WM_USER + 1

@@ -9,7 +9,6 @@
 #include "CObjectManager.h"
 #include "CBillboardObject.h"
 #include "CShadowShader.h"
-#define objScale 6.47
 #define CONCERTMAPSCALSE 6.47
 
 ID3D12DescriptorHeap *CScene::m_pd3dCbvSrvDescriptorHeap = NULL;
