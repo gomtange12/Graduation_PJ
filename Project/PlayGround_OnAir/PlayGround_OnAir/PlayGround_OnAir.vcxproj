@@ -156,7 +156,6 @@
     <ClInclude Include="CObjectManager.h" />
     <ClInclude Include="CPlayerManager.h" />
     <ClInclude Include="CSceneManager.h" />
-    <ClInclude Include="CShadowShader.h" />
     <ClInclude Include="CState.h" />
     <ClInclude Include="CTempScene.h" />
     <ClInclude Include="d3dx12.h" />
@@ -186,7 +185,6 @@
     <ClCompile Include="CObjectManager.cpp" />
     <ClCompile Include="CPlayerManager.cpp" />
     <ClCompile Include="CSceneManager.cpp" />
-    <ClCompile Include="CShadowShader.cpp" />
     <ClCompile Include="CState.cpp" />
     <ClCompile Include="CTempScene.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp" />
@@ -224,17 +222,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="ShadowShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="UIShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>

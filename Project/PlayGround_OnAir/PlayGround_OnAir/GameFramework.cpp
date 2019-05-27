@@ -180,12 +180,12 @@ void CGameFramework::CreateSwapChain()
 	dxgiSwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	HRESULT hResult = m_pdxgiFactory->CreateSwapChain(m_pd3dCommandQueue, &dxgiSwapChainDesc, (IDXGISwapChain **)&m_pdxgiSwapChain);
-	hResult = m_pdxgiSwapChain->SetFullscreenState(false, NULL);
-	if (hResult == E_FAIL)
-		return;
-	m_pdxgiSwapChain->GetDesc(&dxgiSwapChainDesc);
-	//SetFullScreenState함수를 호출해주었기 때문에 ResizeBuffers함수를 호출해줘야함.
-	m_pdxgiSwapChain->ResizeBuffers(m_nSwapChainBuffers, m_nWndClientWidth, m_nWndClientHeight, dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
+	//hResult = m_pdxgiSwapChain->SetFullscreenState(false, NULL);
+	//if (hResult == E_FAIL)
+	//	return;
+	//m_pdxgiSwapChain->GetDesc(&dxgiSwapChainDesc);
+	////SetFullScreenState함수를 호출해주었기 때문에 ResizeBuffers함수를 호출해줘야함.
+	//m_pdxgiSwapChain->ResizeBuffers(m_nSwapChainBuffers, m_nWndClientWidth, m_nWndClientHeight, dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
 #endif
 
 	m_nSwapChainBufferIndex = m_pdxgiSwapChain->GetCurrentBackBufferIndex();
@@ -419,13 +419,23 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 				case VK_F2:
 				case VK_F3:
 				case VK_F4:
-					m_pCamera = PLAYER->GetPlayer()->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
+					//m_pCamera = PLAYER->GetPlayer()->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
 					break;
-				case VK_F6: {
-					CNETWORK->MatchPkt();
+				case VK_F5: {
+					if (m_ready == false) {
+						//CNETWORK->MatchPkt();
+						SCENEMANAGER->SetScene(PLAYGROUNDMAP);
+						m_pCamera = PLAYER->GetPlayer()->GetCamera();
+						cout << "매칭!";
+						m_ready = true;
+					}
 					break;
 				}
-				case VK_F9:
+				case VK_F7: {
+					//CNETWORK->LobbyPkt(true);
+					break;
+				}
+				case VK_F11:
 					ChangeSwapChainState();
 					break;
 				case '1':
@@ -533,7 +543,7 @@ void CGameFramework::OnDestroy()
 
 void CGameFramework::BuildObjects()
 {
-	CNETWORK->MakeServer(m_hWnd);
+	//CNETWORK->MakeServer(m_hWnd);
 	m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
 
 	//SCENEMANAGER->
@@ -543,53 +553,53 @@ void CGameFramework::BuildObjects()
 		m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
 		//m_pScene->SetCollideBox();
 	}
-		//SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
-	//SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
-
-	//for (auto&& p : SCENEMANAGER->m_MapList)
-	//{
-	//	//p.second->CreateShaderResourceViews(m_pd3dDevice,nullptr,)
-	//	p.second->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
-	//}
-
-
-	//m_pScene = new CScene();
-	//if (m_pScene) m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
 	//SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
-	//SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
+//SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
 
-	//for (auto& p : SCENEMANAGER->m_MapList)
-	//{
-	//	//p.second->CreateShaderResourceViews(m_pd3dDevice,nullptr,)
-	//	p.second->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
-	//}
+//for (auto&& p : SCENEMANAGER->m_MapList)
+//{
+//	//p.second->CreateShaderResourceViews(m_pd3dDevice,nullptr,)
+//	p.second->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
+//}
 
-	//여기가 배치 구문이니 신경써야한다. 
+
+//m_pScene = new CScene();
+//if (m_pScene) m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
+//SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
+//SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
+
+//for (auto& p : SCENEMANAGER->m_MapList)
+//{
+//	//p.second->CreateShaderResourceViews(m_pd3dDevice,nullptr,)
+//	p.second->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
+//}
+
+//여기가 배치 구문이니 신경써야한다. 
 #ifdef _WITH_TERRAIN_PLAYER
 	PLAYER->Initialize(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 
-	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(-530,50,745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
-	PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()-> m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
-	PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7,10,7), XMFLOAT4(0, 0, 0, 1));
+	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+	PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
+	PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 	
-	PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(1060, 10, 745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+	PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(440.0f, 50, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	//PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(40,20, 40)); //박스도 151515배 여기여기0409
 	//PLAYER->GetOtherPlayer()->Rotate(0,90,0); //박스도 151515배 여기여기0409
-	
+
 	PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
 	PLAYER->GetOtherPlayer()->SetOOBB(PLAYER->GetOtherPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 
 
 	//if (m_pScene) m_pScene->MakeOtherPlayer(m_pd3dDevice, m_pd3dCommandList);
 	//MAKE OTHER PLAYER
-	
+
 	//PLAYER->GetPlayer()->SetMesh()
 	//PLAYER->GetPlayer()->FindAndSetSkinnedMesh()
 	//if (PLAYER->GetPlayer()->GetRootSkinnedGameObject()->m_pMesh != nullptr)
 		//int i = 0;
 	//PLAYER->GetPlayer()->SetCollideBox();
 																									 //PLAYER->MakeOtherPlayers(m_pd3dDevice, m_pd3dCommandList, SCENEMANAGER->m_MapList[INGAME]->GetGraphicsRootSignature(), SCENEMANAGER->m_MapList[INGAME]->m_pTerrain);
-	
+
 #else
 	CAirplanePlayer *pPlayer = new CAirplanePlayer(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), NULL);
 	pPlayer->SetPosition(XMFLOAT3(425.0f, 240.0f, 640.0f));
@@ -597,7 +607,7 @@ void CGameFramework::BuildObjects()
 	//m_pScene->BuildObjectsAfterPlayer(m_pd3dDevice, m_pd3dCommandList);
 	//m_pScene->m_pPlayer = m_pPlayer;// = pPlayer;// = PLAYER->GetInstance()->GetPlayer();
 	m_pCamera = PLAYER->GetPlayer()->GetCamera();
-	
+	CNETWORK->SetGameFrameWork(GetCGameFramework());
 	//m_pCamera->SetMode(THIRD_PERSON_CAMERA);
 
 	m_pd3dCommandList->Close();
@@ -626,20 +636,18 @@ void CGameFramework::ProcessInput()
 	bool bProcessedByScene = false;
 	if (GetKeyboardState(pKeysBuffer) && m_pScene)
 		bProcessedByScene = m_pScene->ProcessInput(pKeysBuffer);
-	if (!bProcessedByScene&& PLAYER->GetPlayer()->GetAllowKey())
+	if (!bProcessedByScene || PLAYER->GetPlayer()->GetAllowKey() || PLAYER->GetOtherPlayer()->GetAllowKey())
 	{
-		if (pKeysBuffer[VK_RETURN] & 0xF0)
-		{
-			SCENEMANAGER->SetScene(PLAYGROUNDMAP);
-		}
 		if (pKeysBuffer[VK_RSHIFT] & 0xF0)
 		{
 			SCENEMANAGER->SetScene(CONCERTMAP);
+			//PLAYER->GetPlayer()->SetPosition(XMFLOAT3());
+			//PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3());
 		}
 		//PLAYER->GetPlayer()->GetDirectiond() = 0;
 		dwDirection = 0;
 		otherPlayerDirection = 0;
-		if (pKeysBuffer[VK_UP] & 0xF0)
+		if (pKeysBuffer[0x57] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			//PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
@@ -648,17 +656,17 @@ void CGameFramework::ProcessInput()
 
 			//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
 		}
-		if (pKeysBuffer[VK_DOWN] & 0xF0)
+		if (pKeysBuffer[0x53] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			dwDirection |= DIR_BACKWARD;
 		}
-		if (pKeysBuffer[VK_LEFT] & 0xF0) 
+		if (pKeysBuffer[0x41] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			dwDirection |= DIR_LEFT;
-		} 
-		if (pKeysBuffer[VK_RIGHT] & 0xF0) 
+		}
+		if (pKeysBuffer[0x44] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			dwDirection |= DIR_RIGHT;
@@ -689,30 +697,32 @@ void CGameFramework::ProcessInput()
 		//	otherPlayerDirection |= DIR_RIGHT;
 		//}
 
-		if (pKeysBuffer[VK_PRIOR] & 0xF0) {
-			//PLAYER->GetPlayer()->SetPlayerState(RUN);
-			dwDirection |= DIR_UP;
-		} 
-		if (pKeysBuffer[VK_NEXT] & 0xF0)
-		{
-			//PLAYER->GetPlayer()->SetPlayerState(RUN); 
-			dwDirection |= DIR_DOWN;
+		//if (pKeysBuffer[VK_PRIOR] & 0xF0) {
+		//	//PLAYER->GetPlayer()->SetPlayerState(RUN);
+		//	dwDirection |= DIR_UP;
+		//} 
+		//if (pKeysBuffer[VK_NEXT] & 0xF0)
+		//{
+		//	//PLAYER->GetPlayer()->SetPlayerState(RUN); 
+		//	dwDirection |= DIR_DOWN;
+		//}
+		if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::JUMP) {
+			if (pKeysBuffer[VK_SPACE] & 0xF0)
+			{
+				//CNETWORK->KeyPkt(true, false, false);
+				PLAYER->GetPlayer()->SetPlayerState(PlayerState::JUMP);
+				//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
+			}
 		}
-		if (pKeysBuffer[VK_SPACE] & 0xF0)
-		{
-			PLAYER->GetPlayer()->SetPlayerState(JUMP);
-			PLAYER->GetOtherPlayer()->SetPlayerState(JUMP);
-
-			PLAYER->GetPlayer()->SetJumpPower(500.0f);
-			//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
+		if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::HAPPY){// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::HAPPY) {
+			if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::ATTACK){// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::ATTACK) {
+				if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
+				{
+					PLAYER->GetPlayer()->SetPlayerState(PlayerState::ATTACK);
+					//CNETWORK->KeyPkt(false, true, false);
+				}
+			}
 		}
-		if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
-		{
-			PLAYER->GetPlayer()->SetPlayerState(ATTACK);
-			PLAYER->GetOtherPlayer()->SetPlayerState(ATTACK);
-
-		}
-
 		float cxDelta = 0.0f, cyDelta = 0.0f;
 		POINT ptCursorPos;
 		if (GetCapture() == m_hWnd)
@@ -724,7 +734,7 @@ void CGameFramework::ProcessInput()
 			SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
 		}
 
-		if ((otherPlayerDirection != 0)||(dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
+		if ((otherPlayerDirection != 0) || (dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
 		{
 			if (cxDelta || cyDelta)
 			{
@@ -732,16 +742,23 @@ void CGameFramework::ProcessInput()
 				//	PLAYER->GetPlayer()->Rotate(cyDelta, 0.0f, -cxDelta);
 				if (pKeysBuffer[VK_RBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설
 				{
+
 					PLAYER->GetPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
-					PLAYER->GetOtherPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
+					//PLAYER->GetOtherPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
 
 				}
 			}
-			if (dwDirection )
+			if (dwDirection)
 			{
-				//if(!PLAYER->GetPlayer()->IsPlayerCrashMap())
-					PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
-				//CNETWORK->StatePkt(dwDirection); //서버에 키상태전송
+				PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
+				/*if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
+					if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetOtherPlayer()->GetPlayerState() == RUN)
+						CNETWORK->StatePkt(dwDirection);
+				}
+				if (PLAYER->GetOtherPlayer()->GetClientNum() == CNETWORK->myid) {
+					if (PLAYER->GetOtherPlayer()->GetPlayerState() == IDLE || PLAYER->GetOtherPlayer()->GetPlayerState() == RUN)
+						CNETWORK->StatePkt(dwDirection);
+				}*/
 			}
 		}
 	}
@@ -779,7 +796,7 @@ void CGameFramework::AnimateObjects()
 	static float fColors[4] = { 0.0f, 0.478f, 0.8f, 1.0f };
 	fColors[1] += 0.01f;
 	if (fColors[1] > 1.0f) fColors[1] = 0.0f;
-	m_pd2dfxGaussianBlur->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, 0.3f + fColors[1] * 10.0f);
+	//m_pd2dfxGaussianBlur->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, 0.3f + fColors[1] * 10.0f);
 #endif
 }
 
@@ -815,10 +832,38 @@ void CGameFramework::MoveToNextFrame()
 void CGameFramework::FrameAdvance()
 {    
 	m_GameTimer.Tick(60.0f);
+
+	if (SCENEMANAGER->GetSceneType() == PLAYGROUNDMAP || SCENEMANAGER->GetSceneType() == CONCERTMAP) {
+		//if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
+
+			ProcessInput();
+		//}
+	}
 	
-	ProcessInput();
+
 
     AnimateObjects();
+
+	//if (GetTickCount() % 4 == 0) {
+	//	if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
+	//		if (PLAYER->GetPlayer()->m_match == true) {
+	//			if (PLAYER->GetPlayer()->GetPrePosition().x != PLAYER->GetPlayer()->GetPosition().x || PLAYER->GetPlayer()->GetPrePosition().z != PLAYER->GetPlayer()->GetPosition().z) {
+	//				CNETWORK->PosPkt(PLAYER->GetPlayer()->GetPosition());
+	//				PLAYER->GetPlayer()->SetPrePosition(PLAYER->GetPlayer()->GetPosition());
+	//				//cout << "--A : "<< PLAYER->GetPlayer()->GetPosition().z << endl;
+	//			}
+	//		}
+	//	}
+	//	else {
+	//		if (PLAYER->GetOtherPlayer()->m_match == true) {
+	//			if (PLAYER->GetOtherPlayer()->GetPrePosition().x != PLAYER->GetOtherPlayer()->GetPosition().x || PLAYER->GetOtherPlayer()->GetPrePosition().z != PLAYER->GetOtherPlayer()->GetPosition().z) {
+	//				CNETWORK->PosPkt(PLAYER->GetOtherPlayer()->GetPosition());
+	//				PLAYER->GetOtherPlayer()->SetPrePosition(PLAYER->GetOtherPlayer()->GetPosition());
+	//				//cout << "--B : " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+	//			}
+	//		}
+	//	}
+	//}
 
 	HRESULT hResult = m_pd3dCommandAllocator->Reset();
 	hResult = m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
@@ -847,6 +892,7 @@ void CGameFramework::FrameAdvance()
 	m_pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	m_pd3dCommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
+	
 	if (m_pScene)
 	{
 		m_pScene->Render(m_pd3dCommandList, m_pCamera);
@@ -861,6 +907,7 @@ void CGameFramework::FrameAdvance()
 	if (PLAYER->GetPlayer()!=NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
 	if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
 	//cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+
 	if (m_pScene)
 	{
 		m_pScene->CheckObjectByObjectCollisions();
@@ -936,7 +983,9 @@ void CGameFramework::FrameAdvance()
 	m_GameTimer.GetFrameRate(m_pszFrameRate + 12, 37);
 	size_t nLength = _tcslen(m_pszFrameRate);
 	XMFLOAT3 xmf3Position = PLAYER->GetPlayer()->GetPosition();
-	_stprintf_s(m_pszFrameRate + nLength, 70 - nLength, _T("(%4f, %4f, %4f)"), xmf3Position.x, xmf3Position.y, xmf3Position.z);
+	//_stprintf_s(m_pszFrameRate + nLength, 70 - nLength, _T("(%4f, %4f, %4f)"), xmf3Position.x, xmf3Position.y, xmf3Position.z);
+	_stprintf_s(m_pszFrameRate + nLength, 70 - nLength, _T(" "));
+
 	::SetWindowText(m_hWnd, m_pszFrameRate);
 }
 

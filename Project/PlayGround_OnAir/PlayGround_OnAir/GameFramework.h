@@ -1,7 +1,7 @@
 #pragma once
 
-#define FRAME_BUFFER_WIDTH		640
-#define FRAME_BUFFER_HEIGHT		480
+#define FRAME_BUFFER_WIDTH		1280
+#define FRAME_BUFFER_HEIGHT		720
 
 #include "Timer.h"
 #include "Player.h"
@@ -13,6 +13,9 @@ class CGameFramework //: public CSingleTonBase<CGameFramework>
 public:
 	CGameFramework();
 	~CGameFramework();
+
+	CGameFramework*			GetCGameFramework() { return this; }
+	void SetCamera(const shared_ptr<CCamera>& camera) { m_pCamera = camera; };
 
 	bool OnCreate(HINSTANCE hInstance, HWND hMainWnd);
 	void OnDestroy();
@@ -42,12 +45,15 @@ public:
 
 	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
+
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
+	bool						m_ready = false;
 #ifdef _WITH_DIRECT2D
 	void CreateDirect2DDevice();
 #endif
 
 private:
+
 	D3D12_VIEWPORT				m_d3dViewport;
 	D3D12_RECT					m_d3dScissorRect;
 	HINSTANCE					m_hInstance;

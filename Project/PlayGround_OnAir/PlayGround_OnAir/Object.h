@@ -458,7 +458,7 @@ public:
 public:
 	CAnimationController 			*m_pAnimationController = NULL;
 	CSkinningBoneTransforms 		*m_pSkinningBoneTransforms = NULL;
-	int GetMyIdx() { return myIdx; }
+
 	CGameObject *GetRootSkinnedGameObject();
 
 	void SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet);
@@ -591,8 +591,8 @@ class MapObject : public CGameObject
 public:
 	
 	MapObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
+
 	~MapObject(){}
-	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT4X4 *pxmf4x4World);
 
 public:
 	

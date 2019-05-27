@@ -2,8 +2,11 @@
 #pragma comment (lib, "ws2_32.lib")
 #include <WinSock2.h>
 #include "Player.h"
+#include "GameFramework.h"
 //#include "..\..\IOCPServer\IOCPServer\Protocol.h"
 #include "..\..\Ãµ±â\IOCPServer\IOCPServer\Protocol.h"
+
+#define IP_ADDR "192.168.22.79"
 
 class CNetWork : public CSingleTonBase<CNetWork>
 {
@@ -17,24 +20,32 @@ private:
 	char 	send_buffer[MAX_BUFFER];
 	WSABUF	recv_wsabuf;
 	char	recv_buffer[MAX_BUFFER];
-	char	packet_buffer[MAX_BUFFER];
+	unsigned char	packet_buffer[MAX_BUFFER];
 
 	DWORD	in_packet_size = 0;
 	int		saved_packet_size = 0;
 
-	int myid;
+	bool firstCheck;
+
+	CGameFramework*			CNetCGameFramework;
 
 public:
+	int myid;
+
 	CNetWork();
 	~CNetWork();
 
+	void SetGameFrameWork(CGameFramework* CGFramwork) { CNetCGameFramework = CGFramwork; };
+
+	bool GetFirstCheck() const { return firstCheck; }
 	void MakeServer(const HWND& hWnd);
 	void SendPacket();
 	void ReadPacket(SOCKET sock);
-	void ProcessPacket(char *ptr);
+	void ProcessPacket(unsigned char *ptr);
 	void MatchPkt();
-	void StatePkt(DWORD state, float fTime);
+	void StatePkt(DWORD state);
 	void RotePkt(float y);
-	void Pos(const XMFLOAT3& pos);
-
+	void PosPkt(const XMFLOAT3& pos);
+	void KeyPkt(bool jump, bool attack, bool skill);
+	void LobbyPkt(bool out);
 };

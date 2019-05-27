@@ -63,18 +63,18 @@ using Microsoft::WRL::ComPtr;
 extern HINSTANCE						ghAppInstance;
 
 //#define _WITH_SWAPCHAIN_FULLSCREEN_STATE
-#define _WITH_DIRECT2D
-#ifdef _WITH_DIRECT2D
+//#define _WITH_DIRECT2D
+//#ifdef _WITH_DIRECT2D
 //#define _WITH_DIRECT2D_IMAGE_EFFECT
-#endif
+//#endif
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
 #else
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console") 
 #endif
 
-#define FRAME_BUFFER_WIDTH		640
-#define FRAME_BUFFER_HEIGHT		480
+#define FRAME_BUFFER_WIDTH		1280
+#define FRAME_BUFFER_HEIGHT		720
 #define MIRAHEIGHT				10
 //#define _WITH_CB_GAMEOBJECT_32BIT_CONSTANTS
 //#define _WITH_CB_GAMEOBJECT_ROOT_DESCRIPTOR
@@ -103,7 +103,6 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 #define SCENEMANAGER	 CSceneManager::GetInstance()
 #define OBJECTMANAGER	 CObjectManager::GetInstance()
 #define CNETWORK	CNetWork::GetInstance()
-#define objScale 6.47
 
 #define MAXOBJECTNUM 100
 #define   WM_SOCKET            WM_USER + 1
@@ -127,12 +126,11 @@ enum PlayerState {
 	HIT,
 	JUMPROLL,
 	RUN_JUMP_ATTAK,
-	KICK,
 	ATTACK,
+	ATTACK_3,
 	HAPPY,
 	SAD,
 	BACK_RUN,
-	FALLING
 };
 
 enum SceneState {
@@ -146,14 +144,19 @@ enum AVATARNumber {
 	A, //ÀÓ½Ã¸íÄª
 	B
 };
-enum MAPNumber {
-	PLAYGROUND,
-	CONCERT
-};
+//enum MAPNumber {
+//	PLAYGROUND,
+//	CONCERT
+//};
 enum ModNumber {
 	SOLO,
 	DUO,
 	SQUAD
+};
+enum Result {
+	LOSE,
+	WIN,
+	ING
 };
 namespace Vector3
 {

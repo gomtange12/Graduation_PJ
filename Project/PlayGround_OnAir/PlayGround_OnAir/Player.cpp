@@ -145,8 +145,8 @@ void CPlayer::Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity)
 		else
 		{
 			m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
-			//if(m_pCamera!=nullptr)
-			m_pCamera->Move(xmf3Shift);
+			if(m_pCamera!=nullptr)
+				m_pCamera->Move(xmf3Shift);
 		}
 	}
 }
@@ -224,6 +224,14 @@ void CPlayer::SetPlayCrashMap(bool isCrash)
 
 void CPlayer::Update(float fTimeElapsed)
 {
+	if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
+		if (PLAYER->GetPlayer()->GetCollisionState() == true)
+		{
+			PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -6.f));
+			PLAYER->GetPlayer()->SetCollisionState(false);
+		}
+	}
+
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
 	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);
 	float fMaxVelocityXZ = m_fMaxVelocityXZ;
@@ -274,13 +282,16 @@ void CPlayer::Update(float fTimeElapsed)
 		SetTrackAnimationSet(0, IDLE);
 		break;*/
 	case IDLE:
+		m_OnAacting = FALSE;
+		SetTrackAnimationSet(0, IDLE);
+		break;
 	case RUN:
 		//if (!m_OnAacting)
 		//{
-			SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
-			m_OnAacting = FALSE;
+			//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
+		m_OnAacting = FALSE;
 		//}
-		//SetTrackAnimationSet(0, RUN);
+		SetTrackAnimationSet(0, RUN);
 		//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		//m_OnAacting = FALSE;
 		break;
@@ -301,11 +312,10 @@ void CPlayer::Update(float fTimeElapsed)
 		m_xmf3Position.y = m_newYpos;*/
 		m_JumpPower += (m_xmf3Gravity.y * 0.1* fTimeElapsed);
 		m_xmf3Position.y += m_JumpPower * fTimeElapsed;
-		if (m_JumpPower < 470)
-			m_PlayerState = FALLING;
+		
 
 		//m_newYpos = 0;
-		cout << m_JumpPower << endl;
+		//cout << m_JumpPower << endl;
 		SetTrackAnimationSet(0, JUMP);
 		break;
 	case STUN:
@@ -320,9 +330,9 @@ void CPlayer::Update(float fTimeElapsed)
 		m_OnAacting = TRUE;
 		SetTrackAnimationSet(0, RUN_JUMP_ATTAK);
 		break;
-	case KICK:
+	case ATTACK_3:
 		m_OnAacting = TRUE;
-		SetTrackAnimationSet(0, KICK);
+		SetTrackAnimationSet(0, ATTACK_3);
 		break;
 	case ATTACK:
 		m_OnAacting = TRUE;
@@ -378,7 +388,7 @@ std::shared_ptr<CCamera> CPlayer::OnChangeCamera(DWORD nNewCameraMode, DWORD nCu
 		//pNewCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
 		pNewCamera->SetTimeLag(0.25f);
 		//pNewCamera->SetOffset(XMFLOAT3(0.0f, 350.0f, -80.0f));
-		pNewCamera->SetOffset(XMFLOAT3(0.0f, 250.0f, -180.0f));
+		pNewCamera->SetOffset(XMFLOAT3(0.0f, 330.0f, -310.0f));
 		//pNewCamera->SetOffset(XMFLOAT3(0.0f, 980.0f, -180.0f));
 
 		if(PLAYER->GetPlayer()!=nullptr)
@@ -658,7 +668,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	//if(CNETWORK->GetInstance()->)
 	
 	m_BoundScale = 60.0f;
-	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/다시받은키타.bin", NULL, true);
+	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
 
 	SetChild(pPlayerModel->m_pModelRootObject, true);
 	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
@@ -772,35 +782,45 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	int z = (int)(xmf3PlayerPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
+	XMFLOAT3 xmf3Shift{ 0.0,0.0,0.0 };
 
 	/*int num = 0;
 	switch (SCENEMANAGER->GetSceneType())
 	{
 	case PLAYGROUNDMAP:
-		
-		break;
+
+	   break;
 	case CONCERTMAP:
-		
-		break;
+
+	   break;
 	}*/
 	if (PLAYER->GetPlayer()->IsPlayerCrashMap())
 	{
 		//if(PLAYER->GetPlayer()->GetPlayerState()== FALLING)
 		fHeight = PLAYER->GetPlayer()->GetHeight();
 	}
-	else
-	{
+	else {
 		fHeight = 10;
 	}
+
+	
+	//if (PLAYER->GetPlayer()->GetCollisionState())
+	//{
+	//   xmf3Shift = Vector3::Add(xmf3Shift, GetLookVector(), 5.25f);
+	//   xmf3PlayerPosition = Vector3::Add(xmf3PlayerPosition, xmf3Shift, -12.25f);
+	//   //SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), xmf3Shift, -12.25f));
+	//   SetPosition(xmf3PlayerPosition);
+	//}
+	
 	if (xmf3PlayerPosition.y < fHeight)
 	{
 		//if (FindFrame("LFootBone1")->GetPosition().y < fHeight)
-		//	FindFrame("LFootBone1")->SetPosition(xmf3PlayerPosition);
+		//   FindFrame("LFootBone1")->SetPosition(xmf3PlayerPosition);
 		XMFLOAT3 xmf3PlayerVelocity = GetVelocity();
 		xmf3PlayerVelocity.y = 0.0f;
 		SetVelocity(xmf3PlayerVelocity);
 		xmf3PlayerPosition.y = fHeight;
-		SetPosition(xmf3PlayerPosition);	
+		SetPosition(xmf3PlayerPosition);
 	}
 
 
@@ -818,13 +838,15 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
 	//float boundHeight = 
 	//fHeight = 255; //여기
-	fHeight = 10;
+	fHeight = 0;
 	if (xmf3CameraPosition.y <= fHeight)
-		xmf3CameraPosition.y = fHeight;
+
+	xmf3CameraPosition.y = fHeight;
 	m_pCamera->SetPosition(xmf3CameraPosition);
 	
 	if (m_pCamera->GetMode() == THIRD_PERSON_CAMERA && m_pCamera != nullptr)
 	{
+
 		std::shared_ptr<CCamera> p3rdPersonCamera = m_pCamera;
 		p3rdPersonCamera->SetLookAt(GetPosition());
 	}
@@ -912,8 +934,14 @@ void COtherPlayers::OnPlayerUpdateCallback(float fTimeElapsed)
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
 
-	fHeight = 20;
-
+	if (PLAYER->GetOtherPlayer()->IsPlayerCrashMap())
+	{
+		//if(PLAYER->GetPlayer()->GetPlayerState()== FALLING)
+		fHeight = PLAYER->GetOtherPlayer()->GetHeight();
+	}
+	else {
+		fHeight = 10;
+	}
 	if (xmf3PlayerPosition.y < fHeight)
 	{
 		//if (FindFrame("LFootBone1")->GetPosition().y < fHeight)
@@ -936,16 +964,26 @@ void COtherPlayers::OnCameraUpdateCallback(float fTimeElapsed)
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad) + 5.0f;
 	//float boundHeight = 
-	fHeight = 255; //여기
+	fHeight = 0; //여기
 	if (xmf3CameraPosition.y <= fHeight)
 
 		xmf3CameraPosition.y = fHeight;
 	m_pCamera->SetPosition(xmf3CameraPosition);
-	//
+	
 }
 
 void COtherPlayers::Update(float fTimeElapsed)
 {
+	if (PLAYER->GetOtherPlayer()->IsPlayerCrashMap() == false) {
+		if (PLAYER->GetOtherPlayer()->GetCollisionState() == true)
+		{
+			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -6.f));
+			
+			PLAYER->GetOtherPlayer()->SetCollisionState(false);
+			
+		}
+	}
+
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
 	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);
 	float fMaxVelocityXZ = m_fMaxVelocityXZ;
@@ -969,12 +1007,16 @@ void COtherPlayers::Update(float fTimeElapsed)
 		DWORD nCurrentCameraMode = m_pCamera->GetMode();
 		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) {
 			m_pCamera->Update(PLAYER->GetOtherPlayer()->GetPosition(), fTimeElapsed);
+			//m_pCamera->Update(PLAYER->GetOtherPlayer()->GetPosition(), fTimeElapsed);
+
 		}
 		if (m_pCameraUpdatedContext) OnCameraUpdateCallback(fTimeElapsed);
 		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->SetLookAt(PLAYER->GetOtherPlayer()->GetPosition());
 		//m_pCamera = ChangeCamera(/SPACESHIP_CAMERA/THIRD_PERSON_CAMERA, 0.0f);
 		m_pCamera->RegenerateViewMatrix();
-
+			
+		
+		
 	}
 
 	//m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
@@ -991,23 +1033,24 @@ void COtherPlayers::Update(float fTimeElapsed)
 			SetTrackAnimationSet(0, IDLE);
 			break;*/
 	case IDLE:
+		m_OnAacting = FALSE;
+		SetTrackAnimationSet(0, IDLE);
+		break;
 	case RUN:
 		//if (!m_OnAacting)
 		//{
-		SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
+			//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		m_OnAacting = FALSE;
 		//}
-		//SetTrackAnimationSet(0, RUN);
+		SetTrackAnimationSet(0, RUN);
 		//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		//m_OnAacting = FALSE;
 		break;
 	case JUMP:
-		m_OnAacting = TRUE;
-		m_newYpos = m_xmf3Position.y + 9;
-		m_newYpos += (m_xmf3Gravity.y * 0.5)* fTimeElapsed;
-		m_xmf3Position.y = m_newYpos;
-		m_newYpos = 0;
+		m_JumpPower += (m_xmf3Gravity.y * 0.1* fTimeElapsed);
+		m_xmf3Position.y += m_JumpPower * fTimeElapsed;
 		SetTrackAnimationSet(0, JUMP);
+		
 		//m_xmf3Position.y += (9.8) * fTimeElapsed + fTimeElapsed * m_xmf3Velocity.y;
 		//cout << m_xmf3Position.y << endl; 
 		break;
@@ -1023,9 +1066,9 @@ void COtherPlayers::Update(float fTimeElapsed)
 		m_OnAacting = TRUE;
 		SetTrackAnimationSet(0, RUN_JUMP_ATTAK);
 		break;
-	case KICK:
+	case ATTACK_3:
 		m_OnAacting = TRUE;
-		SetTrackAnimationSet(0, KICK);
+		SetTrackAnimationSet(0, ATTACK_3);
 		break;
 	case ATTACK:
 		m_OnAacting = TRUE;
@@ -1047,4 +1090,5 @@ void COtherPlayers::Update(float fTimeElapsed)
 	//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 
 	m_xmOOBB.Center = m_xmf3Position;
+	m_xmOOBB.Center.y = m_xmf3Position.y + GetBoundingBox().Extents.y;
 }

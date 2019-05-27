@@ -28,16 +28,17 @@ protected:
 	XMFLOAT3     				m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	float           			m_fMaxVelocityXZ = 0.0f;
 	float           			m_fMaxVelocityY = 0.0f;
-	float           			m_fFriction = 0.0f;
+	float           			m_fFriction = 0.1f;
 	bool						m_OnAacting{ FALSE };
 	bool						m_isCrashMap{ false };
 	LPVOID						m_pPlayerUpdatedContext = NULL;
 	LPVOID						m_pCameraUpdatedContext = NULL;
 	float						m_newYpos{ 0.0f };
 	float						m_oldYpos{ 0.0f };
-	float						m_JumpPower{ 300.0 };
+	float						m_JumpPower{ 500.0 };
 	//CCamera						*m_pCamera = NULL;
 	//이넘만들기
+	
 	int							m_collideBox{ 0 };
 	std::shared_ptr<CCamera>	m_pCamera;
 
@@ -46,14 +47,24 @@ protected:
 
 	//for 서버로 플레이어 식별
 
-	int							m_PlayerID=-1;
-	int							m_JoinRoomNum=-1;
+	XMFLOAT3					prePosition =XMFLOAT3(0.f, 0.f, 0.f);
+	int							m_PlayerID = -1;
+	int							m_JoinRoomNum = -1;
+	bool						m_playerCollision = false;
 
 	float m_HeightForCollide{ 0 };
-	bool						m_IsPlayerInConcert = true;
+
+	bool                        m_IsPlayerInConcert = true;
+	bool						XZcollision=false;
 public:
 	bool GetPlayerInConcert() { return m_IsPlayerInConcert; }
 	void SetPlayerInConocert(bool inConcert) { m_IsPlayerInConcert = inConcert; }
+public:
+	bool						m_match = false;
+	
+	bool GetCollisionState() { return XZcollision; }
+	void SetCollisionState(bool check) { XZcollision = check; }
+
 	float GetJumpPower() { return m_JumpPower; }
 	void SetJumpPower(float p) { m_JumpPower = p; }
 
@@ -70,7 +81,14 @@ public:
 		//if ( != nullptr)
 		SetOOBB(GetPosition(), XMFLOAT3(0.5, 0.5, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	};
-
+	XMFLOAT3 GetPrePosition() { return(prePosition); }
+	void SetPrePosition(const XMFLOAT3& xmf3Position) { prePosition.x = xmf3Position.x, prePosition.y = xmf3Position.y, prePosition.z = xmf3Position.z; };
+	bool GetPlayerCollision() const {
+		return m_playerCollision;
+	}
+	void SetPlayerCollision(bool check) {
+		m_playerCollision = check;
+	}
 	std::shared_ptr<CCamera> GetCamera() { return(m_pCamera); }
 	virtual void SetCamera(std::shared_ptr<CCamera> pCamera) { m_pCamera = pCamera; }
 	void SetYPosition(float ypos) { m_xmf3Position.y = ypos; }
@@ -95,7 +113,7 @@ public:
 	void SetMaxVelocityY(float fMaxVelocity) { m_fMaxVelocityY = fMaxVelocity; }
 	void SetVelocity(const XMFLOAT3& xmf3Velocity) { m_xmf3Velocity = xmf3Velocity; }
 	void SetPosition(const XMFLOAT3& xmf3Position) { Move(XMFLOAT3(xmf3Position.x - m_xmf3Position.x, xmf3Position.y - m_xmf3Position.y, xmf3Position.z - m_xmf3Position.z), false); }
-
+	
 	void SetScale(XMFLOAT3& xmf3Scale) { m_xmf3Scale = xmf3Scale; }
 
 	const XMFLOAT3& GetVelocity() const { return(m_xmf3Velocity); }
