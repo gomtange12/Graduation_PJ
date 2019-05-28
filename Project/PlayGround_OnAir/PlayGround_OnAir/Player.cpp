@@ -890,13 +890,13 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	}
 
 	//m_ObjType = DYNAMIC;
-	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
+	//CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
 
 
-	SetChild(pPlayerModel->m_pModelRootObject, true);
-	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
+	SetChild(OBJECTMANAGER->GetPlayerResource(GUITAR)->m_pModelRootObject, true);
+	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, OBJECTMANAGER->GetPlayerResource(GUITAR));
 
-	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
+	m_pAnimationController = new CAnimationController(1, OBJECTMANAGER->GetPlayerResource(GUITAR)->m_pAnimationSets);
 	m_pAnimationController->SetTrackAnimationSet(0, 0);
 
 	m_pAnimationController->SetCallbackKeys(1, 3);
