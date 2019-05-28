@@ -56,14 +56,17 @@ void CObjectManager::SetObjlist(vector<CGameObject*>& Obj)
 }
 void CObjectManager::LoadPlayerResource(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature   *m_pd3dGraphicsRootSignature)
 {
-	CLoadedModelInfo *guitarResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
-	CLoadedModelInfo *keyBoaResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
-	//CLoadedModelInfo *DrumResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature,"", NULL, true);
-	//CLoadedModelInfo *guitarResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature,"", NULL, true);
-	//CLoadedModelInfo *guitarResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature,"", NULL, true);
+	CLoadedModelInfo* guitarResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
+	CLoadedModelInfo* keyBoaResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
+	CLoadedModelInfo *DrumResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature,"Model/DrumTest.bin", NULL, true);
+	CLoadedModelInfo *vocalResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature,"Model/MicTest.bin", NULL, true);
+	CLoadedModelInfo *bassResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature,"Model/basstest.bin", NULL, true);
 
 	m_PlayerResourceMap.insert(std::make_pair(GUITAR, guitarResource));
-	m_PlayerResourceMap.insert(std::make_pair(GUITAR, keyBoaResource));
+	m_PlayerResourceMap.insert(std::make_pair(KEYBOARD, keyBoaResource));
+	m_PlayerResourceMap.insert(std::make_pair(BASS, bassResource));
+	m_PlayerResourceMap.insert(std::make_pair(DRUM, DrumResource));
+	m_PlayerResourceMap.insert(std::make_pair(VOCAL, vocalResource));
 
 
 }
@@ -75,11 +78,14 @@ CLoadedModelInfo* CObjectManager::GetPlayerResource(E_CHARACTERTYPE type)
 	if (iter != m_PlayerResourceMap.end())
 	{
 		return (*iter).second;
+		//m_ObjMap[objType].begin();
+
 	}
 	else //예외처리
 	{
 		return m_PlayerResourceMap.begin()->second;
 	}
+	
 }
 
 CGameObject* CObjectManager::FindGameObject(OBJTYPE objType, int idx)

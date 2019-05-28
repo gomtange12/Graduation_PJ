@@ -6,6 +6,7 @@
 #include "GameFramework.h"
 #include "CSceneManager.h"
 #include "CMenuScene.h"
+#include "CObjectManager.h"
 #include "CIngameScene.h"
 #include "CNetWork.h"
 
@@ -575,6 +576,7 @@ void CGameFramework::BuildObjects()
 //}
 
 //여기가 배치 구문이니 신경써야한다. 
+	OBJECTMANAGER->LoadPlayerResource(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature());
 #ifdef _WITH_TERRAIN_PLAYER
 	PLAYER->Initialize(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 
@@ -656,22 +658,27 @@ void CGameFramework::ProcessInput()
 
 			//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
 		}
+		
 		if (pKeysBuffer[0x53] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			dwDirection |= DIR_BACKWARD;
 		}
+		
 		if (pKeysBuffer[0x41] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			dwDirection |= DIR_LEFT;
 		}
+		
 		if (pKeysBuffer[0x44] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			dwDirection |= DIR_RIGHT;
 		}
-
+	
+	
+		
 		//2플레이어
 		//if (pKeysBuffer[VK_HANGUL] & 0xF0)
 		//{

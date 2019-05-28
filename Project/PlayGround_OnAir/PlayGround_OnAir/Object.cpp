@@ -329,45 +329,53 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 #ifdef _WITH_ANIMATION_INTERPOLATION
 			PLAYER->GetPlayer()->SetAllowKey(true);
 			m_fPosition = fTrackPosition;
-			 m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]); //¿ø·¡²¨
-		  
-			 //m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
+			m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //¿ø·¡²¨
+
+			//m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
 			//m_fPosition = fmod(fTrackPosition, m_fLength); if (m_fPosition < 0) m_fPosition += m_fLength;
 			//m_fPosition = fTrackPosition - int(fTrackPosition / m_fLength) * m_fLength;
 #else
 			m_nCurrentKey++;
 			if (m_nCurrentKey >= m_nKeyFrameTransforms) m_nCurrentKey = 0;
 #endif
-			
+			//if()
+			PLAYER->GetPlayer()->SetPlayerState(IDLE);
+
 			break;
 		}
 		case ANIMATION_TYPE_ONCE:
+		{
 			//m_fPosition = fTrackPosition;
 			//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //¿ø·¡²¨
-			PLAYER->GetPlayer()->SetAllowKey(false);
-			PLAYER->GetOtherPlayer()->SetAllowKey(false);
-			m_fPosition += 0.00001;
 
+
+			PLAYER->GetOtherPlayer()->SetAllowKey(false);
+
+			PLAYER->GetPlayer()->SetAllowKey(false);
+			m_fPosition += 0.00001;// m_nFramesPerSecond;// 0.00001;
 			//sol) m_fPosition += fDelta * speed; ÇÁ·¹ÀÓ °íÁ¤½Ã
-			if (m_fPosition >= maxLength)
+			if (m_fPosition >= m_fLength)  //maxLength)
 			{
- 				m_fPosition = 0.0f;
+				m_fPosition = 0;
 				//fPosition = 0.0f;
 				//fTrackPosition = 0.f;
 				oncePosition = 0.0f;
 				//maxLength = 0.0f;
- 				PLAYER->GetPlayer()->SetPlayerState(IDLE);
+				PLAYER->GetPlayer()->SetAllowKey(true);
+
+				PLAYER->GetPlayer()->SetPlayerState(IDLE);
 				PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
-				
+
 			}
 			//CPlayer::m_PlayerState = CPlayer::PlayerState::IDLE;
 			//CPlayer::SetPlayerState(IDLE);
 			//PLAYER->GetPlayer()->SetPlayerState(PLAYER->GetPlayer()->PlayerState::IDLE);
 
+
 			break;
+		}
 		
 	}
-
 	if (m_pAnimationCallbackHandler)
 	{
 		void *pCallbackData = GetCallbackData();
@@ -1287,7 +1295,7 @@ CAnimationSets *CGameObject::LoadAnimationFromFile(FILE *pInFile, CGameObject *p
 			nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
 			nReads = (UINT)::fread(pAnimationSet->m_pstrName, sizeof(char), nStrLength, pInFile);
 			pAnimationSet->m_pstrName[nStrLength] = '\0';
-			if (!strcmp(pAnimationSet->m_pstrName, "Idle") || !strcmp(pAnimationSet->m_pstrName, "idle") || !strcmp(pAnimationSet->m_pstrName, "back_run") || !strcmp(pAnimationSet->m_pstrName, "run") || !strcmp(pAnimationSet->m_pstrName, "Run")|| !strcmp(pAnimationSet->m_pstrName, "run"))
+			if (!strcmp(pAnimationSet->m_pstrName, "Idle") || !strcmp(pAnimationSet->m_pstrName, "idle")|| !strcmp(pAnimationSet->m_pstrName, "back_run") || !strcmp(pAnimationSet->m_pstrName, "run") || !strcmp(pAnimationSet->m_pstrName, "Run")|| !strcmp(pAnimationSet->m_pstrName, "run"))
 			{
 				pAnimationSet->m_nType = ANIMATION_TYPE_LOOP;
 			}

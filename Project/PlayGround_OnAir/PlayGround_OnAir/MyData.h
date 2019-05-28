@@ -7,9 +7,10 @@ enum E_PLAYERTYPE
 
 enum E_CHARACTERTYPE
 {
-	BASS,
+	
 	GUITAR,
 	KEYBOARD,
+	BASS,
 	DRUM,
 	VOCAL
 };

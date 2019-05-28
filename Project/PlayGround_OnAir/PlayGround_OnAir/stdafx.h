@@ -72,6 +72,7 @@ extern HINSTANCE						ghAppInstance;
 #else
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console") 
 #endif
+#define KEYDOWN(vk_code) ((GetAsyncKeyState(vk_code)& 0x8000)? 1 : 0)
 
 #define FRAME_BUFFER_WIDTH		1280
 #define FRAME_BUFFER_HEIGHT		720

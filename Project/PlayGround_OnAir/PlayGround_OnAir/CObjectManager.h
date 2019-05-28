@@ -1,6 +1,7 @@
 #pragma once
 
 class CGameObject;
+class CLoadedModelInfo;
 class CObjectManager : public CSingleTonBase<CObjectManager>
 {
 	std::map<OBJTYPE, std::vector<CGameObject*>> m_ObjMap;

@@ -276,6 +276,9 @@ void CPlayer::Update(float fTimeElapsed)
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 
 	//m_JumpPower = 0;
+	//if (PLAYER->GetPlayer()->GetAllowKey())
+	{
+
 	switch (GetPlayerState())
 	{
 	/*default:
@@ -350,6 +353,7 @@ void CPlayer::Update(float fTimeElapsed)
 		m_OnAacting = TRUE;
 		SetTrackAnimationSet(0, BACK_RUN);
 		break;
+	}
 	}
 	//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 	//cout <<"Á¡ÇÁ ÈÄ"<< m_xmf3Position.y << endl;
@@ -668,9 +672,10 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	//if(CNETWORK->GetInstance()->)
 	
 	m_BoundScale = 60.0f;
-	CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
-
+	CLoadedModelInfo *pPlayerModel = //CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
+	OBJECTMANAGER->GetPlayerResource(BASS);
 	SetChild(pPlayerModel->m_pModelRootObject, true);
+	//SetChild(pPlayerModel->m_pModelRootObject, true);
 	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
 	//if(m_pMesh!=nullptr)
 	//this->SetMesh(pPlayerModel->m_pModelRootObject->m_pMesh);
@@ -702,7 +707,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	}
 	//SetOOBB(GetPosition(), m_pMesh->GetAABBExtents(), XMFLOAT4(0, 0, 0, 1));
 	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
-	//if (pPlayerModel) delete pPlayerModel;
+	if (pPlayerModel) delete pPlayerModel;
 	
 }
 
@@ -890,13 +895,13 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	}
 
 	//m_ObjType = DYNAMIC;
-	//CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
+	CLoadedModelInfo *pPlayerModel = //CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
+	OBJECTMANAGER->GetPlayerResource(GUITAR);
 
+	SetChild(pPlayerModel->m_pModelRootObject, true);
+	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
 
-	SetChild(OBJECTMANAGER->GetPlayerResource(GUITAR)->m_pModelRootObject, true);
-	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, OBJECTMANAGER->GetPlayerResource(GUITAR));
-
-	m_pAnimationController = new CAnimationController(1, OBJECTMANAGER->GetPlayerResource(GUITAR)->m_pAnimationSets);
+	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
 	m_pAnimationController->SetTrackAnimationSet(0, 0);
 
 	m_pAnimationController->SetCallbackKeys(1, 3);
@@ -921,7 +926,7 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	//SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
 
-	//if (pPlayerModel) delete pPlayerModel;
+	if (pPlayerModel) delete pPlayerModel;
 	
 }
 
