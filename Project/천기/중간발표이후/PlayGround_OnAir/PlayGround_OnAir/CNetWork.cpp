@@ -24,8 +24,11 @@ void CNetWork::MakeServer(const HWND& hWnd)
 	ServerAddr.sin_port = htons(SERVER_PORT);
 	ServerAddr.sin_addr.s_addr = inet_addr(IP_ADDR);
 
-	int Result = WSAConnect(g_mysocket, (sockaddr *)&ServerAddr, sizeof(ServerAddr), NULL, NULL, NULL, NULL);
-
+	if (WSAConnect(g_mysocket, (sockaddr *)&ServerAddr, sizeof(ServerAddr), NULL, NULL, NULL, NULL) != 0) {
+		printf("Failed to connect!\n");
+		//MakeServer(hWnd);
+	}
+	
 	WSAAsyncSelect(g_mysocket, hWnd, WM_SOCKET, FD_CLOSE | FD_READ);
 
 	send_wsabuf.buf = send_buffer;
