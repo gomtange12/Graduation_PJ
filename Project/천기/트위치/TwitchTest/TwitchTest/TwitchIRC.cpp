@@ -87,7 +87,7 @@ void TwitchIRC::Run()
 
 }
 void TwitchIRC::stripMessage(string incoming, string &username, string &message) {
-	string cName = "1k1000";
+	string cName = "#1k1000";
 	SIZE_T nameBegin = incoming.find("display-name=") + 13;
 	SIZE_T nameEnd = incoming.find(";", nameBegin);
 	SIZE_T messageStart = incoming.find(cName + " :") + cName.size() + 2;
