@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "헤더.h"
-void TwitchIRC::Init() {
+#pragma execution_character_Set("utf-8")
+
+void TwitchIRC::Init() 
+{
+	SetConsoleOutputCP(65001); //콘솔 인코딩
+
 	WSAStartup(MAKEWORD(2, 2), &wsaData);
 
 	printf("Calling gethostbyname with %s\n", host_name);
@@ -49,7 +54,6 @@ void TwitchIRC::Init() {
 
 void TwitchIRC::Run() 
 {
-	//send(sock, "PRIVMSG #1k1000 :hello world\n", strlen("PRIVMSG #1k1000 :hello world") + 1, 0);
 	int mret = 0;
 	while (1) {
 		DWORD dwTmp=0;
@@ -64,66 +68,22 @@ void TwitchIRC::Run()
 			break;
 		}*/
 		
-		mret = recv(sock, recv_buffer, sizeof(recv_buffer) - 1, 0);
+		mret = recv(sock, (char *)recv_buffer, sizeof(MAX_BUFFER) - 1, 0);
 		if (mret == SOCKET_ERROR) {
 			printf("Receive Error..\n");
 			break;
 		}
-		
-		//recv_buffer[mret] = '\0';
 		response += string((char *)recv_buffer);
 		fill_n(recv_buffer, sizeof(recv_buffer), NULL);;
-		//Check if the server sent it all in one go
-		/*if (response.size() > 1 && response[response.size() - 2] == '\r' && response[response.size() - 1] == '\n') {
-		
-		}*/
 		if (response.size() > 1 && response[response.size() - 2] == '\r' && response[response.size() - 1] == '\n') {
 			
 				string name, message;
-				//Strip the username and their message
 				stripMessage(response, name, message);
-				//Push to log / console
 				cout << "Chat: " << name << ": " << message << endl;
 			
 			
 		}
-		//if (response.find("PRIVMSG") != string::npos) {
-		//	string name, message;
-		//	//Strip the username and their message
-		//	stripMessage(response, name, message);
-		//	//Push to log / console
-		//	cout << "Chat: " << name << ": " << message << endl;
-		//}
-		//else
-		//{
-
-			
-		//}
-
-		//printf("Receive Message : %s", recv_buffer);
 	}
-
-
-
-
-
-
-	/*while (true)
-	{
-		ZeroMemory(&recv_buffer, sizeof(recv_buffer));
-		int mret = recv(sock, recv_buffer, sizeof(recv_buffer), 0);
-		if (!mret)
-		{
-			printf("Connection broke...\n");
-			exit(1);
-		}
-		else
-		{
-			if (recv_buffer)
-				printf("%s\n", recv_buffer);
-		}
-	}*/
-	//recv_buffer[mret] = '\0';
 
 }
 void TwitchIRC::stripMessage(string incoming, string &username, string &message) {
@@ -141,16 +101,23 @@ void TwitchIRC::stripMessage(string incoming, string &username, string &message)
 	}
 }
 void TwitchIRC::InitSend() {
-	send(sock, "PASS oauth:ccuwxr3mx5ks5q9pzv04x7k33rue9r\n", strlen("PASS oauth:ccuwxr3mx5ks5q9pzv04x7k33rue9r") + 1, 0); //토큰?
-	send(sock, "NICK blqblq\n", strlen("NICK blqblq") + 1, 0);
-	send(sock, "USER blqblq\n", strlen("USER blqblq") + 1, 0);
+	send(sock, "PASS oauth:ccuwxr3mx5ks5q9pzv04x7k33rue9r\r\n", strlen("PASS oauth:ccuwxr3mx5ks5q9pzv04x7k33rue9r\r") + 1, 0); //토큰?
+	send(sock, "NICK blqblq\r\n", strlen("NICK blqblq\r") + 1, 0);
+	send(sock, "USER blqblq\r\n", strlen("USER blqblq\r") + 1, 0);
 
-	send(sock, "CAP REQ :twitch.tv/commands\n", strlen("CAP REQ :twitch.tv/commands") + 1, 0);
-	send(sock, "CAP REQ :twitch.tv/membership\n", strlen("CAP REQ :twitch.tv/membership") + 1, 0);
-	send(sock, "CAP REQ :twitch.tv/tags\n", strlen("CAP REQ :twitch.tv/tags") + 1, 0);
+	send(sock, "CAP REQ :twitch.tv/commands\r\n", strlen("CAP REQ :twitch.tv/commands\r") + 1, 0);
+	send(sock, "CAP REQ :twitch.tv/membership\r\n", strlen("CAP REQ :twitch.tv/membership\r") + 1, 0);
+	send(sock, "CAP REQ :twitch.tv/tags\r\n", strlen("CAP REQ :twitch.tv/tags\r") + 1, 0);
 
-	send(sock, "JOIN 1k1000\n", strlen("JOIN 1k1000") + 1, 0);
+	send(sock, "JOIN #1k1000\r\n", strlen("JOIN #1k1000\r") + 1, 0);
 }
+//void TwitchIRC::setNonBlocking(const bool status) {
+//	UL block = status;
+//	S32 opt = ioctlsocket(sock, FIONBIO, &block);
+//	if (opt) {
+//		cout << "Socket::setNonBlocking(): Failed with error " << WSAGetLastError() << endl;
+//	}
+//}
 TwitchIRC::TwitchIRC()
 {
 }
