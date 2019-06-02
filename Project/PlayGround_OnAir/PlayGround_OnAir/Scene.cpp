@@ -433,13 +433,19 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[2]->SetMesh(Floor_Stage->m_pModelRootObject->m_pMesh);
 	m_ppPlayGroundObjects[2]->SetOOBB(m_ppPlayGroundObjects[2]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents().x * objScale * 20, m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents().z * objScale * 20, m_ppPlayGroundObjects[2]->m_pMesh->GetAABBExtents().y * objScale * 20), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo *Slide = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/미끄럼틀.bin", NULL, false);
+	CLoadedModelInfo *Slide = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/스크립트슬라이드.bin", NULL, false);
 	m_ppPlayGroundObjects[3] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[3]->SetChild(Slide->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[3]->SetPosition(1500.0f, 20, 1000.0f); //맵 거꾸로 버그 여기
-	m_ppPlayGroundObjects[3]->SetScale(20.0f, 20.0f, 20.0f);
+	m_ppPlayGroundObjects[3]->SetPosition(150.0f, 10, 100.0f); //맵 거꾸로 버그 여기
+	//m_ppPlayGroundObjects[3]->SetPosition(2500.0f, 300, 1700.0f); //맵 거꾸로 버그 여기
+
+	m_ppPlayGroundObjects[3]->SetScale(100.0f, 100.0f, 100.0f);
 	m_ppPlayGroundObjects[3]->SetMesh(Slide->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[3]->SetOOBB(m_ppPlayGroundObjects[3]->GetPosition(), XMFLOAT3(200, 100, 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	//m_ppPlayGroundObjects[3]->SetOOBB(m_ppPlayGroundObjects[3]->GetPosition(), XMFLOAT3(200, 100, 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	std::cout << m_ppPlayGroundObjects[3]->GetPosition().x<<std::endl;
+	std::cout << m_ppPlayGroundObjects[3]->GetPosition().y << std::endl;
+	std::cout << m_ppPlayGroundObjects[3]->GetPosition().z << std::endl;
+
 
 	CLoadedModelInfo *Respawn_Blue = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Respawn_Blue.bin", NULL, false);
 	m_ppPlayGroundObjects[4] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -541,13 +547,13 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[15]->SetOOBB(m_ppPlayGroundObjects[15]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[15]->m_pMesh->GetAABBExtents().x * objScale * 10, 40, m_ppPlayGroundObjects[7]->m_pMesh->GetAABBExtents().z * objScale * 20), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_ppPlayGroundObjects[15]->Rotate(0.0f, -13.0f, 0.0f);
 	
-	CLoadedModelInfo *Chair_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Chair_1.bin", NULL, false);
+	CLoadedModelInfo *Chair_2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/스크립트익스포트.bin", NULL, false);
 	m_ppPlayGroundObjects[16] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[16]->SetChild(Chair_2->m_pModelRootObject, true);
 	m_ppPlayGroundObjects[16]->SetPosition(2600.0f, 40, 160.0f);
-	m_ppPlayGroundObjects[16]->SetScale(20.0f, 20.0f, 20.0f);
+	m_ppPlayGroundObjects[16]->SetScale(50.0f, 50.0f, 50.0f);
 	m_ppPlayGroundObjects[16]->SetMesh(Chair_2->m_pModelRootObject->m_pMesh);
-	m_ppPlayGroundObjects[16]->SetOOBB(m_ppPlayGroundObjects[16]->GetPosition(), XMFLOAT3(m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents().x * objScale * 10, 40, m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents().z * objScale * 20), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppPlayGroundObjects[16]->SetOOBB(m_ppPlayGroundObjects[16]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[16]->m_pMesh->GetAABBExtents(), 10 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_ppPlayGroundObjects[16]->Rotate(0.0f, -83.0f, 0.0f);
 
 	CLoadedModelInfo *Street_Lamp_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Street_Lamp_1.bin", NULL, false);
