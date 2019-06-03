@@ -1395,14 +1395,14 @@ CLoadedModelInfo *CGameObject::LoadGeometryAndAnimationFromFile(ID3D12Device *pd
 	{
 		pLoadedModel->m_pAnimationSets = CGameObject::LoadAnimationFromFile(pInFile, pLoadedModel->m_pModelRootObject); //0125코드 분석 여기부터
 		pLoadedModel->m_pModelRootObject->SetObjType(PLAYEROBJ);
-		if (strcmp(pstrFileName, "Model/ALL_(1).bin")==0 || strcmp(pstrFileName, "Model/ALL.bin") == 0)
-		{
-			pLoadedModel->m_pModelRootObject->SetObjType(MAPOBJ);
-		}
+		//if (strcmp(pstrFileName, "Model/ALL_(1).bin")==0 || strcmp(pstrFileName, "Model/ALL.bin") == 0)
+		//{
+		//	pLoadedModel->m_pModelRootObject->SetObjType(MAPOBJ);
+		//}
 	}
 	else
 	{
-		pLoadedModel->m_pModelRootObject->SetObjType(STATICOBJ);
+		pLoadedModel->m_pModelRootObject->SetObjType(MAPOBJ);
 
 	}
 	pLoadedModel->m_pModelRootObject->CacheSkinningBoneFrames(pLoadedModel->m_pModelRootObject);

@@ -337,8 +337,8 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 		normalW = normalize(input.normalW);
 	}
 	float4 cIllumination = Lighting(input.positionW, normalW);
-	return cAlbedoColor;
-	//return(lerp(cColor, cIllumination, 0.5f));
+	//return cAlbedoColor;
+	return(lerp(cColor, cIllumination, 0.2f));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

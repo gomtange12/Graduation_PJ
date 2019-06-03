@@ -25,7 +25,7 @@ void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 
 	//4m_pPlayer->SETPO
 	//m_vecPlayerList.reserve(m_MaxPlayerNum);
-	m_pOtherPlayerMap.reserve(m_MaxPlayerNum);
+	m_pOtherPlayerMap.reserve(8);
 	//std::shared_ptr<std::vector<uint8_t> > mSharedPtr(new std::vector<uint8_t>());
 	//for (int i = 0; i < m_MaxPlayerNum - 1; ++i)
 	//m_pOtherPlayerMap.emplace_back(shared_ptr<COtherPlayers>(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext)));

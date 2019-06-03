@@ -916,9 +916,11 @@ void CGameFramework::FrameAdvance()
 	//cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
 	if (PLAYER->GetOtherPlayerMap().size() > 0)
 	{
-		//for (auto players : PLAYER->GetOtherPlayerMap())
-		for (auto i = PLAYER->GetOtherPlayerMap().begin(); i < PLAYER->GetOtherPlayerMap().end(); ++i)
-			(*i)->Render(m_pd3dCommandList, m_pCamera);
+		for (auto players : PLAYER->GetOtherPlayerMap())
+			players->Render(m_pd3dCommandList, m_pCamera);
+		//for (auto i = PLAYER->GetOtherPlayerMap().begin(); i != PLAYER->GetOtherPlayerMap().end(); ++i)
+		//	(*i)->Render(m_pd3dCommandList, m_pCamera);
+		//->Render(m_pd3dCommandList, m_pCamera);
 	}
 	if (m_pScene)
 	{
