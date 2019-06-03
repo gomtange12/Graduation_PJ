@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Protocol.h"
 #pragma execution_character_Set("utf-8")
 
 #include <winsock.h>
@@ -80,9 +81,9 @@ void TwitchIRC::stripMessage(std::string incoming, std::string &username, std::s
 	SIZE_T nameBegin = incoming.find("display-name=") + 13;
 	SIZE_T nameEnd = incoming.find(";", nameBegin);
 	SIZE_T messageStart = incoming.find(cName + " :") + cName.size() + 2;
-	//The correct format is :NAME!, test here
+
 	username = incoming.substr(nameBegin, (nameEnd - nameBegin));
-	//Fetch the message content
+
 	if (messageStart != std::string::npos) {
 		for (SIZE_T i = messageStart; i < incoming.size(); i++) {
 			message.push_back(incoming[i]);

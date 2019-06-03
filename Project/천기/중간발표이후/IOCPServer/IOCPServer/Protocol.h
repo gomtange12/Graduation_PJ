@@ -13,7 +13,7 @@
 #define MAX_BUFFER		1024
 #define SERVER_PORT		4000
 #define MAX_USER		20
-
+#define TW_PORT			6667
 //
 const int OP_RECV = 1;
 const int OP_SEND = 2;
