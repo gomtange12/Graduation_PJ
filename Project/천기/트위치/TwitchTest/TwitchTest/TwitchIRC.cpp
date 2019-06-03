@@ -20,7 +20,7 @@ void TwitchIRC::Init()
 
 	ZeroMemory(&ServerAddr, sizeof(SOCKADDR_IN));
 	ServerAddr.sin_family = AF_INET;
-	ServerAddr.sin_port = htons(6667);
+	ServerAddr.sin_port = htons(TW_PORT);
 	ServerAddr.sin_addr.s_addr = inet_addr(ipaddr);
 
 	if (connect(tw_sock, (struct sockaddr *)&ServerAddr, sizeof(ServerAddr)) == 0)
@@ -60,7 +60,7 @@ void TwitchIRC::Run()
 			break;
 		}
 		response += string((char *)recv_buffer);
-		fill_n(recv_buffer, sizeof(recv_buffer), NULL);;
+		fill_n(recv_buffer, sizeof(recv_buffer), NULL);
 		if (response.size() > 1 && response[response.size() - 2] == '\r' && response[response.size() - 1] == '\n') {
 			
 				string name, message;

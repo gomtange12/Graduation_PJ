@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
 #include <process.h>
 #include <winsock2.h>
 #include <iostream>

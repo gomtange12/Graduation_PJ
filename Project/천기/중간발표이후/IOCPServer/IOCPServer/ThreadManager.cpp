@@ -27,6 +27,7 @@ void ThreadManager::CreateThreads()
 	}
 	std::cout << "  WorkerThreads\n";
 	AddThread(new TimerThread);  std::cout << "  TimerTheread\n";
+	AddThread(new TwitchIRC);  std::cout << "  TwitchIRC\n";
 }
 void ThreadManager::AddThread(MyThread* myth)
 {

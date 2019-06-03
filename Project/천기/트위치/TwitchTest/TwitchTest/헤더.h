@@ -2,6 +2,7 @@
 
 //#include "..\..\IOCPServer\IOCPServer\Protocol.h"
 #define MAX_BUFFER		1024
+#define TW_PORT 6667
 class TwitchIRC
 {
 private:

@@ -37,12 +37,6 @@
     <Filter Include="소스 파일\GameObject">
       <UniqueIdentifier>{f1ec75fd-adcb-4218-85de-26eb7ff7e3e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\TwitchIRC">
-      <UniqueIdentifier>{b0ea519a-5c65-4dce-9630-9b68c1bbd52b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\TwitchIRC\Chat">
-      <UniqueIdentifier>{8052481f-91da-419c-bcf0-99f507c5e1a5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\ThreadManager">
       <UniqueIdentifier>{a4a9f3dd-302f-4d94-b312-61d1d64e6c99}</UniqueIdentifier>
     </Filter>
@@ -57,6 +51,12 @@
     </Filter>
     <Filter Include="소스 파일\ThreadManager\MyThread\TimerThread">
       <UniqueIdentifier>{b7f70d7c-f6e0-4051-b046-99e2da69f159}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ThreadManager\TwitchIRC">
+      <UniqueIdentifier>{b0ea519a-5c65-4dce-9630-9b68c1bbd52b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ThreadManager\TwitchIRC\Chat">
+      <UniqueIdentifier>{8052481f-91da-419c-bcf0-99f507c5e1a5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -112,7 +112,7 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TwitchIRC.h">
-      <Filter>소스 파일\TwitchIRC</Filter>
+      <Filter>소스 파일\ThreadManager\TwitchIRC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -159,7 +159,7 @@
       <Filter>소스 파일\ThreadManager\MyThread\TimerThread</Filter>
     </ClCompile>
     <ClCompile Include="TwitchIRC.cpp">
-      <Filter>소스 파일\TwitchIRC</Filter>
+      <Filter>소스 파일\ThreadManager\TwitchIRC</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

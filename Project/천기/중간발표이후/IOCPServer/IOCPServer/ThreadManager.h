@@ -2,6 +2,7 @@
 #include "WorkerThread.h"
 #include "AcceptThread.h"
 #include "TimerThread.h"
+#include "TwitchIRC.h"
 
 class ThreadManager : public SingleTone<ThreadManager>
 {
