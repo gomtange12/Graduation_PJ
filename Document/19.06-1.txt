@@ -1,0 +1,8 @@
+김천기
+진행사항
+- Twitch chat 연동 중
+ 서버<->서버 연동완료
+
+ Twitch chat을 하나의 Thread를 사용하여 관리하고
+ Twitch 서버에 5분에 한번씩 핑을 넘겨줘야하는데 timemerThread를 사용 할 계획
+
