@@ -905,23 +905,23 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pAnimationController->SetTrackAnimationSet(0, 0);
 
 	m_pAnimationController->SetCallbackKeys(1, 3);
-#ifdef _WITH_SOUND_RESOURCE
-	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Footstep01"));
-	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Footstep02"));
-	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Footstep03"));
-#else
-	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Sound/Footstep01.wav"));
-	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Sound/Footstep02.wav"));
-	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Sound/Footstep03.wav"));
-#endif
+//#ifdef _WITH_SOUND_RESOURCE
+//	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Footstep01"));
+//	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Footstep02"));
+//	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Footstep03"));
+//#else
+//	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Sound/Footstep01.wav"));
+//	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Sound/Footstep02.wav"));
+//	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Sound/Footstep03.wav"));
+//#endif
 	CAnimationCallbackHandler *pAnimationCallbackHandler = new CSoundCallbackHandler();
 	m_pAnimationController->SetAnimationCallbackHandler(1, pAnimationCallbackHandler);
 
 	if (this != nullptr)
 	{
 		CreateShaderVariables(pd3dDevice, pd3dCommandList);
-		SetPlayerUpdatedContext(pContext);
-		SetCameraUpdatedContext(pContext);
+		//SetPlayerUpdatedContext(pContext);
+		//SetCameraUpdatedContext(pContext);
 	}
 	//SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	//OBJECTMANAGER->AddGameObject(this, m_ObjType);

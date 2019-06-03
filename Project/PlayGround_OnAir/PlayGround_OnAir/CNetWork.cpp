@@ -294,7 +294,7 @@ void CNetWork::MatchPkt()
 	//	pkt->avatar = B;
 	//}
 	pkt->map = PLAYGROUNDMAP;
-	pkt->mod = SOLO;
+	pkt->mod = SQUAD;
 
 	SendPacket();
 }

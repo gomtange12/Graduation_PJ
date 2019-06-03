@@ -20,12 +20,24 @@ void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	//첫번째 플레이어
 	m_pPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature,pContext);
 	m_pOtherPlayer = std::make_shared<COtherPlayers>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);
+	///m_pSECOND = std::make_shared<COtherPlayers>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);
 
 
 	//4m_pPlayer->SETPO
-	m_vecPlayerList.reserve(m_MaxPlayerNum);
-	
+	//m_vecPlayerList.reserve(m_MaxPlayerNum);
+	m_pOtherPlayerMap.reserve(m_MaxPlayerNum);
+	//std::shared_ptr<std::vector<uint8_t> > mSharedPtr(new std::vector<uint8_t>());
+	//for (int i = 0; i < m_MaxPlayerNum - 1; ++i)
+	//m_pOtherPlayerMap.emplace_back(shared_ptr<COtherPlayers>(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext)));
 	//MakeOtherPlayers(pd3dDevice,pd3dCommandList,pd3dGraphicsRootSignature, pContext);
+
+	m_pOtherPlayerMap.emplace_back(m_pOtherPlayer);
+	m_pOtherPlayerMap.emplace_back(m_pOtherPlayer);
+	m_pOtherPlayerMap.emplace_back(m_pOtherPlayer);
+
+	cout <<"아더 플레이어 맵 크기  "<< m_pOtherPlayerMap.size() << endl;
+	//1111m_pOtherPlayerMap.emplace_back(m_pSECOND);
+
 }
 
 void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)

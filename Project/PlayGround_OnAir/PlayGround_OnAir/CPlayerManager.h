@@ -9,10 +9,11 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 {
 	std::shared_ptr<CTerrainPlayer>							m_pPlayer = nullptr;
 	std::shared_ptr<COtherPlayers>							m_pOtherPlayer = nullptr;
-
-	//std::vector<std::shared_ptr<COtherPlayer>>				m_pOtherPlayer;
+	
 	std::map<E_PLAYERTYPE, vector<CTerrainPlayer*>>			m_PlayerMap;
+	std::vector<std::shared_ptr<COtherPlayers>>				m_pOtherPlayerMap;
 public:
+	std::vector<std::shared_ptr<COtherPlayers>>		GetOtherPlayerMap() { return m_pOtherPlayerMap; }
 	vector<CTerrainPlayer*>									m_vecPlayerList;
 	//void 
 	CPlayerManager();
