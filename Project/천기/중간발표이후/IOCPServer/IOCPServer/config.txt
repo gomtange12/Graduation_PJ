@@ -1,0 +1,5 @@
+irc.chat.twitch.tv
+6667
+OAUTH
+NICKNAME
+#CHANNEL

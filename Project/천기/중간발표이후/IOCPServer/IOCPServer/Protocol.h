@@ -1,5 +1,4 @@
 #pragma once
-
 //공용 키값//
 #define DIR_FORWARD					0x01
 #define DIR_BACKWARD				0x02

@@ -8,7 +8,6 @@ private:
 	WSADATA			 wsaData;
 	SOCKET			 tw_sock;
 	SOCKADDR_IN		 ServerAddr;
-	char hostName[19] = "irc.chat.twitch.tv";
 	struct hostent   *hostAdd;
 	int				 iResult;
 	DWORD			 dwError;
@@ -17,6 +16,7 @@ private:
 	std::string		 response;
 	DWORD			 in_packet_size = 0;
 	int				 saved_packet_size = 0;
+	std::vector<std::string> config;
 public:
 	TwitchIRC();
 	~TwitchIRC();
@@ -26,6 +26,7 @@ public:
 	void Run();
 	void stripMessage(std::string incoming, std::string &username, std::string &message);
 	void InitSend();
+	void sendCommand(const char* command);
 	void setNonBlocking(const bool status);
 	//void ProcessPacket();
 
