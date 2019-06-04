@@ -13,7 +13,7 @@ void TwitchIRC::Init()
 }
 void TwitchIRC::Proc() {
 	SetConsoleOutputCP(65001); //콘솔 인코딩
-
+	
 	char line[124];
 	std::fstream f("config.txt", std::ios::in);
 	//hostName, port, pass, nick, channel
@@ -55,7 +55,6 @@ void TwitchIRC::Proc() {
 
 void TwitchIRC::Run()
 {
-	int mret = 0;
 	while (1) {
 		DWORD dwTmp = 0;
 
@@ -68,19 +67,17 @@ void TwitchIRC::Run()
 			send(tw_sock, recv_buffer, (int)strlen(recv_buffer), 0);
 			break;
 		}*/
-
-		mret = recv(tw_sock, (char *)recv_buffer, sizeof(MAX_BUFFER) - 1, 0);
-		if (mret == SOCKET_ERROR) {
-			printf("Receive Error..\n");
-			break;
-		}
-		response += std::string((char *)recv_buffer);
-		std::fill_n(recv_buffer, sizeof(recv_buffer), NULL);
-		if (response.size() > 1 && response[response.size() - 2] == '\r' && response[response.size() - 1] == '\n') {
+		
+		recv(tw_sock, (char *)recv_buffer, sizeof(MAX_BUFFER) - 1, 0);
+		pkt += std::string((char *)recv_buffer);
+		ZeroMemory(&recv_buffer, sizeof(recv_buffer));
+		
+		if (pkt.size() > 1 && pkt[pkt.size() - 2] == '\r' && pkt[pkt.size() - 1] == '\n') {
 
 			std::string name, message;
-			stripMessage(response, name, message);
+			stripMessage(pkt, name, message);
 			std::cout << "Chat: " << name << ": " << message << std::endl;
+			pkt.resize(0);
 		}
 	}
 
@@ -119,8 +116,8 @@ void TwitchIRC::sendCommand(const char* command) {
 }
 void TwitchIRC::setNonBlocking(const bool status) {
 	u_long block = status;
-	int opt = ioctlsocket(tw_sock, FIONBIO, &block);
-	if (opt) {
+	int ret = ioctlsocket(tw_sock, FIONBIO, &block);
+	if (ret) {
 		std::cout << "tw_socket::setNonBlocking(): Failed with error " << WSAGetLastError() << std::endl;
 	}
 }

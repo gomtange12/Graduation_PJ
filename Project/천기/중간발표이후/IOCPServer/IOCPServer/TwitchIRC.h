@@ -5,18 +5,16 @@
 class TwitchIRC : public MyThread
 {
 private:
+	std::vector<std::string> config;
+
 	WSADATA			 wsaData;
 	SOCKET			 tw_sock;
 	SOCKADDR_IN		 ServerAddr;
 	struct hostent   *hostAdd;
-	int				 iResult;
-	DWORD			 dwError;
-	unsigned char	 packet_buffer[MAX_BUFFER];
+
 	char			 recv_buffer[MAX_BUFFER];
-	std::string		 response;
-	DWORD			 in_packet_size = 0;
-	int				 saved_packet_size = 0;
-	std::vector<std::string> config;
+	std::string		 pkt;
+
 public:
 	TwitchIRC();
 	~TwitchIRC();
@@ -28,6 +26,5 @@ public:
 	void InitSend();
 	void sendCommand(const char* command);
 	void setNonBlocking(const bool status);
-	//void ProcessPacket();
 
 };
