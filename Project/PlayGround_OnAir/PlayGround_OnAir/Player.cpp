@@ -286,7 +286,10 @@ void CPlayer::Update(float fTimeElapsed)
 		break;*/
 	case IDLE:
 		m_OnAacting = FALSE;
-		SetTrackAnimationSet(0, IDLE);
+		//m_AllowKey = true;
+		//oncce 애니메이션이 끝난게 확인이 되면
+		if(PLAYER->GetPlayer()->GetAllowKey())
+			SetTrackAnimationSet(0, IDLE);
 		break;
 	case RUN:
 		//if (!m_OnAacting)
@@ -313,6 +316,7 @@ void CPlayer::Update(float fTimeElapsed)
 		/*m_newYpos = m_xmf3Position.y + 8;
 		m_newYpos += (m_xmf3Gravity.y * 0.5* fTimeElapsed);
 		m_xmf3Position.y = m_newYpos;*/
+
 		m_JumpPower += (m_xmf3Gravity.y * 0.1* fTimeElapsed);
 		m_xmf3Position.y += m_JumpPower * fTimeElapsed;
 		
