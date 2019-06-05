@@ -327,7 +327,7 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 		case ANIMATION_TYPE_LOOP:
 		{
 #ifdef _WITH_ANIMATION_INTERPOLATION
-			PLAYER->GetPlayer()->SetAllowKey(true);
+			//PLAYER->GetPlayer()->SetAllowKey(true);
 			m_fPosition = fTrackPosition;
 			m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //원래꺼
 
@@ -349,22 +349,21 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //원래꺼
 
 
-			PLAYER->GetOtherPlayer()->SetAllowKey(false);
+			//PLAYER->GetOtherPlayer()->SetAllowKey(false);
 
-			PLAYER->GetPlayer()->SetAllowKey(false);
-			m_fPosition += 0.00001;// m_nFramesPerSecond;// 0.00001;
+			//PLAYER->GetPlayer()->SetAllowKey(false);
+			m_fPosition += 0.000000001;// m_nFramesPerSecond;// 0.00001;
 			//sol) m_fPosition += fDelta * speed; 프레임 고정시
-			if (m_fPosition >= m_fLength)  //maxLength)
+			if (m_fPosition > m_fLength)  //maxLength)
 			{
 				m_fPosition = 0;
 				//fPosition = 0.0f;
 				//fTrackPosition = 0.f;
 				oncePosition = 0.0f;
-				//maxLength = 0.0f;
+				maxLength = 0.0f;
 				PLAYER->GetPlayer()->SetAllowKey(true);
-
-				PLAYER->GetPlayer()->SetPlayerState(IDLE);
-				PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
+					PLAYER->GetPlayer()->SetPlayerState(IDLE);
+				//PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
 
 			}
 			//CPlayer::m_PlayerState = CPlayer::PlayerState::IDLE;
@@ -754,6 +753,8 @@ void CGameObject::UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent)
 
 void CGameObject::SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet)
 {
+	//여기
+	//PLAYER->GetPlayer()->SetAllowKey(true);
 	if (m_pAnimationController) m_pAnimationController->SetTrackAnimationSet(nAnimationTrack, nAnimationSet);
 }
 

@@ -653,7 +653,7 @@ void CGameFramework::ProcessInput()
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 			//PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-
+			//PLAYER->GetPlayer()->SetAllowKey(true);
 			dwDirection |= DIR_FORWARD;
 
 			//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
@@ -662,18 +662,24 @@ void CGameFramework::ProcessInput()
 		if (pKeysBuffer[0x53] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
+			//PLAYER->GetPlayer()->SetAllowKey(true);
+
 			dwDirection |= DIR_BACKWARD;
 		}
 		
 		if (pKeysBuffer[0x41] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
+			//PLAYER->GetPlayer()->SetAllowKey(true);
+
 			dwDirection |= DIR_LEFT;
 		}
 		
 		if (pKeysBuffer[0x44] & 0xF0)
 		{
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
+			//PLAYER->GetPlayer()->SetAllowKey(true);
+
 			dwDirection |= DIR_RIGHT;
 		}
 	
@@ -718,6 +724,8 @@ void CGameFramework::ProcessInput()
 			{
 				//CNETWORK->KeyPkt(true, false, false);
 				PLAYER->GetPlayer()->SetPlayerState(PlayerState::JUMP);
+				//PLAYER->GetPlayer()->SetAllowKey(false);
+
 				//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //¿©±â
 			}
 		}
@@ -901,10 +909,9 @@ void CGameFramework::FrameAdvance()
 	m_pd3dCommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
 	
 	if (m_pScene)
-	{
 		m_pScene->Render(m_pd3dCommandList, m_pCamera);
 	
-	}
+	
 
 
 
