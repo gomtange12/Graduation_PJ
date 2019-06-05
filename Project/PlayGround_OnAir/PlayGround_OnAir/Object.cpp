@@ -330,6 +330,15 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			//PLAYER->GetPlayer()->SetAllowKey(true);
 			m_fPosition = fTrackPosition;
 			m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //¿ø·¡²¨
+			
+			
+			/*if (PLAYER->GetPlayer()->GetPlayerState() == RUN)
+			{
+
+				PLAYER->GetPlayer()->SetAllowKey(true);
+				PLAYER->GetPlayer()->SetPlayerState(IDLE);
+
+			}*/
 
 			//m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
 			//m_fPosition = fmod(fTrackPosition, m_fLength); if (m_fPosition < 0) m_fPosition += m_fLength;
@@ -337,9 +346,12 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 #else
 			m_nCurrentKey++;
 			if (m_nCurrentKey >= m_nKeyFrameTransforms) m_nCurrentKey = 0;
-#endif
-			//if()
 			PLAYER->GetPlayer()->SetPlayerState(IDLE);
+
+#endif
+			PLAYER->GetPlayer()->SetPlayerState(IDLE);
+			//if()
+			//PLAYER->GetPlayer()->SetAllowKey(true);
 
 			break;
 		}
@@ -362,7 +374,7 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 				oncePosition = 0.0f;
 				maxLength = 0.0f;
 				PLAYER->GetPlayer()->SetAllowKey(true);
-					PLAYER->GetPlayer()->SetPlayerState(IDLE);
+				PLAYER->GetPlayer()->SetPlayerState(IDLE);
 				//PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
 
 			}
@@ -630,14 +642,14 @@ CGameObject::CGameObject(int nMaterials) : CGameObject()
 		m_ppMaterials = new CMaterial*[m_nMaterials];
 		for(int i = 0; i < m_nMaterials; i++) m_ppMaterials[i] = NULL;
 	}
-	while (AllObjectList[ObjIndex] != nullptr)
-	{
-		ObjIndex %= MAXOBJECTNUM;
-		++ObjIndex;
-	}
-	AllObjectList[ObjIndex] = this;
-	myIdx = ObjIndex;
-	++ObjIndex;
+	//while (AllObjectList[ObjIndex] != nullptr)
+	//{
+	//	ObjIndex %= MAXOBJECTNUM;
+	//	++ObjIndex;
+	//}
+	//AllObjectList[ObjIndex] = this;
+	//myIdx = ObjIndex;
+	//++ObjIndex;
 }
 
 CGameObject::~CGameObject()

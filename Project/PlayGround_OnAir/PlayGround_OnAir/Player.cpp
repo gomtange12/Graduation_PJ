@@ -647,7 +647,7 @@ void CSoundCallbackHandler::HandleCallback(void *pCallbackData)
 #endif
 }
 
-CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
+CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void *pContext)
 	: CPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext)
 {
 	/*m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -677,7 +677,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	
 	m_BoundScale = 60.0f;
 	CLoadedModelInfo *pPlayerModel = //CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
-	OBJECTMANAGER->GetPlayerResource(BASS);
+	OBJECTMANAGER->GetPlayerResource(type);
 	SetChild(pPlayerModel->m_pModelRootObject, true);
 	//SetChild(pPlayerModel->m_pModelRootObject, true);
 	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
@@ -871,7 +871,7 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 // CGameObject::UpdateTransform(NULL);
 //}
 
-COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void * pContext)
 	: CPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext)
 {
 	//차후에 리소스 관리 방식을 바꿔야한다

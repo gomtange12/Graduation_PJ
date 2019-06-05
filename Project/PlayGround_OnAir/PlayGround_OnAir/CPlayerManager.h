@@ -11,9 +11,9 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 	std::shared_ptr<COtherPlayers>							m_pOtherPlayer = nullptr;
 	
 	std::map<E_PLAYERTYPE, vector<CTerrainPlayer*>>			m_PlayerMap;
-	std::vector<std::shared_ptr<COtherPlayers>>				m_pOtherPlayerMap;
+	std::vector<std::shared_ptr<COtherPlayers*>>				m_pOtherPlayerMap;
 public:
-	std::vector<std::shared_ptr<COtherPlayers>>		GetOtherPlayerMap() { return m_pOtherPlayerMap; }
+	std::vector<std::shared_ptr<COtherPlayers*>>		GetOtherPlayerMap() { return m_pOtherPlayerMap; }
 	vector<CTerrainPlayer*>									m_vecPlayerList;
 	//void 
 	CPlayerManager();
