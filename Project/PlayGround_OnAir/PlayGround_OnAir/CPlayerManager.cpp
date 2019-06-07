@@ -3,6 +3,7 @@
 #include "GameFramework.h"
 #include "CPlayerManager.h"
 #include "Player.h"
+#include "COtherPlayer.h"
 #include "CNetWork.h"
 CPlayerManager::CPlayerManager()
 {
@@ -26,24 +27,22 @@ void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	//4m_pPlayer->SETPO
 	//m_vecPlayerList.reserve(m_MaxPlayerNum);
 	m_pOtherPlayerMap.reserve(8);
-	//std::shared_ptr<std::vector<uint8_t> > mSharedPtr(new std::vector<uint8_t>());
-	//for (int i = 0; i < m_MaxPlayerNum - 1; ++i)
-	m_pOtherPlayerMap.emplace_back(std::make_shared<COtherPlayers>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
-	//m_pOtherPlayerMap.emplace_back(make_shared<COtherPlayers>(COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext)));
-	//m_pOtherPlayerMap.emplace_back(make_shared<COtherPlayers>(COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext)));
 
-	//MakeOtherPlayers(pd3dDevice,pd3dCommandList,pd3dGraphicsRootSignature, pContext);
-
-	//m_pOtherPlayerMap.emplace_back(m_pOtherPlayer);
-	//m_pOtherPlayerMap.emplace_back(m_pOtherPlayer);
-	//m_pOtherPlayerMap.emplace_back(m_pOtherPlayer);
+	// 생성자에 리소스
+	//m_pOtherPlayerMap.emplace_back(std::make_shared<COtherPlayers>( pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
+	//cout << "sizeofMap: " <<m_pOtherPlayerMap.size() << std::endl;
+	
+	//같은 otherPlayer 여러개 생성
+	m_pOtherPlayerMap.emplace_back(m_pOtherPlayer);
+	m_pOtherPlayerMap.emplace_back(m_pOtherPlayer);
+	m_pOtherPlayerMap.emplace_back(m_pOtherPlayer);
 
 	cout <<"아더 플레이어 맵 크기  "<< m_pOtherPlayerMap.size() << endl;
 	//1111m_pOtherPlayerMap.emplace_back(m_pSECOND);
 
 }
 
-void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+void CPlayerManager::MakeOtherPlayers(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
 	//여길 고쳐야함. 
 	//m_pOtherPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);

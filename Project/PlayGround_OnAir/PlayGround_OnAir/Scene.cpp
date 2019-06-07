@@ -7,7 +7,8 @@
 #include "CPlayerManager.h"
 #include "CSceneManager.h"
 #include "CObjectManager.h"
-#include "CBillboardObject.h"
+
+#include "CUIShader.h"
 #include "CNetWork.h"
 #define objScale 6.47
 #define CONCERTMAPSCALSE 6.47
@@ -271,7 +272,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 
 	m_ppShaders[1] = pAngrybotObjectsShader;
 
-	CUiShader *pUIShader = new CUiShader();
+	CUIShader *pUIShader = new CUIShader();
 	pUIShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	pUIShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
 	m_ppShaders[2] = pUIShader;
@@ -1263,7 +1264,7 @@ void CScene::AnimateObjects(float fTimeElapsed)
 		m_pLights[1].m_xmf3Direction = PLAYER->GetPlayer()->GetLookVector();
 	}
 
-	if (billboardobj) billboardobj->Animate(fTimeElapsed, PLAYER->GetPlayer()->GetCamera());
+	//if (billboardobj) billboardobj->Animate(fTimeElapsed, PLAYER->GetPlayer()->GetCamera());
 }
 
 void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera)
