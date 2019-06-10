@@ -2,8 +2,7 @@
 
 #include "Protocol.h"
 
-#define SOLO_RNUM 2
-#define TEAM_RNUM 8
+#define SOLO_NUM 2
 
 struct stOverEx {
 	WSAOVERLAPPED m_wsaOver;

@@ -50,8 +50,8 @@ void PacketManager::MovePacket(int id)
 	pkt.posZ = objectManager->GetPlayer(id)->m_xmf3Position.z;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_RNUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+	for (int i = 0; i < SOLO_NUM; ++i) {
+		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 	}
 
 		
@@ -60,9 +60,9 @@ void PacketManager::ClientDisconnect(int id)
 {
 	//int otherId;
 	//int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	//for (int i = 0; i < SOLO_RNUM; ++i) {
-	//	if (id != ROOMMANAGER->room[roomNum]->m_SoloIds[i])
-	//		otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
+	//for (int i = 0; i < SOLO_NUM; ++i) {
+	//	if (id != ROOMMANAGER->room[roomNum]->m_ids[i])
+	//		otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
 	//}
 	//
 	//sc_packet_remove_player pkt;
@@ -94,11 +94,11 @@ void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo ¸ÅÄª¿
 	pkt.roomNum = roomNum;
 	pkt.avatar = avatar;
 	
-	if (ROOMMANAGER->room[roomNum]->m_SoloIds[0] != id) {
-		pkt.ids = ROOMMANAGER->room[roomNum]->m_SoloIds[0];
+	if (ROOMMANAGER->room[roomNum]->m_ids[0] != id) {
+		pkt.ids = ROOMMANAGER->room[roomNum]->m_ids[0];
 	}
 	else{ 
-		pkt.ids = ROOMMANAGER->room[roomNum]->m_SoloIds[1]; 
+		pkt.ids = ROOMMANAGER->room[roomNum]->m_ids[1]; 
 	}
 	
 	SendPacket(id, &pkt);
@@ -117,8 +117,8 @@ void PacketManager::VectorPacket(int id)
 	pkt.LposZ = objectManager->GetPlayer(id)->m_xmf4x4ToParent._33;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_RNUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+	for (int i = 0; i < SOLO_NUM; ++i) {
+		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 
 	}
 		
@@ -143,8 +143,8 @@ void PacketManager::KeyPacket(int id, bool jump, bool attack, bool skill)
 	pkt.attack = attack;
 	pkt.skill = skill;
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_RNUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+	for (int i = 0; i < SOLO_NUM; ++i) {
+		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 	}
 }
 void PacketManager::AttackPacKet(int id) 
@@ -155,8 +155,8 @@ void PacketManager::AttackPacKet(int id)
 	pkt.id = id;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_RNUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+	for (int i = 0; i < SOLO_NUM; ++i) {
+		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 	}
 }
 void PacketManager::LobbyPacket(int id) 
@@ -166,15 +166,15 @@ void PacketManager::LobbyPacket(int id)
 	pkt.type = SC_LOBBY_IN;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_RNUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+	for (int i = 0; i < SOLO_NUM; ++i) {
+		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 	}
 
 	
 	//¹æ ÃÊ±âÈ­
 	ROOMMANAGER->room[roomNum]->m_full == false;
-	for (int i = 0; i < SOLO_RNUM; ++i) {
-		ROOMMANAGER->room[roomNum]->m_SoloIds[i] = -1;
+	for (int i = 0; i < SOLO_NUM; ++i) {
+		ROOMMANAGER->room[roomNum]->m_ids[i] = -1;
 	}
 }
 void PacketManager::ResultPacket(int id)
@@ -186,7 +186,7 @@ void PacketManager::ResultPacket(int id)
 
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_RNUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+	for (int i = 0; i < SOLO_NUM; ++i) {
+		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
 	}
 }

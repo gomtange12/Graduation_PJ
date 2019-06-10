@@ -16,7 +16,6 @@ public:
 	~RoomManager();
 
 	void SoloRoomMatch(int id);
-	void TeamRoomMatch(int id);
 private:
 
 };

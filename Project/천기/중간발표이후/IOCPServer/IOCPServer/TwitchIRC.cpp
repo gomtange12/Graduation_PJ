@@ -59,6 +59,7 @@ void TwitchIRC::Run()
 		DWORD dwTmp = 0;
 
 		//메세지 전송용
+
 	/*	char text[1024] = { 0 };
 		ReadFile(GetStdHandle(STD_INPUT_HANDLE), text, 1024, &dwTmp, NULL);
 		send(tw_sock, text, strlen(text), 0);
@@ -113,12 +114,19 @@ void TwitchIRC::InitSend() {
 
 	const std::string jS = std::string("JOIN " + config[4] + "\r\n");
 	sendCommand(jS.c_str());
-
+	const std::string joS = std::string("JOIN " + config[5] + "\r\n");
+	sendCommand(joS.c_str());
 }
 void TwitchIRC::sendCommand(const char* command) {
 	send(tw_sock, command, strlen(command), 0);
 }
-
+void TwitchIRC::setNonBlocking(const bool status) {
+	u_long block = status;
+	int ret = ioctlsocket(tw_sock, FIONBIO, &block);
+	if (ret) {
+		std::cout << "tw_socket::setNonBlocking(): Failed with error " << WSAGetLastError() << std::endl;
+	}
+}
 TwitchIRC::TwitchIRC()
 {
 }
