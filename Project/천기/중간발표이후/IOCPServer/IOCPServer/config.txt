@@ -1,5 +1,5 @@
 irc.chat.twitch.tv
 6667
-OAUTH
-NICKNAME
-#CHANNEL
+oauth:ccuwxr3mx5ks5q9pzv04x7k33rue9r
+blqblq
+#1k1000

@@ -100,6 +100,7 @@ void ObjManager::ModMatch(int id)
 	}
 	case SQUAD:
 	{
+		ROOMMANAGER->TeamRoomMatch(id);
 		break;
 	}
 	default:
@@ -161,9 +162,9 @@ bool ObjManager::collisionPlayerByPlayer(int id)
 	
 	int roomNum = g_clients[id]->roomNumber;
 	int otherId;
-	for (int i = 0; i < SOLO_NUM; ++i) {
-		if (id != ROOMMANAGER->room[roomNum]->m_ids[i])
-			otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
+	for (int i = 0; i < SOLO_RNUM; ++i) {
+		if (id != ROOMMANAGER->room[roomNum]->m_SoloIds[i])
+			otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
 	}
 			
 	if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //Ãæµ¹!
@@ -190,9 +191,9 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 	{
 		int roomNum = g_clients[id]->roomNumber;
 		int otherId;
-		for (int i = 0; i < SOLO_NUM; ++i) {
-			if(id != ROOMMANAGER->room[roomNum]->m_ids[i])
-				otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			if(id != ROOMMANAGER->room[roomNum]->m_SoloIds[i])
+				otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
 		}
 		float fLength = sqrtf(pow(g_clients[id]->m_xmf3Position.x-g_clients[otherId]->m_xmf3Position.x,2) + pow(g_clients[id]->m_xmf3Position.z-g_clients[otherId]->m_xmf3Position.z,2));
 		if (fLength <= 180.0f) {
@@ -211,9 +212,9 @@ void ObjManager::LobbyPkt(int id, unsigned char *packet)
 
 	int roomNum = g_clients[id]->roomNumber;
 	int otherId;
-	for (int i = 0; i < SOLO_NUM; ++i) {
-		if (id != ROOMMANAGER->room[roomNum]->m_ids[i])
-			otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
+	for (int i = 0; i < SOLO_RNUM; ++i) {
+		if (id != ROOMMANAGER->room[roomNum]->m_SoloIds[i])
+			otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
 	}
 
 	if (g_clients[id]->gameEnd == true && g_clients[otherId]->gameEnd == true) {

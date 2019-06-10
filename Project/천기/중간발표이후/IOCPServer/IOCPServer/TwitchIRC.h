@@ -17,14 +17,14 @@ private:
 
 public:
 	TwitchIRC();
-	~TwitchIRC();
+	virtual ~TwitchIRC();
 
 	virtual void Init();
 	virtual void Proc();
+
 	void Run();
 	void stripMessage(std::string incoming, std::string &username, std::string &message);
 	void InitSend();
 	void sendCommand(const char* command);
-	void setNonBlocking(const bool status);
 
 };
