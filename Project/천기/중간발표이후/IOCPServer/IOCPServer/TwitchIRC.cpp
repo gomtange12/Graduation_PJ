@@ -73,11 +73,15 @@ void TwitchIRC::Run()
 		ZeroMemory(&recv_buffer, sizeof(recv_buffer));
 		
 		if (pkt.size() > 1 && pkt[pkt.size() - 2] == '\r' && pkt[pkt.size() - 1] == '\n') {
-
-			std::string name, message;
-			stripMessage(pkt, name, message);
-			std::cout << "Chat: " << name << ": " << message << std::endl;
-			pkt.resize(0);
+			if (pkt.find("PRIVMSG") !=  std::string::npos) {
+				std::string name, message;
+				stripMessage(pkt, name, message);
+				std::cout << "Chat: " << name << ": " << message << std::endl;
+				pkt.resize(0);
+			}
+			if (pkt.find("PING") != std::string::npos) {
+				send(tw_sock, "PONG :tmi.twitch.tv\r\n", strlen("PONG :tmi.twitch.tv\r") + 1, 0);
+			}
 		}
 	}
 
@@ -107,9 +111,11 @@ void TwitchIRC::InitSend() {
 	send(tw_sock, "CAP REQ :twitch.tv/membership\r\n", strlen("CAP REQ :twitch.tv/membership\r") + 1, 0);
 	send(tw_sock, "CAP REQ :twitch.tv/tags\r\n", strlen("CAP REQ :twitch.tv/tags\r") + 1, 0);
 
+
 	const std::string jS = std::string("JOIN " + config[4] + "\r\n");
 	sendCommand(jS.c_str());
-
+	const std::string joS = std::string("JOIN " + config[5] + "\r\n");
+	sendCommand(joS.c_str());
 }
 void TwitchIRC::sendCommand(const char* command) {
 	send(tw_sock, command, strlen(command), 0);
