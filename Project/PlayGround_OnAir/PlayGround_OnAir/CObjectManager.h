@@ -7,7 +7,7 @@ class CObjectManager : public CSingleTonBase<CObjectManager>
 	std::map<OBJTYPE, std::vector<CGameObject*>> m_ObjMap;
 	std::map<OBJTYPE, std::vector<CGameObject*>> m_ResourceMap;
 	std::map<E_CHARACTERTYPE, CLoadedModelInfo*> m_PlayerResourceMap;
-
+	
 public:
 	std::vector<CGameObject*> ObjList;
 public:
@@ -21,5 +21,6 @@ public:
 	std::vector<CGameObject*> GetObjlist() { return ObjList; }
 	std::map<OBJTYPE, std::vector<CGameObject*>> GetAllObjList() { return m_ObjMap; }
 	CGameObject* FindGameObject(OBJTYPE objType, int idx);
+
 };
 

@@ -584,12 +584,12 @@ void CGameFramework::BuildObjects()
 	PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
 	PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 	
-	PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(440.0f, 50, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
-	//PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(40,20, 40)); //박스도 151515배 여기여기0409
+	//PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(440.0f, 50, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+	////PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(40,20, 40)); //박스도 151515배 여기여기0409
 	//PLAYER->GetOtherPlayer()->Rotate(0,90,0); //박스도 151515배 여기여기0409
-
-	PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
-	PLAYER->GetOtherPlayer()->SetOOBB(PLAYER->GetOtherPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+	//
+	//PLAYER->M_()->SetScale(XMFLOAT3(PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
+	//PLAYER->GetOtherPlayer()->SetOOBB(PLAYER->GetOtherPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 
 
 	//if (m_pScene) m_pScene->MakeOtherPlayer(m_pd3dDevice, m_pd3dCommandList);
@@ -779,7 +779,7 @@ void CGameFramework::ProcessInput()
 	}
 	//PLAYER->GetPlayer()->SetAllowKey(true);
 	PLAYER->GetPlayer()->Update(m_GameTimer.GetTimeElapsed());
-	PLAYER->GetOtherPlayer()->Update(m_GameTimer.GetTimeElapsed());
+	//PLAYER->GetOtherPlayer()->Update(m_GameTimer.GetTimeElapsed());
 
 }
 
@@ -797,10 +797,10 @@ void CGameFramework::AnimateObjects()
 
 
 	PLAYER->GetPlayer()->Animate(fTimeElapsed);
-	PLAYER->GetOtherPlayer()->Animate(fTimeElapsed);
+	//PLAYER->GetOtherPlayer()->Animate(fTimeElapsed);
 
 	PLAYER->GetPlayer()->UpdateTransform(NULL);
-	PLAYER->GetOtherPlayer()->UpdateTransform(NULL);
+	//PLAYER->GetOtherPlayer()->UpdateTransform(NULL);
 
 
 	

@@ -1,5 +1,4 @@
 #include "stdafx.h"
-
 #include "GameFramework.h"
 #include "CPlayerManager.h"
 #include "Player.h"
@@ -16,11 +15,11 @@ CPlayerManager::~CPlayerManager()
 {
 }
 
-void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void* pContext)
 {
 	//첫번째 플레이어
 	m_pPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext);
-	m_pOtherPlayer = std::make_shared<COtherPlayers>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
+	//m_pOtherPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
 	///m_pSECOND = std::make_shared<COtherPlayers>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);
 
 
@@ -33,9 +32,9 @@ void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	//cout << "sizeofMap: " <<m_pOtherPlayerMap.size() << std::endl;
 	
 	//같은 otherPlayer 여러개 생성
-	m_pOtherPlayerMap.emplace_back(m_pOtherPlayer);
-	m_pOtherPlayerMap.emplace_back(m_pOtherPlayer);
-	m_pOtherPlayerMap.emplace_back(m_pOtherPlayer);
+	m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
+	m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext));
+	m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext));
 
 	cout <<"아더 플레이어 맵 크기  "<< m_pOtherPlayerMap.size() << endl;
 	//1111m_pOtherPlayerMap.emplace_back(m_pSECOND);

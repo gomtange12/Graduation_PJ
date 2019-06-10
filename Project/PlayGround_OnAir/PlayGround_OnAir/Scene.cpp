@@ -1333,15 +1333,15 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 			}
 		}
 		else {
-			if (PLAYER->GetOtherPlayer()->GetPlayerState() == HAPPY) {
-				if (m_ppShaders[8])
-					m_ppShaders[8]->Render(pd3dCommandList, pCamera);
-			}
-
-			if (PLAYER->GetOtherPlayer()->GetPlayerState() == SAD) {
-				if (m_ppShaders[7])
-					m_ppShaders[7]->Render(pd3dCommandList, pCamera);
-			}
+			//if (PLAYER->GetOtherPlayer()->GetPlayerState() == HAPPY) {
+			//	if (m_ppShaders[8])
+			//		m_ppShaders[8]->Render(pd3dCommandList, pCamera);
+			//}
+			//
+			//if (PLAYER->GetOtherPlayer()->GetPlayerState() == SAD) {
+			//	if (m_ppShaders[7])
+			//		m_ppShaders[7]->Render(pd3dCommandList, pCamera);
+			//}
 		}
 		//PLAYER->GetOtherPlayer()->Render(pd3dCommandList, pCamera);
 		//m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
@@ -1466,27 +1466,27 @@ void CScene::CheckObjectByObjectCollisions() {
 					PLAYER->GetPlayer()->SetCollisionState(true);
 				}
 
-				if (m_ppPlayGroundObjects[i]->GetBoundingBox().Intersects(PLAYER->GetOtherPlayer()->GetBoundingBox()))
-				{
-					//PLAYER->GetPlayer()->SetPosition()
-					//PLAYER->GetPlayer()->SetAllowKey(false);
-					//PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0,0,0));
+				//if (m_ppPlayGroundObjects[i]->GetBoundingBox().Intersects(PLAYER->GetOtherPlayer()->GetBoundingBox()))
+				//{
+				//	//PLAYER->GetPlayer()->SetPosition()
+				//	//PLAYER->GetPlayer()->SetAllowKey(false);
+				//	//PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0,0,0));
 
-					//PLAYER->GetPlayer()->SetCollideNum(i);
-					if (m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.y + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.y <= PLAYER->GetOtherPlayer()->GetBoundingBox().Center.y - PLAYER->GetOtherPlayer()->GetBoundingBox().Extents.y + 10)
-					{
-						PLAYER->GetOtherPlayer()->SetHeight(m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.y + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.y);
-						PLAYER->GetOtherPlayer()->SetPlayCrashMap(true);
-						PLAYER->GetOtherPlayer()->SetCollisionState(false);
+				//	//PLAYER->GetPlayer()->SetCollideNum(i);
+				//	if (m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.y + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.y <= PLAYER->GetOtherPlayer()->GetBoundingBox().Center.y - PLAYER->GetOtherPlayer()->GetBoundingBox().Extents.y + 10)
+				//	{
+				//		PLAYER->GetOtherPlayer()->SetHeight(m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.y + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.y);
+				//		PLAYER->GetOtherPlayer()->SetPlayCrashMap(true);
+				//		PLAYER->GetOtherPlayer()->SetCollisionState(false);
 
-						num2++;
-					}
+				//		num2++;
+				//	}
 
-				}
-				if (m_ppPlayGroundObjects[i]->GetBoundingBox().Contains(PLAYER->GetOtherPlayer()->GetBoundingBox()))
-				{
-					PLAYER->GetOtherPlayer()->SetCollisionState(true);
-				}
+				//}
+				//if (m_ppPlayGroundObjects[i]->GetBoundingBox().Contains(PLAYER->GetOtherPlayer()->GetBoundingBox()))
+				//{
+				//	PLAYER->GetOtherPlayer()->SetCollisionState(true);
+				//}
 
 			}
 		}
@@ -1497,7 +1497,7 @@ void CScene::CheckObjectByObjectCollisions() {
 		}
 		if (num2 == 0)
 		{
-			PLAYER->GetOtherPlayer()->SetPlayCrashMap(false);
+			//PLAYER->GetOtherPlayer()->SetPlayCrashMap(false);
 
 		}
 		break;

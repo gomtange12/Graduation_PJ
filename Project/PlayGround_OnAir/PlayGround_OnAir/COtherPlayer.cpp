@@ -12,27 +12,28 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);
 	m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
+	m_xmf3Scale = XMFLOAT3(40, 20, 40);
 	m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_fMaxVelocityXZ = 0.0f;
 	m_fMaxVelocityY = 0.0f;
 	m_fFriction = 0.0f;
-
+	
 	m_fPitch = 0.0f;
 	m_fRoll = 0.0f;
 	m_fYaw = 0.0f;
+	Rotate(0, 90, 0);
 	//m_BoundScale = 1;
 	if (this != nullptr) //일단 카메라 쓰지 않는다
 	{
 		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
-		m_pCamera->SetLookAt(m_xmf3Position);
-		m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
+		//m_pCamera->SetLookAt(m_xmf3Position);
+		//m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
 
 	}
 
 	//m_ObjType = DYNAMIC;
-	CLoadedModelInfo *pPlayerModel = //CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
-		OBJECTMANAGER->GetPlayerResource(type);
+	CLoadedModelInfo* pPlayerModel = OBJECTMANAGER->GetPlayerResource(type);
 
 	SetChild(pPlayerModel->m_pModelRootObject, true);
 	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
@@ -40,7 +41,7 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
 	m_pAnimationController->SetTrackAnimationSet(0, 0);
 
-	m_pAnimationController->SetCallbackKeys(1, 3);
+	m_pAnimationController->SetCallbackKeys(2, 3);
 	//#ifdef _WITH_SOUND_RESOURCE
 	//	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Footstep01"));
 	//	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Footstep02"));
@@ -56,8 +57,8 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	if (this != nullptr)
 	{
 		CreateShaderVariables(pd3dDevice, pd3dCommandList);
-		//SetPlayerUpdatedContext(pContext);
-		//SetCameraUpdatedContext(pContext);
+		SetPlayerUpdatedContext(pContext);
+		SetCameraUpdatedContext(pContext);
 	}
 	//SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	//OBJECTMANAGER->AddGameObject(this, m_ObjType);
@@ -143,7 +144,7 @@ void COtherPlayers::Update(float fTimeElapsed)
 	if (m_pPlayerUpdatedContext)
 		OnPlayerUpdateCallback(fTimeElapsed);
 
-	if (PLAYER->GetOtherPlayer() != nullptr)
+	if (PLAYER->GetOtherPlayerMap().size() > 0)
 	{
 		DWORD nCurrentCameraMode = m_pCamera->GetMode();
 		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) {
