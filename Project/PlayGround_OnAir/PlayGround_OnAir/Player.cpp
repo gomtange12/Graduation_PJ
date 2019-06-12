@@ -257,7 +257,9 @@ void CPlayer::Update(float fTimeElapsed)
 			DWORD nCurrentCameraMode = m_pCamera->GetMode();
 			if (nCurrentCameraMode == THIRD_PERSON_CAMERA) {
 			m_pCamera->Update(PLAYER->GetPlayer()->GetPosition(), fTimeElapsed);
-			//m_pCamera->Update(PLAYER->GetOtherPlayer()->GetPosition(), fTimeElapsed);
+			
+			//i
+				//m_pCamera->Update(PLAYER->->GetPosition(), fTimeElapsed);
 
 			}
 			if (m_pCameraUpdatedContext) OnCameraUpdateCallback(fTimeElapsed);

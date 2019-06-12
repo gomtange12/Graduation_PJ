@@ -798,8 +798,18 @@ void CGameFramework::AnimateObjects()
 
 	PLAYER->GetPlayer()->Animate(fTimeElapsed);
 	//PLAYER->GetOtherPlayer()->Animate(fTimeElapsed);
+	if (PLAYER->GetOtherPlayerMap().size() > 0)
+	{
+		for (auto&& players : PLAYER->GetOtherPlayerMap())
+			players->Animate(fTimeElapsed);
+	}
 
 	PLAYER->GetPlayer()->UpdateTransform(NULL);
+	if (PLAYER->GetOtherPlayerMap().size() > 0)
+	{
+		for (auto&& players : PLAYER->GetOtherPlayerMap())
+			players->UpdateTransform(NULL);
+	}
 	//PLAYER->GetOtherPlayer()->UpdateTransform(NULL);
 
 

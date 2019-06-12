@@ -36,7 +36,13 @@ void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext));
 	m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext));
 
-	cout <<"아더 플레이어 맵 크기  "<< m_pOtherPlayerMap.size() << endl;
+	for (auto&& p : m_pOtherPlayerMap)
+	{
+		p->SetPosition(XMFLOAT3(2160, 10, 1745));
+		p->SetScale(XMFLOAT3(50.0f, 50, 40));
+	}
+
+ 	cout <<"아더 플레이어 맵 크기  "<< m_pOtherPlayerMap.size() << endl;
 	//1111m_pOtherPlayerMap.emplace_back(m_pSECOND);
 
 }
