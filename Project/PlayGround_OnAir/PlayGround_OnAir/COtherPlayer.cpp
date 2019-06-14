@@ -28,7 +28,7 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	{
 		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
 		//m_pCamera->SetLookAt(m_xmf3Position);
-		//m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
+		m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
 
 	}
 
@@ -57,7 +57,7 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	if (this != nullptr)
 	{
 		CreateShaderVariables(pd3dDevice, pd3dCommandList);
-		SetPlayerUpdatedContext(pContext);
+		//SetPlayerUpdatedContext(pContext);
 		SetCameraUpdatedContext(pContext);
 	}
 	//SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
@@ -86,8 +86,6 @@ void COtherPlayers::OnPlayerUpdateCallback(float fTimeElapsed)
 	}
 	if (xmf3PlayerPosition.y < fHeight)
 	{
-		//if (FindFrame("LFootBone1")->GetPosition().y < fHeight)
-		//	FindFrame("LFootBone1")->SetPosition(xmf3PlayerPosition);
 		XMFLOAT3 xmf3PlayerVelocity = GetVelocity();
 		xmf3PlayerVelocity.y = 0.0f;
 		SetVelocity(xmf3PlayerVelocity);
@@ -109,7 +107,7 @@ void COtherPlayers::OnCameraUpdateCallback(float fTimeElapsed)
 	fHeight = 0; //¿©±â
 	if (xmf3CameraPosition.y <= fHeight)
 
-		xmf3CameraPosition.y = fHeight;
+	xmf3CameraPosition.y = fHeight;
 	m_pCamera->SetPosition(xmf3CameraPosition);
 
 }
@@ -147,19 +145,19 @@ void COtherPlayers::Update(float fTimeElapsed)
 	if (PLAYER->GetOtherPlayerMap().size() > 0)
 	{
 		DWORD nCurrentCameraMode = m_pCamera->GetMode();
-		//for (int i = 0; i < PLAYER->GetOtherPlayerMap().size(); ++i)
-		//{
+		for (int i = 0; i < PLAYER->GetOtherPlayerMap().size(); ++i)
+		{
 
-		//	if (nCurrentCameraMode == THIRD_PERSON_CAMERA) {
-		//		m_pCamera->Update(PLAYER->GetOtherPlayerMap()[i]->GetPosition(), fTimeElapsed);
-		//		//m_pCamera->Update(PLAYER->GetOtherPlayer()->GetPosition(), fTimeElapsed);
+			if (nCurrentCameraMode == THIRD_PERSON_CAMERA) {
+				m_pCamera->Update(PLAYER->GetOtherPlayerMap()[i]->GetPosition(), fTimeElapsed);
+				//m_pCamera->Update(PLAYER->GetOtherPlayer()->GetPosition(), fTimeElapsed);
 
-		//	}
-		//	if (m_pCameraUpdatedContext) OnCameraUpdateCallback(fTimeElapsed);
-		//	if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->SetLookAt(PLAYER->GetOtherPlayerMap()[i]->GetPosition());
-		//	//m_pCamera = ChangeCamera(/SPACESHIP_CAMERA/THIRD_PERSON_CAMERA, 0.0f);
-		//}
-		m_pCamera->RegenerateViewMatrix();
+			}
+			if (m_pCameraUpdatedContext) OnCameraUpdateCallback(fTimeElapsed);
+			if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->SetLookAt(PLAYER->GetOtherPlayerMap()[i]->GetPosition());
+			//m_pCamera = ChangeCamera(/SPACESHIP_CAMERA/THIRD_PERSON_CAMERA, 0.0f);
+		}
+		//m_pCamera->RegenerateViewMatrix();
 
 
 
