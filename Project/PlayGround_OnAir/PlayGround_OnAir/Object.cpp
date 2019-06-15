@@ -327,66 +327,47 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 		case ANIMATION_TYPE_LOOP:
 		{
 #ifdef _WITH_ANIMATION_INTERPOLATION
-			//PLAYER->GetPlayer()->SetAllowKey(true);
+			PLAYER->GetPlayer()->SetAllowKey(true);
 			m_fPosition = fTrackPosition;
-			m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //원래꺼
-			
-			
-			/*if (PLAYER->GetPlayer()->GetPlayerState() == RUN)
-			{
-
-				PLAYER->GetPlayer()->SetAllowKey(true);
-				PLAYER->GetPlayer()->SetPlayerState(IDLE);
-
-			}*/
-
-			//m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
+			 m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]); //원래꺼
+		  
+			 //m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
 			//m_fPosition = fmod(fTrackPosition, m_fLength); if (m_fPosition < 0) m_fPosition += m_fLength;
 			//m_fPosition = fTrackPosition - int(fTrackPosition / m_fLength) * m_fLength;
 #else
 			m_nCurrentKey++;
 			if (m_nCurrentKey >= m_nKeyFrameTransforms) m_nCurrentKey = 0;
-			PLAYER->GetPlayer()->SetPlayerState(IDLE);
-
 #endif
-			PLAYER->GetPlayer()->SetPlayerState(IDLE);
-			//if()
-			//PLAYER->GetPlayer()->SetAllowKey(true);
-
+			
 			break;
 		}
 		case ANIMATION_TYPE_ONCE:
-		{
 			//m_fPosition = fTrackPosition;
 			//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //원래꺼
+			PLAYER->GetPlayer()->SetAllowKey(false);
+			PLAYER->GetOtherPlayer()->SetAllowKey(false);
+			m_fPosition += 0.00001;
 
-
-			//PLAYER->GetOtherPlayer()->SetAllowKey(false);
-
-			//PLAYER->GetPlayer()->SetAllowKey(false);
-			m_fPosition += 0.000000001;// m_nFramesPerSecond;// 0.00001;
 			//sol) m_fPosition += fDelta * speed; 프레임 고정시
-			if (m_fPosition > m_fLength)  //maxLength)
+			if (m_fPosition >= maxLength)
 			{
-				m_fPosition = 0;
+ 				m_fPosition = 0.0f;
 				//fPosition = 0.0f;
 				//fTrackPosition = 0.f;
 				oncePosition = 0.0f;
-				maxLength = 0.0f;
-				PLAYER->GetPlayer()->SetAllowKey(true);
-				PLAYER->GetPlayer()->SetPlayerState(IDLE);
-				//PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
-
+				//maxLength = 0.0f;
+ 				PLAYER->GetPlayer()->SetPlayerState(IDLE);
+				PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
+				
 			}
 			//CPlayer::m_PlayerState = CPlayer::PlayerState::IDLE;
 			//CPlayer::SetPlayerState(IDLE);
 			//PLAYER->GetPlayer()->SetPlayerState(PLAYER->GetPlayer()->PlayerState::IDLE);
 
-
 			break;
-		}
 		
 	}
+
 	if (m_pAnimationCallbackHandler)
 	{
 		void *pCallbackData = GetCallbackData();
@@ -642,14 +623,14 @@ CGameObject::CGameObject(int nMaterials) : CGameObject()
 		m_ppMaterials = new CMaterial*[m_nMaterials];
 		for(int i = 0; i < m_nMaterials; i++) m_ppMaterials[i] = NULL;
 	}
-	//while (AllObjectList[ObjIndex] != nullptr)
-	//{
-	//	ObjIndex %= MAXOBJECTNUM;
-	//	++ObjIndex;
-	//}
-	//AllObjectList[ObjIndex] = this;
-	//myIdx = ObjIndex;
-	//++ObjIndex;
+	while (AllObjectList[ObjIndex] != nullptr)
+	{
+		ObjIndex %= MAXOBJECTNUM;
+		++ObjIndex;
+	}
+	AllObjectList[ObjIndex] = this;
+	myIdx = ObjIndex;
+	++ObjIndex;
 }
 
 CGameObject::~CGameObject()
@@ -765,8 +746,6 @@ void CGameObject::UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent)
 
 void CGameObject::SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet)
 {
-	//여기
-	//PLAYER->GetPlayer()->SetAllowKey(true);
 	if (m_pAnimationController) m_pAnimationController->SetTrackAnimationSet(nAnimationTrack, nAnimationSet);
 }
 
@@ -1308,7 +1287,7 @@ CAnimationSets *CGameObject::LoadAnimationFromFile(FILE *pInFile, CGameObject *p
 			nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
 			nReads = (UINT)::fread(pAnimationSet->m_pstrName, sizeof(char), nStrLength, pInFile);
 			pAnimationSet->m_pstrName[nStrLength] = '\0';
-			if (!strcmp(pAnimationSet->m_pstrName, "Idle") || !strcmp(pAnimationSet->m_pstrName, "idle")|| !strcmp(pAnimationSet->m_pstrName, "back_run") || !strcmp(pAnimationSet->m_pstrName, "run") || !strcmp(pAnimationSet->m_pstrName, "Run")|| !strcmp(pAnimationSet->m_pstrName, "run"))
+			if (!strcmp(pAnimationSet->m_pstrName, "Idle") || !strcmp(pAnimationSet->m_pstrName, "idle") || !strcmp(pAnimationSet->m_pstrName, "back_run") || !strcmp(pAnimationSet->m_pstrName, "run") || !strcmp(pAnimationSet->m_pstrName, "Run")|| !strcmp(pAnimationSet->m_pstrName, "run"))
 			{
 				pAnimationSet->m_nType = ANIMATION_TYPE_LOOP;
 			}
@@ -1408,14 +1387,14 @@ CLoadedModelInfo *CGameObject::LoadGeometryAndAnimationFromFile(ID3D12Device *pd
 	{
 		pLoadedModel->m_pAnimationSets = CGameObject::LoadAnimationFromFile(pInFile, pLoadedModel->m_pModelRootObject); //0125코드 분석 여기부터
 		pLoadedModel->m_pModelRootObject->SetObjType(PLAYEROBJ);
-		//if (strcmp(pstrFileName, "Model/ALL_(1).bin")==0 || strcmp(pstrFileName, "Model/ALL.bin") == 0)
-		//{
-		//	pLoadedModel->m_pModelRootObject->SetObjType(MAPOBJ);
-		//}
+		if (strcmp(pstrFileName, "Model/ALL_(1).bin")==0 || strcmp(pstrFileName, "Model/ALL.bin") == 0)
+		{
+			pLoadedModel->m_pModelRootObject->SetObjType(MAPOBJ);
+		}
 	}
 	else
 	{
-		pLoadedModel->m_pModelRootObject->SetObjType(MAPOBJ);
+		pLoadedModel->m_pModelRootObject->SetObjType(STATICOBJ);
 
 	}
 	pLoadedModel->m_pModelRootObject->CacheSkinningBoneFrames(pLoadedModel->m_pModelRootObject);

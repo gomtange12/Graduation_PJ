@@ -1,8 +1,8 @@
 #include "stdafx.h"
+
 #include "GameFramework.h"
 #include "CPlayerManager.h"
 #include "Player.h"
-#include "COtherPlayer.h"
 #include "CNetWork.h"
 CPlayerManager::CPlayerManager()
 {
@@ -15,39 +15,56 @@ CPlayerManager::~CPlayerManager()
 {
 }
 
-void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void* pContext)
+void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
 	//첫번째 플레이어
-	m_pPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext);
-	//m_pOtherPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
-	///m_pSECOND = std::make_shared<COtherPlayers>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);
+	m_pPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
+	m_pOtherPlayer = std::make_shared<COtherPlayers>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext);
 
+	
 
 	//4m_pPlayer->SETPO
-	//m_vecPlayerList.reserve(m_MaxPlayerNum);
-	m_pOtherPlayerMap.reserve(8);
+	m_vecPlayerList.reserve(m_MaxPlayerNum);
+	m_pOtherPlayerMap.reserve(m_MaxPlayerNum);
+	m_pTeamPlayerMap.reserve(m_MaxPlayerNum);
 
-	// 생성자에 리소스
-	//m_pOtherPlayerMap.emplace_back(std::make_shared<COtherPlayers>( pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
-	//cout << "sizeofMap: " <<m_pOtherPlayerMap.size() << std::endl;
-	
-	//같은 otherPlayer 여러개 생성
-	m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
+	//m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
 	m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext));
 	m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext));
+	//m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
+	m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
+	m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext));
 
-	for (auto&& p : m_pOtherPlayerMap)
+
+	m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext));
+	m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext));
+	m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext));
+
+
+	default_random_engine dre;
+	uniform_int_distribution<> otherUid(200, 600);
+	uniform_int_distribution<> teamUid(2300, 2800);
+	uniform_int_distribution<> zUid(1600, 1800);
+
+
+	for (auto&& p : m_pOtherPlayerMap) //팀원이 아닌경우
 	{
-		p->SetPosition(XMFLOAT3(2160, 10, 1745));
-		p->SetScale(XMFLOAT3(50.0f, 50, 40));
+		p->SetPosition(XMFLOAT3(otherUid(dre), 50, zUid(dre)));
+		p->SetScale(XMFLOAT3(60.0f, 60, 60));
+		p->Rotate(0, 180, 0);
 	}
 
- 	cout <<"아더 플레이어 맵 크기  "<< m_pOtherPlayerMap.size() << endl;
-	//1111m_pOtherPlayerMap.emplace_back(m_pSECOND);
+	for (auto&& p : m_pTeamPlayerMap) //팀원인경우
+	{
+		p->SetPosition(XMFLOAT3(teamUid(dre), 10, zUid(dre)));
+		p->SetScale(XMFLOAT3(60.0f, 60, 60));
+		p->Rotate(0, 180, 0);
 
+	}
+	//MakeOtherPlayers(pd3dDevice,pd3dCommandList,pd3dGraphicsRootSignature, pContext);
 }
 
-void CPlayerManager::MakeOtherPlayers(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
 	//여길 고쳐야함. 
 	//m_pOtherPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);

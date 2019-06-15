@@ -7,27 +7,27 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	: CPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext)
 {
 	//차후에 리소스 관리 방식을 바꿔야한다
-	m_xmf3Position = XMFLOAT3(440.0f, 50, 1745);
-	m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);
-	m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
-
-	m_xmf3Scale = XMFLOAT3(40, 20, 40);
-	m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_fMaxVelocityXZ = 0.0f;
-	m_fMaxVelocityY = 0.0f;
-	m_fFriction = 0.0f;
-	
-	m_fPitch = 0.0f;
-	m_fRoll = 0.0f;
-	m_fYaw = 0.0f;
-	Rotate(0, 90, 0);
+	//m_xmf3Position = XMFLOAT3(440.0f, 50, 1745);
+	//m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	//m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	//m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	//
+	//m_xmf3Scale = XMFLOAT3(40, 20, 40);
+	//m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	//m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	//m_fMaxVelocityXZ = 0.0f;
+	//m_fMaxVelocityY = 0.0f;
+	//m_fFriction = 0.0f;
+	//
+	//m_fPitch = 0.0f;
+	//m_fRoll = 0.0f;
+	//m_fYaw = 0.0f;
+	//Rotate(0, 90, 0);
 	//m_BoundScale = 1;
 	if (this != nullptr) //일단 카메라 쓰지 않는다
 	{
 		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
-		//m_pCamera->SetLookAt(m_xmf3Position);
+		m_pCamera->SetLookAt(m_xmf3Position);
 		m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
 
 	}
@@ -57,7 +57,7 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	if (this != nullptr)
 	{
 		CreateShaderVariables(pd3dDevice, pd3dCommandList);
-		//SetPlayerUpdatedContext(pContext);
+		SetPlayerUpdatedContext(pContext);
 		SetCameraUpdatedContext(pContext);
 	}
 	//SetOOBB(GetPosition(), XMFLOAT3(0.1f, 0.1f, 0.1f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
@@ -76,14 +76,14 @@ void COtherPlayers::OnPlayerUpdateCallback(float fTimeElapsed)
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
 
-	if (PLAYER->GetOtherPlayer()->IsPlayerCrashMap())
-	{
-		//if(PLAYER->GetPlayer()->GetPlayerState()== FALLING)
-		fHeight = PLAYER->GetOtherPlayer()->GetHeight();
-	}
-	else {
+	//if (PLAYER->GetOtherPlayer()->IsPlayerCrashMap())
+	//{
+	//	//if(PLAYER->GetPlayer()->GetPlayerState()== FALLING)
+	//	fHeight = PLAYER->GetOtherPlayer()->GetHeight();
+	//}
+	//else {
 		fHeight = 10;
-	}
+	//}
 	if (xmf3PlayerPosition.y < fHeight)
 	{
 		XMFLOAT3 xmf3PlayerVelocity = GetVelocity();
@@ -114,15 +114,15 @@ void COtherPlayers::OnCameraUpdateCallback(float fTimeElapsed)
 
 void COtherPlayers::Update(float fTimeElapsed)
 {
-	if (PLAYER->GetOtherPlayer()->IsPlayerCrashMap() == false) {
-		if (PLAYER->GetOtherPlayer()->GetCollisionState() == true)
-		{
-			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -6.f));
-
-			PLAYER->GetOtherPlayer()->SetCollisionState(false);
-
-		}
-	}
+	//if (PLAYER->GetOtherPlayer()->IsPlayerCrashMap() == false) {
+	//	if (PLAYER->GetOtherPlayer()->GetCollisionState() == true)
+	//	{
+	//		PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -6.f));
+	//
+	//		PLAYER->GetOtherPlayer()->SetCollisionState(false);
+	//
+	//	}
+	//}
 
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
 	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);

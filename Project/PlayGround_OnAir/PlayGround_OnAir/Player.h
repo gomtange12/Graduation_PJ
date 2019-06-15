@@ -186,7 +186,7 @@ class CTerrainPlayer : public CPlayer
 {
 public:
 	CTerrainPlayer() = default;
-	CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void *pContext= NULL);
+	CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void *pContext=NULL);
 	virtual ~CTerrainPlayer();
 
 public:
@@ -196,6 +196,18 @@ public:
 	virtual void OnCameraUpdateCallback(float fTimeElapsed);
 	//virtual void Animate(float fTimeElapsed);
 	//virtual void UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent);
+};
+class COtherPlayers : public CPlayer
+{
+	bool isTeam{ true };
+public:
+	COtherPlayers(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void *pContext = NULL);
+	virtual void OnPlayerUpdateCallback(float fTimeElapsed);
+	virtual void OnCameraUpdateCallback(float fTimeElapsed);
+	virtual void Update(float fTimeElapsed);
+	virtual ~COtherPlayers(){}
+public:
+
 };
 
 

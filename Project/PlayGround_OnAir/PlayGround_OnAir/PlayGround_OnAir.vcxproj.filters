@@ -73,14 +73,11 @@
     <Filter Include="소스 파일\CNetwork">
       <UniqueIdentifier>{8fd0e33c-97bb-4fa4-8931-9c07ddc32c7a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Shader\UIShader">
-      <UniqueIdentifier>{e9e91da1-963d-4ee3-88d3-b0096c3a3cf8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\헤더 파일\PlayerManager\Other">
-      <UniqueIdentifier>{f1e06758-06f7-4a03-aa18-23bfe4e5c795}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Player.h">
+      <Filter>소스 파일\헤더 파일\PlayerManager</Filter>
+    </ClInclude>
     <ClInclude Include="CPlayerManager.h">
       <Filter>소스 파일\헤더 파일\PlayerManager</Filter>
     </ClInclude>
@@ -159,15 +156,6 @@
     <ClInclude Include="CNetWork.h">
       <Filter>소스 파일\CNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>소스 파일\헤더 파일\PlayerManager</Filter>
-    </ClInclude>
-    <ClInclude Include="CUIShader.h">
-      <Filter>소스 파일\Shader\UIShader</Filter>
-    </ClInclude>
-    <ClInclude Include="COtherPlayer.h">
-      <Filter>소스 파일\헤더 파일\PlayerManager\Other</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Player.cpp">
@@ -238,12 +226,6 @@
     </ClCompile>
     <ClCompile Include="CNetWork.cpp">
       <Filter>소스 파일\CNetwork</Filter>
-    </ClCompile>
-    <ClCompile Include="CUIShader.cpp">
-      <Filter>소스 파일\Shader\UIShader</Filter>
-    </ClCompile>
-    <ClCompile Include="COtherPlayer.cpp">
-      <Filter>소스 파일\헤더 파일\PlayerManager\Other</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

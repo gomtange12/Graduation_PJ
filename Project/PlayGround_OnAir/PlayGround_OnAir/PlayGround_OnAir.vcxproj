@@ -154,12 +154,10 @@
     <ClInclude Include="CMenuScene.h" />
     <ClInclude Include="CNetWork.h" />
     <ClInclude Include="CObjectManager.h" />
-    <ClInclude Include="COtherPlayer.h" />
     <ClInclude Include="CPlayerManager.h" />
     <ClInclude Include="CSceneManager.h" />
     <ClInclude Include="CState.h" />
     <ClInclude Include="CTempScene.h" />
-    <ClInclude Include="CUIShader.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DDSTextureLoader12.h" />
     <ClInclude Include="GameFramework.h" />
@@ -185,12 +183,10 @@
     <ClCompile Include="CMenuScene.cpp" />
     <ClCompile Include="CNetWork.cpp" />
     <ClCompile Include="CObjectManager.cpp" />
-    <ClCompile Include="COtherPlayer.cpp" />
     <ClCompile Include="CPlayerManager.cpp" />
     <ClCompile Include="CSceneManager.cpp" />
     <ClCompile Include="CState.cpp" />
     <ClCompile Include="CTempScene.cpp" />
-    <ClCompile Include="CUIShader.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp" />
     <ClCompile Include="GameFramework.cpp" />
     <ClCompile Include="Mesh.cpp" />

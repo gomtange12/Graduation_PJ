@@ -5,7 +5,6 @@
 
 #include "Timer.h"
 #include "Player.h"
-#include "COtherPlayer.h"
 #include "Scene.h"
 #define	_WITH_DIRECT2D_IMAGE_EFFECT
 
