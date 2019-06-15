@@ -142,26 +142,26 @@ void COtherPlayers::Update(float fTimeElapsed)
 	if (m_pPlayerUpdatedContext)
 		OnPlayerUpdateCallback(fTimeElapsed);
 
-	if (PLAYER->GetOtherPlayerMap().size() > 0)
-	{
-		DWORD nCurrentCameraMode = m_pCamera->GetMode();
-		for (int i = 0; i < PLAYER->GetOtherPlayerMap().size(); ++i)
-		{
-
-			if (nCurrentCameraMode == THIRD_PERSON_CAMERA) {
-				m_pCamera->Update(PLAYER->GetOtherPlayerMap()[i]->GetPosition(), fTimeElapsed);
-				//m_pCamera->Update(PLAYER->GetOtherPlayer()->GetPosition(), fTimeElapsed);
-
-			}
-			if (m_pCameraUpdatedContext) OnCameraUpdateCallback(fTimeElapsed);
-			if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->SetLookAt(PLAYER->GetOtherPlayerMap()[i]->GetPosition());
-			//m_pCamera = ChangeCamera(/SPACESHIP_CAMERA/THIRD_PERSON_CAMERA, 0.0f);
-		}
-		//m_pCamera->RegenerateViewMatrix();
-
-
-
-	}
+	//if (PLAYER->GetOtherPlayerMap().size() > 0)
+	//{
+	//	DWORD nCurrentCameraMode = m_pCamera->GetMode();
+	//	for (int i = 0; i < PLAYER->GetOtherPlayerMap().size(); ++i)
+	//	{
+	//
+	//		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) {
+	//			m_pCamera->Update(m_xmf3Position, fTimeElapsed);
+	//			//m_pCamera->Update(PLAYER->GetOtherPlayer()->GetPosition(), fTimeElapsed);
+	//
+	//		}
+	//		if (m_pCameraUpdatedContext) OnCameraUpdateCallback(fTimeElapsed);
+	//		if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->SetLookAt(m_xmf3Position);
+	//		//m_pCamera = ChangeCamera(/SPACESHIP_CAMERA/THIRD_PERSON_CAMERA, 0.0f);
+	//	}
+	//	//m_pCamera->RegenerateViewMatrix();
+	//
+	//
+	//
+	//}
 
 	//m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 
