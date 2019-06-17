@@ -33,7 +33,7 @@ XMFLOAT4 CScene::CoordTransform(int x, int y)
 	int transcoord_x = x * 2 - 1;
 
 	int transcoord_y = y * 2 - 1;
-	cout <<"3"<< transcoord_x << ", " << transcoord_y << endl;
+	cout <<"3: "<< transcoord_x << ", " << transcoord_y << endl;
 
 	return XMFLOAT4(transcoord_x, transcoord_y, 1, 0);
 }
