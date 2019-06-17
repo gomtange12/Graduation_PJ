@@ -87,6 +87,7 @@ void PacketManager::ClientDisconnect(int id)
 }
 void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo 매칭용임 2인용
 	//해당 채널 매칭된 클라 모두에게
+
 	sc_packet_scene pkt;
 	pkt.size = sizeof(sc_packet_scene);
 	pkt.type = SC_SCENE;
