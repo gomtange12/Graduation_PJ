@@ -397,7 +397,6 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects = new CGameObject*[m_nPlayGroundObjects];
 
 
-
 	/*CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/KeytarTest.bin", NULL, true);
 	m_ppPlayGroundObjects[0] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[0]->SetChild(pPlayerModel->m_pModelRootObject, true);
@@ -407,6 +406,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
 	m_ppPlayGroundObjects[0]->SetPosition(0.0f, 20, 440.0f);
 	m_ppPlayGroundObjects[0]->SetScale(50.0f, 50.0f, 50.0f);*/
+
 	CLoadedModelInfo *Floor = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Floor.bin", NULL, false);
 	m_ppPlayGroundObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[0]->SetChild(Floor->m_pModelRootObject, true);
@@ -730,7 +730,6 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	//m_ppPlayGroundObjects[37]->SetOOBB(m_ppPlayGroundObjects[37]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[37]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_ppPlayGroundObjects[37]->Rotate(0.0f, 180.0f, 0.0f);
 	//map2
-
 	m_nConcertObjects = 2;
 	m_ppConcertObjects = new CGameObject*[m_nConcertObjects];
 
@@ -1095,7 +1094,7 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	//pd3dDescriptorRanges[10].BaseShaderRegister = 20; //T20: gtxtScene
 	//pd3dDescriptorRanges[10].RegisterSpace = 0;
 	//pd3dDescriptorRanges[10].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	D3D12_ROOT_PARAMETER pd3dRootParameters[18];
+	D3D12_ROOT_PARAMETER pd3dRootParameters[19];
 
 	pd3dRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pd3dRootParameters[0].Descriptor.ShaderRegister = 1; //Camera
@@ -1187,6 +1186,13 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dRootParameters[17].DescriptorTable.NumDescriptorRanges = 1;
 	pd3dRootParameters[17].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[12]);
 	pd3dRootParameters[17].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	pd3dRootParameters[18].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pd3dRootParameters[18].DescriptorTable.NumDescriptorRanges = 1;
+	pd3dRootParameters[18].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[13]);
+	pd3dRootParameters[18].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+
 	//pd3dRootParameters[15].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	//pd3dRootParameters[15].DescriptorTable.NumDescriptorRanges = 1;
 	//pd3dRootParameters[15].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[10];				//t21 : UI
