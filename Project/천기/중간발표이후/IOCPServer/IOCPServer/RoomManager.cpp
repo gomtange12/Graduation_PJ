@@ -43,12 +43,14 @@ void RoomManager::SoloRoomMatch(int id)
 							objectManager->GetPlayer(room[i]->m_SoloIds[0])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_SoloIds[0])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_SoloIds[0])->m_xmf3Position.y,
 								objectManager->GetPlayer(room[i]->m_SoloIds[0])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
+							objectManager->GetPlayer(room[i]->m_SoloIds[0])->posN = 1;
 
 							objectManager->GetPlayer(room[i]->m_SoloIds[1])->avatar = B;
 							objectManager->GetPlayer(room[i]->m_SoloIds[1])->m_xmf3Position = XMFLOAT3(440.0f, 10, 1745);
 							objectManager->GetPlayer(room[i]->m_SoloIds[1])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_SoloIds[1])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_SoloIds[1])->m_xmf3Position.y,
 								objectManager->GetPlayer(room[i]->m_SoloIds[1])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
+							objectManager->GetPlayer(room[i]->m_SoloIds[1])->posN = 2;
 							////
 
 							for (int k = 0; k < SOLO_RNUM; ++k) {

@@ -651,7 +651,7 @@ void CGameFramework::ProcessInput()
 		otherPlayerDirection = 0;
 		if (pKeysBuffer[0x57] & 0xF0)
 		{
-			PLAYER->GetPlayer()->SetPlayerState(RUN);
+		
 			//PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
 
 			dwDirection |= DIR_FORWARD;
@@ -660,17 +660,17 @@ void CGameFramework::ProcessInput()
 		}
 		if (pKeysBuffer[0x53] & 0xF0)
 		{
-			PLAYER->GetPlayer()->SetPlayerState(RUN);
+			
 			dwDirection |= DIR_BACKWARD;
 		}
 		if (pKeysBuffer[0x41] & 0xF0)
 		{
-			PLAYER->GetPlayer()->SetPlayerState(RUN);
+			
 			dwDirection |= DIR_LEFT;
 		}
 		if (pKeysBuffer[0x44] & 0xF0)
 		{
-			PLAYER->GetPlayer()->SetPlayerState(RUN);
+			
 			dwDirection |= DIR_RIGHT;
 		}
 
@@ -711,7 +711,7 @@ void CGameFramework::ProcessInput()
 		if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::JUMP) {
 			if (pKeysBuffer[VK_SPACE] & 0xF0)
 			{
-				//CNETWORK->KeyPkt(true, false, false);
+				CNETWORK->KeyPkt(true, false, false);
 				PLAYER->GetPlayer()->SetPlayerState(PlayerState::JUMP);
 				//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
 			}
@@ -721,7 +721,7 @@ void CGameFramework::ProcessInput()
 				if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
 				{
 					PLAYER->GetPlayer()->SetPlayerState(PlayerState::ATTACK);
-					//CNETWORK->KeyPkt(false, true, false);
+					CNETWORK->KeyPkt(false, true, false);
 				}
 			}
 		}
@@ -746,21 +746,17 @@ void CGameFramework::ProcessInput()
 				{
 
 					PLAYER->GetPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
-					//PLAYER->GetOtherPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
+					
 
 				}
 			}
 			if (dwDirection)
 			{
-				PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
-				/*if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
-					if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetOtherPlayer()->GetPlayerState() == RUN)
-						CNETWORK->StatePkt(dwDirection);
-				}
-				if (PLAYER->GetOtherPlayer()->GetClientNum() == CNETWORK->myid) {
-					if (PLAYER->GetOtherPlayer()->GetPlayerState() == IDLE || PLAYER->GetOtherPlayer()->GetPlayerState() == RUN)
-						CNETWORK->StatePkt(dwDirection);
-				}*/
+				//PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
+				
+				if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN)
+					CNETWORK->StatePkt(dwDirection);
+
 			}
 		}
 	}

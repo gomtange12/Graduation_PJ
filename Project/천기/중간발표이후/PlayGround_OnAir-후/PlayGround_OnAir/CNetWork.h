@@ -11,6 +11,7 @@
 
 class CNetWork : public CSingleTonBase<CNetWork>
 {
+	
 private:
 	//Server
 	WSADATA	wsadata;

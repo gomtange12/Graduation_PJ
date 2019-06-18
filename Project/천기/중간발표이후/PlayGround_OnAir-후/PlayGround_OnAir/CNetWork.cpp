@@ -3,6 +3,8 @@
 #include "CSceneManager.h"
 #include "CPlayerManager.h"
 
+
+
 CNetWork::CNetWork()
 {
 }
@@ -89,12 +91,18 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_scene *paket = reinterpret_cast<sc_packet_scene *>(ptr);
 		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
-	
+		
 		//캐릭터 설정 해줘야함 paket->avatar
-		//초기 포지션 설정
+		
 		PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 		PLAYER->GetPlayer()->SetClientNum(myid);
+		
+
+		//솔로모드면
 		PLAYER->GetOtherPlayer()->SetClientNum(paket->ids);
+		
+		//팀모드면
+
 
 		PLAYER->GetPlayer()->m_match = true;
 		CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
@@ -109,25 +117,29 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		xmf3Shift = XMFLOAT3(pkt->posX, pkt->posY, pkt->posZ);
 
-		if (pkt->id == PLAYER->GetPlayer()->GetClientNum())
-			PLAYER->GetPlayer()->Move(xmf3Shift, pkt->velocity);
+		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
+			PLAYER->GetPlayer()->SetPosition(xmf3Shift);
+			PLAYER->GetPlayer()->SetPlayerState(RUN);
+		}
+		else {
+			PLAYER->GetOtherPlayer()->SetPosition(xmf3Shift);
+			PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
 
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum())
-			PLAYER->GetOtherPlayer()->Move(xmf3Shift, pkt->velocity);
-
+		}
 		break;
 	}
 	case SC_VECTOR_INFO:
 	{
 		sc_packet_vector *pkt = reinterpret_cast<sc_packet_vector *>(ptr);
-		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
+		cout << pkt->LposX <<", " << pkt->LposY << ", " << pkt->LposZ << endl;
+		if (pkt->id == PLAYER->GetPlayer()->GetClientNum())
 			PLAYER->GetPlayer()->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
 			PLAYER->GetPlayer()->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
-		}
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
+		
+		/*if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
 			PLAYER->GetOtherPlayer()->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
 			PLAYER->GetOtherPlayer()->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
-		}
+		}*/
 		break;
 	}
 	case SC_COLLISION:

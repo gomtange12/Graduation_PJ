@@ -6,6 +6,8 @@ class PacketManager : public SingleTone<PacketManager>
 {
 private:
 	ObjManager* objectManager = OBJMANAGER->GetObjectManager();
+
+	
 public:
 	PacketManager();
 	~PacketManager();

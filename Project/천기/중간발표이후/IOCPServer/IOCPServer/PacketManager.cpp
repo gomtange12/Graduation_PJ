@@ -83,7 +83,7 @@ void PacketManager::ClientDisconnect(int id)
 	//SendPacket(otherId, &pkt);
 
 	closesocket(objectManager->GetPlayer(id)->m_socket);
-	objectManager->GetPlayer(id)->m_connected = false;
+	objectManager->GetPlayer(id)->m_connected = false;	
 }
 void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo 매칭용임 2인용
 	//해당 채널 매칭된 클라 모두에게
@@ -94,6 +94,7 @@ void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo 매칭�
 	pkt.sceneNum = PLAYGROUNDMAP;
 	pkt.roomNum = roomNum;
 	pkt.avatar = avatar;
+
 	
 	if (ROOMMANAGER->room[roomNum]->m_SoloIds[0] != id) {
 		pkt.ids = ROOMMANAGER->room[roomNum]->m_SoloIds[0];

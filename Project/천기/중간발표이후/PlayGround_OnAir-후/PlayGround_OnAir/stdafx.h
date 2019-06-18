@@ -159,6 +159,7 @@ enum Result {
 	WIN,
 	ING
 };
+
 namespace Vector3
 {
 	inline XMFLOAT3 XMVectorToFloat3(XMVECTOR& xmvVector)
