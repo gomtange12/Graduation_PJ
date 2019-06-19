@@ -519,7 +519,47 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr
 	DWORD nCameraMode = (pCamera) ? pCamera->GetMode() : 0x00;
 	if (nCameraMode == THIRD_PERSON_CAMERA) CGameObject::Render(pd3dCommandList, pCamera);
 }
+void CPlayer::NumberByPos(int num) {
 
+	switch (num)
+	{
+	case 1:
+	{
+		m_xmf3Position = XMFLOAT3(2560, 10, 1745);
+		break;
+	}
+	case 2: {
+		m_xmf3Position = XMFLOAT3(2750, 10, 1745);
+		break;
+	}
+	case 3: {
+		m_xmf3Position = XMFLOAT3(2750, 10, 1835);
+		break;
+	}
+	case 4: {
+		m_xmf3Position = XMFLOAT3(2560, 10, 1835);
+		break;
+	}
+	case 5: {
+		m_xmf3Position = XMFLOAT3(600, 10, 1745);
+		break;
+	}
+	case 6: {
+		m_xmf3Position = XMFLOAT3(350, 10, 1745);
+		break;
+	}
+	case 7: {
+		m_xmf3Position = XMFLOAT3(600, 10, 1835);
+		break;
+	}
+	case 8: {
+		m_xmf3Position = XMFLOAT3(350, 10, 1835);
+		break;
+	}
+	default:
+		break;
+	}
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

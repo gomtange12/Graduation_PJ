@@ -93,15 +93,18 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
 		
 		//캐릭터 설정 해줘야함 paket->avatar
-		
-		PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
-		PLAYER->GetPlayer()->SetClientNum(myid);
-		
-
-		//솔로모드면
-		PLAYER->GetOtherPlayer()->SetClientNum(paket->ids);
-		
+		if (myid != paket->ids) {
+			PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+			PLAYER->GetPlayer()->SetClientNum(myid);
+			PLAYER->GetPlayer()->NumberByPos(paket->posN);
+		}
+		else {
+			//솔로모드면
+			PLAYER->GetOtherPlayerMap()[0]->SetClientNum(paket->ids);
+			PLAYER->GetOtherPlayerMap()[0]->NumberByPos(paket->posN);
+		}
 		//팀모드면
+
 
 
 		PLAYER->GetPlayer()->m_match = true;
@@ -121,25 +124,30 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 			PLAYER->GetPlayer()->SetPosition(xmf3Shift);
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 		}
-		else {
-			PLAYER->GetOtherPlayer()->SetPosition(xmf3Shift);
-			PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-
+		for (int i=0; i<4; ++i) {
+			if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
+				PLAYER->GetOtherPlayerMap()[i]->SetPosition(xmf3Shift);
+				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(RUN);
+				cout << (int)pkt->id << endl;
+				cout << pkt->posX << ", " << pkt->posY << ", " << pkt->posZ << endl;
+			}
 		}
 		break;
 	}
 	case SC_VECTOR_INFO:
 	{
 		sc_packet_vector *pkt = reinterpret_cast<sc_packet_vector *>(ptr);
-		cout << pkt->LposX <<", " << pkt->LposY << ", " << pkt->LposZ << endl;
-		if (pkt->id == PLAYER->GetPlayer()->GetClientNum())
+		
+		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
 			PLAYER->GetPlayer()->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
 			PLAYER->GetPlayer()->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
-		
-		/*if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
-			PLAYER->GetOtherPlayer()->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
-			PLAYER->GetOtherPlayer()->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
-		}*/
+		}
+		for (int i = 0; i < 4; ++i) {	
+				if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
+				PLAYER->GetOtherPlayerMap()[i]->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
+				PLAYER->GetOtherPlayerMap()[i]->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
+			}
+		}
 		break;
 	}
 	case SC_COLLISION:
@@ -154,12 +162,12 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -fDistance));
 			}
 			else { //상대가와서 충돌
-				PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -fDistance));
+				PLAYER->GetOtherPlayerMap()[0]->SetPosition(Vector3::Add(PLAYER->GetOtherPlayerMap()[0]->GetPosition(), PLAYER->GetOtherPlayerMap()[0]->GetLookVector(), -fDistance));
 			}
 		}
 		else {
 			if (pkt->id == myid) {
-				PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -fDistance));
+				PLAYER->GetOtherPlayerMap()[0]->SetPosition(Vector3::Add(PLAYER->GetOtherPlayerMap()[0]->GetPosition(), PLAYER->GetOtherPlayerMap()[0]->GetLookVector(), -fDistance));
 			}
 			else {
 				PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -fDistance));
@@ -168,9 +176,9 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		}
 	
 		PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
-		PLAYER->GetOtherPlayer()->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
+		PLAYER->GetOtherPlayerMap()[0]->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
 		PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
-		PLAYER->GetOtherPlayer()->SetPlayerState(PlayerState::STUN);
+		PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(PlayerState::STUN);
 		break;
 	}
 	case SC_KEY_INFO: 
@@ -185,13 +193,13 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				PLAYER->GetPlayer()->SetPlayerState(ATTACK);
 
 		}
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
+		if (pkt->id == PLAYER->GetOtherPlayerMap()[0]->GetClientNum()) {
 			if (pkt->jump == true) {
-				PLAYER->GetOtherPlayer()->SetPlayerState(JUMP);
-				PLAYER->GetOtherPlayer()->SetJumpPower(450.0f);
+				PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(JUMP);
+				PLAYER->GetOtherPlayerMap()[0]->SetJumpPower(450.0f);
 			}
 			if (pkt->attack == true) 
-				PLAYER->GetOtherPlayer()->SetPlayerState(ATTACK);
+				PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(ATTACK);
 		}
 		break;
 	}
@@ -200,8 +208,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
 			PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
 		}
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
-			PLAYER->GetOtherPlayer()->SetPlayerState(PlayerState::STUN);
+		if (pkt->id == PLAYER->GetOtherPlayerMap()[0]->GetClientNum()) {
+			PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(PlayerState::STUN);
 		}
 		break;
 	}
@@ -211,11 +219,11 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 
 		SCENEMANAGER->SetScene(MENUSCENE);
 		PLAYER->GetPlayer()->m_match = false;
-		PLAYER->GetOtherPlayer()->m_match = false;
+		PLAYER->GetOtherPlayerMap()[0]->m_match = false;
 		PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));
 		PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
-		PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(440.0f, 50, 1745));
-		PLAYER->GetOtherPlayer()->SetOOBB(PLAYER->GetOtherPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+		PLAYER->GetOtherPlayerMap()[0]->SetPosition(XMFLOAT3(440.0f, 50, 1745));
+		PLAYER->GetOtherPlayerMap()[0]->SetOOBB(PLAYER->GetOtherPlayerMap()[0]->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 		CNetCGameFramework->m_ready = false;
 			
 		
@@ -226,12 +234,12 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		sc_packet_result *pkt = reinterpret_cast<sc_packet_result *>(ptr);
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
 			PLAYER->GetPlayer()->SetPlayerState(SAD);
-			PLAYER->GetOtherPlayer()->SetPlayerState(HAPPY);
+			PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(HAPPY);
 			
 			
 		}
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
-			PLAYER->GetOtherPlayer()->SetPlayerState(SAD);
+		if (pkt->id == PLAYER->GetOtherPlayerMap()[0]->GetClientNum()) {
+			PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(SAD);
 			PLAYER->GetPlayer()->SetPlayerState(HAPPY);
 			
 		}

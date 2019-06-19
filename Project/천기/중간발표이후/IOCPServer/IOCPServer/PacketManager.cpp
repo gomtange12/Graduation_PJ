@@ -44,7 +44,6 @@ void PacketManager::MovePacket(int id)
 	pkt.size = sizeof(sc_packet_move);
 	pkt.type = SC_MOVE_PLAYER;
 	pkt.id = id;
-	pkt.velocity = true;
 	pkt.posX = objectManager->GetPlayer(id)->m_xmf3Position.x;
 	pkt.posY = objectManager->GetPlayer(id)->m_xmf3Position.y;
 	pkt.posZ = objectManager->GetPlayer(id)->m_xmf3Position.z;
@@ -94,7 +93,7 @@ void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo ¸ÅÄª¿
 	pkt.sceneNum = PLAYGROUNDMAP;
 	pkt.roomNum = roomNum;
 	pkt.avatar = avatar;
-
+	pkt.posN = objectManager->GetPlayer(id)->posN;
 	
 	if (ROOMMANAGER->room[roomNum]->m_SoloIds[0] != id) {
 		pkt.ids = ROOMMANAGER->room[roomNum]->m_SoloIds[0];
@@ -104,6 +103,7 @@ void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo ¸ÅÄª¿
 	}
 	
 	SendPacket(id, &pkt);
+	SendPacket(pkt.ids, &pkt);
 }
 void PacketManager::VectorPacket(int id)
 {

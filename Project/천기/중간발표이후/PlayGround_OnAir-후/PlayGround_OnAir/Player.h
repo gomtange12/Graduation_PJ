@@ -151,7 +151,7 @@ public:
 	virtual void OnPrepareRender();
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
 
-	
+	void NumberByPos(int num);
 };
 
 class CAirplanePlayer : public CPlayer

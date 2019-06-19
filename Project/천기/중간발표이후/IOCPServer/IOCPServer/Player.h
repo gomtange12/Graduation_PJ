@@ -53,6 +53,8 @@ public:
 	void move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity);
 	void Transform();
 	
+	void NumberByPos(int num);
+
 	void SetOOBB(XMFLOAT3& xmCenter, XMFLOAT3& xmExtents, XMFLOAT4& xmOrientation) { m_xmOOBB = BoundingOrientedBox(xmCenter, xmExtents, xmOrientation); }
 
 };

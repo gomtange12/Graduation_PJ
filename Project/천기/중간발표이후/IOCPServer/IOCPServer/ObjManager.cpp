@@ -28,9 +28,9 @@ void ObjManager::OverlappedRecv(unsigned int id)
 }
 void ObjManager::MatchProcess(int id, unsigned char *packet) 
 {
-	std::cout << "Machig Request --- " << std::endl;
 	if (packet[1] == CS_MATCHING_PLAYER) 
 	{ 
+	//std::cout << "Machig Request --- " << std::endl;
 
 		cs_packet_matching *match = reinterpret_cast<cs_packet_matching *>(packet);
 		g_clients[id]->mod = match->mod;
