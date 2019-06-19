@@ -93,17 +93,19 @@ void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo ¸ÅÄª¿
 	pkt.sceneNum = PLAYGROUNDMAP;
 	pkt.roomNum = roomNum;
 	pkt.avatar = avatar;
-	pkt.posN = objectManager->GetPlayer(id)->posN;
-	
-	if (ROOMMANAGER->room[roomNum]->m_SoloIds[0] != id) {
-		pkt.ids = ROOMMANAGER->room[roomNum]->m_SoloIds[0];
+
+
+	for (int i = 0; i < SOLO_RNUM; ++i) {
+		
+		pkt.ids[i] = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
+		pkt.posN[i] = objectManager->GetPlayer(pkt.ids[i])->posN;
+		
+		
 	}
-	else{ 
-		pkt.ids = ROOMMANAGER->room[roomNum]->m_SoloIds[1]; 
-	}
 	
-	SendPacket(id, &pkt);
-	SendPacket(pkt.ids, &pkt);
+	for (int i = 0; i < SOLO_RNUM; ++i) {
+		SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+	}
 }
 void PacketManager::VectorPacket(int id)
 {

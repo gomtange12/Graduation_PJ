@@ -93,18 +93,21 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
 		
 		//캐릭터 설정 해줘야함 paket->avatar
-		if (myid != paket->ids) {
-			PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
-			PLAYER->GetPlayer()->SetClientNum(myid);
-			PLAYER->GetPlayer()->NumberByPos(paket->posN);
-		}
-		else {
-			//솔로모드면
-			PLAYER->GetOtherPlayerMap()[0]->SetClientNum(paket->ids);
-			PLAYER->GetOtherPlayerMap()[0]->NumberByPos(paket->posN);
-		}
-		//팀모드면
+		for (int i = 0; i < 2; ++i) {
+			if (myid == paket->ids[i]) {
+				PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+				PLAYER->GetPlayer()->SetClientNum(myid);
+				PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+			}
 
+			else {
+				//솔로모드면
+				PLAYER->GetOtherPlayerMap()[0]->SetClientNum(paket->ids[i]);
+				PLAYER->GetOtherPlayerMap()[0]->NumberByPos(paket->posN[i]);
+			}
+		}
+		
+		//팀모드면
 
 
 		PLAYER->GetPlayer()->m_match = true;
@@ -119,17 +122,19 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		xmf3Shift = XMFLOAT3(pkt->posX, pkt->posY, pkt->posZ);
-
+		
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
 			PLAYER->GetPlayer()->SetPosition(xmf3Shift);
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
 		}
-		for (int i=0; i<4; ++i) {
-			if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
-				PLAYER->GetOtherPlayerMap()[i]->SetPosition(xmf3Shift);
-				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(RUN);
-				cout << (int)pkt->id << endl;
-				cout << pkt->posX << ", " << pkt->posY << ", " << pkt->posZ << endl;
+		else {
+			for (int i = 0; i < 4; ++i) {
+				if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetOtherPlayerMap()[i]->SetPosition(xmf3Shift);
+					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(RUN);
+					cout << pkt->posX << ", " << pkt->posY << ", " << pkt->posZ << endl;
+					break;
+				}
 			}
 		}
 		break;
