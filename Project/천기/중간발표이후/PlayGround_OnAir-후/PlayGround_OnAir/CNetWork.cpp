@@ -93,21 +93,42 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
 		
 		//캐릭터 설정 해줘야함 paket->avatar
-		for (int i = 0; i < 2; ++i) {
-			if (myid == paket->ids[i]) {
-				PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
-				PLAYER->GetPlayer()->SetClientNum(myid);
-				PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
-			}
-
-			else {
-				//솔로모드면
-				PLAYER->GetOtherPlayerMap()[0]->SetClientNum(paket->ids[i]);
-				PLAYER->GetOtherPlayerMap()[0]->NumberByPos(paket->posN[i]);
-			}
-		}
 		
-		//팀모드면
+		//솔로모드면
+		//if (mod == SOLO) {
+			for (int i = 0; i < 2; ++i) {
+				if (myid == paket->ids[i]) {
+					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+					PLAYER->GetPlayer()->SetClientNum(myid);
+					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+				}
+
+				else {
+					PLAYER->GetOtherPlayerMap()[0]->SetClientNum(paket->ids[i]);
+					PLAYER->GetOtherPlayerMap()[0]->NumberByPos(paket->posN[i]);
+				}
+			}
+		//}
+		//else if (mod = SQUAD) {
+			//팀모드면
+			/*for (int i = 0; i < 4; ++i) {
+				if (myid == paket->ids[i]) {
+					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+					PLAYER->GetPlayer()->SetClientNum(myid);
+					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+				}
+
+				else {
+					PLAYER->GetTeamPlayerMap()[i]->SetClientNum(paket->ids[i]);
+					PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
+				}
+			}
+			for (int i = 4; i < 8; ++i) {
+				PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
+				PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
+			}*/
+	//	}
+		
 
 
 		PLAYER->GetPlayer()->m_match = true;

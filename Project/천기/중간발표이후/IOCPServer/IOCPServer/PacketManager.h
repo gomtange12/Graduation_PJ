@@ -15,7 +15,7 @@ public:
 	void SendPacket(int id, void *packet);
 	void LoginPacket(int id);
 	//void PutPlayerPacket(int id);
-	void MovePacket( int id);
+	void MovePacket(int id);
 	void ClientDisconnect(int id);
 	void IngamePacket(int num, int roomNum, int avatar);
 	void VectorPacket(int id);

@@ -93,18 +93,32 @@ void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo ¸ÅÄª¿
 	pkt.sceneNum = PLAYGROUNDMAP;
 	pkt.roomNum = roomNum;
 	pkt.avatar = avatar;
-
-
-	for (int i = 0; i < SOLO_RNUM; ++i) {
-		
-		pkt.ids[i] = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
-		pkt.posN[i] = objectManager->GetPlayer(pkt.ids[i])->posN;
-		
-		
-	}
 	
-	for (int i = 0; i < SOLO_RNUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+
+			pkt.ids[i] = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
+			pkt.posN[i] = objectManager->GetPlayer(pkt.ids[i])->posN;
+
+
+		}
+
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+
+			pkt.ids[i] = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
+			pkt.posN[i] = objectManager->GetPlayer(pkt.ids[i])->posN;
+
+
+		}
+
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+		}
 	}
 }
 void PacketManager::VectorPacket(int id)
@@ -121,9 +135,17 @@ void PacketManager::VectorPacket(int id)
 	pkt.LposZ = objectManager->GetPlayer(id)->m_xmf4x4ToParent._33;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_RNUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
 
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+
+		}
 	}
 		
 }
