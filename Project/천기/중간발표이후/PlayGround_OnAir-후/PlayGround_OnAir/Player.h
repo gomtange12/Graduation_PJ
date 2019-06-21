@@ -61,7 +61,7 @@ public:
 	void SetPlayerInConocert(bool inConcert) { m_IsPlayerInConcert = inConcert; }
 public:
 	bool						m_match = false;
-	
+	int							teamNum = -1;
 	bool GetCollisionState() { return XZcollision; }
 	void SetCollisionState(bool check) { XZcollision = check; }
 

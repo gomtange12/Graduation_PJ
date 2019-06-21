@@ -51,9 +51,7 @@ void PacketManager::MovePacket(int id)
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
 	for (int i = 0; i < SOLO_RNUM; ++i) {
 		SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
-	}
-
-		
+	}	
 }
 void PacketManager::ClientDisconnect(int id)
 {

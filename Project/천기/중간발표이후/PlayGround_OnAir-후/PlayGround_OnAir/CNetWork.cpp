@@ -101,6 +101,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 					PLAYER->GetPlayer()->SetClientNum(myid);
 					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+					PLAYER->GetPlayer()->m_match = true;
 				}
 
 				else {
@@ -113,25 +114,52 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 			//ÆÀ¸ðµå¸é
 			/*for (int i = 0; i < 4; ++i) {
 				if (myid == paket->ids[i]) {
-					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
-					PLAYER->GetPlayer()->SetClientNum(myid);
-					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
-				}
-
-				else {
-					PLAYER->GetTeamPlayerMap()[i]->SetClientNum(paket->ids[i]);
-					PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
+					PLAYER->GetPlayer()->teamNum = 0;
 				}
 			}
-			for (int i = 4; i < 8; ++i) {
-				PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
-				PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
+			if (PLAYER->GetPlayer()->teamNum == 0) {
+				for (int i = 0; i < 4; ++i) {
+					if (myid == paket->ids[i]) {
+						PLAYER->GetPlayer()->teamNum = 0;
+						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+						PLAYER->GetPlayer()->SetClientNum(myid);
+						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+						
+					}
+
+					else {
+						PLAYER->GetTeamPlayerMap()[i]->SetClientNum(paket->ids[i]);
+						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
+					}
+				}
+				for (int i = 4; i < 8; ++i) {
+					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
+					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
+				}
+			}
+			else {
+				for (int i = 4; i < 8; ++i) {
+					if (myid == paket->ids[i]) {
+						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+						PLAYER->GetPlayer()->SetClientNum(myid);
+						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+					}
+					else {
+						PLAYER->GetTeamPlayerMap()[i]->SetClientNum(paket->ids[i]);
+						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
+					}
+				}
+				for (int i = 0; i < 4; ++i) {
+					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
+					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
+				}
+
 			}*/
 	//	}
 		
 
 
-		PLAYER->GetPlayer()->m_match = true;
+			PLAYER->GetPlayer()->m_match = true;
 		CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
 
 		break;			
