@@ -863,7 +863,7 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 // CGameObject::UpdateTransform(NULL);
 //}
 
-COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void * pContext)
+COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, CLoadedModelInfo* type, void * pContext)
 	: CPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext)
 {
 	//차후에 리소스 관리 방식을 바꿔야한다
@@ -891,14 +891,14 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	}
 
 	//m_ObjType = DYNAMIC;
-	CLoadedModelInfo *pPlayerModel = OBJECTMANAGER->GetPlayerResource(type);
+	//CLoadedModelInfo *pPlayerModel = OBJECTMANAGER->GetPlayerResource(type);
 		//CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
 
 
-	SetChild(pPlayerModel->m_pModelRootObject, true);
-	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
+	SetChild(type->m_pModelRootObject, true);
+	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, type);
 
-	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
+	m_pAnimationController = new CAnimationController(1, type->m_pAnimationSets);
 	m_pAnimationController->SetTrackAnimationSet(0, 0);
 
 	m_pAnimationController->SetCallbackKeys(1, 3);
