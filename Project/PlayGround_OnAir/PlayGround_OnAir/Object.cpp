@@ -327,7 +327,7 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 		case ANIMATION_TYPE_LOOP:
 		{
 #ifdef _WITH_ANIMATION_INTERPOLATION
-			PLAYER->GetPlayer()->SetAllowKey(true);
+			//PLAYER->GetPlayer()->SetAllowKey(true);
 			m_fPosition = fTrackPosition;
 			 m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]); //¿ø·¡²¨
 		  
@@ -358,7 +358,14 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 				//maxLength = 0.0f;
  				PLAYER->GetPlayer()->SetPlayerState(IDLE);
 				PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
-				
+				for (auto&& p : PLAYER->GetTeamPlayerMap())
+				{
+					p->SetPlayerState(IDLE);
+				}
+				for (auto&& p : PLAYER->GetOtherPlayerMap())
+				{
+					p->SetPlayerState(IDLE);
+				}
 			}
 			//CPlayer::m_PlayerState = CPlayer::PlayerState::IDLE;
 			//CPlayer::SetPlayerState(IDLE);

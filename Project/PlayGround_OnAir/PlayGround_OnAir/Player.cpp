@@ -968,7 +968,6 @@ void COtherPlayers::OnCameraUpdateCallback(float fTimeElapsed)
 	//float boundHeight = 
 	fHeight = 0; //¿©±â
 	if (xmf3CameraPosition.y <= fHeight)
-
 		xmf3CameraPosition.y = fHeight;
 	m_pCamera->SetPosition(xmf3CameraPosition);
 	
