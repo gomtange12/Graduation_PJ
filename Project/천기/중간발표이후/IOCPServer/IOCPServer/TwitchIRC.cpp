@@ -82,6 +82,7 @@ void TwitchIRC::Run()
 				send(tw_sock, "PONG :tmi.twitch.tv\r\n", strlen("PONG :tmi.twitch.tv\r") + 1, 0);
 			}
 		}
+		
 	}
 
 }

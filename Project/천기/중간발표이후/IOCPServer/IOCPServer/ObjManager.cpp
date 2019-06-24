@@ -30,7 +30,7 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 {
 	if (packet[1] == CS_MATCHING_PLAYER) 
 	{ 
-	//std::cout << "Machig Request --- " << std::endl;
+	std::cout << "Machig Request --- " << std::endl;
 
 		cs_packet_matching *match = reinterpret_cast<cs_packet_matching *>(packet);
 		g_clients[id]->mod = match->mod;

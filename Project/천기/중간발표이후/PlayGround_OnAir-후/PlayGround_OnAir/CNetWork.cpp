@@ -96,7 +96,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		
 		//솔로모드면
 		//if (mod == SOLO) {
-			for (int i = 0; i < 2; ++i) {
+		/*	for (int i = 0; i < 2; ++i) {
 				if (myid == paket->ids[i]) {
 					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 					PLAYER->GetPlayer()->SetClientNum(myid);
@@ -108,17 +108,17 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[0]->SetClientNum(paket->ids[i]);
 					PLAYER->GetOtherPlayerMap()[0]->NumberByPos(paket->posN[i]);
 				}
-			}
+			}*/
 		//}
 		//else if (mod = SQUAD) {
 			//팀모드면
-			/*for (int i = 0; i < 4; ++i) {
+			for (int i = 0; i < 2; ++i) {
 				if (myid == paket->ids[i]) {
 					PLAYER->GetPlayer()->teamNum = 0;
 				}
 			}
 			if (PLAYER->GetPlayer()->teamNum == 0) {
-				for (int i = 0; i < 4; ++i) {
+				for (int i = 0; i < 2; ++i) {
 					if (myid == paket->ids[i]) {
 						PLAYER->GetPlayer()->teamNum = 0;
 						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
@@ -132,13 +132,13 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
 					}
 				}
-				for (int i = 4; i < 8; ++i) {
+				for (int i = 2; i < 4; ++i) {
 					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
 				}
 			}
 			else {
-				for (int i = 4; i < 8; ++i) {
+				for (int i = 2; i < 4; ++i) {
 					if (myid == paket->ids[i]) {
 						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 						PLAYER->GetPlayer()->SetClientNum(myid);
@@ -149,17 +149,17 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
 					}
 				}
-				for (int i = 0; i < 4; ++i) {
+				for (int i = 0; i < 2; ++i) {
 					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
 				}
 
-			}*/
+			}
 	//	}
 		
 
 
-			PLAYER->GetPlayer()->m_match = true;
+		PLAYER->GetPlayer()->m_match = true;
 		CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
 
 		break;			
@@ -318,7 +318,7 @@ void CNetWork::MatchPkt()
 	//	pkt->avatar = B;
 	//}
 	pkt->map = PLAYGROUNDMAP;
-	pkt->mod = SOLO;
+	pkt->mod = SQUAD;
 
 	SendPacket();
 }
