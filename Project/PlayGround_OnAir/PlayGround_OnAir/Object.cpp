@@ -344,20 +344,22 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 		case ANIMATION_TYPE_ONCE:
 			//m_fPosition = fTrackPosition;
 			//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //원래꺼
-			PLAYER->GetPlayer()->SetAllowKey(false);
-			PLAYER->GetOtherPlayer()->SetAllowKey(false);
-			m_fPosition += 0.00001;
+			//PLAYER->GetPlayer()->SetAllowKey(false);
+			//PLAYER->GetOtherPlayer()->SetAllowKey(false);
+			m_fPosition += 0.001;
 
 			//sol) m_fPosition += fDelta * speed; 프레임 고정시
-			if (m_fPosition >= maxLength)
+			if (m_fPosition >= m_fLength)
 			{
  				m_fPosition = 0.0f;
 				//fPosition = 0.0f;
 				//fTrackPosition = 0.f;
 				oncePosition = 0.0f;
-				//maxLength = 0.0f;
+				maxLength = 0.0f;
+				PLAYER->GetPlayer()->SetAllowKey(true);
+
  				PLAYER->GetPlayer()->SetPlayerState(IDLE);
-				PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
+				//PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
 				for (auto&& p : PLAYER->GetTeamPlayerMap())
 				{
 					p->SetPlayerState(IDLE);
@@ -1294,7 +1296,7 @@ CAnimationSets *CGameObject::LoadAnimationFromFile(FILE *pInFile, CGameObject *p
 			nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
 			nReads = (UINT)::fread(pAnimationSet->m_pstrName, sizeof(char), nStrLength, pInFile);
 			pAnimationSet->m_pstrName[nStrLength] = '\0';
-			if (!strcmp(pAnimationSet->m_pstrName, "Idle") || !strcmp(pAnimationSet->m_pstrName, "idle") || !strcmp(pAnimationSet->m_pstrName, "back_run") || !strcmp(pAnimationSet->m_pstrName, "run") || !strcmp(pAnimationSet->m_pstrName, "Run")|| !strcmp(pAnimationSet->m_pstrName, "run"))
+			if (!strcmp(pAnimationSet->m_pstrName, "Idle") || !strcmp(pAnimationSet->m_pstrName, "idle"))// || !strcmp(pAnimationSet->m_pstrName, "back_run") || !strcmp(pAnimationSet->m_pstrName, "run") || !strcmp(pAnimationSet->m_pstrName, "Run")|| !strcmp(pAnimationSet->m_pstrName, "run"))
 			{
 				pAnimationSet->m_nType = ANIMATION_TYPE_LOOP;
 			}

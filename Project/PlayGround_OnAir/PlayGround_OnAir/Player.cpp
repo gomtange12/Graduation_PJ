@@ -276,14 +276,16 @@ void CPlayer::Update(float fTimeElapsed)
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 
 	//m_JumpPower = 0;
-	switch (GetPlayerState())
+	switch (m_PlayerState)
 	{
 	/*default:
 		SetTrackAnimationSet(0, IDLE);
 		break;*/
 	case IDLE:
 		m_OnAacting = FALSE;
-		SetTrackAnimationSet(0, IDLE);
+		//SetTrackAnimationSet(0, IDLE);
+		//if (PLAYER->GetPlayer()->GetAllowKey())
+			SetTrackAnimationSet(0, IDLE);
 		break;
 	case RUN:
 		//if (!m_OnAacting)
