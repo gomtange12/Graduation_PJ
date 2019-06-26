@@ -12,20 +12,18 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 
 	//std::vector<std::shared_ptr<COtherPlayer>>				m_pOtherPlayer;
 	std::map<E_PLAYERTYPE, vector<CTerrainPlayer*>>			m_PlayerMap;
+	std::map<E_PLAYERTYPE, std::shared_ptr<CTerrainPlayer>>					m_PlayerPool;
 	std::vector<COtherPlayers*>								m_pOtherPlayerMap;
 	std::vector<COtherPlayers*>								m_pTeamPlayerMap;
-
-
 public:
-	std::vector<COtherPlayers*>		GetOtherPlayerMap() { return m_pOtherPlayerMap; }
-	std::vector<COtherPlayers*>		GetTeamPlayerMap() { return m_pTeamPlayerMap; }
-
 	vector<CTerrainPlayer*>									m_vecPlayerList;
 	//void 
 	CPlayerManager();
 	~CPlayerManager();
 	//CLoadedModelInfo* MakePlayerResource(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext, AVATARNumber avartarNum);
-	
+	std::vector<COtherPlayers*>		GetOtherPlayerMap() { return m_pOtherPlayerMap; }
+	std::vector<COtherPlayers*>		GetTeamPlayerMap() { return m_pTeamPlayerMap; }
+
 	void Initialize(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	void MakeOtherPlayers(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 
