@@ -10,6 +10,8 @@ public:
 	//unordered_map을 사용하여 만드려 했지만 해쉬함수를 가진 클레스를 만들어 사용하지 못하였다.
 	//나중에 시간이 생긴다면 바꾸자.
 	ObjManager* objectManager = OBJMANAGER->GetObjectManager();
+
+	
 	int RNumber = 0;
 public:
 	RoomManager();

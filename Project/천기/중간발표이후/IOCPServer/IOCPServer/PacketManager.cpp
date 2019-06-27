@@ -91,6 +91,7 @@ void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo ¸ÅÄª¿
 	pkt.sceneNum = PLAYGROUNDMAP;
 	pkt.roomNum = roomNum;
 	pkt.avatar = avatar;
+
 	
 	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
 		for (int i = 0; i < SOLO_RNUM; ++i) {
@@ -101,9 +102,7 @@ void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo ¸ÅÄª¿
 
 		}
 
-		for (int i = 0; i < SOLO_RNUM; ++i) {
-			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
-		}
+		SendPacket(id, &pkt);
 	}
 	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
 		for (int i = 0; i < TEAM_RNUM; ++i) {
@@ -114,10 +113,11 @@ void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo ¸ÅÄª¿
 
 		}
 
-		for (int i = 0; i < TEAM_RNUM; ++i) {
-			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
-		}
+		
+		SendPacket(id, &pkt);
+		
 	}
+	
 }
 void PacketManager::VectorPacket(int id)
 {

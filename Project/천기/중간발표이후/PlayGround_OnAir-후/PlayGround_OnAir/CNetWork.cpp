@@ -115,26 +115,30 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 			for (int i = 0; i < 2; ++i) {
 				if (myid == paket->ids[i]) {
 					PLAYER->GetPlayer()->teamNum = 0;
+					
 				}
 			}
 			if (PLAYER->GetPlayer()->teamNum == 0) {
 				for (int i = 0; i < 2; ++i) {
 					if (myid == paket->ids[i]) {
-						PLAYER->GetPlayer()->teamNum = 0;
 						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 						PLAYER->GetPlayer()->SetClientNum(myid);
 						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
 						
 					}
-
-					else {
+				}
+					
+				for (int i = 0; i < 2; ++i) {
+					if (myid != paket->ids[i]) {
 						PLAYER->GetTeamPlayerMap()[i]->SetClientNum(paket->ids[i]);
 						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
 					}
 				}
-				for (int i = 2; i < 4; ++i) {
-					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
-					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
+				for (int i = 0; i < 2; ++i) {
+					for (int k = 2; k < 4; ++k) {
+						PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[k]);
+						PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[k]);
+					}
 				}
 			}
 			else {
@@ -144,11 +148,16 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetPlayer()->SetClientNum(myid);
 						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
 					}
-					else {
-						PLAYER->GetTeamPlayerMap()[i]->SetClientNum(paket->ids[i]);
-						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
+				}
+				for (int k = 0; k < 2; ++k) {
+					for (int i = 2; i < 4; ++i) {
+						if (myid != paket->ids[i]) {
+							PLAYER->GetTeamPlayerMap()[k]->SetClientNum(paket->ids[i]);
+							PLAYER->GetTeamPlayerMap()[k]->NumberByPos(paket->posN[i]);
+						}
 					}
 				}
+				
 				for (int i = 0; i < 2; ++i) {
 					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);

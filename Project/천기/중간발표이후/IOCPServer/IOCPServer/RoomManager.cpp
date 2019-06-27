@@ -97,6 +97,7 @@ void RoomManager::TeamRoomMatch(int id)
 							room.emplace_back(teamRooms);
 
 							//// 매칭 디폴트값
+							
 							objectManager->GetPlayer(room[i]->m_TeamIds[0])->avatar = A;
 							objectManager->GetPlayer(room[i]->m_TeamIds[0])->posN = 1;
 							objectManager->GetPlayer(room[i]->m_TeamIds[0])->NumberByPos(1);
@@ -111,7 +112,7 @@ void RoomManager::TeamRoomMatch(int id)
 								objectManager->GetPlayer(room[i]->m_TeamIds[1])->m_xmf3Position.y,
 								objectManager->GetPlayer(room[i]->m_TeamIds[1])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
 
-							objectManager->GetPlayer(room[i]->m_TeamIds[2])->avatar = B;
+							objectManager->GetPlayer(room[i]->m_TeamIds[2])->avatar = A;
 							objectManager->GetPlayer(room[i]->m_TeamIds[2])->posN = 3;
 							objectManager->GetPlayer(room[i]->m_TeamIds[2])->NumberByPos(3);
 							objectManager->GetPlayer(room[i]->m_TeamIds[2])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_TeamIds[2])->m_xmf3Position.x,
@@ -125,7 +126,7 @@ void RoomManager::TeamRoomMatch(int id)
 								objectManager->GetPlayer(room[i]->m_TeamIds[3])->m_xmf3Position.y,
 								objectManager->GetPlayer(room[i]->m_TeamIds[3])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
 
-					/*		objectManager->GetPlayer(room[i]->m_TeamIds[4])->avatar = B;
+							objectManager->GetPlayer(room[i]->m_TeamIds[4])->avatar = B;
 							objectManager->GetPlayer(room[i]->m_TeamIds[4])->posN = 5;
 							objectManager->GetPlayer(room[i]->m_TeamIds[4])->NumberByPos(5);
 							objectManager->GetPlayer(room[i]->m_TeamIds[4])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_TeamIds[4])->m_xmf3Position.x,
@@ -152,16 +153,17 @@ void RoomManager::TeamRoomMatch(int id)
 							objectManager->GetPlayer(room[i]->m_TeamIds[7])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_TeamIds[7])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_TeamIds[7])->m_xmf3Position.y,
 								objectManager->GetPlayer(room[i]->m_TeamIds[7])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
-*/
-							////
 
+							////
+							
 							for (int k = 0; k < TEAM_RNUM; ++k) {
 								objectManager->GetPlayer(room[i]->m_TeamIds[k])->roomNumber = i;
 								objectManager->GetPlayer(room[i]->m_TeamIds[k])->m_match = true;
-
+								
 								PACKETMANAGER->IngamePacket(room[i]->m_TeamIds[k], i, objectManager->GetPlayer(room[i]->m_TeamIds[k])->avatar);
+								
 							}
-
+							
 						}
 					}
 					break;
