@@ -49,7 +49,7 @@ void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsC
 		m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, OBJECTMANAGER->GetPlayerResource(KEYBOARD), pContext));
 		m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, OBJECTMANAGER->GetPlayerResource(BASS), pContext));
 		m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, OBJECTMANAGER->GetPlayerResource(DRUM), pContext));
-*/
+		*/
 
 		m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext));
 		m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext));

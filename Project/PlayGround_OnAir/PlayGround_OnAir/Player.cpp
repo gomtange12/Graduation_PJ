@@ -297,7 +297,7 @@ void CPlayer::Update(float fTimeElapsed)
 		m_OnAacting = FALSE;
 		//}
 		//if (!m_isAnimationOver)
-			SetTrackAnimationSet(0, RUN);
+		SetTrackAnimationSet(0, RUN);
 		
 		//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		//m_OnAacting = FALSE;
@@ -326,7 +326,7 @@ void CPlayer::Update(float fTimeElapsed)
 		//cout << m_JumpPower << endl;
 		
 		SetTrackAnimationSet(0, JUMP);
-		
+		//M_JumpPower = 500;
 		break;
 	case STUN:
 		m_OnAacting = TRUE;
@@ -680,6 +680,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	
 	m_BoundScale = 60.0f;
 	CLoadedModelInfo *pPlayerModel = OBJECTMANAGER->GetPlayerResource(type);
+	//CLoadedModelInfo& a = *OBJECTMANAGER->GetPlayerResource(BASS);
 		// = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
 	//const CLoadedModelInfo& p = OBJECTMANAGER->GetPlayerResource(type);
 	SetChild(pPlayerModel->m_pModelRootObject, true);

@@ -330,10 +330,18 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			//PLAYER->GetPlayer()->SetAllowKey(true);
 			m_fPosition = fTrackPosition;
 			m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]); //원래꺼
-			//PLAYER->GetPlayer()->SetAniOver(true);
-			if (PLAYER->GetPlayer()->GetAniOver())
-				PLAYER->GetPlayer()->SetPlayerState(IDLE);
+			//if (PLAYER->GetPlayer()->GetPlayerState() == RUN)
+			//{
+			//	if (m_fPosition >= m_fLength)
+			//	{
+			//		PLAYER->GetPlayer()->SetPlayerState(IDLE);
 
+			//		//if (PLAYER->GetPlayer()->GetAniOver())
+			//		//	PLAYER->GetPlayer()->SetPlayerState(IDLE);
+			//	}
+			//}
+			//if (PLAYER->GetPlayer()->GetPlayerState() == IDLE)
+			//PLAYER->GetPlayer()->SetAniOver(true);
 			 //m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
 			//m_fPosition = fmod(fTrackPosition, m_fLength); if (m_fPosition < 0) m_fPosition += m_fLength;
 			//m_fPosition = fTrackPosition - int(fTrackPosition / m_fLength) * m_fLength;
@@ -355,8 +363,10 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			m_fPosition += 0.00001;
 
 			//sol) m_fPosition += fDelta * speed; 프레임 고정시
-			if (m_fPosition >= m_fLength)
+		
+			if (m_fPosition + 0.05 > m_fLength)
 			{
+				
 				
  				m_fPosition = 0.0f;
 				//fPosition = 0.0f;
