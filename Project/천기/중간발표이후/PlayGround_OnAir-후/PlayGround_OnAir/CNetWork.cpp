@@ -184,12 +184,21 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
 			PLAYER->GetPlayer()->SetPosition(xmf3Shift);
 			PLAYER->GetPlayer()->SetPlayerState(RUN);
+			break;
 		}
 		else {
-			for (int i = 0; i < 4; ++i) {
+			for (int i = 0; i < 2; ++i) {
 				if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
 					PLAYER->GetOtherPlayerMap()[i]->SetPosition(xmf3Shift);
 					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(RUN);
+					cout << pkt->posX << ", " << pkt->posY << ", " << pkt->posZ << endl;
+					break;
+				}
+			}
+			for (int i = 0; i < 2; ++i) {
+				if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetTeamPlayerMap()[i]->SetPosition(xmf3Shift);
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(RUN);
 					cout << pkt->posX << ", " << pkt->posY << ", " << pkt->posZ << endl;
 					break;
 				}
@@ -204,11 +213,22 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
 			PLAYER->GetPlayer()->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
 			PLAYER->GetPlayer()->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
+			break;
 		}
-		for (int i = 0; i < 4; ++i) {	
+		else {
+			for (int i = 0; i < 2; ++i) {
 				if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
-				PLAYER->GetOtherPlayerMap()[i]->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
-				PLAYER->GetOtherPlayerMap()[i]->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
+					PLAYER->GetOtherPlayerMap()[i]->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
+					PLAYER->GetOtherPlayerMap()[i]->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
+					break;
+				}
+			}
+			for (int i = 0; i < 2; ++i) {
+				if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetTeamPlayerMap()[i]->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
+					PLAYER->GetTeamPlayerMap()[i]->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
+					break;
+				}
 			}
 		}
 		break;

@@ -49,9 +49,16 @@ void PacketManager::MovePacket(int id)
 	pkt.posZ = objectManager->GetPlayer(id)->m_xmf3Position.z;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_RNUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
-	}	
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+		}
+	}
 }
 void PacketManager::ClientDisconnect(int id)
 {

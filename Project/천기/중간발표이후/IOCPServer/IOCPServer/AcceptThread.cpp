@@ -74,7 +74,8 @@ void AcceptThread::Proc()
 		objectManager->GetPlayer(id)->m_id = id;
 		objectManager->GetPlayer(id)->m_socket = clientSocket;
 		//
-		CreateIoCompletionPort(reinterpret_cast<HANDLE>(objectManager->GetPlayer(id)->m_socket), IOCPSERVER->GetIocp(), id, 0);
+		CreateIoCompletionPort(reinterpret_cast<HANDLE>(objectManager->GetPlayer(id)->m_socket),
+			IOCPSERVER->GetIocp(), id, 0);
 		//
 		objectManager->GetPlayer(id)->m_connected = true;
 	
