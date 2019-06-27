@@ -6,8 +6,8 @@
 #include "GameFramework.h"
 #include "CSceneManager.h"
 #include "CMenuScene.h"
-#include "CIngameScene.h"
 #include "CObjectManager.h"
+#include "CIngameScene.h"
 #include "CNetWork.h"
 
 CGameFramework::CGameFramework()
@@ -554,7 +554,8 @@ void CGameFramework::BuildObjects()
 		m_pScene->BuildObjects(m_pd3dDevice, m_pd3dCommandList);
 		//m_pScene->SetCollideBox();
 	}
-	OBJECTMANAGER->LoadPlayerResource(m_pd3dDevice, m_pd3dCommandList,m_pScene->GetGraphicsRootSignature());
+	OBJECTMANAGER->LoadPlayerResource(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature());
+
 	//SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
 //SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
 
@@ -584,12 +585,12 @@ void CGameFramework::BuildObjects()
 	PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
 	PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 	
-	//PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(440.0f, 50, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+	PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(440.0f, 50, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	//PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(40,20, 40)); //박스도 151515배 여기여기0409
 	//PLAYER->GetOtherPlayer()->Rotate(0,90,0); //박스도 151515배 여기여기0409
 
-	//PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
-	//PLAYER->GetOtherPlayer()->SetOOBB(PLAYER->GetOtherPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+	PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale, PLAYER->GetOtherPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
+	PLAYER->GetOtherPlayer()->SetOOBB(PLAYER->GetOtherPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 
 
 	//if (m_pScene) m_pScene->MakeOtherPlayer(m_pd3dDevice, m_pd3dCommandList);
@@ -768,21 +769,6 @@ void CGameFramework::ProcessInput()
 	PLAYER->GetPlayer()->Update(m_GameTimer.GetTimeElapsed());
 	PLAYER->GetOtherPlayer()->Update(m_GameTimer.GetTimeElapsed());
 
-	if (PLAYER->GetOtherPlayerMap().size() > 0)
-	{
-
-		for (auto&& p : PLAYER->GetOtherPlayerMap())
-			p->Update(m_GameTimer.GetTimeElapsed());
-
-	}
-
-	if (PLAYER->GetOtherPlayerMap().size() > 0)
-	{
-
-		for (auto&& p : PLAYER->GetTeamPlayerMap())
-			p->Update(m_GameTimer.GetTimeElapsed());
-
-	}
 }
 
 void CGameFramework::AnimateObjects()
@@ -799,38 +785,35 @@ void CGameFramework::AnimateObjects()
 
 
 	PLAYER->GetPlayer()->Animate(fTimeElapsed);
-	//PLAYER->GetOtherPlayer()->Animate(fTimeElapsed);
 	if (PLAYER->GetOtherPlayerMap().size() > 0)
 	{
-
 		for (auto&& p : PLAYER->GetOtherPlayerMap())
 			p->Animate(fTimeElapsed);
-
 	}
-
 	if (PLAYER->GetTeamPlayerMap().size() > 0)
 	{
-
 		for (auto&& p : PLAYER->GetTeamPlayerMap())
 			p->Animate(fTimeElapsed);
-
 	}
+
 	PLAYER->GetPlayer()->UpdateTransform(NULL);
-	//PLAYER->GetOtherPlayer()->UpdateTransform(NULL);
 	if (PLAYER->GetOtherPlayerMap().size() > 0)
 	{
-
 		for (auto&& p : PLAYER->GetOtherPlayerMap())
 			p->UpdateTransform(NULL);
-
 	}
 	if (PLAYER->GetTeamPlayerMap().size() > 0)
 	{
-
 		for (auto&& p : PLAYER->GetTeamPlayerMap())
 			p->UpdateTransform(NULL);
-
 	}
+
+	//PLAYER->GetOtherPlayer()->Animate(fTimeElapsed);
+
+	//PLAYER->GetPlayer()->UpdateTransform(NULL);
+	//PLAYER->GetOtherPlayer()->UpdateTransform(NULL);
+
+
 	
 #ifdef _WITH_DIRECT2D_IMAGE_EFFECT
 	static UINT64 i = 0;
@@ -1039,8 +1022,8 @@ void CGameFramework::FrameAdvance()
 	m_GameTimer.GetFrameRate(m_pszFrameRate + 12, 37);
 	size_t nLength = _tcslen(m_pszFrameRate);
 	XMFLOAT3 xmf3Position = PLAYER->GetPlayer()->GetPosition();
-	_stprintf_s(m_pszFrameRate + nLength, 70 - nLength, _T("(%4f, %4f, %4f)"), xmf3Position.x, xmf3Position.y, xmf3Position.z);
-	//_stprintf_s(m_pszFrameRate + nLength, 70 - nLength, _T(" "));
+	//_stprintf_s(m_pszFrameRate + nLength, 70 - nLength, _T("(%4f, %4f, %4f)"), xmf3Position.x, xmf3Position.y, xmf3Position.z);
+	_stprintf_s(m_pszFrameRate + nLength, 70 - nLength, _T(" "));
 
 	::SetWindowText(m_hWnd, m_pszFrameRate);
 }

@@ -300,7 +300,7 @@ void CNetWork::MatchPkt()
 }
 void CNetWork::StatePkt(DWORD state)
 {
-	cs_packet_move_state *pkt = reinterpret_cast<cs_packet_move_state*>(send_buffer);
+	cs_packet_move_state *pkt = reinterpret_cast<cs_packet_move_state *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_MOVE_STATE_INFO;
@@ -310,7 +310,7 @@ void CNetWork::StatePkt(DWORD state)
 }
 void CNetWork::RotePkt(float y)
 {
-	cs_packet_rote_state *pkt = reinterpret_cast<cs_packet_rote_state*>(send_buffer);
+	cs_packet_rote_state *pkt = reinterpret_cast<cs_packet_rote_state *>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_ROTE_STATE_INFO;

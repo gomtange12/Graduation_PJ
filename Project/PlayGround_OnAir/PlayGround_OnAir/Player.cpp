@@ -276,16 +276,19 @@ void CPlayer::Update(float fTimeElapsed)
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 
 	//m_JumpPower = 0;
-	switch (m_PlayerState)
+	switch (GetPlayerState())
 	{
 	/*default:
 		SetTrackAnimationSet(0, IDLE);
 		break;*/
 	case IDLE:
 		m_OnAacting = FALSE;
-		//SetTrackAnimationSet(0, IDLE);
-		//if (PLAYER->GetPlayer()->GetAllowKey())
+		if (m_isAnimationOver)
+		{
 			SetTrackAnimationSet(0, IDLE);
+			m_isAnimationOver = false;
+
+		}
 		break;
 	case RUN:
 		//if (!m_OnAacting)
@@ -293,11 +296,14 @@ void CPlayer::Update(float fTimeElapsed)
 			//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		m_OnAacting = FALSE;
 		//}
-		SetTrackAnimationSet(0, RUN);
+		//if (!m_isAnimationOver)
+			SetTrackAnimationSet(0, RUN);
+		
 		//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		//m_OnAacting = FALSE;
 		break;
 	case JUMP:
+
 		m_OnAacting = TRUE;
 		//float jumpTime = fTimeElapsed;
 		//XMFLOAT3 jump{ 0,0,0 };
@@ -318,7 +324,9 @@ void CPlayer::Update(float fTimeElapsed)
 
 		//m_newYpos = 0;
 		//cout << m_JumpPower << endl;
+		
 		SetTrackAnimationSet(0, JUMP);
+		
 		break;
 	case STUN:
 		m_OnAacting = TRUE;
@@ -641,6 +649,7 @@ void CSoundCallbackHandler::HandleCallback(void *pCallbackData)
 #endif
 }
 
+//CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void *pContext)
 	: CPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext)
 {
@@ -670,9 +679,9 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	//if(CNETWORK->GetInstance()->)
 	
 	m_BoundScale = 60.0f;
-	CLoadedModelInfo* pPlayerModel = OBJECTMANAGER->GetPlayerResource(type); 
-	//CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
-
+	CLoadedModelInfo *pPlayerModel = OBJECTMANAGER->GetPlayerResource(type);
+		// = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
+	//const CLoadedModelInfo& p = OBJECTMANAGER->GetPlayerResource(type);
 	SetChild(pPlayerModel->m_pModelRootObject, true);
 	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
 	//if(m_pMesh!=nullptr)
@@ -786,7 +795,7 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
 	XMFLOAT3 xmf3Shift{ 0.0,0.0,0.0 };
-	//cout<<endl<<"플레이어"<<xmf3PlayerPosition.x<<", "
+
 	/*int num = 0;
 	switch (SCENEMANAGER->GetSceneType())
 	{
@@ -865,7 +874,7 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 // CGameObject::UpdateTransform(NULL);
 //}
 
-COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, CLoadedModelInfo* type, void * pContext)
+COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void * pContext)
 	: CPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext)
 {
 	//차후에 리소스 관리 방식을 바꿔야한다
@@ -893,14 +902,13 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	}
 
 	//m_ObjType = DYNAMIC;
-	//CLoadedModelInfo *pPlayerModel = OBJECTMANAGER->GetPlayerResource(type);
-		//CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
+	CLoadedModelInfo *pPlayerModel// = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
+		= OBJECTMANAGER->GetPlayerResource(type);
 
+	SetChild(pPlayerModel->m_pModelRootObject, true);
+	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
 
-	SetChild(type->m_pModelRootObject, true);
-	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, type);
-
-	m_pAnimationController = new CAnimationController(1, type->m_pAnimationSets);
+	m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
 	m_pAnimationController->SetTrackAnimationSet(0, 0);
 
 	m_pAnimationController->SetCallbackKeys(1, 3);
@@ -970,6 +978,7 @@ void COtherPlayers::OnCameraUpdateCallback(float fTimeElapsed)
 	//float boundHeight = 
 	fHeight = 0; //여기
 	if (xmf3CameraPosition.y <= fHeight)
+
 		xmf3CameraPosition.y = fHeight;
 	m_pCamera->SetPosition(xmf3CameraPosition);
 	
