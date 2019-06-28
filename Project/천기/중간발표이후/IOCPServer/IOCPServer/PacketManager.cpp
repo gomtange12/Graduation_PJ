@@ -36,30 +36,7 @@ void PacketManager::LoginPacket(int id)
 	SendPacket(id, &pkt);
 }
 
-void PacketManager::MovePacket(int id)
-{
-	//매칭시 
-	// 같은방에 있는 '모든' id들 에게 나의 변경된 포지션 값을 준다.
-	sc_packet_move pkt;
-	pkt.size = sizeof(sc_packet_move);
-	pkt.type = SC_MOVE_PLAYER;
-	pkt.id = id;
-	pkt.posX = objectManager->GetPlayer(id)->m_xmf3Position.x;
-	pkt.posY = objectManager->GetPlayer(id)->m_xmf3Position.y;
-	pkt.posZ = objectManager->GetPlayer(id)->m_xmf3Position.z;
 
-	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
-		for (int i = 0; i < SOLO_RNUM; ++i) {
-			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
-		}
-	}
-	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
-		for (int i = 0; i < TEAM_RNUM; ++i) {
-			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
-		}
-	}
-}
 void PacketManager::ClientDisconnect(int id)
 {
 	//int otherId;
@@ -125,6 +102,30 @@ void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo 매칭�
 		
 	}
 	
+}
+void PacketManager::MovePacket(int id)
+{
+	//매칭시 
+	// 같은방에 있는 '모든' id들 에게 나의 변경된 포지션 값을 준다.
+	sc_packet_move pkt;
+	pkt.size = sizeof(sc_packet_move);
+	pkt.type = SC_MOVE_PLAYER;
+	pkt.id = id;
+	pkt.posX = objectManager->GetPlayer(id)->m_xmf3Position.x;
+	pkt.posY = objectManager->GetPlayer(id)->m_xmf3Position.y;
+	pkt.posZ = objectManager->GetPlayer(id)->m_xmf3Position.z;
+
+	int roomNum = objectManager->GetPlayer(id)->roomNumber;
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+		}
+	}
 }
 void PacketManager::VectorPacket(int id)
 {

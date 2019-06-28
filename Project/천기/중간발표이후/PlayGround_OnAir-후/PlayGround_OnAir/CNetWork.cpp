@@ -135,10 +135,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					}
 				}
 				for (int i = 0; i < 2; ++i) {
-					for (int k = 2; k < 4; ++k) {
-						PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[k]);
-						PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[k]);
-					}
+						PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i+2]);
+						PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i+2]);
 				}
 			}
 			else {
@@ -149,14 +147,14 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
 					}
 				}
-				for (int k = 0; k < 2; ++k) {
-					for (int i = 2; i < 4; ++i) {
-						if (myid != paket->ids[i]) {
-							PLAYER->GetTeamPlayerMap()[k]->SetClientNum(paket->ids[i]);
-							PLAYER->GetTeamPlayerMap()[k]->NumberByPos(paket->posN[i]);
-						}
+				
+				for (int i = 2; i < 4; ++i) {
+					if (myid != paket->ids[i]) {
+						PLAYER->GetTeamPlayerMap()[0]->SetClientNum(paket->ids[i]);
+						PLAYER->GetTeamPlayerMap()[0]->NumberByPos(paket->posN[i]);
 					}
 				}
+				
 				
 				for (int i = 0; i < 2; ++i) {
 					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
@@ -164,9 +162,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				}
 
 			}
-	//	}
-		
-
+	//	}		
 
 		PLAYER->GetPlayer()->m_match = true;
 		CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
@@ -191,15 +187,11 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
 					PLAYER->GetOtherPlayerMap()[i]->SetPosition(xmf3Shift);
 					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(RUN);
-					cout << pkt->posX << ", " << pkt->posY << ", " << pkt->posZ << endl;
 					break;
 				}
-			}
-			for (int i = 0; i < 2; ++i) {
-				if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+				else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
 					PLAYER->GetTeamPlayerMap()[i]->SetPosition(xmf3Shift);
-					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(RUN);
-					cout << pkt->posX << ", " << pkt->posY << ", " << pkt->posZ << endl;
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(RUN);		
 					break;
 				}
 			}
@@ -222,9 +214,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[i]->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
 					break;
 				}
-			}
-			for (int i = 0; i < 2; ++i) {
-				if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+				else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
 					PLAYER->GetTeamPlayerMap()[i]->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
 					PLAYER->GetTeamPlayerMap()[i]->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
 					break;
