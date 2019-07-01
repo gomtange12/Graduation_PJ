@@ -1086,7 +1086,12 @@ void COtherPlayers::Update(float fTimeElapsed)
 			break;*/
 	case IDLE:
 		m_OnAacting = FALSE;
-		SetTrackAnimationSet(0, IDLE);
+		if (m_isAnimationOver)
+		{
+			SetTrackAnimationSet(0, IDLE);
+			m_isAnimationOver = false;
+
+		}
 		break;
 	case RUN:
 		//if (!m_OnAacting)
@@ -1094,17 +1099,37 @@ void COtherPlayers::Update(float fTimeElapsed)
 			//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		m_OnAacting = FALSE;
 		//}
+		//if (!m_isAnimationOver)
 		SetTrackAnimationSet(0, RUN);
+
 		//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		//m_OnAacting = FALSE;
 		break;
 	case JUMP:
+
+		m_OnAacting = TRUE;
+		//float jumpTime = fTimeElapsed;
+		//XMFLOAT3 jump{ 0,0,0 };
+		//float newVel = -xmf3Velocity.y;
+		//xmf3Velocity.y += m_xmf3Gravity.y * fTimeElapsed;
+		////m_xmf3Position += 
+		/*m_xmf3Position.y = m_xmf3Position.y + (m_xmf3Gravity.y * fTimeElapsed);
+		cout << m_xmf3Position.y << endl;*/
+		//m_newYpos = m_xmf3Position.y;
+		//m_xmf3Position.y = m_xmf3Position.y + (m_xmf3Gravity.y* 0.5) * fTimeElapsed ;
+		//m_xmf3Position.y += 7;
+		/*m_newYpos = m_xmf3Position.y + 8;
+		m_newYpos += (m_xmf3Gravity.y * 0.5* fTimeElapsed);
+		m_xmf3Position.y = m_newYpos;*/
 		m_JumpPower += (m_xmf3Gravity.y * 0.1* fTimeElapsed);
 		m_xmf3Position.y += m_JumpPower * fTimeElapsed;
+
+
+		//m_newYpos = 0;
+		//cout << m_JumpPower << endl;
+
 		SetTrackAnimationSet(0, JUMP);
-		
-		//m_xmf3Position.y += (9.8) * fTimeElapsed + fTimeElapsed * m_xmf3Velocity.y;
-		//cout << m_xmf3Position.y << endl; 
+		//M_JumpPower = 500;
 		break;
 	case STUN:
 		m_OnAacting = TRUE;
