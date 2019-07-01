@@ -359,7 +359,14 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 	 //   PLAYER->GetPlayer()->SetAllowKey(false);
 	 //   PLAYER->GetOtherPlayer()->SetAllowKey(false);
 		PLAYER->GetPlayer()->SetAniOver(false);
-
+		for (auto&& p : PLAYER->GetTeamPlayerMap())
+		{
+			p->SetAniOver(false);
+		}
+		for (auto&& p : PLAYER->GetOtherPlayerMap())
+		{
+			p->SetAniOver(false);
+		}
 		m_fPosition += 0.00001;
 
 		//sol) m_fPosition += fDelta * speed; 프레임 고정시
@@ -374,9 +381,36 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			//oncePosition = 0.0f;
 			maxLength = 0.0f;
 			PLAYER->GetPlayer()->SetAllowKey(true);
+			for (auto&& p : PLAYER->GetTeamPlayerMap())
+			{
+				p->SetAllowKey(true);
+			}
+			for (auto&& p : PLAYER->GetOtherPlayerMap())
+			{
+				p->SetAllowKey(true);
+			}
 			PLAYER->GetPlayer()->SetAniOver(true);
+			for (auto&& p : PLAYER->GetTeamPlayerMap())
+			{
+				p->SetAniOver(true);
+			}
+			for (auto&& p : PLAYER->GetOtherPlayerMap())
+			{
+				p->SetAniOver(true);
+			}
 			if (PLAYER->GetPlayer()->GetAniOver())
 				PLAYER->GetPlayer()->SetPlayerState(IDLE);
+			
+			for (auto&& p : PLAYER->GetTeamPlayerMap())
+			{
+				if (p->GetAniOver())
+					p->SetPlayerState(IDLE);
+			}
+			for (auto&& p : PLAYER->GetOtherPlayerMap())
+			{
+				if (p->GetAniOver())
+					p->SetPlayerState(IDLE);
+			}
 			//PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
 
 		}
