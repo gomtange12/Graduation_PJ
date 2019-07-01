@@ -261,18 +261,38 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 			if (pkt->jump == true) {
 				PLAYER->GetPlayer()->SetPlayerState(JUMP);
 				PLAYER->GetPlayer()->SetJumpPower(450.0f);
+				break;
 			}
-			if (pkt->attack == true) 
+			if (pkt->attack == true) {
 				PLAYER->GetPlayer()->SetPlayerState(ATTACK);
+				break;
+			}
 
 		}
-		if (pkt->id == PLAYER->GetOtherPlayerMap()[0]->GetClientNum()) {
-			if (pkt->jump == true) {
-				PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(JUMP);
-				PLAYER->GetOtherPlayerMap()[0]->SetJumpPower(450.0f);
+		for (int i = 0; i < 2; ++i) {
+			if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
+				
+				if (pkt->jump == true) {
+					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(JUMP);
+					PLAYER->GetOtherPlayerMap()[i]->SetJumpPower(450.0f);
+					break;
+				}
+				if (pkt->attack == true) {
+					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(ATTACK);
+					break;
+				}
 			}
-			if (pkt->attack == true) 
-				PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(ATTACK);
+			else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+				if (pkt->jump == true) {
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(JUMP);
+					PLAYER->GetTeamPlayerMap()[i]->SetJumpPower(450.0f);
+					break;
+				}
+				if (pkt->attack == true) {
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(ATTACK);
+					break;
+				}
+			}
 		}
 		break;
 	}
@@ -280,9 +300,19 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		sc_packet_attack *pkt = reinterpret_cast<sc_packet_attack *>(ptr);
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
 			PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
+			break;
 		}
-		if (pkt->id == PLAYER->GetOtherPlayerMap()[0]->GetClientNum()) {
-			PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(PlayerState::STUN);
+		for (int i = 0; i < 2; ++i) {
+			if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
+				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
+				break;
+			}
+			else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+				if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
+					break;
+				}
+			}
 		}
 		break;
 	}

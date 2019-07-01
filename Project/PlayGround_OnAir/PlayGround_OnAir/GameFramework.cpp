@@ -424,8 +424,8 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 					break;
 				case VK_F5: {
 					if (m_ready == false) {
-						CNETWORK->MatchPkt();
-						//SCENEMANAGER->SetScene(PLAYGROUNDMAP);
+						//CNETWORK->MatchPkt();
+						SCENEMANAGER->SetScene(PLAYGROUNDMAP);
 						//m_pCamera = PLAYER->GetPlayer()->GetCamera();
 						cout << "매칭!";
 						m_ready = true;
@@ -544,7 +544,7 @@ void CGameFramework::OnDestroy()
 
 void CGameFramework::BuildObjects()
 {
-	CNETWORK->MakeServer(m_hWnd);
+	//CNETWORK->MakeServer(m_hWnd);
 	m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
 
 	//SCENEMANAGER->
@@ -609,7 +609,7 @@ void CGameFramework::BuildObjects()
 	//m_pScene->BuildObjectsAfterPlayer(m_pd3dDevice, m_pd3dCommandList);
 	//m_pScene->m_pPlayer = m_pPlayer;// = pPlayer;// = PLAYER->GetInstance()->GetPlayer();
 	m_pCamera = PLAYER->GetPlayer()->GetCamera();
-	CNETWORK->SetGameFrameWork(GetCGameFramework());
+	//CNETWORK->SetGameFrameWork(GetCGameFramework());
 	//m_pCamera->SetMode(THIRD_PERSON_CAMERA);
 
 	m_pd3dCommandList->Close();
@@ -711,7 +711,7 @@ void CGameFramework::ProcessInput()
 		if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::JUMP) {
 			if (pKeysBuffer[VK_SPACE] & 0xF0)
 			{
-				CNETWORK->KeyPkt(true, false, false);
+				//CNETWORK->KeyPkt(true, false, false);
 				PLAYER->GetPlayer()->SetPlayerState(PlayerState::JUMP);
 				//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
 			}
@@ -720,8 +720,8 @@ void CGameFramework::ProcessInput()
 			if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::ATTACK){// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::ATTACK) {
 				if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
 				{
+					//CNETWORK->KeyPkt(false, true, false);
 					PLAYER->GetPlayer()->SetPlayerState(PlayerState::ATTACK);
-					CNETWORK->KeyPkt(false, true, false);
 				}
 			}
 		}
@@ -752,10 +752,10 @@ void CGameFramework::ProcessInput()
 			}
 			if (dwDirection)
 			{
-				//PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
+				PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
 				
-				if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN)
-					CNETWORK->StatePkt(dwDirection);
+				//if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN)
+					//CNETWORK->StatePkt(dwDirection);
 
 			}
 		}

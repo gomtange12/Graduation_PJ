@@ -80,6 +80,7 @@ void CObjectManager::LoadPlayerResource(ID3D12Device *pd3dDevice, ID3D12Graphics
 	m_PlayerResourceMap.insert(std::make_pair(DRUM, DrumResource));
 	m_PlayerResourceMap.insert(std::make_pair(VOCAL, vocalResource));
 
+
 }
 
 CLoadedModelInfo* CObjectManager::GetPlayerResource(E_CHARACTERTYPE type)

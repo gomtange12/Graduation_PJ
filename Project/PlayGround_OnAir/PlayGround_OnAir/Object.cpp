@@ -317,7 +317,7 @@ void *CAnimationSet::GetCallbackData()
 
 void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 {
-	
+
 	maxLength = m_fLength;// -0.18f;
 	fPosition = 0.0f;
 	float m_fLooftoOnce = 0.f;
@@ -332,13 +332,13 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 		m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //원래꺼
 		//if (PLAYER->GetPlayer()->GetPlayerState() == RUN)
 		//{
-		//	if (m_fPosition >= m_fLength)
-		//	{
-		//		PLAYER->GetPlayer()->SetPlayerState(IDLE);
+		//   if (m_fPosition >= m_fLength)
+		//   {
+		//      PLAYER->GetPlayer()->SetPlayerState(IDLE);
 
-		//		//if (PLAYER->GetPlayer()->GetAniOver())
-		//		//	PLAYER->GetPlayer()->SetPlayerState(IDLE);
-		//	}
+		//      //if (PLAYER->GetPlayer()->GetAniOver())
+		//      //   PLAYER->GetPlayer()->SetPlayerState(IDLE);
+		//   }
 		//}
 		//if (PLAYER->GetPlayer()->GetPlayerState() == IDLE)
 		//PLAYER->GetPlayer()->SetAniOver(true);
@@ -356,10 +356,17 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 	case ANIMATION_TYPE_ONCE:
 		//m_fPosition = fTrackPosition;
 		//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //원래꺼
-	//	PLAYER->GetPlayer()->SetAllowKey(false);
-	//	PLAYER->GetOtherPlayer()->SetAllowKey(false);
+	 //   PLAYER->GetPlayer()->SetAllowKey(false);
+	 //   PLAYER->GetOtherPlayer()->SetAllowKey(false);
 		PLAYER->GetPlayer()->SetAniOver(false);
-
+		for (auto&& p : PLAYER->GetTeamPlayerMap())
+		{
+			p->SetAniOver(false);
+		}
+		for (auto&& p : PLAYER->GetOtherPlayerMap())
+		{
+			p->SetAniOver(false);
+		}
 		m_fPosition += 0.00001;
 
 		//sol) m_fPosition += fDelta * speed; 프레임 고정시
@@ -374,9 +381,36 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			//oncePosition = 0.0f;
 			maxLength = 0.0f;
 			PLAYER->GetPlayer()->SetAllowKey(true);
+			for (auto&& p : PLAYER->GetTeamPlayerMap())
+			{
+				p->SetAllowKey(true);
+			}
+			for (auto&& p : PLAYER->GetOtherPlayerMap())
+			{
+				p->SetAllowKey(true);
+			}
 			PLAYER->GetPlayer()->SetAniOver(true);
+			for (auto&& p : PLAYER->GetTeamPlayerMap())
+			{
+				p->SetAniOver(true);
+			}
+			for (auto&& p : PLAYER->GetOtherPlayerMap())
+			{
+				p->SetAniOver(true);
+			}
 			if (PLAYER->GetPlayer()->GetAniOver())
 				PLAYER->GetPlayer()->SetPlayerState(IDLE);
+			
+			for (auto&& p : PLAYER->GetTeamPlayerMap())
+			{
+				if (p->GetAniOver())
+					p->SetPlayerState(IDLE);
+			}
+			for (auto&& p : PLAYER->GetOtherPlayerMap())
+			{
+				if (p->GetAniOver())
+					p->SetPlayerState(IDLE);
+			}
 			//PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
 
 		}
