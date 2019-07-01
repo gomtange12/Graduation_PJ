@@ -193,16 +193,33 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 	{
 		int roomNum = g_clients[id]->roomNumber;
 		int otherId;
-		for (int i = 0; i < SOLO_RNUM; ++i) {
-			if(id != ROOMMANAGER->room[roomNum]->m_SoloIds[i])
-				otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
+		
+		if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+			for (int i = 0; i < SOLO_RNUM; ++i) {
+				if (id != ROOMMANAGER->room[roomNum]->m_SoloIds[i])
+					otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
+			}
+			float fLength = sqrtf(pow(g_clients[id]->m_xmf3Position.x - g_clients[otherId]->m_xmf3Position.x, 2) + pow(g_clients[id]->m_xmf3Position.z - g_clients[otherId]->m_xmf3Position.z, 2));
+			if (fLength <= 180.0f) {
+				PACKETMANAGER->AttackPacKet(otherId);
+				--g_clients[otherId]->hp;
+				if (g_clients[otherId]->hp <= 0) PACKETMANAGER->ResultPacket(otherId);
+			}
 		}
-		float fLength = sqrtf(pow(g_clients[id]->m_xmf3Position.x-g_clients[otherId]->m_xmf3Position.x,2) + pow(g_clients[id]->m_xmf3Position.z-g_clients[otherId]->m_xmf3Position.z,2));
-		if (fLength <= 180.0f) {
-			PACKETMANAGER->AttackPacKet(otherId);
-			--g_clients[otherId]->hp;
-			if (g_clients[otherId]->hp <= 0) PACKETMANAGER->ResultPacket(otherId);
+		else {
+			for (int i = 0; i < TEAM_RNUM; ++i) {
+				if (id != ROOMMANAGER->room[roomNum]->m_TeamIds[i])
+					otherId = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
+			}
+			float fLength = sqrtf(pow(g_clients[id]->m_xmf3Position.x - g_clients[otherId]->m_xmf3Position.x, 2) + pow(g_clients[id]->m_xmf3Position.z - g_clients[otherId]->m_xmf3Position.z, 2));
+			if (fLength <= 180.0f) {
+				PACKETMANAGER->AttackPacKet(otherId);
+				--g_clients[otherId]->hp;
+				if (g_clients[otherId]->hp <= 0) PACKETMANAGER->ResultPacket(otherId);
+			}
 		}
+			
+		
 	}
 	
 }
@@ -210,25 +227,39 @@ void ObjManager::LobbyPkt(int id, unsigned char *packet)
 {
 	cs_packet_lobby_out *pkt = reinterpret_cast<cs_packet_lobby_out *>(packet);
 
-	g_clients[id]->gameEnd =true;
+	g_clients[id]->gameEnd = true;
 
 	int roomNum = g_clients[id]->roomNumber;
 	int otherId;
-	for (int i = 0; i < SOLO_RNUM; ++i) {
-		if (id != ROOMMANAGER->room[roomNum]->m_SoloIds[i])
-			otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			if (id != ROOMMANAGER->room[roomNum]->m_SoloIds[i])
+				otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
+		}
+		float fLength = sqrtf(pow(g_clients[id]->m_xmf3Position.x - g_clients[otherId]->m_xmf3Position.x, 2) + pow(g_clients[id]->m_xmf3Position.z - g_clients[otherId]->m_xmf3Position.z, 2));
+		if (fLength <= 180.0f) {
+			PACKETMANAGER->AttackPacKet(otherId);
+			--g_clients[otherId]->hp;
+			if (g_clients[otherId]->hp <= 0) PACKETMANAGER->ResultPacket(otherId);
+		}
 	}
+	else {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			if (id != ROOMMANAGER->room[roomNum]->m_TeamIds[i])
+				otherId = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
+		}
 
-	if (g_clients[id]->gameEnd == true && g_clients[otherId]->gameEnd == true) {
-		
-		PACKETMANAGER->LobbyPacket(id);
-		//초기화
-		g_clients[id]->gameEnd = false;
-		g_clients[otherId]->gameEnd = false;
-		g_clients[id]->m_match = false;
-		g_clients[otherId]->m_match = false;
-		g_clients[id]->hp = 3;
-		g_clients[otherId]->hp =3;
+		if (g_clients[id]->gameEnd == true && g_clients[otherId]->gameEnd == true) {
+
+			PACKETMANAGER->LobbyPacket(id);
+			//초기화
+			g_clients[id]->gameEnd = false;
+			g_clients[otherId]->gameEnd = false;
+			g_clients[id]->m_match = false;
+			g_clients[otherId]->m_match = false;
+			g_clients[id]->hp = 3;
+			g_clients[otherId]->hp = 3;
+		}
+
 	}
-
 }
