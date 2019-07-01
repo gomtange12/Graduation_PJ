@@ -3,6 +3,8 @@
 #include "CSceneManager.h"
 #include "CPlayerManager.h"
 
+
+
 CNetWork::CNetWork()
 {
 }
@@ -89,70 +91,135 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_scene *paket = reinterpret_cast<sc_packet_scene *>(ptr);
 		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
-	
-		if (paket->avatar == A) {
-			PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
-			PLAYER->GetPlayer()->SetClientNum(myid);
-			PLAYER->GetOtherPlayer()->SetClientNum(paket->ids);
-			PLAYER->GetPlayer()->m_match = true;
-			
-			CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
-		}
-		else if(paket->avatar == B){
-			PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
-			PLAYER->GetOtherPlayer()->SetClientNum(myid);
-			PLAYER->GetPlayer()->SetClientNum(paket->ids);
-			PLAYER->GetOtherPlayer()->m_match = true;
-			
-			CNetCGameFramework->SetCamera(PLAYER->GetOtherPlayer()->GetCamera());
-			
-		}
-
 		
-		break;
+		//캐릭터 설정 해줘야함 paket->avatar
+		
+		//솔로모드면
+		//if (mod == SOLO) {
+		/*	for (int i = 0; i < 2; ++i) {
+				if (myid == paket->ids[i]) {
+					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+					PLAYER->GetPlayer()->SetClientNum(myid);
+					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+					PLAYER->GetPlayer()->m_match = true;
+				}
+
+				else {
+					PLAYER->GetOtherPlayerMap()[0]->SetClientNum(paket->ids[i]);
+					PLAYER->GetOtherPlayerMap()[0]->NumberByPos(paket->posN[i]);
+				}
+			}*/
+		//}
+		//else if (mod = SQUAD) {
+			//팀모드면
+			for (int i = 0; i < 2; ++i) {
+				if (myid == paket->ids[i]) {
+					PLAYER->GetPlayer()->teamNum = 0;
+					
+				}
+			}
+			if (PLAYER->GetPlayer()->teamNum == 0) {
+				for (int i = 0; i < 2; ++i) {
+					if (myid == paket->ids[i]) {
+						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+						PLAYER->GetPlayer()->SetClientNum(myid);
+						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+						
+					}
+				}
+					
+				for (int i = 0; i < 2; ++i) {
+					if (myid != paket->ids[i]) {
+						PLAYER->GetTeamPlayerMap()[i]->SetClientNum(paket->ids[i]);
+						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
+					}
+				}
+				for (int i = 0; i < 2; ++i) {
+						PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i+2]);
+						PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i+2]);
+				}
+			}
+			else {
+				for (int i = 2; i < 4; ++i) {
+					if (myid == paket->ids[i]) {
+						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+						PLAYER->GetPlayer()->SetClientNum(myid);
+						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+					}
+				}
+				
+				for (int i = 2; i < 4; ++i) {
+					if (myid != paket->ids[i]) {
+						PLAYER->GetTeamPlayerMap()[0]->SetClientNum(paket->ids[i]);
+						PLAYER->GetTeamPlayerMap()[0]->NumberByPos(paket->posN[i]);
+					}
+				}
+				
+				
+				for (int i = 0; i < 2; ++i) {
+					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
+					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
+				}
+
+			}
+	//	}		
+
+		PLAYER->GetPlayer()->m_match = true;
+		CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
+
+		break;			
 	}
-	case SC_PUT_PLAYER:
-	{
-		sc_packet_put_player *pkt = reinterpret_cast<sc_packet_put_player *>(ptr);
-		int id = pkt->id;
 
-		if (id == PLAYER->GetPlayer()->GetClientNum()) {
-
-
-		}
-		else if (id < MAX_USER) {
-
-		}
-		else {
-
-		}
-		break;
-	}
 	case SC_MOVE_PLAYER:
 	{
 		sc_packet_move *pkt = reinterpret_cast<sc_packet_move *>(ptr);
 
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		xmf3Shift = XMFLOAT3(pkt->posX, pkt->posY, pkt->posZ);
-
-		if (pkt->id == PLAYER->GetPlayer()->GetClientNum())
-			PLAYER->GetPlayer()->Move(xmf3Shift, pkt->velocity);
-
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum())
-			PLAYER->GetOtherPlayer()->Move(xmf3Shift, pkt->velocity);
-
+		
+		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
+			PLAYER->GetPlayer()->SetPosition(xmf3Shift);
+			PLAYER->GetPlayer()->SetPlayerState(RUN);
+			break;
+		}
+		else {
+			for (int i = 0; i < 2; ++i) {
+				if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetOtherPlayerMap()[i]->SetPosition(xmf3Shift);
+					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(RUN);
+					break;
+				}
+				else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetTeamPlayerMap()[i]->SetPosition(xmf3Shift);
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(RUN);		
+					break;
+				}
+			}
+		}
 		break;
 	}
 	case SC_VECTOR_INFO:
 	{
 		sc_packet_vector *pkt = reinterpret_cast<sc_packet_vector *>(ptr);
+		
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
 			PLAYER->GetPlayer()->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
 			PLAYER->GetPlayer()->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
+			break;
 		}
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
-			PLAYER->GetOtherPlayer()->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
-			PLAYER->GetOtherPlayer()->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
+		else {
+			for (int i = 0; i < 2; ++i) {
+				if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetOtherPlayerMap()[i]->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
+					PLAYER->GetOtherPlayerMap()[i]->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
+					break;
+				}
+				else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetTeamPlayerMap()[i]->SetLookV(XMFLOAT3(pkt->LposX, pkt->LposY, pkt->LposZ));
+					PLAYER->GetTeamPlayerMap()[i]->SetRightV(XMFLOAT3(pkt->RposX, pkt->RposY, pkt->RposZ));
+					break;
+				}
+			}
 		}
 		break;
 	}
@@ -168,12 +235,12 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -fDistance));
 			}
 			else { //상대가와서 충돌
-				PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -fDistance));
+				PLAYER->GetOtherPlayerMap()[0]->SetPosition(Vector3::Add(PLAYER->GetOtherPlayerMap()[0]->GetPosition(), PLAYER->GetOtherPlayerMap()[0]->GetLookVector(), -fDistance));
 			}
 		}
 		else {
 			if (pkt->id == myid) {
-				PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), PLAYER->GetOtherPlayer()->GetLookVector(), -fDistance));
+				PLAYER->GetOtherPlayerMap()[0]->SetPosition(Vector3::Add(PLAYER->GetOtherPlayerMap()[0]->GetPosition(), PLAYER->GetOtherPlayerMap()[0]->GetLookVector(), -fDistance));
 			}
 			else {
 				PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -fDistance));
@@ -182,9 +249,9 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		}
 	
 		PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
-		PLAYER->GetOtherPlayer()->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
+		PLAYER->GetOtherPlayerMap()[0]->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
 		PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
-		PLAYER->GetOtherPlayer()->SetPlayerState(PlayerState::STUN);
+		PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(PlayerState::STUN);
 		break;
 	}
 	case SC_KEY_INFO: 
@@ -199,13 +266,13 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				PLAYER->GetPlayer()->SetPlayerState(ATTACK);
 
 		}
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
+		if (pkt->id == PLAYER->GetOtherPlayerMap()[0]->GetClientNum()) {
 			if (pkt->jump == true) {
-				PLAYER->GetOtherPlayer()->SetPlayerState(JUMP);
-				PLAYER->GetOtherPlayer()->SetJumpPower(450.0f);
+				PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(JUMP);
+				PLAYER->GetOtherPlayerMap()[0]->SetJumpPower(450.0f);
 			}
 			if (pkt->attack == true) 
-				PLAYER->GetOtherPlayer()->SetPlayerState(ATTACK);
+				PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(ATTACK);
 		}
 		break;
 	}
@@ -214,8 +281,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
 			PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
 		}
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
-			PLAYER->GetOtherPlayer()->SetPlayerState(PlayerState::STUN);
+		if (pkt->id == PLAYER->GetOtherPlayerMap()[0]->GetClientNum()) {
+			PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(PlayerState::STUN);
 		}
 		break;
 	}
@@ -223,16 +290,16 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_lobby *pkt = reinterpret_cast<sc_packet_lobby *>(ptr);
 
-		if (pkt->out == true) {
-			SCENEMANAGER->SetScene(MENUSCENE);
-			PLAYER->GetPlayer()->m_match = false;
-			PLAYER->GetOtherPlayer()->m_match = false;
-			PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));
-			PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
-			PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(440.0f, 50, 1745));
-			PLAYER->GetOtherPlayer()->SetOOBB(PLAYER->GetOtherPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
-			CNetCGameFramework->m_ready = false;
-		}
+		SCENEMANAGER->SetScene(MENUSCENE);
+		PLAYER->GetPlayer()->m_match = false;
+		PLAYER->GetOtherPlayerMap()[0]->m_match = false;
+		PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));
+		PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+		PLAYER->GetOtherPlayerMap()[0]->SetPosition(XMFLOAT3(440.0f, 50, 1745));
+		PLAYER->GetOtherPlayerMap()[0]->SetOOBB(PLAYER->GetOtherPlayerMap()[0]->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+		CNetCGameFramework->m_ready = false;
+			
+		
 		break;
 	}
 	case SC_RESULT_INFO: 
@@ -240,42 +307,18 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		sc_packet_result *pkt = reinterpret_cast<sc_packet_result *>(ptr);
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
 			PLAYER->GetPlayer()->SetPlayerState(SAD);
-			PLAYER->GetOtherPlayer()->SetPlayerState(HAPPY);
+			PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(HAPPY);
 			
 			
 		}
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
-			PLAYER->GetOtherPlayer()->SetPlayerState(SAD);
+		if (pkt->id == PLAYER->GetOtherPlayerMap()[0]->GetClientNum()) {
+			PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(SAD);
 			PLAYER->GetPlayer()->SetPlayerState(HAPPY);
 			
 		}
 		break;
 	}
-	case SC_ALL_POS:
-	{
-		sc_packet_allpos *pkt = reinterpret_cast<sc_packet_allpos *>(ptr);
-		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
-			PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(pkt->posX, PLAYER->GetOtherPlayer()->GetPosition().y,pkt->posZ));
 
-			
-		}
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
-			PLAYER->GetPlayer()->SetPosition(XMFLOAT3(pkt->posX, PLAYER->GetPlayer()->GetPosition().y, pkt->posZ));
-
-		}
-		break;
-	}
-	case SC_REMOVE_PLAYER:
-	{
-		sc_packet_remove_player *pkt = reinterpret_cast<sc_packet_remove_player *>(ptr);
-	/*	if(pkt->id == PLAYER->GetPlayer()->GetClientNum()){
-
-		}
-		if (pkt->id == PLAYER->GetOtherPlayer()->GetClientNum()) {
-
-		}*/
-		break;
-	}
 
 	default:
 		printf("Unknown PACKET type [%d]\n", ptr[1]);
@@ -294,7 +337,7 @@ void CNetWork::MatchPkt()
 	//	pkt->avatar = B;
 	//}
 	pkt->map = PLAYGROUNDMAP;
-	pkt->mod = SOLO;
+	pkt->mod = SQUAD;
 
 	SendPacket();
 }
@@ -318,21 +361,7 @@ void CNetWork::RotePkt(float y)
 
 	SendPacket();
 }
-void CNetWork::PosPkt(const XMFLOAT3& pos)
-{
-	cs_packet_pos *pkt = reinterpret_cast<cs_packet_pos *>(send_buffer);
-	send_wsabuf.len = sizeof(pkt);
-	pkt->size = sizeof(pkt);
-	pkt->type = CS_POS_INFO;
-	pkt->x = pos.x;
-	//pkt->y = pos.y;
-	int z =pos.z;
-	pkt->z = z;
-	cout << "pkt->z " << pkt->z << endl;
 
-	SendPacket();
-	
-}
 void CNetWork::KeyPkt(bool jump, bool attack, bool skill) 
 {
 	cs_packet_key *pkt = reinterpret_cast<cs_packet_key *>(send_buffer);
@@ -350,7 +379,6 @@ void CNetWork::LobbyPkt(bool out)
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_LOBBY_OUT;
-	pkt->out = out;
 
 	SendPacket();
 }

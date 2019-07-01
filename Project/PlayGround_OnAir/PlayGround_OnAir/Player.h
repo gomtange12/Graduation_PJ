@@ -38,7 +38,7 @@ protected:
 	float						m_JumpPower{ 500.0 };
 	//CCamera						*m_pCamera = NULL;
 	//이넘만들기
-	bool						m_isAnimationOver{ false };
+	
 	int							m_collideBox{ 0 };
 	std::shared_ptr<CCamera>	m_pCamera;
 
@@ -56,13 +56,16 @@ protected:
 
 	bool                        m_IsPlayerInConcert = true;
 	bool						XZcollision=false;
+	bool						m_isAnimationOver{ false };
+
 public:
 	bool GetPlayerInConcert() { return m_IsPlayerInConcert; }
 	void SetPlayerInConocert(bool inConcert) { m_IsPlayerInConcert = inConcert; }
 public:
-	bool						m_match = false;
-	bool GetAniOver()			 { return m_isAnimationOver; }
+	bool GetAniOver() { return m_isAnimationOver; }
 	void SetAniOver(bool isOver) { m_isAnimationOver = isOver; }
+	bool						m_match = false;
+	int							teamNum = -1;
 	bool GetCollisionState() { return XZcollision; }
 	void SetCollisionState(bool check) { XZcollision = check; }
 
@@ -152,7 +155,7 @@ public:
 	virtual void OnPrepareRender();
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
 
-	
+	void NumberByPos(int num);
 };
 
 class CAirplanePlayer : public CPlayer
@@ -187,9 +190,7 @@ class CTerrainPlayer : public CPlayer
 {
 public:
 	CTerrainPlayer() = default;
-	//CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext=NULL);
-	CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void *pContext = NULL);
-
+	CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void *pContext=NULL);
 	virtual ~CTerrainPlayer();
 
 public:
@@ -202,8 +203,9 @@ public:
 };
 class COtherPlayers : public CPlayer
 {
+	bool isTeam{ true };
 public:
-	COtherPlayers(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature,E_CHARACTERTYPE type, void *pContext = NULL);
+	COtherPlayers(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void *pContext = NULL);
 	virtual void OnPlayerUpdateCallback(float fTimeElapsed);
 	virtual void OnCameraUpdateCallback(float fTimeElapsed);
 	virtual void Update(float fTimeElapsed);

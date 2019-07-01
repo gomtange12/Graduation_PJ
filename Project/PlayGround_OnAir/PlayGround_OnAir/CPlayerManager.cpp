@@ -18,41 +18,38 @@ CPlayerManager::~CPlayerManager()
 void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
 	//첫번째 플레이어
-	m_pPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature,BASS, pContext);
-	m_pOtherPlayer = std::make_shared<COtherPlayers>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
+	m_pPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
+	m_pOtherPlayer = std::make_shared<COtherPlayers>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext);
 
 
-	//4m_pPlayer->SETPO
-	m_vecPlayerList.reserve(m_MaxPlayerNum);
-	//std::shared_ptr<CTerrainPlayer> m_Guitar;
-	//m_Guitar = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
-	//m_PlayerPool.insert(std::make_pair(GUITAR, m_Guitar));
-
-	//m_PlayerPool.insert(GUITAR, )
-
+	//if (CNETWORK->GetInstance()->)
+	
 	MakeOtherPlayers(pd3dDevice,pd3dCommandList,pd3dGraphicsRootSignature, pContext);
 }
 
 void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
+	//여길 고쳐야함. 
+	//m_pOtherPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext);
+	//m_vecPlayerList.emplace_back(new CTerrainPlayer);
+	//AddPlayer()
 	{
 		m_vecPlayerList.reserve(m_MaxPlayerNum);
 		m_pOtherPlayerMap.reserve(m_MaxPlayerNum);
 		m_pTeamPlayerMap.reserve(m_MaxPlayerNum);
 
-		/*m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, OBJECTMANAGER->GetPlayerResource(KEYBOARD), pContext));
-		m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, OBJECTMANAGER->GetPlayerResource(VOCAL), pContext));
-		m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, OBJECTMANAGER->GetPlayerResource(GUITAR), pContext));
-		m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, OBJECTMANAGER->GetPlayerResource(BASS), pContext));
-
-
-		m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, OBJECTMANAGER->GetPlayerResource(KEYBOARD), pContext));
-		m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, OBJECTMANAGER->GetPlayerResource(BASS), pContext));
-		m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, OBJECTMANAGER->GetPlayerResource(DRUM), pContext));
-		*/
+		//m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext));
+		//m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext));
+		//m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
+		//m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext));
+		//
+		//
+		//m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext));
+		//m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext));
+		//m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext));
 
 		m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext));
-		m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext));
+		m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext));
 		//m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
 		//m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext));
 
@@ -61,22 +58,25 @@ void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsC
 		//m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext));
 		m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext));
 
-
 		//default_random_engine dre;
 		//uniform_int_distribution<> otherUid(200, 600);
 		//uniform_int_distribution<> teamUid(2300, 2800);
 		//uniform_int_distribution<> zUid(1600, 1800);
 
 
-		m_pTeamPlayerMap[0]->SetPosition(XMFLOAT3(2750, 10, 1745));
+		m_pTeamPlayerMap[0]->SetPosition(XMFLOAT3(12750, 10, 1745));
 		//m_pTeamPlayerMap[1]->SetPosition(XMFLOAT3(2750, 10, 1835));
+		//m_pTeamPlayerMap[1]->SetPosition(XMFLOAT3(12750, 10, 1835));
 		//m_pTeamPlayerMap[2]->SetPosition(XMFLOAT3(2560, 10, 1835));
+		//m_pTeamPlayerMap[2]->SetPosition(XMFLOAT3(12560, 10, 1835));
 
-		m_pOtherPlayerMap[0]->SetPosition(XMFLOAT3(600, 10, 1745));
-		m_pOtherPlayerMap[1]->SetPosition(XMFLOAT3(350, 10, 1745));
+
+		m_pOtherPlayerMap[0]->SetPosition(XMFLOAT3(1600, 10, 1745));
+		m_pOtherPlayerMap[1]->SetPosition(XMFLOAT3(1350, 10, 1745));
 		//m_pOtherPlayerMap[2]->SetPosition(XMFLOAT3(600, 10, 1835));
 		//m_pOtherPlayerMap[3]->SetPosition(XMFLOAT3(350, 10, 1835));
-
+		//m_pOtherPlayerMap[2]->SetPosition(XMFLOAT3(11600, 10, 1835));
+		//m_pOtherPlayerMap[3]->SetPosition(XMFLOAT3(11350, 10, 1835));
 
 
 		for (auto&& p : m_pOtherPlayerMap) //팀원이 아닌경우

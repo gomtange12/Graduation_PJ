@@ -28,6 +28,7 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <random>
 
 using namespace std;
 
@@ -158,6 +159,7 @@ enum Result {
 	WIN,
 	ING
 };
+
 namespace Vector3
 {
 	inline XMFLOAT3 XMVectorToFloat3(XMVECTOR& xmvVector)

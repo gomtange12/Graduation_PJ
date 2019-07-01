@@ -177,11 +177,11 @@ void CPlayer::Rotate(float x, float y, float z)
 		m_pCamera->Rotate(x, y,z);
 		if (y != 0.0f)
 		{
-			//CNETWORK->RotePkt(y);
+			CNETWORK->RotePkt(y);
 			//서버연결시 주석
-			XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Up), XMConvertToRadians(y));
-			m_xmf3Look = Vector3::TransformNormal(m_xmf3Look, xmmtxRotate);
-			m_xmf3Right = Vector3::TransformNormal(m_xmf3Right, xmmtxRotate);
+			//XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Up), XMConvertToRadians(y));
+			//m_xmf3Look = Vector3::TransformNormal(m_xmf3Look, xmmtxRotate);
+			//m_xmf3Right = Vector3::TransformNormal(m_xmf3Right, xmmtxRotate);
 			//
 		}
 	}
@@ -209,9 +209,9 @@ void CPlayer::Rotate(float x, float y, float z)
 	}
 
 	//서버연결시 주석
-	m_xmf3Look = Vector3::Normalize(m_xmf3Look);
-	m_xmf3Right = Vector3::CrossProduct(m_xmf3Up, m_xmf3Look, true);
-	m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
+	//m_xmf3Look = Vector3::Normalize(m_xmf3Look);
+	//m_xmf3Right = Vector3::CrossProduct(m_xmf3Up, m_xmf3Look, true);
+	//m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
 	//
 }
 
@@ -278,9 +278,9 @@ void CPlayer::Update(float fTimeElapsed)
 	//m_JumpPower = 0;
 	switch (GetPlayerState())
 	{
-	/*default:
-		SetTrackAnimationSet(0, IDLE);
-		break;*/
+		/*default:
+			SetTrackAnimationSet(0, IDLE);
+			break;*/
 	case IDLE:
 		m_OnAacting = FALSE;
 		if (m_isAnimationOver)
@@ -298,7 +298,7 @@ void CPlayer::Update(float fTimeElapsed)
 		//}
 		//if (!m_isAnimationOver)
 		SetTrackAnimationSet(0, RUN);
-		
+
 		//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 		//m_OnAacting = FALSE;
 		break;
@@ -320,11 +320,11 @@ void CPlayer::Update(float fTimeElapsed)
 		m_xmf3Position.y = m_newYpos;*/
 		m_JumpPower += (m_xmf3Gravity.y * 0.1* fTimeElapsed);
 		m_xmf3Position.y += m_JumpPower * fTimeElapsed;
-		
+
 
 		//m_newYpos = 0;
 		//cout << m_JumpPower << endl;
-		
+
 		SetTrackAnimationSet(0, JUMP);
 		//M_JumpPower = 500;
 		break;
@@ -529,7 +529,47 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr
 	DWORD nCameraMode = (pCamera) ? pCamera->GetMode() : 0x00;
 	if (nCameraMode == THIRD_PERSON_CAMERA) CGameObject::Render(pd3dCommandList, pCamera);
 }
+void CPlayer::NumberByPos(int num) {
 
+	switch (num)
+	{
+	case 1:
+	{
+		m_xmf3Position = XMFLOAT3(2560, 10, 1745);
+		break;
+	}
+	case 2: {
+		m_xmf3Position = XMFLOAT3(2750, 10, 1745);
+		break;
+	}
+	case 3: {
+		m_xmf3Position = XMFLOAT3(2750, 10, 1835);
+		break;
+	}
+	case 4: {
+		m_xmf3Position = XMFLOAT3(2560, 10, 1835);
+		break;
+	}
+	case 5: {
+		m_xmf3Position = XMFLOAT3(600, 10, 1745);
+		break;
+	}
+	case 6: {
+		m_xmf3Position = XMFLOAT3(350, 10, 1745);
+		break;
+	}
+	case 7: {
+		m_xmf3Position = XMFLOAT3(600, 10, 1835);
+		break;
+	}
+	case 8: {
+		m_xmf3Position = XMFLOAT3(350, 10, 1835);
+		break;
+	}
+	default:
+		break;
+	}
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -649,7 +689,6 @@ void CSoundCallbackHandler::HandleCallback(void *pCallbackData)
 #endif
 }
 
-//CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void *pContext)
 	: CPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext)
 {
@@ -679,10 +718,9 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	//if(CNETWORK->GetInstance()->)
 	
 	m_BoundScale = 60.0f;
-	CLoadedModelInfo *pPlayerModel = OBJECTMANAGER->GetPlayerResource(type);
-	//CLoadedModelInfo& a = *OBJECTMANAGER->GetPlayerResource(BASS);
-		// = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
-	//const CLoadedModelInfo& p = OBJECTMANAGER->GetPlayerResource(type);
+	CLoadedModelInfo* pPlayerModel = OBJECTMANAGER->GetPlayerResource(type); 
+	//CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
+
 	SetChild(pPlayerModel->m_pModelRootObject, true);
 	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
 	//if(m_pMesh!=nullptr)
@@ -796,7 +834,7 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
 	XMFLOAT3 xmf3Shift{ 0.0,0.0,0.0 };
-
+	//cout<<endl<<"플레이어"<<xmf3PlayerPosition.x<<", "
 	/*int num = 0;
 	switch (SCENEMANAGER->GetSceneType())
 	{
@@ -903,8 +941,9 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	}
 
 	//m_ObjType = DYNAMIC;
-	CLoadedModelInfo *pPlayerModel// = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
-		= OBJECTMANAGER->GetPlayerResource(type);
+	CLoadedModelInfo *pPlayerModel = OBJECTMANAGER->GetPlayerResource(type);
+		//CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
+
 
 	SetChild(pPlayerModel->m_pModelRootObject, true);
 	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);

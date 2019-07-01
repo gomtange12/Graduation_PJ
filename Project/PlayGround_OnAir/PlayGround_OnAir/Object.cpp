@@ -321,70 +321,70 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 	maxLength = m_fLength;// -0.18f;
 	fPosition = 0.0f;
 	float m_fLooftoOnce = 0.f;
-	
+
 	switch (m_nType)
 	{
-		case ANIMATION_TYPE_LOOP:
-		{
+	case ANIMATION_TYPE_LOOP:
+	{
 #ifdef _WITH_ANIMATION_INTERPOLATION
-			//PLAYER->GetPlayer()->SetAllowKey(true);
-			m_fPosition = fTrackPosition;
-			m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]); //¿ø·¡²¨
-			//if (PLAYER->GetPlayer()->GetPlayerState() == RUN)
-			//{
-			//	if (m_fPosition >= m_fLength)
-			//	{
-			//		PLAYER->GetPlayer()->SetPlayerState(IDLE);
+		//PLAYER->GetPlayer()->SetAllowKey(true);
+		m_fPosition = fTrackPosition;
+		m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //¿ø·¡²¨
+		//if (PLAYER->GetPlayer()->GetPlayerState() == RUN)
+		//{
+		//	if (m_fPosition >= m_fLength)
+		//	{
+		//		PLAYER->GetPlayer()->SetPlayerState(IDLE);
 
-			//		//if (PLAYER->GetPlayer()->GetAniOver())
-			//		//	PLAYER->GetPlayer()->SetPlayerState(IDLE);
-			//	}
-			//}
-			//if (PLAYER->GetPlayer()->GetPlayerState() == IDLE)
-			//PLAYER->GetPlayer()->SetAniOver(true);
-			 //m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
-			//m_fPosition = fmod(fTrackPosition, m_fLength); if (m_fPosition < 0) m_fPosition += m_fLength;
-			//m_fPosition = fTrackPosition - int(fTrackPosition / m_fLength) * m_fLength;
-			//m_fPosition += 0.00001;
+		//		//if (PLAYER->GetPlayer()->GetAniOver())
+		//		//	PLAYER->GetPlayer()->SetPlayerState(IDLE);
+		//	}
+		//}
+		//if (PLAYER->GetPlayer()->GetPlayerState() == IDLE)
+		//PLAYER->GetPlayer()->SetAniOver(true);
+		 //m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1]) * m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms-1];
+		//m_fPosition = fmod(fTrackPosition, m_fLength); if (m_fPosition < 0) m_fPosition += m_fLength;
+		//m_fPosition = fTrackPosition - int(fTrackPosition / m_fLength) * m_fLength;
+		//m_fPosition += 0.00001;
 #else
-			m_nCurrentKey++;
-			if (m_nCurrentKey >= m_nKeyFrameTransforms) m_nCurrentKey = 0;
+		m_nCurrentKey++;
+		if (m_nCurrentKey >= m_nKeyFrameTransforms) m_nCurrentKey = 0;
 #endif
 
-			break;
+		break;
+	}
+	case ANIMATION_TYPE_ONCE:
+		//m_fPosition = fTrackPosition;
+		//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //¿ø·¡²¨
+	//	PLAYER->GetPlayer()->SetAllowKey(false);
+	//	PLAYER->GetOtherPlayer()->SetAllowKey(false);
+		PLAYER->GetPlayer()->SetAniOver(false);
+
+		m_fPosition += 0.00001;
+
+		//sol) m_fPosition += fDelta * speed; ÇÁ·¹ÀÓ °íÁ¤½Ã
+
+		if (m_fPosition + 0.05 > m_fLength)
+		{
+
+
+			m_fPosition = 0.0f;
+			//fPosition = 0.0f;
+			//fTrackPosition = 0.f;
+			//oncePosition = 0.0f;
+			maxLength = 0.0f;
+			PLAYER->GetPlayer()->SetAllowKey(true);
+			PLAYER->GetPlayer()->SetAniOver(true);
+			if (PLAYER->GetPlayer()->GetAniOver())
+				PLAYER->GetPlayer()->SetPlayerState(IDLE);
+			//PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
+
 		}
-		case ANIMATION_TYPE_ONCE:
-			//m_fPosition = fTrackPosition;
-			//m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTransformTimes[m_nKeyFrameTransforms - 1]); //¿ø·¡²¨
-		//	PLAYER->GetPlayer()->SetAllowKey(false);
-		//	PLAYER->GetOtherPlayer()->SetAllowKey(false);
-			PLAYER->GetPlayer()->SetAniOver(false);
+		//CPlayer::m_PlayerState = CPlayer::PlayerState::IDLE;
+		//CPlayer::SetPlayerState(IDLE);
+		//PLAYER->GetPlayer()->SetPlayerState(PLAYER->GetPlayer()->PlayerState::IDLE);
 
-			m_fPosition += 0.00001;
-
-			//sol) m_fPosition += fDelta * speed; ÇÁ·¹ÀÓ °íÁ¤½Ã
-		
-			if (m_fPosition + 0.05 > m_fLength)
-			{
-				
-				
- 				m_fPosition = 0.0f;
-				//fPosition = 0.0f;
-				//fTrackPosition = 0.f;
-				//oncePosition = 0.0f;
-				maxLength = 0.0f;
-				PLAYER->GetPlayer()->SetAllowKey(true);
-				PLAYER->GetPlayer()->SetAniOver(true);
-				if(PLAYER->GetPlayer()->GetAniOver())
- 					PLAYER->GetPlayer()->SetPlayerState(IDLE);
-				//PLAYER->GetOtherPlayer()->SetPlayerState(IDLE);
-				
-			}
-			//CPlayer::m_PlayerState = CPlayer::PlayerState::IDLE;
-			//CPlayer::SetPlayerState(IDLE);
-			//PLAYER->GetPlayer()->SetPlayerState(PLAYER->GetPlayer()->PlayerState::IDLE);
-			
-			break;
+		break;
 
 	}
 

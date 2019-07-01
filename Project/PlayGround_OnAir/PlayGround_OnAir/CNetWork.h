@@ -4,12 +4,16 @@
 #include "Player.h"
 #include "GameFramework.h"
 //#include "..\..\IOCPServer\IOCPServer\Protocol.h"
-#include "..\..\천기\IOCPServer\IOCPServer\Protocol.h"
+//#include "..\..\IOCPServer\IOCPServer\Protocol.h"
+#include "..\..\천기\중간발표이후\IOCPServer\IOCPServer\Protocol.h"
 
-#define IP_ADDR "192.168.22.79"
+
+//#define IP_ADDR "192.168.22.79"
+#define IP_ADDR "127.0.0.1"
 
 class CNetWork : public CSingleTonBase<CNetWork>
 {
+	
 private:
 	//Server
 	WSADATA	wsadata;
@@ -45,7 +49,7 @@ public:
 	void MatchPkt();
 	void StatePkt(DWORD state);
 	void RotePkt(float y);
-	void PosPkt(const XMFLOAT3& pos);
+	
 	void KeyPkt(bool jump, bool attack, bool skill);
 	void LobbyPkt(bool out);
 };
