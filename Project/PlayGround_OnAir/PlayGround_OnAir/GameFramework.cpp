@@ -384,14 +384,23 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 	switch (nMessageID)
 	{
 		case WM_LBUTTONDOWN:
-			::SetCapture(hWnd);
 			::GetCursorPos(&m_LeftCursorPos);
+			::ScreenToClient(hWnd, &m_LeftCursorPos);
 
-			std::cout <<"cursorPos: "<< m_LeftCursorPos.x << ", " << m_LeftCursorPos.y << endl;
+			std::cout <<"변환전cursorPos: "<< m_LeftCursorPos.x << ", " << m_LeftCursorPos.y << endl;
 			if (SCENEMANAGER->GetSceneType() == MENUSCENE)
 			{
-				//PLAYER-> m_LeftCursorPos.x
+				cout << "메뉴신" << endl;
+				int num{ 0 };
+				//E_CHARACTERTYPE type = PLAYER->CheckSceneCharacter(m_LeftCursorPos.x, m_LeftCursorPos.y);
+				//PLAYER->SetCharacterArray(type, num);
+				E_CHARACTERTYPE type;
+				
+				type = PLAYER->CheckSceneCharacter(m_LeftCursorPos);
+				if (num > 5) num = 0;
+				num++;
 			}
+			break;
 		case WM_RBUTTONDOWN:
 			::SetCapture(hWnd);
 			::GetCursorPos(&m_ptOldCursorPos);

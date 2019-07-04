@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 #include "MyData.h"
 class CPlayer;
 class CTerrainPlayer;
@@ -16,10 +17,17 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 	std::vector<COtherPlayers*>								m_pTeamPlayerMap;
 	//array<E_CHARACTERTYPE, 5> m_character_Array ;
 	//array<E_CHARACTERTYPE, 5> m_Othercharacter_Array;
-	E_CHARACTERTYPE m_character_Array[5];
-	E_CHARACTERTYPE m_Othercharacter_Array[5];
+	E_CHARACTERTYPE m_characterArray[5];
+	E_CHARACTERTYPE m_OthercharacterArray[5];
 
 public:
+	E_CHARACTERTYPE* GetCharacterArray() { return m_characterArray; }
+	E_CHARACTERTYPE* GetOtherCharacterArray() { return 	m_OthercharacterArray; }
+
+	E_CHARACTERTYPE CheckSceneCharacter(const POINT& pos);
+	void SetCharacterArray(E_CHARACTERTYPE type, int num) { m_characterArray[num] = type; }
+	void SetOtherCharacterArray(E_CHARACTERTYPE type, int num) { m_OthercharacterArray[num] = type; }
+
 	std::vector<COtherPlayers*>		GetOtherPlayerMap() { return m_pOtherPlayerMap; }
 	std::vector<COtherPlayers*>		GetTeamPlayerMap() { return m_pTeamPlayerMap; }
 

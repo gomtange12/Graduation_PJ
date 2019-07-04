@@ -5,6 +5,29 @@
 #include "CPlayerManager.h"
 #include "Player.h"
 #include "CNetWork.h"
+E_CHARACTERTYPE CPlayerManager::CheckSceneCharacter(const POINT& pos)
+{
+	//int size{ 50 };
+
+	XMFLOAT2 cursorpos{
+						  2.0f * (static_cast<float>(pos.x) / static_cast<float>(FRAME_BUFFER_WIDTH)) - 1.0f
+						, -(2.0f * (static_cast<float>(pos.y) / static_cast<float>(FRAME_BUFFER_HEIGHT)) - 1.0f) };
+
+	std::cout << "변환후cursorPos: " << cursorpos.x << ", " << cursorpos.y << endl;
+
+	if (cursorpos.x > 0.35 && cursorpos.x < 0.55 && cursorpos.y>-0.2 && cursorpos.y < -0.025)
+	{
+		cout << "BASS 선택" << endl;
+		return BASS;
+	}
+	else if (cursorpos.x > 0.55 && cursorpos.x < 0.75 && cursorpos.y>-0.2 && cursorpos.y < -0.025)
+	{
+		cout << "키보드 선택" << endl;
+
+		return KEYBOARD;
+	}
+	else return GUITAR;
+}
 CPlayerManager::CPlayerManager()
 {
 	m_pPlayer = nullptr;
