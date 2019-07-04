@@ -33,7 +33,7 @@ public:
 	std::shared_ptr<COtherPlayers> GetOtherPlayer() { return m_pOtherPlayer; }
 
 	//std::shared_ptr<CTerrainPlayer> SetPlayer() { return m_pPlayer; }
-	int m_MaxPlayerNum{ 8 };
+	int m_MaxPlayerNum{ 4 };
 	void AddPlayer(CTerrainPlayer* playerObj, E_PLAYERTYPE type, E_CHARACTERTYPE charactertype);
 
 	void SetPlayerResource();

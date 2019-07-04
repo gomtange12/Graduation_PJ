@@ -233,25 +233,25 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		if (PLAYER->GetPlayer()->GetClientNum() == myid) {
 			if (pkt->id == myid) { //내가가서 충돌
 				PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -fDistance));
+				PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
+				PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
+				break;
 			}
-			else { //상대가와서 충돌
-				PLAYER->GetOtherPlayerMap()[0]->SetPosition(Vector3::Add(PLAYER->GetOtherPlayerMap()[0]->GetPosition(), PLAYER->GetOtherPlayerMap()[0]->GetLookVector(), -fDistance));
+			for (int i = 0; i < 2; ++i) {
+				if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetOtherPlayerMap()[i]->SetPosition(Vector3::Add(PLAYER->GetOtherPlayerMap()[i]->GetPosition(), PLAYER->GetOtherPlayerMap()[i]->GetLookVector(), -fDistance));
+					PLAYER->GetOtherPlayerMap()[i]->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
+					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
+					break;
+				}
+				else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetTeamPlayerMap()[i]->SetPosition(Vector3::Add(PLAYER->GetTeamPlayerMap()[i]->GetPosition(), PLAYER->GetTeamPlayerMap()[i]->GetLookVector(), -fDistance));
+					PLAYER->GetTeamPlayerMap()[i]->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
+					break;
+				}
 			}
 		}
-		else {
-			if (pkt->id == myid) {
-				PLAYER->GetOtherPlayerMap()[0]->SetPosition(Vector3::Add(PLAYER->GetOtherPlayerMap()[0]->GetPosition(), PLAYER->GetOtherPlayerMap()[0]->GetLookVector(), -fDistance));
-			}
-			else {
-				PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -fDistance));
-
-			}
-		}
-	
-		PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
-		PLAYER->GetOtherPlayerMap()[0]->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
-		PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
-		PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(PlayerState::STUN);
 		break;
 	}
 	case SC_KEY_INFO: 

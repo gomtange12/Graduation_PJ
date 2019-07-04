@@ -164,22 +164,42 @@ bool ObjManager::collisionPlayerByPlayer(int id)
 	
 	int roomNum = g_clients[id]->roomNumber;
 	int otherId;
-	for (int i = 0; i < SOLO_RNUM; ++i) {
-		if (id != ROOMMANAGER->room[roomNum]->m_SoloIds[i])
-			otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
-	}
-			
-	if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //충돌!
-	{
-		PACKETMANAGER->CollisionPacket(id, otherId);
-		g_clients[otherId]->m_xmf3Position = Vector3::Add(g_clients[otherId]->m_xmf3Position, g_clients[otherId]->m_xmf3Look, -fCollDistance);
-		g_clients[otherId]->m_xmOOBB.Center = XMFLOAT3(g_clients[otherId]->m_xmf3Position.x, g_clients[otherId]->m_xmf3Position.y, g_clients[otherId]->m_xmf3Position.z);
-		return true;
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			if (id != ROOMMANAGER->room[roomNum]->m_SoloIds[i])
+				otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
+
+			if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //충돌!
+			{
+				PACKETMANAGER->CollisionPacket(id, otherId);
+				g_clients[otherId]->m_xmf3Position = Vector3::Add(g_clients[otherId]->m_xmf3Position, g_clients[otherId]->m_xmf3Look, -fCollDistance);
+				g_clients[otherId]->m_xmOOBB.Center = XMFLOAT3(g_clients[otherId]->m_xmf3Position.x, g_clients[otherId]->m_xmf3Position.y, g_clients[otherId]->m_xmf3Position.z);
+				return true;
+			}
+		}
+
 	}
 	else {
-		
-		return false;
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			if (id != ROOMMANAGER->room[roomNum]->m_TeamIds[i])
+				otherId = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
+
+			if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //충돌!
+			{
+				PACKETMANAGER->CollisionPacket(id, otherId);
+				g_clients[otherId]->m_xmf3Position = Vector3::Add(g_clients[otherId]->m_xmf3Position, g_clients[otherId]->m_xmf3Look, -fCollDistance);
+				g_clients[otherId]->m_xmOOBB.Center = XMFLOAT3(g_clients[otherId]->m_xmf3Position.x, g_clients[otherId]->m_xmf3Position.y, g_clients[otherId]->m_xmf3Position.z);
+				return true;
+			}
+		}
+
 	}
+	
+
+	return false;
+			
+		
+	
 	
 	
 }

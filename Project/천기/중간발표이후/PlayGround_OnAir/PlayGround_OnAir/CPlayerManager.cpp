@@ -56,18 +56,15 @@ void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsC
 
 
 		m_pTeamPlayerMap[0]->SetPosition(XMFLOAT3(12750, 10, 1745));
-		m_pTeamPlayerMap[1]->SetPosition(XMFLOAT3(2750, 10, 1835));
-		//m_pTeamPlayerMap[1]->SetPosition(XMFLOAT3(12750, 10, 1835));
+		m_pTeamPlayerMap[1]->SetPosition(XMFLOAT3(12750, 10, 1835));
+		//m_pTeamPlayerMap[1]->SetPosition(XMFLOAT3(2750, 10, 1835));
 		//m_pTeamPlayerMap[2]->SetPosition(XMFLOAT3(2560, 10, 1835));
-		//m_pTeamPlayerMap[2]->SetPosition(XMFLOAT3(12560, 10, 1835));
 
 
 		m_pOtherPlayerMap[0]->SetPosition(XMFLOAT3(1600, 10, 1745));
 		m_pOtherPlayerMap[1]->SetPosition(XMFLOAT3(1350, 10, 1745));
 		//m_pOtherPlayerMap[2]->SetPosition(XMFLOAT3(600, 10, 1835));
 		//m_pOtherPlayerMap[3]->SetPosition(XMFLOAT3(350, 10, 1835));
-		//m_pOtherPlayerMap[2]->SetPosition(XMFLOAT3(11600, 10, 1835));
-		//m_pOtherPlayerMap[3]->SetPosition(XMFLOAT3(11350, 10, 1835));
 
 
 		for (auto&& p : m_pOtherPlayerMap) //팀원이 아닌경우
