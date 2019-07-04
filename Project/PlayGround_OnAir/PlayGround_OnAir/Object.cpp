@@ -677,14 +677,7 @@ CGameObject::CGameObject(int nMaterials) : CGameObject()
 		m_ppMaterials = new CMaterial*[m_nMaterials];
 		for(int i = 0; i < m_nMaterials; i++) m_ppMaterials[i] = NULL;
 	}
-	while (AllObjectList[ObjIndex] != nullptr)
-	{
-		ObjIndex %= MAXOBJECTNUM;
-		++ObjIndex;
-	}
-	AllObjectList[ObjIndex] = this;
-	myIdx = ObjIndex;
-	++ObjIndex;
+
 }
 
 CGameObject::~CGameObject()

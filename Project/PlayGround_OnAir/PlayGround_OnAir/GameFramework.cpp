@@ -384,9 +384,14 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 	switch (nMessageID)
 	{
 		case WM_LBUTTONDOWN:
-		/*	::SetCapture(hWnd);
-			::GetCursorPos(&m_ptRightOldCursorPos);*/
+			::SetCapture(hWnd);
+			::GetCursorPos(&m_LeftCursorPos);
 
+			std::cout <<"cursorPos: "<< m_LeftCursorPos.x << ", " << m_LeftCursorPos.y << endl;
+			if (SCENEMANAGER->GetSceneType() == MENUSCENE)
+			{
+				//PLAYER-> m_LeftCursorPos.x
+			}
 		case WM_RBUTTONDOWN:
 			::SetCapture(hWnd);
 			::GetCursorPos(&m_ptOldCursorPos);
@@ -653,6 +658,7 @@ void CGameFramework::ProcessInput()
 		{
 		
 			//PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+			PLAYER->GetPlayer()->SetPlayerState(RUN);
 
 			dwDirection |= DIR_FORWARD;
 
@@ -660,17 +666,20 @@ void CGameFramework::ProcessInput()
 		}
 		if (pKeysBuffer[0x53] & 0xF0)
 		{
-			
+			PLAYER->GetPlayer()->SetPlayerState(RUN);
+
 			dwDirection |= DIR_BACKWARD;
 		}
 		if (pKeysBuffer[0x41] & 0xF0)
 		{
-			
+			PLAYER->GetPlayer()->SetPlayerState(RUN);
+
 			dwDirection |= DIR_LEFT;
 		}
 		if (pKeysBuffer[0x44] & 0xF0)
 		{
-			
+			PLAYER->GetPlayer()->SetPlayerState(RUN);
+
 			dwDirection |= DIR_RIGHT;
 		}
 

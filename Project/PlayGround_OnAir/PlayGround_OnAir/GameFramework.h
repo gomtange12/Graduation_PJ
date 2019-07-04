@@ -101,6 +101,8 @@ private:
 
 	POINT						m_ptOldCursorPos;
 	POINT						m_ptRightOldCursorPos;
+	POINT						m_LeftCursorPos;
+
 	//COtherPlayers				*pOtherPlayer = nullptr;
 
 	_TCHAR						m_pszFrameRate[70];

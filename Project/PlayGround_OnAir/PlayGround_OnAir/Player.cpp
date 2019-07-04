@@ -714,9 +714,11 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	//if(CNETWORK->GetInstance()->)
 
 	m_BoundScale = 60.0f;
-	CLoadedModelInfo* pPlayerModel = OBJECTMANAGER->GetPlayerResource(type);
+	CLoadedModelInfo* pPlayerModel = pPlayerModel = OBJECTMANAGER->GetPlayerResource(type);
+
 	//CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
 
+	
 	SetChild(pPlayerModel->m_pModelRootObject, true);
 	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
 	//if(m_pMesh!=nullptr)
@@ -937,10 +939,11 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	}
 
 	//m_ObjType = DYNAMIC;
-	CLoadedModelInfo *pPlayerModel = OBJECTMANAGER->GetPlayerResource(type);
+	//CLoadedModelInfo *pPlayerModel = OBJECTMANAGER->GetPlayerResource(type);
 	//CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
-
-
+	CLoadedModelInfo* pPlayerModel =  OBJECTMANAGER->GetOhterPlayerResource(type);
+	
+	
 	SetChild(pPlayerModel->m_pModelRootObject, true);
 	m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
 

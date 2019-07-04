@@ -74,11 +74,24 @@ void CObjectManager::LoadPlayerResource(ID3D12Device *pd3dDevice, ID3D12Graphics
 	CLoadedModelInfo* vocalResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
 	CLoadedModelInfo* bassResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);
 
+	CLoadedModelInfo* otherGuitarResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/guitarTest2.bin", NULL, true);
+	CLoadedModelInfo* otherKeyBoardResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/KeyT2.bin", NULL, true);
+	CLoadedModelInfo* otherDrumResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/DrumTest2.bin", NULL, true);
+	CLoadedModelInfo* otherVocalResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/MicTest2.bin", NULL, true);
+	CLoadedModelInfo* otherBassResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/basstest2.bin", NULL, true);
+
+
 	m_PlayerResourceMap.insert(std::make_pair(GUITAR, guitarResource));
 	m_PlayerResourceMap.insert(std::make_pair(KEYBOARD, keyBoardResource));
 	m_PlayerResourceMap.insert(std::make_pair(BASS, bassResource));
 	m_PlayerResourceMap.insert(std::make_pair(DRUM, DrumResource));
 	m_PlayerResourceMap.insert(std::make_pair(VOCAL, vocalResource));
+
+	m_OtherPlayerResourceMap.insert(std::make_pair(GUITAR, otherGuitarResource));
+	m_OtherPlayerResourceMap.insert(std::make_pair(KEYBOARD, otherKeyBoardResource));
+	m_OtherPlayerResourceMap.insert(std::make_pair(BASS, otherBassResource));
+	m_OtherPlayerResourceMap.insert(std::make_pair(DRUM, otherDrumResource));
+	m_OtherPlayerResourceMap.insert(std::make_pair(VOCAL, otherVocalResource));
 
 
 }
@@ -98,4 +111,20 @@ CLoadedModelInfo* CObjectManager::GetPlayerResource(E_CHARACTERTYPE type)
 		return m_PlayerResourceMap.begin()->second;
 	}
 
+}
+
+CLoadedModelInfo * CObjectManager::GetOhterPlayerResource(E_CHARACTERTYPE type)
+{
+	auto iter = m_OtherPlayerResourceMap.find(type);
+
+	if (iter != m_OtherPlayerResourceMap.end())
+	{
+		return (*iter).second;
+		//m_ObjMap[objType].begin();
+
+	}
+	else //예외처리
+	{
+		return m_OtherPlayerResourceMap.begin()->second;
+	}
 }

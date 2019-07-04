@@ -14,7 +14,10 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 	std::map<E_PLAYERTYPE, vector<CTerrainPlayer*>>			m_PlayerMap;
 	std::vector<COtherPlayers*>								m_pOtherPlayerMap;
 	std::vector<COtherPlayers*>								m_pTeamPlayerMap;
-
+	//array<E_CHARACTERTYPE, 5> m_character_Array ;
+	//array<E_CHARACTERTYPE, 5> m_Othercharacter_Array;
+	E_CHARACTERTYPE m_character_Array[5];
+	E_CHARACTERTYPE m_Othercharacter_Array[5];
 
 public:
 	std::vector<COtherPlayers*>		GetOtherPlayerMap() { return m_pOtherPlayerMap; }
