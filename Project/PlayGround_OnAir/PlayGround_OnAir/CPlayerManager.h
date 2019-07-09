@@ -19,10 +19,17 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 	//array<E_CHARACTERTYPE, 5> m_Othercharacter_Array;
 	E_CHARACTERTYPE m_characterArray[5];
 	E_CHARACTERTYPE m_OthercharacterArray[5];
+	std::shared_ptr<CTerrainPlayer>							m_pGuitarPlayer = nullptr;
+	std::shared_ptr<CTerrainPlayer>							m_pBassPlayer = nullptr;
+	std::shared_ptr<CTerrainPlayer>							m_pKeyboardPlayer = nullptr;
+	std::shared_ptr<CTerrainPlayer>							m_pDrumPlayer = nullptr;
+	std::shared_ptr<CTerrainPlayer>							m_pVocalPlayer = nullptr;
+	std::map<E_CHARACTERTYPE, std::shared_ptr<CTerrainPlayer>>			m_SharedPlayerMap;
 
 public:
 	E_CHARACTERTYPE* GetCharacterArray() { return m_characterArray; }
 	E_CHARACTERTYPE* GetOtherCharacterArray() { return 	m_OthercharacterArray; }
+	void ChangePlayer(E_CHARACTERTYPE type, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 
 	E_CHARACTERTYPE CheckSceneCharacter(const POINT& pos);
 	void SetCharacterArray(E_CHARACTERTYPE type, int num) { m_characterArray[num] = type; }

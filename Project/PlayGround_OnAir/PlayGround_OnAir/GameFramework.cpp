@@ -395,9 +395,16 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 				//E_CHARACTERTYPE type = PLAYER->CheckSceneCharacter(m_LeftCursorPos.x, m_LeftCursorPos.y);
 				//PLAYER->SetCharacterArray(type, num);
 				E_CHARACTERTYPE type;
-				
+
 				type = PLAYER->CheckSceneCharacter(m_LeftCursorPos);
-				if (num > 5) num = 0;
+				PLAYER->ChangePlayer(type, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+				PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+				//if (type == KEYBOARD)
+				//	PLAYER->GetPlayer()->SetMesh(m_pKeyBoardModel->m_pModelRootObject->m_pMesh);
+																		   //PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
+				//PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+
+				SetCamera(PLAYER->GetPlayer()->GetCamera()); if (num > 5) num = 0;
 				num++;
 			}
 			break;
