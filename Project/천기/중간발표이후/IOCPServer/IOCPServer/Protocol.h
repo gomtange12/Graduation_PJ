@@ -99,6 +99,7 @@ struct sc_packet_collision {
 	BYTE size;
 	BYTE type;
 	char id;
+	char otherid;
 	bool check;
 };
 struct sc_packet_key {

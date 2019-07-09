@@ -127,14 +127,12 @@ void ObjManager::MovePkt(int id, unsigned char *packet)
 	if (DIR_RIGHT & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Right, fDistance);}
 
 	player->move(xmf3Shift, true);
-	
+	g_clients[id]->m_xmOOBB.Center = XMFLOAT3(g_clients[id]->m_xmf3Position.x, g_clients[id]->m_xmf3Position.y, g_clients[id]->m_xmf3Position.z);
 	bool coolCheck = collisionPlayerByPlayer(id);
-	std::cout << g_clients[id]->m_xmf3Look.x << " " << g_clients[id]->m_xmf3Look.z << std::endl;
-	std::cout << player->m_xmf3Position.x << " " << player->m_xmf3Position.z << std::endl;
 
-	
 	if (coolCheck == true) {
-		g_clients[id]->m_xmf3Position = Vector3::Add(g_clients[id]->m_xmf3Position, g_clients[id]->m_xmf3Look, -fCollDistance);
+		xmf3Shift = Vector3::Add(XMFLOAT3(0, 0, 0), g_clients[id]->m_xmf3Look, -fCollDistance);
+		player->move(xmf3Shift, true);
 		g_clients[id]->m_xmOOBB.Center = XMFLOAT3(g_clients[id]->m_xmf3Position.x, g_clients[id]->m_xmf3Position.y, g_clients[id]->m_xmf3Position.z);
 	}
 	PACKETMANAGER->MovePacket(id);
@@ -163,45 +161,38 @@ bool ObjManager::collisionPlayerByPlayer(int id)
 {
 	
 	int roomNum = g_clients[id]->roomNumber;
-	int otherId;
+	int otherId=-1;
 	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
 		for (int i = 0; i < SOLO_RNUM; ++i) {
-			if (id != ROOMMANAGER->room[roomNum]->m_SoloIds[i])
+			if (id != ROOMMANAGER->room[roomNum]->m_SoloIds[i]) {
 				otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
-
-			if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //面倒!
-			{
-				PACKETMANAGER->CollisionPacket(id, otherId);
-				g_clients[otherId]->m_xmf3Position = Vector3::Add(g_clients[otherId]->m_xmf3Position, g_clients[otherId]->m_xmf3Look, -fCollDistance);
-				g_clients[otherId]->m_xmOOBB.Center = XMFLOAT3(g_clients[otherId]->m_xmf3Position.x, g_clients[otherId]->m_xmf3Position.y, g_clients[otherId]->m_xmf3Position.z);
-				return true;
+				if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //面倒!
+				{
+					PACKETMANAGER->CollisionPacket(id, otherId);
+					g_clients[otherId]->m_xmf3Position = Vector3::Add(g_clients[otherId]->m_xmf3Position, g_clients[otherId]->m_xmf3Look, -fCollDistance);
+					g_clients[otherId]->m_xmOOBB.Center = XMFLOAT3(g_clients[otherId]->m_xmf3Position.x, g_clients[otherId]->m_xmf3Position.y, g_clients[otherId]->m_xmf3Position.z);
+					return true;
+				}
 			}
 		}
 
 	}
 	else {
 		for (int i = 0; i < TEAM_RNUM; ++i) {
-			if (id != ROOMMANAGER->room[roomNum]->m_TeamIds[i])
+			if (id != ROOMMANAGER->room[roomNum]->m_TeamIds[i]) {
 				otherId = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
-
-			if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //面倒!
-			{
-				PACKETMANAGER->CollisionPacket(id, otherId);
-				g_clients[otherId]->m_xmf3Position = Vector3::Add(g_clients[otherId]->m_xmf3Position, g_clients[otherId]->m_xmf3Look, -fCollDistance);
-				g_clients[otherId]->m_xmOOBB.Center = XMFLOAT3(g_clients[otherId]->m_xmf3Position.x, g_clients[otherId]->m_xmf3Position.y, g_clients[otherId]->m_xmf3Position.z);
-				return true;
+				if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //面倒!
+				{
+					PACKETMANAGER->CollisionPacket(id, otherId);
+					g_clients[otherId]->m_xmf3Position = Vector3::Add(g_clients[otherId]->m_xmf3Position, g_clients[otherId]->m_xmf3Look, -fCollDistance);
+					g_clients[otherId]->m_xmOOBB.Center = XMFLOAT3(g_clients[otherId]->m_xmf3Position.x, g_clients[otherId]->m_xmf3Position.y, g_clients[otherId]->m_xmf3Position.z);
+					return true;
+				}
 			}
 		}
 
 	}
-	
-
-	return false;
-			
-		
-	
-	
-	
+	return false;		
 }
 void ObjManager::KeyPkt(int id, unsigned char *packet)
 {

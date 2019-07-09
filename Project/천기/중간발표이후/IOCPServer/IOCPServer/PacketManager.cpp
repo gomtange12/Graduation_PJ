@@ -160,10 +160,22 @@ void PacketManager::CollisionPacket(int id, int otherId) {
 	pkt.size = sizeof(sc_packet_collision);
 	pkt.type = SC_COLLISION;
 	pkt.id = id;
+	pkt.otherid = otherId;
 	pkt.check = true;
+	
+	int roomNum = objectManager->GetPlayer(id)->roomNumber;
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
 
-	SendPacket(id, &pkt);
-	SendPacket(otherId, &pkt);
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+
+		}
+	}
 }
 void PacketManager::KeyPacket(int id, bool jump, bool attack, bool skill)
 {

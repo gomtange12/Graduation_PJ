@@ -228,23 +228,23 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		sc_packet_collision *pkt = reinterpret_cast<sc_packet_collision *>(ptr);
 		
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		float fDistance = 40.0f;
+		float fDistance = 5.25f;
 
 		if (PLAYER->GetPlayer()->GetClientNum() == myid) {
-			if (pkt->id == myid) { //내가가서 충돌
+			if (pkt->id == myid || pkt->otherid == myid) { //내가가서 충돌
 				PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -fDistance));
 				PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
 				PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
 				break;
 			}
 			for (int i = 0; i < 2; ++i) {
-				if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
+				if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum() || pkt->otherid == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
 					PLAYER->GetOtherPlayerMap()[i]->SetPosition(Vector3::Add(PLAYER->GetOtherPlayerMap()[i]->GetPosition(), PLAYER->GetOtherPlayerMap()[i]->GetLookVector(), -fDistance));
 					PLAYER->GetOtherPlayerMap()[i]->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
 					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
 					break;
 				}
-				else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+				else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum() || pkt->otherid == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
 					PLAYER->GetTeamPlayerMap()[i]->SetPosition(Vector3::Add(PLAYER->GetTeamPlayerMap()[i]->GetPosition(), PLAYER->GetTeamPlayerMap()[i]->GetLookVector(), -fDistance));
 					PLAYER->GetTeamPlayerMap()[i]->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
 					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
