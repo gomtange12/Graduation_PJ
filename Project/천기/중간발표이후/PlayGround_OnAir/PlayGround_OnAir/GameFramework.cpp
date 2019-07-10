@@ -468,6 +468,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 				}
 				case VK_F7: {
 					CNETWORK->LobbyPkt(true);
+					m_ready = false;
 					break;
 				}
 				case VK_F11:

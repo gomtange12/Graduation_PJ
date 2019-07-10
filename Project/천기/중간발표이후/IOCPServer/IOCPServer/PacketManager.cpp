@@ -82,7 +82,7 @@ void PacketManager::IngamePacket(int id, int roomNum) {
 		{
 			pkt.ids[i] = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
 			pkt.posN[i] = objectManager->GetPlayer(pkt.ids[i])->posN;
-			pkt.avatar[i] = objectManager->GetPlayer(pkt.ids[i])->avatar;
+			//pkt.avatar[i] = objectManager->GetPlayer(pkt.ids[i])->avatar;
 		}
 		SendPacket(id, &pkt);
 	}
@@ -91,7 +91,7 @@ void PacketManager::IngamePacket(int id, int roomNum) {
 		{
 			pkt.ids[i] = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
 			pkt.posN[i] = objectManager->GetPlayer(pkt.ids[i])->posN;
-			pkt.avatar[i] = objectManager->GetPlayer(pkt.ids[i])->avatar;
+			//pkt.avatar[i] = objectManager->GetPlayer(pkt.ids[i])->avatar;
 		}	
 		SendPacket(id, &pkt);	
 	}
