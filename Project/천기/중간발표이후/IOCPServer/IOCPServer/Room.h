@@ -8,6 +8,7 @@ public:
 	int m_SoloIds[SOLO_RNUM];
 	int m_TeamIds[TEAM_RNUM];
 	int mod;
+	int map;
 	bool m_full;
 public:
 	Room();

@@ -1507,7 +1507,7 @@ void CUiShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 	
 	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/menu.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/menu2.dds", 0);
 
 	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/¸Þ´º¾À.dds", 0);
 

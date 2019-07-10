@@ -6,6 +6,7 @@ class CObjectManager : public CSingleTonBase<CObjectManager>
 {
 	std::map<OBJTYPE, std::vector<CGameObject*>> m_ObjMap;
 	std::map<E_CHARACTERTYPE, CLoadedModelInfo*> m_PlayerResourceMap;
+	std::map<E_CHARACTERTYPE, CLoadedModelInfo*> m_OtherPlayerResourceMap;
 
 public:
 	std::vector<CGameObject*> ObjList;
@@ -21,5 +22,7 @@ public:
 public:
 	void LoadPlayerResource(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature   *m_pd3dGraphicsRootSignature);
 	CLoadedModelInfo* GetPlayerResource(E_CHARACTERTYPE type);
+	CLoadedModelInfo* GetOhterPlayerResource(E_CHARACTERTYPE type);
+
 };
 

@@ -66,40 +66,34 @@ void PacketManager::ClientDisconnect(int id)
 	closesocket(objectManager->GetPlayer(id)->m_socket);
 	objectManager->GetPlayer(id)->m_connected = false;	
 }
-void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo 매칭용임 2인용
+void PacketManager::IngamePacket(int id, int roomNum) {
 	//해당 채널 매칭된 클라 모두에게
 
 	sc_packet_scene pkt;
 	pkt.size = sizeof(sc_packet_scene);
 	pkt.type = SC_SCENE;
-	pkt.sceneNum = PLAYGROUNDMAP;
+	pkt.sceneNum = objectManager->GetPlayer(pkt.ids[id])->map;
 	pkt.roomNum = roomNum;
-	pkt.avatar = avatar;
+	pkt.mod = ROOMMANAGER->room[roomNum]->mod;
 
 	
 	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
-		for (int i = 0; i < SOLO_RNUM; ++i) {
-
+		for (int i = 0; i < SOLO_RNUM; ++i) 
+		{
 			pkt.ids[i] = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
 			pkt.posN[i] = objectManager->GetPlayer(pkt.ids[i])->posN;
-
-
+			pkt.avatar[i] = objectManager->GetPlayer(pkt.ids[i])->avatar;
 		}
-
 		SendPacket(id, &pkt);
 	}
 	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
-		for (int i = 0; i < TEAM_RNUM; ++i) {
-
+		for (int i = 0; i < TEAM_RNUM; ++i)
+		{
 			pkt.ids[i] = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
 			pkt.posN[i] = objectManager->GetPlayer(pkt.ids[i])->posN;
-
-
-		}
-
-		
-		SendPacket(id, &pkt);
-		
+			pkt.avatar[i] = objectManager->GetPlayer(pkt.ids[i])->avatar;
+		}	
+		SendPacket(id, &pkt);	
 	}
 	
 }

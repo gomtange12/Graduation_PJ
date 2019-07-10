@@ -384,9 +384,43 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 	switch (nMessageID)
 	{
 		case WM_LBUTTONDOWN:
-		/*	::SetCapture(hWnd);
-			::GetCursorPos(&m_ptRightOldCursorPos);*/
+			::GetCursorPos(&m_LeftCursorPos);
+			::ScreenToClient(hWnd, &m_LeftCursorPos);
 
+			std::cout <<"변환전cursorPos: "<< m_LeftCursorPos.x << ", " << m_LeftCursorPos.y << endl;
+			
+			//XMFLOAT2 cursorpos{ 2.0f * (static_cast<float>(m_LeftCursorPos.x) / static_cast<float>(FRAME_BUFFER_WIDTH)) - 1.0f
+			//		, -(2.0f * (static_cast<float>(m_LeftCursorPos.y) / static_cast<float>(FRAME_BUFFER_HEIGHT)) - 1.0f) };
+
+
+			if (SCENEMANAGER->GetSceneType() == MENUSCENE)
+			{
+				
+				CNETWORK->mod = SCENEMANAGER->CheckModeButton(m_LeftCursorPos);
+				cout <<"모드: "<< CNETWORK->mod << endl;
+
+				
+				CNETWORK->map = SCENEMANAGER->CheckMapButton(m_LeftCursorPos);
+				cout << "맵: " << CNETWORK->map << endl;
+
+
+				int num{ 0 };
+				//E_CHARACTERTYPE type = PLAYER->CheckSceneCharacter(m_LeftCursorPos.x, m_LeftCursorPos.y);
+				//PLAYER->SetCharacterArray(type, num);
+				E_CHARACTERTYPE type;
+				type = PLAYER->CheckSceneCharacter(m_LeftCursorPos);
+				PLAYER->ChangePlayer(type, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+				PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+				//if (type == KEYBOARD)
+				//	PLAYER->GetPlayer()->SetMesh(m_pKeyBoardModel->m_pModelRootObject->m_pMesh);
+																		   //PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
+				//PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+
+				SetCamera(PLAYER->GetPlayer()->GetCamera());
+				if (num > 5) num = 0;
+				num++;
+			}
+			break;
 		case WM_RBUTTONDOWN:
 			::SetCapture(hWnd);
 			::GetCursorPos(&m_ptOldCursorPos);
@@ -653,6 +687,7 @@ void CGameFramework::ProcessInput()
 		{
 		
 			//PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+			PLAYER->GetPlayer()->SetPlayerState(RUN);
 
 			dwDirection |= DIR_FORWARD;
 
@@ -660,17 +695,20 @@ void CGameFramework::ProcessInput()
 		}
 		if (pKeysBuffer[0x53] & 0xF0)
 		{
-			
+			PLAYER->GetPlayer()->SetPlayerState(RUN);
+
 			dwDirection |= DIR_BACKWARD;
 		}
 		if (pKeysBuffer[0x41] & 0xF0)
 		{
-			
+			PLAYER->GetPlayer()->SetPlayerState(RUN);
+
 			dwDirection |= DIR_LEFT;
 		}
 		if (pKeysBuffer[0x44] & 0xF0)
 		{
-			
+			PLAYER->GetPlayer()->SetPlayerState(RUN);
+
 			dwDirection |= DIR_RIGHT;
 		}
 
@@ -712,7 +750,7 @@ void CGameFramework::ProcessInput()
 			if (pKeysBuffer[VK_SPACE] & 0xF0)
 			{
 				CNETWORK->KeyPkt(true, false, false);
-				//PLAYER->GetPlayer()->SetPlayerState(PlayerState::JUMP);
+				PLAYER->GetPlayer()->SetPlayerState(PlayerState::JUMP);
 				//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
 			}
 		}
@@ -721,7 +759,7 @@ void CGameFramework::ProcessInput()
 				if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
 				{
 					CNETWORK->KeyPkt(false, true, false);
-					//PLAYER->GetPlayer()->SetPlayerState(PlayerState::ATTACK);
+					PLAYER->GetPlayer()->SetPlayerState(PlayerState::ATTACK);
 				}
 			}
 		}

@@ -74,8 +74,8 @@ extern HINSTANCE						ghAppInstance;
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console") 
 #endif
 
-#define FRAME_BUFFER_WIDTH		1280
-#define FRAME_BUFFER_HEIGHT		720
+//#define FRAME_BUFFER_WIDTH		1280
+//#define FRAME_BUFFER_HEIGHT		720
 #define MIRAHEIGHT				10
 //#define _WITH_CB_GAMEOBJECT_32BIT_CONSTANTS
 //#define _WITH_CB_GAMEOBJECT_ROOT_DESCRIPTOR
@@ -140,10 +140,6 @@ enum SceneState {
 	CONCERTMAP,
 	GAMEOVER,
 	LOADING
-};
-enum AVATARNumber {
-	A, //ÀÓ½Ã¸íÄª
-	B
 };
 //enum MAPNumber {
 //	PLAYGROUND,

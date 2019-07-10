@@ -3,8 +3,7 @@
 #include <WinSock2.h>
 #include "Player.h"
 #include "GameFramework.h"
-//#include "..\..\IOCPServer\IOCPServer\Protocol.h"
-//#include "..\..\IOCPServer\IOCPServer\Protocol.h"
+
 #include "..\..\IOCPServer\IOCPServer\Protocol.h"
 
 
@@ -34,6 +33,8 @@ private:
 	CGameFramework*			CNetCGameFramework;
 
 public:
+	ModNumber mod = SQUAD;
+	SceneState map = PLAYGROUNDMAP;
 	int myid;
 
 	CNetWork();

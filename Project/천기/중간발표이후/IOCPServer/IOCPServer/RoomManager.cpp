@@ -38,14 +38,14 @@ void RoomManager::SoloRoomMatch(int id)
 							room.emplace_back(soloRooms);
 							
 							//// 매칭 디폴트값
-							objectManager->GetPlayer(room[i]->m_SoloIds[0])->avatar = A;
+							//objectManager->GetPlayer(room[i]->m_SoloIds[0])->avatar = GUITAR;
 							objectManager->GetPlayer(room[i]->m_SoloIds[0])->posN = 1;
 							objectManager->GetPlayer(room[i]->m_SoloIds[0])->NumberByPos(1);
 							objectManager->GetPlayer(room[i]->m_SoloIds[0])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_SoloIds[0])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_SoloIds[0])->m_xmf3Position.y,
 								objectManager->GetPlayer(room[i]->m_SoloIds[0])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
 
-							objectManager->GetPlayer(room[i]->m_SoloIds[1])->avatar = B;
+							//objectManager->GetPlayer(room[i]->m_SoloIds[1])->avatar = BASS;
 							objectManager->GetPlayer(room[i]->m_SoloIds[1])->posN = 5;
 							objectManager->GetPlayer(room[i]->m_SoloIds[1])->NumberByPos(5);
 							objectManager->GetPlayer(room[i]->m_SoloIds[1])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_SoloIds[1])->m_xmf3Position.x,
@@ -57,7 +57,7 @@ void RoomManager::SoloRoomMatch(int id)
 								objectManager->GetPlayer(room[i]->m_SoloIds[k])->roomNumber = i;
 								objectManager->GetPlayer(room[i]->m_SoloIds[k])->m_match = true;
 								
-								PACKETMANAGER->IngamePacket(room[i]->m_SoloIds[k], i, objectManager->GetPlayer(room[i]->m_SoloIds[k])->avatar);
+								PACKETMANAGER->IngamePacket(room[i]->m_SoloIds[k], i);
 							}
 							
 						}
@@ -93,33 +93,34 @@ void RoomManager::TeamRoomMatch(int id)
 							std::cout << "RoomNumber : " << RNumber << " ----> Machig Success" << " ::TEAM MOD" << std::endl;
 							Room* teamRooms = new Room; //풀방이니 미리 다음방 생성
 							teamRooms->RoomNumber = ++RNumber;
-							teamRooms->mod = SQUAD;
+							teamRooms->mod = SQUAD; 
+							//teamRooms->map = objectManager->GetPlayer(room[i]->m_TeamIds[0])->map;
 							room.emplace_back(teamRooms);
 
 							//// 매칭 디폴트값
 							
-							objectManager->GetPlayer(room[i]->m_TeamIds[0])->avatar = A;
+							//objectManager->GetPlayer(room[i]->m_TeamIds[0])->avatar = GUITAR;
 							objectManager->GetPlayer(room[i]->m_TeamIds[0])->posN = 1;
 							objectManager->GetPlayer(room[i]->m_TeamIds[0])->NumberByPos(1);
 							objectManager->GetPlayer(room[i]->m_TeamIds[0])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_TeamIds[0])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_TeamIds[0])->m_xmf3Position.y,
 								objectManager->GetPlayer(room[i]->m_TeamIds[0])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
 
-							objectManager->GetPlayer(room[i]->m_TeamIds[1])->avatar = B;
+							//objectManager->GetPlayer(room[i]->m_TeamIds[1])->avatar = BASS;
 							objectManager->GetPlayer(room[i]->m_TeamIds[1])->posN = 2;
 							objectManager->GetPlayer(room[i]->m_TeamIds[1])->NumberByPos(2);
 							objectManager->GetPlayer(room[i]->m_TeamIds[1])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_TeamIds[1])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_TeamIds[1])->m_xmf3Position.y,
 								objectManager->GetPlayer(room[i]->m_TeamIds[1])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
 
-							objectManager->GetPlayer(room[i]->m_TeamIds[2])->avatar = A;
+							//objectManager->GetPlayer(room[i]->m_TeamIds[2])->avatar = KEYBOARD;
 							objectManager->GetPlayer(room[i]->m_TeamIds[2])->posN = 5;
 							objectManager->GetPlayer(room[i]->m_TeamIds[2])->NumberByPos(5);
 							objectManager->GetPlayer(room[i]->m_TeamIds[2])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_TeamIds[2])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_TeamIds[2])->m_xmf3Position.y,
 								objectManager->GetPlayer(room[i]->m_TeamIds[2])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
 
-							objectManager->GetPlayer(room[i]->m_TeamIds[3])->avatar = B;
+							//objectManager->GetPlayer(room[i]->m_TeamIds[3])->avatar = VOCAL;
 							objectManager->GetPlayer(room[i]->m_TeamIds[3])->posN = 6;
 							objectManager->GetPlayer(room[i]->m_TeamIds[3])->NumberByPos(6);
 							objectManager->GetPlayer(room[i]->m_TeamIds[3])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_TeamIds[3])->m_xmf3Position.x,
@@ -160,7 +161,7 @@ void RoomManager::TeamRoomMatch(int id)
 								objectManager->GetPlayer(room[i]->m_TeamIds[k])->roomNumber = i;
 								objectManager->GetPlayer(room[i]->m_TeamIds[k])->m_match = true;
 								
-								PACKETMANAGER->IngamePacket(room[i]->m_TeamIds[k], i, objectManager->GetPlayer(room[i]->m_TeamIds[k])->avatar);
+								PACKETMANAGER->IngamePacket(room[i]->m_TeamIds[k], i);
 								
 							}
 							

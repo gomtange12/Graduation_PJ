@@ -28,31 +28,36 @@ void ObjManager::OverlappedRecv(unsigned int id)
 }
 void ObjManager::MatchProcess(int id, unsigned char *packet) 
 {
-	if (packet[1] == CS_MATCHING_PLAYER) 
-	{ 
-	std::cout << "Machig Request --- " << std::endl;
+	if (packet[1] == CS_MATCHING_PLAYER)
+	{
+		std::cout << "Machig Request --- " << std::endl;
 
 		cs_packet_matching *match = reinterpret_cast<cs_packet_matching *>(packet);
-		g_clients[id]->mod = match->mod;
-		//g_clients[id]->ready = match->ready;
-		g_clients[id]->map = match->map;
+		g_clients[id]->avatar = (E_CHARACTERTYPE)match->avatar;
+		g_clients[id]->map = (SceneState)match->map;
+		g_clients[id]->mod = (ModNumber)match->mod;
 
-	}
-	switch (g_clients[id]->map)
-	{
-	case PLAYGROUNDMAP:
-	{
-		ModMatch(id);
-		break;
-	}
-	case CONCERTMAP:
-	{
-		//ModMatch(id);
-		break;
-	}
-	default:
-		std::wcout << "잘못된 매칭 정보입니다\n";
-		break;
+		std::cout << "ID : " << id << std::endl;
+		std::cout << "Avatar : " << g_clients[id]->avatar << std::endl;
+		std::cout << "Map : " << g_clients[id]->map << std::endl;
+		std::cout << "Mod : " << g_clients[id]->mod << std::endl;
+
+		switch (g_clients[id]->map)
+		{
+		case PLAYGROUNDMAP:
+		{
+			ModMatch(id);
+			break;
+		}
+		case CONCERTMAP:
+		{
+			ModMatch(id);
+			break;
+		}
+		default:
+			std::wcout << "잘못된 매칭 정보입니다\n";
+			break;
+		}
 	}
 }
 
@@ -96,6 +101,7 @@ void ObjManager::ModMatch(int id)
 	}
 	case DUO:
 	{
+		ROOMMANAGER->TeamRoomMatch(id);
 		break;
 	}
 	case SQUAD:
@@ -107,10 +113,7 @@ void ObjManager::ModMatch(int id)
 		std::wcout << L"정의되지 않은 패킷 도착!!\n";
 		break;
 	}
-	std::cout << "ID : " << id << std::endl;
-	std::cout << "Avatar : " << g_clients[id]->avatar << std::endl;
-	std::cout << "Map : " << g_clients[id]->map << std::endl;
-	std::cout << "Mod : " << g_clients[id]->mod << std::endl;
+	
 	
 }
 void ObjManager::MovePkt(int id, unsigned char *packet)

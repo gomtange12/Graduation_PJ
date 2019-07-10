@@ -9,6 +9,7 @@
 #include "CObjectManager.h"
 #include "CBillboardObject.h"
 #include "CNetWork.h"
+
 #define objScale 6.47
 #define CONCERTMAPSCALSE 6.47
 
@@ -1375,6 +1376,8 @@ D3D12_GPU_DESCRIPTOR_HANDLE CScene::CreateShaderResourceViews(ID3D12Device *pd3d
 
 bool CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
+
+
 	return(false);
 }
 

@@ -66,9 +66,10 @@ struct sc_packet_scene {
 	BYTE type;
 	char sceneNum;
 	WORD roomNum;
-	char avatar;
-	char ids[7]; //나중에 여러플레이들 id로 뿌려줘야함
-	char posN[7];
+	char mod;
+	char avatar[4];
+	char ids[4];
+	char posN[4];
 };
 struct sc_packet_match_result {
 	BYTE size;

@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 #include "MyData.h"
 class CPlayer;
 class CTerrainPlayer;
@@ -14,9 +15,26 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 	std::map<E_PLAYERTYPE, vector<CTerrainPlayer*>>			m_PlayerMap;
 	std::vector<COtherPlayers*>								m_pOtherPlayerMap;
 	std::vector<COtherPlayers*>								m_pTeamPlayerMap;
-
+	//array<E_CHARACTERTYPE, 5> m_character_Array ;
+	//array<E_CHARACTERTYPE, 5> m_Othercharacter_Array;
+	E_CHARACTERTYPE m_characterArray[5];
+	E_CHARACTERTYPE m_OthercharacterArray[5];
+	std::shared_ptr<CTerrainPlayer>							m_pGuitarPlayer = nullptr;
+	std::shared_ptr<CTerrainPlayer>							m_pBassPlayer = nullptr;
+	std::shared_ptr<CTerrainPlayer>							m_pKeyboardPlayer = nullptr;
+	std::shared_ptr<CTerrainPlayer>							m_pDrumPlayer = nullptr;
+	std::shared_ptr<CTerrainPlayer>							m_pVocalPlayer = nullptr;
+	std::map<E_CHARACTERTYPE, std::shared_ptr<CTerrainPlayer>>			m_SharedPlayerMap;
 
 public:
+	E_CHARACTERTYPE* GetCharacterArray() { return m_characterArray; }
+	E_CHARACTERTYPE* GetOtherCharacterArray() { return 	m_OthercharacterArray; }
+	void ChangePlayer(E_CHARACTERTYPE type, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+
+	E_CHARACTERTYPE CheckSceneCharacter(const POINT& pos);
+	void SetCharacterArray(E_CHARACTERTYPE type, int num) { m_characterArray[num] = type; }
+	void SetOtherCharacterArray(E_CHARACTERTYPE type, int num) { m_OthercharacterArray[num] = type; }
+
 	std::vector<COtherPlayers*>		GetOtherPlayerMap() { return m_pOtherPlayerMap; }
 	std::vector<COtherPlayers*>		GetTeamPlayerMap() { return m_pTeamPlayerMap; }
 
@@ -33,7 +51,7 @@ public:
 	std::shared_ptr<COtherPlayers> GetOtherPlayer() { return m_pOtherPlayer; }
 
 	//std::shared_ptr<CTerrainPlayer> SetPlayer() { return m_pPlayer; }
-	int m_MaxPlayerNum{ 4 };
+	int m_MaxPlayerNum{ 8 };
 	void AddPlayer(CTerrainPlayer* playerObj, E_PLAYERTYPE type, E_CHARACTERTYPE charactertype);
 
 	void SetPlayerResource();
