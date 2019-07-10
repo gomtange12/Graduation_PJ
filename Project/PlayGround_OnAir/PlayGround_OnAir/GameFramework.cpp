@@ -388,14 +388,26 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 			::ScreenToClient(hWnd, &m_LeftCursorPos);
 
 			std::cout <<"변환전cursorPos: "<< m_LeftCursorPos.x << ", " << m_LeftCursorPos.y << endl;
+			
+			//XMFLOAT2 cursorpos{ 2.0f * (static_cast<float>(m_LeftCursorPos.x) / static_cast<float>(FRAME_BUFFER_WIDTH)) - 1.0f
+			//		, -(2.0f * (static_cast<float>(m_LeftCursorPos.y) / static_cast<float>(FRAME_BUFFER_HEIGHT)) - 1.0f) };
+
+
 			if (SCENEMANAGER->GetSceneType() == MENUSCENE)
 			{
-				cout << "메뉴신" << endl;
+				//ModNumber mode;
+				SCENEMANAGER->CheckModeButton(m_LeftCursorPos);
+				//cout <<"모드: "<< mode << endl;
+
+				//SceneState map;
+				//SCENEMANAGER->CheckMapButton(m_LeftCursorPos);
+				//cout << "맵: " << map << endl;
+
+
 				int num{ 0 };
 				//E_CHARACTERTYPE type = PLAYER->CheckSceneCharacter(m_LeftCursorPos.x, m_LeftCursorPos.y);
 				//PLAYER->SetCharacterArray(type, num);
 				E_CHARACTERTYPE type;
-
 				type = PLAYER->CheckSceneCharacter(m_LeftCursorPos);
 				PLAYER->ChangePlayer(type, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 				PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
@@ -404,7 +416,8 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 																		   //PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
 				//PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 
-				SetCamera(PLAYER->GetPlayer()->GetCamera()); if (num > 5) num = 0;
+				SetCamera(PLAYER->GetPlayer()->GetCamera());
+				if (num > 5) num = 0;
 				num++;
 			}
 			break;
