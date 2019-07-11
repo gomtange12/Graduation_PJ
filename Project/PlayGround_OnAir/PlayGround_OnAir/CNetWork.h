@@ -3,9 +3,8 @@
 #include <WinSock2.h>
 #include "Player.h"
 #include "GameFramework.h"
-//#include "..\..\IOCPServer\IOCPServer\Protocol.h"
-//#include "..\..\IOCPServer\IOCPServer\Protocol.h"
-#include "..\..\천기\중간발표이후\IOCPServer\IOCPServer\Protocol.h"
+
+#include "..\..\IOCPServer\IOCPServer\Protocol.h"
 
 
 //#define IP_ADDR "192.168.22.79"
@@ -34,6 +33,8 @@ private:
 	CGameFramework*			CNetCGameFramework;
 
 public:
+	ModNumber mod = SQUAD;
+	SceneState map = PLAYGROUNDMAP;
 	int myid;
 
 	CNetWork();

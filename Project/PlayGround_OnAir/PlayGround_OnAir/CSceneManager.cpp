@@ -3,7 +3,7 @@
 #include "CSceneManager.h"
 #include "CTempScene.h"
 #include "Scene.h"
-
+#include "GameFramework.h"
 ModNumber CSceneManager::CheckModeButton(const POINT & pos)
 {
 	XMFLOAT2 cursorpos{ 2.0f * (static_cast<float>(pos.x) / static_cast<float>(FRAME_BUFFER_WIDTH)) - 1.0f
@@ -18,9 +18,9 @@ ModNumber CSceneManager::CheckModeButton(const POINT & pos)
 	{
 		cout << "µà¿À ¼±ÅÃ" << endl;
 
-		return DUO;
+		return SQUAD;
 	}
-	return DUO;
+	return SQUAD;
 	
 }
 
