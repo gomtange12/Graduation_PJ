@@ -55,11 +55,11 @@ CPlayerManager::~CPlayerManager()
 }
 void CPlayerManager::ChangePlayer(E_CHARACTERTYPE type, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
-	CLoadedModelInfo*			m_pGuitarModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
-	CLoadedModelInfo*			m_pKeyBoardModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
-	CLoadedModelInfo*			m_pDrumModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);;
-	CLoadedModelInfo*			m_pBassModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
-	CLoadedModelInfo*			m_pVocalModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
+	CLoadedModelInfo*         m_pGuitarModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
+	CLoadedModelInfo*         m_pKeyBoardModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
+	CLoadedModelInfo*         m_pDrumModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);;
+	CLoadedModelInfo*         m_pBassModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
+	CLoadedModelInfo*         m_pVocalModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
 
 
 	if (type == GUITAR)
@@ -68,6 +68,7 @@ void CPlayerManager::ChangePlayer(E_CHARACTERTYPE type, ID3D12Device *pd3dDevice
 		m_pPlayer->SetChild(m_pGuitarModel->m_pModelRootObject);
 		m_pPlayer->SetScale(XMFLOAT3(60, 60, 60));
 		m_pPlayer->SetMesh(m_pGuitarModel->m_pModelRootObject->m_pMesh);
+		m_pPlayer->SetCharacterType(GUITAR);
 	}
 
 	else if (type == KEYBOARD)
@@ -76,22 +77,28 @@ void CPlayerManager::ChangePlayer(E_CHARACTERTYPE type, ID3D12Device *pd3dDevice
 		m_pPlayer->SetChild(m_pKeyBoardModel->m_pModelRootObject);
 		m_pPlayer->SetScale(XMFLOAT3(60, 60, 60));
 		m_pPlayer->SetMesh(m_pKeyBoardModel->m_pModelRootObject->m_pMesh);
+		m_pPlayer->SetCharacterType(KEYBOARD);
+
 	}
 
 	else if (type == DRUM)
 	{
-		
+
 		m_pPlayer = m_pDrumPlayer;// make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext);
 		m_pPlayer->SetChild(m_pDrumModel->m_pModelRootObject);
 		m_pPlayer->SetScale(XMFLOAT3(60, 60, 60));
 		m_pPlayer->SetMesh(m_pDrumModel->m_pModelRootObject->m_pMesh);
+		m_pPlayer->SetCharacterType(DRUM);
+
 	}
 	else if (type == VOCAL)
 	{
 		m_pPlayer = m_pVocalPlayer;// make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext);
 		m_pPlayer->SetChild(m_pVocalModel->m_pModelRootObject);
-		m_pPlayer->SetScale(XMFLOAT3(60, 60, 60));		
+		m_pPlayer->SetScale(XMFLOAT3(60, 60, 60));
 		m_pPlayer->SetMesh(m_pVocalModel->m_pModelRootObject->m_pMesh);
+		m_pPlayer->SetCharacterType(VOCAL);
+
 	}
 	else if (type == BASS)
 	{
@@ -99,8 +106,10 @@ void CPlayerManager::ChangePlayer(E_CHARACTERTYPE type, ID3D12Device *pd3dDevice
 		m_pPlayer->SetChild(m_pBassModel->m_pModelRootObject);
 		m_pPlayer->SetScale(XMFLOAT3(60, 60, 60));
 		m_pPlayer->SetMesh(m_pBassModel->m_pModelRootObject->m_pMesh);
+		m_pPlayer->SetCharacterType(BASS);
+
 	}
-	
+
 
 }
 void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
@@ -156,7 +165,7 @@ void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsC
 
 
 		m_pTeamPlayerMap[0]->SetPosition(XMFLOAT3(12750, 10, 1745));
-		m_pTeamPlayerMap[1]->SetPosition(XMFLOAT3(2750, 10, 1835));
+		m_pTeamPlayerMap[1]->SetPosition(XMFLOAT3(12750, 10, 1835));
 		//m_pTeamPlayerMap[1]->SetPosition(XMFLOAT3(12750, 10, 1835));
 		//m_pTeamPlayerMap[2]->SetPosition(XMFLOAT3(2560, 10, 1835));
 		//m_pTeamPlayerMap[2]->SetPosition(XMFLOAT3(12560, 10, 1835));

@@ -9,6 +9,7 @@
 #include "CObjectManager.h"
 #include "CBillboardObject.h"
 #include "CNetWork.h"
+
 #define objScale 6.47
 #define CONCERTMAPSCALSE 6.47
 

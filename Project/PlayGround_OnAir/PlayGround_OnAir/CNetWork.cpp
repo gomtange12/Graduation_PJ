@@ -91,12 +91,10 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_scene *paket = reinterpret_cast<sc_packet_scene *>(ptr);
 		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
-
-		//캐릭터 설정 해줘야함 paket->avatar
-
+		
 		//솔로모드면
-		//if (mod == SOLO) {
-		/*	for (int i = 0; i < 2; ++i) {
+		/*if (paket->mod == SOLO) {
+			for (int i = 0; i < 2; ++i) {
 				if (myid == paket->ids[i]) {
 					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 					PLAYER->GetPlayer()->SetClientNum(myid);
@@ -108,61 +106,65 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[0]->SetClientNum(paket->ids[i]);
 					PLAYER->GetOtherPlayerMap()[0]->NumberByPos(paket->posN[i]);
 				}
-			}*/
-			//}
-			//else if (mod = SQUAD) {
-				//팀모드면
-		for (int i = 0; i < 2; ++i) {
-			if (myid == paket->ids[i]) {
-				PLAYER->GetPlayer()->teamNum = 0;
-
 			}
 		}
-		if (PLAYER->GetPlayer()->teamNum == 0) {
+		else if (paket->mod = SQUAD) {*/
+			//팀모드면
 			for (int i = 0; i < 2; ++i) {
 				if (myid == paket->ids[i]) {
-					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
-					PLAYER->GetPlayer()->SetClientNum(myid);
-					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+					PLAYER->GetPlayer()->teamNum = 0;
 
 				}
 			}
+			if (PLAYER->GetPlayer()->teamNum == 0) {
+				for (int i = 0; i < 2; ++i) {
+					if (myid == paket->ids[i]) {
+						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+						PLAYER->GetPlayer()->SetClientNum(myid);
+						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
 
-			for (int i = 0; i < 2; ++i) {
-				if (myid != paket->ids[i]) {
-					PLAYER->GetTeamPlayerMap()[i]->SetClientNum(paket->ids[i]);
-					PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
+					}
+				}
+
+				for (int i = 0; i < 2; ++i) {
+					if (myid != paket->ids[i]) {
+						PLAYER->GetTeamPlayerMap()[i]->SetClientNum(paket->ids[i]);
+						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
+						//PLAYER->GetTeamPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+					}
+				}
+				for (int i = 0; i < 2; ++i) {
+					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i + 2]);
+					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i + 2]);
+					//PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i + 2]);
 				}
 			}
-			for (int i = 0; i < 2; ++i) {
-				PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i + 2]);
-				PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i + 2]);
-			}
-		}
-		else {
-			for (int i = 2; i < 4; ++i) {
-				if (myid == paket->ids[i]) {
-					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
-					PLAYER->GetPlayer()->SetClientNum(myid);
-					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+			else {
+				for (int i = 2; i < 4; ++i) {
+					if (myid == paket->ids[i]) {
+						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
+						PLAYER->GetPlayer()->SetClientNum(myid);
+						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+					}
 				}
-			}
 
-			for (int i = 2; i < 4; ++i) {
-				if (myid != paket->ids[i]) {
-					PLAYER->GetTeamPlayerMap()[0]->SetClientNum(paket->ids[i]);
-					PLAYER->GetTeamPlayerMap()[0]->NumberByPos(paket->posN[i]);
+				for (int i = 2; i < 4; ++i) {
+					if (myid != paket->ids[i]) {
+						PLAYER->GetTeamPlayerMap()[0]->SetClientNum(paket->ids[i]);
+						PLAYER->GetTeamPlayerMap()[0]->NumberByPos(paket->posN[i]);
+						//PLAYER->GetTeamPlayerMap()[0]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+					}
 				}
+
+
+				for (int i = 0; i < 2; ++i) {
+					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
+					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
+					//PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+				}
+
 			}
-
-
-			for (int i = 0; i < 2; ++i) {
-				PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
-				PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
-			}
-
-		}
-		//	}		
+		//}
 
 		PLAYER->GetPlayer()->m_match = true;
 		CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
@@ -360,14 +362,9 @@ void CNetWork::MatchPkt()
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_MATCHING_PLAYER;
-	//if (firstCheck == true || myid % 2 ==0) {
-	//	pkt->avatar = A;
-	//}
-	//else {
-	//	pkt->avatar = B;
-	//}
-	pkt->map = PLAYGROUNDMAP;
-	pkt->mod = SQUAD;
+	pkt->avatar = PLAYER->GetPlayer()->GetCharacterType();
+	pkt->map = map;
+	pkt->mod = mod;
 
 	SendPacket();
 }

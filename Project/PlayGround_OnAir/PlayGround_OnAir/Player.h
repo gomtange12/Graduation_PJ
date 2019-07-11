@@ -57,7 +57,11 @@ protected:
 	bool                        m_IsPlayerInConcert = true;
 	bool						XZcollision=false;
 	bool						m_isAnimationOver{ false };
+	E_CHARACTERTYPE                m_CharacterType;
 
+public:
+	E_CHARACTERTYPE GetCharacterType() { return m_CharacterType; }
+	void SetCharacterType(E_CHARACTERTYPE type) { m_CharacterType = type; }
 public:
 	bool GetPlayerInConcert() { return m_IsPlayerInConcert; }
 	void SetPlayerInConocert(bool inConcert) { m_IsPlayerInConcert = inConcert; }
