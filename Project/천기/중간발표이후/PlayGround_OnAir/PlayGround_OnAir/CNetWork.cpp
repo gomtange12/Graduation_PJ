@@ -99,7 +99,6 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 					PLAYER->GetPlayer()->SetClientNum(myid);
 					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
-					PLAYER->GetPlayer()->m_match = true;
 				}
 
 				else {
@@ -167,10 +166,10 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 			}
 		}
 
+		CNetCGameFramework->ChangePlayerCharacter();
+
 		PLAYER->GetPlayer()->m_match = true;
 		CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
-		m_isCheckPkt = true;
-
 		break;
 	}
 
@@ -367,7 +366,7 @@ void CNetWork::MatchPkt()
 	pkt->avatar = PLAYER->GetPlayer()->GetCharacterType();
 	pkt->map = map;
 	pkt->mod = mod;
-	cout << "type!" << (int)pkt->avatar << endl;
+	
 	SendPacket();
 }
 void CNetWork::StatePkt(DWORD state)

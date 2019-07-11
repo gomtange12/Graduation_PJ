@@ -416,39 +416,7 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 				//	PLAYER->GetPlayer()->SetMesh(m_pKeyBoardModel->m_pModelRootObject->m_pMesh);
 																		   //PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
 				//PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosiation(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
-				//cout << "pckChecked -1 " << endl;
-				if (CNETWORK->GetCheckPkt())
-				{
-					cout << "pckChecked" << endl;
-					if (PLAYER->GetOtherPlayerMap().size() > 0)
-					{
-
-						int i = 0;
-						for (auto p : PLAYER->GetOtherPlayerMap())
-						{
-							p->SetPlayerCharacter(p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-							i++;
-							cout << i << "enemyChecked" << endl;
-
-						}
-
-					}
-					if (PLAYER->GetTeamPlayerMap().size() > 0)
-					{
-
-						int i = 0;
-						for (auto p : PLAYER->GetTeamPlayerMap())
-						{
-							if (p->GetClientNum() != -1) {
-								p->SetPlayerCharacter(p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-								i++;
-							}
-							cout << i << "TeamChecked" << endl;
-
-						}
-
-					}
-				}
+				
 				SetCamera(PLAYER->GetPlayer()->GetCamera());
 				if (num > 5) num = 0;
 				num++;
@@ -469,7 +437,37 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 			break;
 	}
 }
+void CGameFramework::ChangePlayerCharacter(){
+	cout << "pckChecked" << endl;
+	if (PLAYER->GetOtherPlayerMap().size() > 0)
+	{
 
+		int i = 0;
+		for (auto p : PLAYER->GetOtherPlayerMap())
+		{
+			p->SetPlayerCharacter(p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+			i++;
+			cout << i << "enemyChecked" << endl;
+
+		}
+
+	}
+	if (PLAYER->GetTeamPlayerMap().size() > 0)
+	{
+
+		int i = 0;
+		for (auto p : PLAYER->GetTeamPlayerMap())
+		{
+			if (p->GetClientNum() != -1) {
+				p->SetPlayerCharacter(p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+				i++;
+			}
+			cout << i << "TeamChecked" << endl;
+
+		}
+
+	}
+}
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
 	if (m_pScene) m_pScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);

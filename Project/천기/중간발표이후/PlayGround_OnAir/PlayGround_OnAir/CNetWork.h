@@ -32,7 +32,7 @@ private:
 
 	CGameFramework*			CNetCGameFramework;
 
-	bool	m_isCheckPkt{ false };
+	bool	m_isCheckPkt  =  false;
 public:
 	ModNumber mod = SQUAD;
 	SceneState map = PLAYGROUNDMAP;
@@ -43,7 +43,7 @@ public:
 
 	void SetGameFrameWork(CGameFramework* CGFramwork) { CNetCGameFramework = CGFramwork; };
 	bool GetCheckPkt() { return m_isCheckPkt; }
-	void SetCheckPkt(bool isChecked) { m_isCheckPkt = isChecked; }
+	
 	bool GetFirstCheck() const { return firstCheck; }
 	void MakeServer(const HWND& hWnd);
 	void SendPacket();
