@@ -1143,3 +1143,91 @@ void COtherPlayers::Update(float fTimeElapsed)
 	m_xmOOBB.Center = m_xmf3Position;
 	m_xmOOBB.Center.y = m_xmf3Position.y + GetBoundingBox().Extents.y;
 }
+void COtherPlayers::SetPlayerCharacter(E_CHARACTERTYPE type, int num, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
+{
+
+	std::vector<COtherPlayers*>   bass;
+	std::vector<COtherPlayers*>   guitar;
+	std::vector<COtherPlayers*>   key;
+	std::vector<COtherPlayers*>   dru;
+	std::vector<COtherPlayers*>   vocal;
+
+	cout << num << endl;
+
+	CLoadedModelInfo*         m_pGuitarModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
+	CLoadedModelInfo*         m_pKeyBoardModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
+	CLoadedModelInfo*         m_pDrumModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);;
+	CLoadedModelInfo*         m_pBassModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
+	CLoadedModelInfo*         m_pVocalModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
+
+	//플레이어맵 
+	m_pKeyboardPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext);
+	m_pBassPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext);
+	m_pDrumPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext);
+	m_pGuitarPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
+	m_pVocalPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext);
+
+	bass.emplace_back(m_pBassPlayer);
+	guitar.emplace_back(m_pGuitarPlayer);
+	key.emplace_back(m_pKeyboardPlayer);
+	dru.emplace_back(m_pDrumPlayer);
+	vocal.emplace_back(m_pVocalPlayer);
+
+
+	//auto iter2 = m_pOtherPlayerTempMap.begin();
+
+	auto iter = PLAYER->m_pOtherPlayerMap.begin();
+	//CNET->sc
+	iter += num;
+	//iter2 += type;
+	cout << type << endl;
+	//cout << (*iter)->GetCharacterType() << endl;
+	//(*iter)->
+	//todo 1. 벡터 새로 만들어서 swap
+
+
+	if (type == GUITAR)
+	{
+		(*iter)->SetChild(m_pGuitarModel->m_pModelRootObject);
+		(*iter)->SetScale(XMFLOAT3(60, 60, 60));
+		(*iter)->SetMesh(m_pGuitarModel->m_pModelRootObject->m_pMesh);
+		//(*iter)->SetCharacterType(GUITAR);
+		(*iter)->SetPosition(XMFLOAT3(2580, 10, 1745));
+	}
+
+	else if (type == KEYBOARD)
+	{
+		(*iter)->SetChild(m_pKeyBoardModel->m_pModelRootObject);
+		(*iter)->SetScale(XMFLOAT3(60, 60, 60));
+		(*iter)->SetMesh(m_pKeyBoardModel->m_pModelRootObject->m_pMesh);
+		//(*iter)->SetCharacterType(KEYBOARD);
+		(*iter)->SetPosition(XMFLOAT3(2580, 10, 1745));
+
+	}
+
+	else if (type == DRUM)
+	{
+		(*iter)->SetChild(m_pDrumModel->m_pModelRootObject);
+		(*iter)->SetScale(XMFLOAT3(60, 60, 60));
+		(*iter)->SetMesh(m_pDrumModel->m_pModelRootObject->m_pMesh);
+		//(*iter)->SetCharacterType(DRUM);
+		(*iter)->SetPosition(XMFLOAT3(2580, 10, 1745));
+
+	}
+	else if (type == VOCAL)
+	{
+		(*iter)->SetChild(m_pVocalModel->m_pModelRootObject);
+		(*iter)->SetScale(XMFLOAT3(60, 60, 60));
+		(*iter)->SetMesh(m_pVocalModel->m_pModelRootObject->m_pMesh);
+		//(*iter)->SetCharacterType(VOCAL);
+		(*iter)->SetPosition(XMFLOAT3(2580, 10, 1745));
+	}
+	else if (type == BASS)
+	{
+		(*iter)->SetChild(m_pBassModel->m_pModelRootObject);
+		(*iter)->SetScale(XMFLOAT3(60, 60, 60));
+		(*iter)->SetMesh(m_pBassModel->m_pModelRootObject->m_pMesh);
+		//(*iter)->SetCharacterType(BASS);
+		(*iter)->SetPosition(XMFLOAT3(2580, 10, 1745));
+	}
+}

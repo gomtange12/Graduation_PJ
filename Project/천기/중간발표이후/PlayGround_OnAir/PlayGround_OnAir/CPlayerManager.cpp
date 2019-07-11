@@ -41,7 +41,7 @@ E_CHARACTERTYPE CPlayerManager::CheckSceneCharacter(const POINT& pos)
 		cout << "기타 선택" << endl;
 		return GUITAR;
 	}
-	else return GUITAR;
+	
 }
 CPlayerManager::CPlayerManager()
 {
@@ -53,6 +53,7 @@ CPlayerManager::CPlayerManager()
 CPlayerManager::~CPlayerManager()
 {
 }
+
 void CPlayerManager::ChangePlayer(E_CHARACTERTYPE type, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
 	CLoadedModelInfo*         m_pGuitarModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
@@ -236,7 +237,7 @@ void CPlayerManager::AddPlayer(CTerrainPlayer* playerObj, E_PLAYERTYPE objType, 
 	//}
 }
 
-void CPlayerManager::SetPlayerResource()
+void CPlayerManager::SetOtherPlayerResource(int num, E_CHARACTERTYPE type, bool isTeam)
 {
 	
 }

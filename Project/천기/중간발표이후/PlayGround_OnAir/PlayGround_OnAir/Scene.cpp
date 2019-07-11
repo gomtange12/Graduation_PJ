@@ -236,7 +236,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 	//
-	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 50, 130); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
+	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 50, 180); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
 	//CreateShaderResourceViews();
 	CMaterial::PrepareShaders(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	//
