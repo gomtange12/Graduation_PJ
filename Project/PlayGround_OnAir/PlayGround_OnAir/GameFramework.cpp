@@ -409,13 +409,14 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 				//PLAYER->SetCharacterArray(type, num);
 				E_CHARACTERTYPE type;
 				type = PLAYER->CheckSceneCharacter(m_LeftCursorPos);
+				cout << "type!" << type << endl;
 				PLAYER->ChangePlayer(type, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 				PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 				//if (type == KEYBOARD)
 				//	PLAYER->GetPlayer()->SetMesh(m_pKeyBoardModel->m_pModelRootObject->m_pMesh);
 																		   //PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
-				//PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
-
+				//PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosiation(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+				
 				SetCamera(PLAYER->GetPlayer()->GetCamera());
 				if (num > 5) num = 0;
 				num++;
@@ -436,7 +437,37 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 			break;
 	}
 }
+void CGameFramework::ChangePlayerCharacter(){
+	cout << "pckChecked" << endl;
+	if (PLAYER->GetOtherPlayerMap().size() > 0)
+	{
 
+		int i = 0;
+		for (auto p : PLAYER->GetOtherPlayerMap())
+		{
+			p->SetPlayerCharacter(p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+			i++;
+			cout << i << "enemyChecked" << endl;
+
+		}
+
+	}
+	if (PLAYER->GetTeamPlayerMap().size() > 0)
+	{
+
+		int i = 0;
+		for (auto p : PLAYER->GetTeamPlayerMap())
+		{
+			if (p->GetClientNum() != -1) {
+				p->SetPlayerCharacter(p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+				i++;
+			}
+			cout << i << "TeamChecked" << endl;
+
+		}
+
+	}
+}
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
 	if (m_pScene) m_pScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
@@ -459,15 +490,19 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 				case VK_F5: {
 					if (m_ready == false) {
 						CNETWORK->MatchPkt();
-						//SCENEMANAGER->SetScene(PLAYGROUNDMAP);
+						
 						//m_pCamera = PLAYER->GetPlayer()->GetCamera();
 						cout << "매칭!";
 						m_ready = true;
 					}
 					break;
 				}
+				case VK_F6:
+					SCENEMANAGER->SetScene(PLAYGROUNDMAP);
+					break;
 				case VK_F7: {
 					CNETWORK->LobbyPkt(true);
+					m_ready = false;
 					break;
 				}
 				case VK_F11:
@@ -917,7 +952,7 @@ void CGameFramework::FrameAdvance()
 		//}
 	}
 	
-
+	
 
     AnimateObjects();
 

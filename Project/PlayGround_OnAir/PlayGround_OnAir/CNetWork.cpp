@@ -90,16 +90,15 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	case SC_SCENE:
 	{
 		sc_packet_scene *paket = reinterpret_cast<sc_packet_scene *>(ptr);
-		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
+		//SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
 		
 		//솔로모드면
-		/*if (paket->mod == SOLO) {
+		if (paket->mod == SOLO) {
 			for (int i = 0; i < 2; ++i) {
 				if (myid == paket->ids[i]) {
 					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 					PLAYER->GetPlayer()->SetClientNum(myid);
 					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
-					PLAYER->GetPlayer()->m_match = true;
 				}
 
 				else {
@@ -108,7 +107,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				}
 			}
 		}
-		else if (paket->mod = SQUAD) {*/
+		else if (paket->mod = SQUAD) {
 			//팀모드면
 			for (int i = 0; i < 2; ++i) {
 				if (myid == paket->ids[i]) {
@@ -130,13 +129,13 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					if (myid != paket->ids[i]) {
 						PLAYER->GetTeamPlayerMap()[i]->SetClientNum(paket->ids[i]);
 						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
-						//PLAYER->GetTeamPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+						PLAYER->GetTeamPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
 					}
 				}
 				for (int i = 0; i < 2; ++i) {
 					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i + 2]);
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i + 2]);
-					//PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i + 2]);
+					PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i + 2]);
 				}
 			}
 			else {
@@ -152,7 +151,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					if (myid != paket->ids[i]) {
 						PLAYER->GetTeamPlayerMap()[0]->SetClientNum(paket->ids[i]);
 						PLAYER->GetTeamPlayerMap()[0]->NumberByPos(paket->posN[i]);
-						//PLAYER->GetTeamPlayerMap()[0]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+						PLAYER->GetTeamPlayerMap()[0]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
 					}
 				}
 
@@ -160,15 +159,17 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				for (int i = 0; i < 2; ++i) {
 					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
-					//PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+					PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+					
 				}
 
 			}
-		//}
+		}
+
+		CNetCGameFramework->ChangePlayerCharacter();
 
 		PLAYER->GetPlayer()->m_match = true;
 		CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
-
 		break;
 	}
 
@@ -365,7 +366,7 @@ void CNetWork::MatchPkt()
 	pkt->avatar = PLAYER->GetPlayer()->GetCharacterType();
 	pkt->map = map;
 	pkt->mod = mod;
-
+	
 	SendPacket();
 }
 void CNetWork::StatePkt(DWORD state)

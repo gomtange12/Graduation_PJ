@@ -41,7 +41,7 @@ E_CHARACTERTYPE CPlayerManager::CheckSceneCharacter(const POINT& pos)
 		cout << "기타 선택" << endl;
 		return GUITAR;
 	}
-	else return GUITAR;
+	
 }
 CPlayerManager::CPlayerManager()
 {
@@ -53,13 +53,9 @@ CPlayerManager::CPlayerManager()
 CPlayerManager::~CPlayerManager()
 {
 }
+
 void CPlayerManager::ChangePlayer(E_CHARACTERTYPE type, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
-	CLoadedModelInfo*         m_pGuitarModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
-	CLoadedModelInfo*         m_pKeyBoardModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
-	CLoadedModelInfo*         m_pDrumModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);;
-	CLoadedModelInfo*         m_pBassModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
-	CLoadedModelInfo*         m_pVocalModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
 
 
 	if (type == GUITAR)
@@ -124,12 +120,29 @@ void CPlayerManager::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	m_pGuitarPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
 	m_pVocalPlayer = std::make_shared<CTerrainPlayer>(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext);
 
-	m_SharedPlayerMap.emplace(KEYBOARD, m_pKeyboardPlayer);
+	/*m_SharedPlayerMap.emplace(KEYBOARD, m_pKeyboardPlayer);
 	m_SharedPlayerMap.emplace(BASS, m_pBassPlayer);
 	m_SharedPlayerMap.emplace(DRUM, m_pDrumPlayer);
 	m_SharedPlayerMap.emplace(GUITAR, m_pGuitarPlayer);
-	m_SharedPlayerMap.emplace(VOCAL, m_pVocalPlayer);
+	m_SharedPlayerMap.emplace(VOCAL, m_pVocalPlayer);*/
 
+	m_pGuitarModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
+	m_pKeyBoardModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
+	m_pDrumModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);;
+	m_pVocalModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
+	m_pBassModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
+
+	m_pGuitarModel2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
+	m_pKeyBoardModel2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
+	m_pDrumModel2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);;
+	m_pVocalModel2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
+	m_pBassModel2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
+
+	m_OtherResourceMap.emplace(GUITAR, m_pGuitarModel2);
+	m_OtherResourceMap.emplace(KEYBOARD, m_pKeyBoardModel2);
+	m_OtherResourceMap.emplace(DRUM, m_pDrumModel2);
+	m_OtherResourceMap.emplace(VOCAL, m_pVocalModel2);
+	m_OtherResourceMap.emplace(BASS, m_pBassModel2);
 
 	//if (CNETWORK->GetInstance()->)
 
@@ -236,7 +249,7 @@ void CPlayerManager::AddPlayer(CTerrainPlayer* playerObj, E_PLAYERTYPE objType, 
 	//}
 }
 
-void CPlayerManager::SetPlayerResource()
+void CPlayerManager::SetOtherPlayerResource(int num, E_CHARACTERTYPE type, bool isTeam)
 {
 	
 }

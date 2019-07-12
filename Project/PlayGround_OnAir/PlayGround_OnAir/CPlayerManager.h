@@ -1,10 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "MyData.h"
+#include "map"
 class CPlayer;
 class CTerrainPlayer;
 
-
+class CLoadedModelInfo;
 class COtherPlayers;
 class CPlayerManager : public CSingleTonBase<CPlayerManager>
 {
@@ -13,24 +14,37 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 
 	//std::vector<std::shared_ptr<COtherPlayer>>				m_pOtherPlayer;
 	std::map<E_PLAYERTYPE, vector<CTerrainPlayer*>>			m_PlayerMap;
-	std::vector<COtherPlayers*>								m_pOtherPlayerMap;
-	std::vector<COtherPlayers*>								m_pTeamPlayerMap;
 	//array<E_CHARACTERTYPE, 5> m_character_Array ;
 	//array<E_CHARACTERTYPE, 5> m_Othercharacter_Array;
-	E_CHARACTERTYPE m_characterArray[5];
-	E_CHARACTERTYPE m_OthercharacterArray[5];
+	CLoadedModelInfo*         m_pGuitarModel{ nullptr };
+	CLoadedModelInfo*		  m_pKeyBoardModel{ nullptr };
+	CLoadedModelInfo*         m_pDrumModel{ nullptr };
+	CLoadedModelInfo*         m_pVocalModel{ nullptr };
+	CLoadedModelInfo*		  m_pBassModel{ nullptr };
+	CLoadedModelInfo*         m_pGuitarModel2{ nullptr };
+	CLoadedModelInfo*		  m_pKeyBoardModel2{ nullptr };
+	CLoadedModelInfo*         m_pDrumModel2{ nullptr };
+	CLoadedModelInfo*         m_pVocalModel2{ nullptr };
+	CLoadedModelInfo*		  m_pBassModel2{ nullptr };
+
+	std::map<E_CHARACTERTYPE, CLoadedModelInfo*> m_OtherResourceMap;
+public:
+	std::map<E_CHARACTERTYPE, CLoadedModelInfo*> GetOtherResourceModel() { return m_OtherResourceMap; }
+	std::vector<COtherPlayers*>								m_pOtherPlayerMap;
+	std::vector<COtherPlayers*>								m_pTeamPlayerMap;
 	std::shared_ptr<CTerrainPlayer>							m_pGuitarPlayer = nullptr;
 	std::shared_ptr<CTerrainPlayer>							m_pBassPlayer = nullptr;
 	std::shared_ptr<CTerrainPlayer>							m_pKeyboardPlayer = nullptr;
 	std::shared_ptr<CTerrainPlayer>							m_pDrumPlayer = nullptr;
 	std::shared_ptr<CTerrainPlayer>							m_pVocalPlayer = nullptr;
 	std::map<E_CHARACTERTYPE, std::shared_ptr<CTerrainPlayer>>			m_SharedPlayerMap;
-
-public:
-	E_CHARACTERTYPE* GetCharacterArray() { return m_characterArray; }
-	E_CHARACTERTYPE* GetOtherCharacterArray() { return 	m_OthercharacterArray; }
 	void ChangePlayer(E_CHARACTERTYPE type, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 
+	E_CHARACTERTYPE m_characterArray[5];
+	E_CHARACTERTYPE m_OthercharacterArray[5];
+	E_CHARACTERTYPE* GetCharacterArray() { return m_characterArray; }
+	E_CHARACTERTYPE* GetOtherCharacterArray() { return 	m_OthercharacterArray; }
+	
 	E_CHARACTERTYPE CheckSceneCharacter(const POINT& pos);
 	void SetCharacterArray(E_CHARACTERTYPE type, int num) { m_characterArray[num] = type; }
 	void SetOtherCharacterArray(E_CHARACTERTYPE type, int num) { m_OthercharacterArray[num] = type; }
@@ -54,7 +68,8 @@ public:
 	int m_MaxPlayerNum{ 8 };
 	void AddPlayer(CTerrainPlayer* playerObj, E_PLAYERTYPE type, E_CHARACTERTYPE charactertype);
 
-	void SetPlayerResource();
+	void SetOtherPlayerResource(int num, E_CHARACTERTYPE type, bool isTeam);
+
 	//std::map<E_PLAYERTYPE, vector<CTerrainPlayer*>> GetPlayerMap() { return m_PlayerMap; }
 	//std::vector<CTerrainPlayer*> GetPlayerList() { return m_vecPlayerList; }
 
