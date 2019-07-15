@@ -532,6 +532,7 @@ void CPlayer::NumberByPos(int num) {
 	case 1:
 	{
 		m_xmf3Position = XMFLOAT3(2560, 10, 1745);
+		
 		break;
 	}
 	case 2: {

@@ -99,11 +99,13 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 					PLAYER->GetPlayer()->SetClientNum(myid);
 					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+					
 				}
 
 				else {
 					PLAYER->GetOtherPlayerMap()[0]->SetClientNum(paket->ids[i]);
 					PLAYER->GetOtherPlayerMap()[0]->NumberByPos(paket->posN[i]);
+					
 				}
 			}
 		}
@@ -121,7 +123,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 						PLAYER->GetPlayer()->SetClientNum(myid);
 						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
-
+						
 					}
 				}
 
@@ -130,12 +132,14 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetTeamPlayerMap()[i]->SetClientNum(paket->ids[i]);
 						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
 						PLAYER->GetTeamPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+						
 					}
 				}
 				for (int i = 0; i < 2; ++i) {
 					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i + 2]);
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i + 2]);
 					PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i + 2]);
+					
 				}
 			}
 			else {
@@ -144,6 +148,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 						PLAYER->GetPlayer()->SetClientNum(myid);
 						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+						
 					}
 				}
 
@@ -152,6 +157,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetTeamPlayerMap()[0]->SetClientNum(paket->ids[i]);
 						PLAYER->GetTeamPlayerMap()[0]->NumberByPos(paket->posN[i]);
 						PLAYER->GetTeamPlayerMap()[0]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+						
 					}
 				}
 
@@ -165,8 +171,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 
 			}
 		}
-
-		CNetCGameFramework->ChangePlayerCharacter();
+		PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(25, 10, 25), XMFLOAT4(0, 0, 0, 1));
+		//CNetCGameFramework->ChangePlayerCharacter();
 
 		PLAYER->GetPlayer()->m_match = true;
 		CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
@@ -230,26 +236,18 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_collision *pkt = reinterpret_cast<sc_packet_collision *>(ptr);
 
-		XMFLOAT3 xmf3Shift = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		float fDistance = 5.25f;
-
+		//어깨빵 시스템 OFF - 사용이 필요하면 서버에서 ON
 		if (PLAYER->GetPlayer()->GetClientNum() == myid) {
-			if (pkt->id == myid || pkt->otherid == myid) { //내가가서 충돌
-				PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -fDistance));
-				PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
+			if (pkt->otherid == myid) { //내가가서 충돌
 				PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
 				break;
 			}
 			for (int i = 0; i < 2; ++i) {
-				if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum() || pkt->otherid == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
-					PLAYER->GetOtherPlayerMap()[i]->SetPosition(Vector3::Add(PLAYER->GetOtherPlayerMap()[i]->GetPosition(), PLAYER->GetOtherPlayerMap()[i]->GetLookVector(), -fDistance));
-					PLAYER->GetOtherPlayerMap()[i]->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
+				if (pkt->otherid == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
 					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
 					break;
 				}
-				else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum() || pkt->otherid == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
-					PLAYER->GetTeamPlayerMap()[i]->SetPosition(Vector3::Add(PLAYER->GetTeamPlayerMap()[i]->GetPosition(), PLAYER->GetTeamPlayerMap()[i]->GetLookVector(), -fDistance));
-					PLAYER->GetTeamPlayerMap()[i]->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f));
+				else if (pkt->otherid == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
 					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
 					break;
 				}
@@ -325,11 +323,10 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 
 		SCENEMANAGER->SetScene(MENUSCENE);
 		PLAYER->GetPlayer()->m_match = false;
-		PLAYER->GetOtherPlayerMap()[0]->m_match = false;
-		PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));
-		PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
-		PLAYER->GetOtherPlayerMap()[0]->SetPosition(XMFLOAT3(440.0f, 50, 1745));
-		PLAYER->GetOtherPlayerMap()[0]->SetOOBB(PLAYER->GetOtherPlayerMap()[0]->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+		for (int i = 0; i < 2; ++i) {
+			PLAYER->GetOtherPlayerMap()[i]->m_match = false;
+			PLAYER->GetTeamPlayerMap()[i]->m_match = false;
+		}
 		CNetCGameFramework->m_ready = false;
 
 

@@ -43,14 +43,14 @@ void RoomManager::SoloRoomMatch(int id)
 							objectManager->GetPlayer(room[i]->m_SoloIds[0])->NumberByPos(1);
 							objectManager->GetPlayer(room[i]->m_SoloIds[0])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_SoloIds[0])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_SoloIds[0])->m_xmf3Position.y,
-								objectManager->GetPlayer(room[i]->m_SoloIds[0])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
+								objectManager->GetPlayer(room[i]->m_SoloIds[0])->m_xmf3Position.z), XMFLOAT3(25, 10, 25), XMFLOAT4(0, 0, 0, 1));
 
 							//objectManager->GetPlayer(room[i]->m_SoloIds[1])->avatar = BASS;
 							objectManager->GetPlayer(room[i]->m_SoloIds[1])->posN = 5;
 							objectManager->GetPlayer(room[i]->m_SoloIds[1])->NumberByPos(5);
 							objectManager->GetPlayer(room[i]->m_SoloIds[1])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_SoloIds[1])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_SoloIds[1])->m_xmf3Position.y,
-								objectManager->GetPlayer(room[i]->m_SoloIds[1])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
+								objectManager->GetPlayer(room[i]->m_SoloIds[1])->m_xmf3Position.z), XMFLOAT3(25, 10, 25), XMFLOAT4(0, 0, 0, 1));
 							////
 
 							for (int k = 0; k < SOLO_RNUM; ++k) {
@@ -104,28 +104,28 @@ void RoomManager::TeamRoomMatch(int id)
 							objectManager->GetPlayer(room[i]->m_TeamIds[0])->NumberByPos(1);
 							objectManager->GetPlayer(room[i]->m_TeamIds[0])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_TeamIds[0])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_TeamIds[0])->m_xmf3Position.y,
-								objectManager->GetPlayer(room[i]->m_TeamIds[0])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
+								objectManager->GetPlayer(room[i]->m_TeamIds[0])->m_xmf3Position.z), XMFLOAT3(25, 10, 25), XMFLOAT4(0, 0, 0, 1));
 
 							//objectManager->GetPlayer(room[i]->m_TeamIds[1])->avatar = BASS;
 							objectManager->GetPlayer(room[i]->m_TeamIds[1])->posN = 2;
 							objectManager->GetPlayer(room[i]->m_TeamIds[1])->NumberByPos(2);
 							objectManager->GetPlayer(room[i]->m_TeamIds[1])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_TeamIds[1])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_TeamIds[1])->m_xmf3Position.y,
-								objectManager->GetPlayer(room[i]->m_TeamIds[1])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
+								objectManager->GetPlayer(room[i]->m_TeamIds[1])->m_xmf3Position.z), XMFLOAT3(25, 10, 25), XMFLOAT4(0, 0, 0, 1));
 
 							//objectManager->GetPlayer(room[i]->m_TeamIds[2])->avatar = KEYBOARD;
 							objectManager->GetPlayer(room[i]->m_TeamIds[2])->posN = 5;
 							objectManager->GetPlayer(room[i]->m_TeamIds[2])->NumberByPos(5);
 							objectManager->GetPlayer(room[i]->m_TeamIds[2])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_TeamIds[2])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_TeamIds[2])->m_xmf3Position.y,
-								objectManager->GetPlayer(room[i]->m_TeamIds[2])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
+								objectManager->GetPlayer(room[i]->m_TeamIds[2])->m_xmf3Position.z), XMFLOAT3(25, 10, 25), XMFLOAT4(0, 0, 0, 1));
 
 							//objectManager->GetPlayer(room[i]->m_TeamIds[3])->avatar = VOCAL;
 							objectManager->GetPlayer(room[i]->m_TeamIds[3])->posN = 6;
 							objectManager->GetPlayer(room[i]->m_TeamIds[3])->NumberByPos(6);
 							objectManager->GetPlayer(room[i]->m_TeamIds[3])->SetOOBB(XMFLOAT3(objectManager->GetPlayer(room[i]->m_TeamIds[3])->m_xmf3Position.x,
 								objectManager->GetPlayer(room[i]->m_TeamIds[3])->m_xmf3Position.y,
-								objectManager->GetPlayer(room[i]->m_TeamIds[3])->m_xmf3Position.z), XMFLOAT3(8, 10, 8), XMFLOAT4(0, 0, 0, 1));
+								objectManager->GetPlayer(room[i]->m_TeamIds[3])->m_xmf3Position.z), XMFLOAT3(25, 10, 25), XMFLOAT4(0, 0, 0, 1));
 
 							/*objectManager->GetPlayer(room[i]->m_TeamIds[4])->avatar = B;
 							objectManager->GetPlayer(room[i]->m_TeamIds[4])->posN = 5;

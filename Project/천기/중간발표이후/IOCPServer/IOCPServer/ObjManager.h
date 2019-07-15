@@ -10,7 +10,7 @@ private:
 	std::array<Player*, MAX_USER>		g_clients;
 	
 	int soloRoomNum;
-	float fCollDistance = 40.0f;
+	float fCollDistance = 5.25f;
 
 	
 	

@@ -501,8 +501,10 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 					SCENEMANAGER->SetScene(PLAYGROUNDMAP);
 					break;
 				case VK_F7: {
-					CNETWORK->LobbyPkt(true);
-					m_ready = false;
+					if (m_ready == true) {
+						CNETWORK->LobbyPkt(true);
+						m_ready = false;
+					}
 					break;
 				}
 				case VK_F11:
@@ -651,7 +653,7 @@ void CGameFramework::BuildObjects()
 
 	PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
-	PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
+	//PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
 	
 	//PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3(440.0f, 50, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 	//PLAYER->GetOtherPlayer()->SetScale(XMFLOAT3(40,20, 40)); //박스도 151515배 여기여기0409
@@ -826,9 +828,10 @@ void CGameFramework::ProcessInput()
 			if (dwDirection)
 			{
 				//PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
-				
-				if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN)
-					CNETWORK->StatePkt(dwDirection);
+				if (PLAYER->GetPlayer()->GetPlayerState() != STUN) {
+					if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN)
+						CNETWORK->StatePkt(dwDirection);
+				}
 
 			}
 		}
@@ -946,10 +949,9 @@ void CGameFramework::FrameAdvance()
 	m_GameTimer.Tick(60.0f);
 
 	if (SCENEMANAGER->GetSceneType() == PLAYGROUNDMAP || SCENEMANAGER->GetSceneType() == CONCERTMAP) {
-		//if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
-
+		// 
 			ProcessInput();
-		//}
+		
 	}
 	
 	
