@@ -16,7 +16,7 @@ ModNumber CSceneManager::CheckModeButton(const POINT & pos)
 	}
 	else if (cursorpos.x > 0.55 && cursorpos.x < 0.8 && cursorpos.y>0.15 && cursorpos.y < 0.35)
 	{
-		cout << "µà¿À ¼±ÅÃ" << endl;
+		cout << "½ºÄõµå ¼±ÅÃ" << endl;
 
 		return SQUAD;
 	}

@@ -60,6 +60,7 @@ protected:
 	E_CHARACTERTYPE                m_CharacterType;
 
 public:
+	int posNumber = -1;
 	E_CHARACTERTYPE GetCharacterType() { return m_CharacterType; }
 	void SetCharacterType(E_CHARACTERTYPE type) { m_CharacterType = type; }
 public:

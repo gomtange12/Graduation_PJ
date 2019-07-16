@@ -526,7 +526,7 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr
 	if (nCameraMode == THIRD_PERSON_CAMERA) CGameObject::Render(pd3dCommandList, pCamera);
 }
 void CPlayer::NumberByPos(int num) {
-
+	posNumber = num;
 	switch (num)
 	{
 	case 1:
@@ -1168,14 +1168,14 @@ void COtherPlayers::SetPlayerCharacter(bool isTeam, E_CHARACTERTYPE type, int nu
 	cout << "¸ðµ¨ ¹Ù²Ù·¯ ¿È" << endl;
 
 	(*iter) = PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam);
-
 	CLoadedModelInfo* m_pGModel = PLAYER->GetOtherModelResourceFromPool(num, type, isTeam);
-	(*iter)->SetMesh(m_pGModel->m_pModelRootObject->m_pMesh);
+	
 	(*iter)->SetChild(m_pGModel->m_pModelRootObject);
-	(*iter)->SetScale(XMFLOAT3(0, 0, 0));
+	(*iter)->SetScale(XMFLOAT3(60, 60,60));
+	(*iter)->SetMesh(m_pGModel->m_pModelRootObject->m_pMesh);
 	(*iter)->SetCharacterType(type);
 
-	//(*iter)->NumberByPos(num);
-	(*iter)->SetPosition(XMFLOAT3(2580, 10, 1745));
+	(*iter)->NumberByPos((*iter)->posNumber);
+	//(*iter)->SetPosition(XMFLOAT3(2580, 10, 1745));
 
 }

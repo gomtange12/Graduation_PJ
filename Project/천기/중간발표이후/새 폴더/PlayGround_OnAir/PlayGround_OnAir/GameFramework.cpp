@@ -446,7 +446,9 @@ void CGameFramework::ChangePlayerCharacter(){
 		//for (auto&& p= PLAYER->GetOtherPlayerMap().begin(); p< p + 2; ++p)
 		for (auto p : PLAYER->GetOtherPlayerMap())
 		{
-			p->SetPlayerCharacter(false, p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+			if (p->GetClientNum() != -1) {
+				p->SetPlayerCharacter(false, p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+			}
 			i++;
 			cout << i << "enemyChecked" << endl;
 
@@ -460,6 +462,7 @@ void CGameFramework::ChangePlayerCharacter(){
 		//for (auto&& p = PLAYER->GetTeamPlayerMap().begin(); p < p + 2; ++p)
 		{
 			if (p->GetClientNum() != -1) {
+
 				p->SetPlayerCharacter(true, p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 			}
 			i++;
