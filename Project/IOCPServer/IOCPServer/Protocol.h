@@ -65,7 +65,7 @@ struct sc_packet_scene {
 	BYTE size;
 	BYTE type;
 	char sceneNum;
-	WORD roomNum;
+	char roomNum;
 	char mod;
 	char avatar[4];
 	char ids[4];

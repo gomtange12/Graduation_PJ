@@ -215,7 +215,7 @@ class COtherPlayers : public CPlayer
 	COtherPlayers*                     m_pVocalPlayer = nullptr;
 public:
 	COtherPlayers(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void *pContext = NULL);
-	void SetPlayerCharacter(E_CHARACTERTYPE type, int num, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext);
+	void SetPlayerCharacter(bool isTeam, E_CHARACTERTYPE type, int num, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext);
 	virtual void OnPlayerUpdateCallback(float fTimeElapsed);
 	virtual void OnCameraUpdateCallback(float fTimeElapsed);
 	virtual void Update(float fTimeElapsed);

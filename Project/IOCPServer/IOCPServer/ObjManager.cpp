@@ -33,9 +33,9 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 		std::cout << "Machig Request --- " << std::endl;
 
 		cs_packet_matching *match = reinterpret_cast<cs_packet_matching *>(packet);
-		g_clients[id]->avatar = (E_CHARACTERTYPE)match->avatar;
-		g_clients[id]->map = (SceneState)match->map;
-		g_clients[id]->mod = (ModNumber)match->mod;
+		g_clients[id]->avatar = match->avatar;
+		g_clients[id]->map = match->map;
+		g_clients[id]->mod = match->mod;
 
 		std::cout << "ID : " << id << std::endl;
 		std::cout << "Avatar : " << g_clients[id]->avatar << std::endl;
@@ -101,7 +101,7 @@ void ObjManager::ModMatch(int id)
 	}
 	case DUO:
 	{
-		ROOMMANAGER->TeamRoomMatch(id);
+		//ROOMMANAGER->TeamRoomMatch(id);
 		break;
 	}
 	case SQUAD:

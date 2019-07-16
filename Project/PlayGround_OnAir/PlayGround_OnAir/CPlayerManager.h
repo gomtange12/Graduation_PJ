@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "MyData.h"
-#include "map"
 class CPlayer;
 class CTerrainPlayer;
 
@@ -14,22 +13,30 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 
 	//std::vector<std::shared_ptr<COtherPlayer>>				m_pOtherPlayer;
 	std::map<E_PLAYERTYPE, vector<CTerrainPlayer*>>			m_PlayerMap;
-	//array<E_CHARACTERTYPE, 5> m_character_Array ;
-	//array<E_CHARACTERTYPE, 5> m_Othercharacter_Array;
-	CLoadedModelInfo*         m_pGuitarModel{ nullptr };
-	CLoadedModelInfo*		  m_pKeyBoardModel{ nullptr };
-	CLoadedModelInfo*         m_pDrumModel{ nullptr };
-	CLoadedModelInfo*         m_pVocalModel{ nullptr };
-	CLoadedModelInfo*		  m_pBassModel{ nullptr };
-	CLoadedModelInfo*         m_pGuitarModel2{ nullptr };
-	CLoadedModelInfo*		  m_pKeyBoardModel2{ nullptr };
-	CLoadedModelInfo*         m_pDrumModel2{ nullptr };
-	CLoadedModelInfo*         m_pVocalModel2{ nullptr };
-	CLoadedModelInfo*		  m_pBassModel2{ nullptr };
+	COtherPlayers*                     m_pEnemyGuitarPlayer[2];
+	COtherPlayers*                     m_pEnemyBassPlayer[2];
+	COtherPlayers*                     m_pEnemyKeyboardPlayer[2];
+	COtherPlayers*                     m_pEnemyDrumPlayer[2];
+	COtherPlayers*                     m_pEnemyVocalPlayer[2];
 
-	std::map<E_CHARACTERTYPE, CLoadedModelInfo*> m_OtherResourceMap;
+	COtherPlayers*                     m_pTeamGuitarPlayer;
+	COtherPlayers*                     m_pTeamBassPlayer;
+	COtherPlayers*                     m_pTeamKeyboardPlayer;
+	COtherPlayers*                     m_pTeamDrumPlayer;
+	COtherPlayers*                     m_pTeamVocalPlayer;
+
+	CLoadedModelInfo*                     m_pEnemyGuitarModel[3];
+	CLoadedModelInfo*                     m_pEnemyBassModel[3];
+	CLoadedModelInfo*                     m_pEnemyKeyboardModel[3];
+	CLoadedModelInfo*                     m_pEnemyDrumModel[3];
+	CLoadedModelInfo*                     m_pEnemyVocalModel[3];
+
+	CLoadedModelInfo*                     m_pTeamGuitarModel = nullptr;
+	CLoadedModelInfo*                     m_pTeamBassModel = nullptr;
+	CLoadedModelInfo*                     m_pTeamKeyboardModel = nullptr;
+	CLoadedModelInfo*                     m_pTeamDrumModel = nullptr;
+	CLoadedModelInfo*                     m_pTeamVocalModel = nullptr;
 public:
-	std::map<E_CHARACTERTYPE, CLoadedModelInfo*> GetOtherResourceModel() { return m_OtherResourceMap; }
 	std::vector<COtherPlayers*>								m_pOtherPlayerMap;
 	std::vector<COtherPlayers*>								m_pTeamPlayerMap;
 	std::shared_ptr<CTerrainPlayer>							m_pGuitarPlayer = nullptr;
@@ -64,14 +71,15 @@ public:
 	std::shared_ptr<CTerrainPlayer> GetPlayer() { return m_pPlayer; }
 	std::shared_ptr<COtherPlayers> GetOtherPlayer() { return m_pOtherPlayer; }
 
-	//std::shared_ptr<CTerrainPlayer> SetPlayer() { return m_pPlayer; }
 	int m_MaxPlayerNum{ 8 };
 	void AddPlayer(CTerrainPlayer* playerObj, E_PLAYERTYPE type, E_CHARACTERTYPE charactertype);
 
 	void SetOtherPlayerResource(int num, E_CHARACTERTYPE type, bool isTeam);
 
-	//std::map<E_PLAYERTYPE, vector<CTerrainPlayer*>> GetPlayerMap() { return m_PlayerMap; }
-	//std::vector<CTerrainPlayer*> GetPlayerList() { return m_vecPlayerList; }
+	COtherPlayers* GetOtherPlayerResourceFromPool(int num, E_CHARACTERTYPE type, bool isTeam);
+	CLoadedModelInfo* GetOtherModelResourceFromPool(int num, E_CHARACTERTYPE type, bool isTeam);
+	void SetOtherModelResource(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext);
+	void SetOtherPlayerResourceFromPool(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext);
 
 
 	

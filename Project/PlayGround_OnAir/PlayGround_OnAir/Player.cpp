@@ -1143,80 +1143,39 @@ void COtherPlayers::Update(float fTimeElapsed)
 	m_xmOOBB.Center = m_xmf3Position;
 	m_xmOOBB.Center.y = m_xmf3Position.y + GetBoundingBox().Extents.y;
 }
-void COtherPlayers::SetPlayerCharacter(E_CHARACTERTYPE type, int num, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
+void COtherPlayers::SetPlayerCharacter(bool isTeam, E_CHARACTERTYPE type, int num, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
 
+	cout << num << endl;
 
-	//플레이어맵 
-	m_pKeyboardPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext);
-	m_pBassPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext);
-	m_pDrumPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext);
-	m_pGuitarPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
-	m_pVocalPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext);
-
-
-
-
-	//auto iter2 = m_pOtherPlayerTempMap.begin();
-
-	auto iter = PLAYER->m_pOtherPlayerMap.begin();
-	//CNET->sc
+	vector<COtherPlayers*>::iterator iter;
+	if (isTeam)
+	{
+		iter = PLAYER->m_pTeamPlayerMap.begin();
+	}
+	else
+	{
+		iter = PLAYER->m_pOtherPlayerMap.begin();
+	}
 	iter += num;
+
+	//CNET->sc
+
+	cout << "num은 몇입니다" << num << endl;
 	//iter2 += type;
-	cout << type << endl;
-	//cout << (*iter)->GetCharacterType() << endl;
-	//(*iter)->
-	//todo 1. 벡터 새로 만들어서 swap
+	cout<<"들어온 타입" << type << endl;
 
+	cout << "모델 바꾸러 옴" << endl;
 
-	if (type == GUITAR)
-	{
-		//CLoadedModelInfo*         m_pGuitarModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
-		
-		(*iter)->SetChild(PLAYER->GetOtherResourceModel()[GUITAR]->m_pModelRootObject);
-		(*iter)->SetScale(XMFLOAT3(60, 60, 60));
-		(*iter)->SetMesh(PLAYER->GetOtherResourceModel()[GUITAR]->m_pModelRootObject->m_pMesh);
-		//(*iter)->SetCharacterType(GUITAR);
-		(*iter)->SetPosition(XMFLOAT3(2580, 10, 1745));
-	}
+	(*iter) = PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam);
 
-	else if (type == KEYBOARD)
-	{
-		//CLoadedModelInfo*         m_pKeyBoardModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
-		(*iter)->SetChild(PLAYER->GetOtherResourceModel()[KEYBOARD]->m_pModelRootObject);
-		(*iter)->SetScale(XMFLOAT3(60, 60, 60));
-		(*iter)->SetMesh(PLAYER->GetOtherResourceModel()[KEYBOARD]->m_pModelRootObject->m_pMesh);
-		//(*iter)->SetCharacterType(KEYBOARD);
-		(*iter)->SetPosition(XMFLOAT3(2580, 10, 1745));
+	CLoadedModelInfo* m_pGModel = PLAYER->GetOtherModelResourceFromPool(num, type, isTeam);
+	(*iter)->SetChild(m_pGModel->m_pModelRootObject);
+	(*iter)->SetScale(XMFLOAT3(60, 60, 60));
+	(*iter)->SetMesh(m_pGModel->m_pModelRootObject->m_pMesh);
+	(*iter)->SetCharacterType(type);
 
-	}
+	//(*iter)->NumberByPos(num);
+	(*iter)->SetPosition(XMFLOAT3(2580, 10, 1745));
 
-	else if (type == DRUM)
-	{
-		//CLoadedModelInfo*         m_pDrumModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);;
-		(*iter)->SetChild(PLAYER->GetOtherResourceModel()[DRUM]->m_pModelRootObject);
-		(*iter)->SetScale(XMFLOAT3(60, 60, 60));
-		(*iter)->SetMesh(PLAYER->GetOtherResourceModel()[DRUM]->m_pModelRootObject->m_pMesh);
-		//(*iter)->SetCharacterType(DRUM);
-		(*iter)->SetPosition(XMFLOAT3(2580, 10, 1745));
-
-	}
-	else if (type == VOCAL)
-	{
-		//CLoadedModelInfo*         m_pVocalModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
-		(*iter)->SetChild(PLAYER->GetOtherResourceModel()[VOCAL]->m_pModelRootObject);
-		(*iter)->SetScale(XMFLOAT3(60, 60, 60));
-		(*iter)->SetMesh(PLAYER->GetOtherResourceModel()[VOCAL]->m_pModelRootObject->m_pMesh);
-		//(*iter)->SetCharacterType(VOCAL);
-		(*iter)->SetPosition(XMFLOAT3(2580, 10, 1745));
-	}
-	else if (type == BASS)
-	{
-		//CLoadedModelInfo*         m_pBassModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
-		(*iter)->SetChild(PLAYER->GetOtherResourceModel()[BASS]->m_pModelRootObject);
-		(*iter)->SetScale(XMFLOAT3(60, 60, 60));
-		(*iter)->SetMesh(PLAYER->GetOtherResourceModel()[BASS]->m_pModelRootObject->m_pMesh);
-		//(*iter)->SetCharacterType(BASS);
-		(*iter)->SetPosition(XMFLOAT3(2580, 10, 1745));
-	}
 }

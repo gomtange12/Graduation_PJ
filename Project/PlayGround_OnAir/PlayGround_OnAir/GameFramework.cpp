@@ -443,9 +443,10 @@ void CGameFramework::ChangePlayerCharacter(){
 	{
 
 		int i = 0;
+		//for (auto&& p= PLAYER->GetOtherPlayerMap().begin(); p< p + 2; ++p)
 		for (auto p : PLAYER->GetOtherPlayerMap())
 		{
-			p->SetPlayerCharacter(p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+			p->SetPlayerCharacter(false, p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 			i++;
 			cout << i << "enemyChecked" << endl;
 
@@ -454,12 +455,12 @@ void CGameFramework::ChangePlayerCharacter(){
 	}
 	if (PLAYER->GetTeamPlayerMap().size() > 0)
 	{
-
 		int i = 0;
 		for (auto p : PLAYER->GetTeamPlayerMap())
+		//for (auto&& p = PLAYER->GetTeamPlayerMap().begin(); p < p + 2; ++p)
 		{
 			if (p->GetClientNum() != -1) {
-				p->SetPlayerCharacter(p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+				p->SetPlayerCharacter(true, p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 				i++;
 			}
 			cout << i << "TeamChecked" << endl;
@@ -624,6 +625,10 @@ void CGameFramework::BuildObjects()
 		//m_pScene->SetCollideBox();
 	}
 	OBJECTMANAGER->LoadPlayerResource(m_pd3dDevice, m_pd3dCommandList,m_pScene->GetGraphicsRootSignature());
+	PLAYER->SetOtherPlayerResourceFromPool(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+	PLAYER->SetOtherModelResource(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+
+	
 	//SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
 //SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
 
@@ -834,7 +839,8 @@ void CGameFramework::ProcessInput()
 		}
 	}
 	//PLAYER->GetPlayer()->SetAllowKey(true);
-	PLAYER->GetPlayer()->Update(m_GameTimer.GetTimeElapsed());
+	if (PLAYER->GetPlayer() != nullptr)
+		PLAYER->GetPlayer()->Update(m_GameTimer.GetTimeElapsed());
 	PLAYER->GetOtherPlayer()->Update(m_GameTimer.GetTimeElapsed());
 
 	if (PLAYER->GetOtherPlayerMap().size() > 0)
@@ -866,8 +872,8 @@ void CGameFramework::AnimateObjects()
 	m_pScene->AnimateObjects(fTimeElapsed);
 	//SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->AnimateObjects(fTimeElapsed);
 
-
-	PLAYER->GetPlayer()->Animate(fTimeElapsed);
+	if (PLAYER->GetPlayer() != nullptr)
+		PLAYER->GetPlayer()->Animate(fTimeElapsed);
 	//PLAYER->GetOtherPlayer()->Animate(fTimeElapsed);
 	if (PLAYER->GetOtherPlayerMap().size() > 0)
 	{
@@ -884,7 +890,8 @@ void CGameFramework::AnimateObjects()
 			p->Animate(fTimeElapsed);
 
 	}
-	PLAYER->GetPlayer()->UpdateTransform(NULL);
+	if (PLAYER->GetPlayer() != nullptr)
+		PLAYER->GetPlayer()->UpdateTransform(NULL);
 	//PLAYER->GetOtherPlayer()->UpdateTransform(NULL);
 	if (PLAYER->GetOtherPlayerMap().size() > 0)
 	{
