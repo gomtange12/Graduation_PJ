@@ -460,13 +460,14 @@ void CGameFramework::ChangePlayerCharacter(){
 		{
 			if (p->GetClientNum() != -1) {
 				p->SetPlayerCharacter(p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-				i++;
 			}
+				i++;
 			cout << i << "TeamChecked" << endl;
 
 		}
 
 	}
+	cout << "end" << endl;
 }
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
