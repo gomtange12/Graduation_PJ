@@ -13,17 +13,17 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 
 	//std::vector<std::shared_ptr<COtherPlayer>>				m_pOtherPlayer;
 	std::map<E_PLAYERTYPE, vector<CTerrainPlayer*>>			m_PlayerMap;
-	COtherPlayers*                     m_pEnemyGuitarPlayer[2];
-	COtherPlayers*                     m_pEnemyBassPlayer[2];
-	COtherPlayers*                     m_pEnemyKeyboardPlayer[2];
-	COtherPlayers*                     m_pEnemyDrumPlayer[2];
-	COtherPlayers*                     m_pEnemyVocalPlayer[2];
+	COtherPlayers*                     m_pEnemyGuitarPlayer[3];
+	COtherPlayers*                     m_pEnemyBassPlayer[3];
+	COtherPlayers*                     m_pEnemyKeyboardPlayer[3];
+	COtherPlayers*                     m_pEnemyDrumPlayer[3];
+	COtherPlayers*                     m_pEnemyVocalPlayer[3];
 
-	COtherPlayers*                     m_pTeamGuitarPlayer;
-	COtherPlayers*                     m_pTeamBassPlayer;
-	COtherPlayers*                     m_pTeamKeyboardPlayer;
-	COtherPlayers*                     m_pTeamDrumPlayer;
-	COtherPlayers*                     m_pTeamVocalPlayer;
+	COtherPlayers*                     m_pTeamGuitarPlayer[3];
+	COtherPlayers*                     m_pTeamBassPlayer[3];
+	COtherPlayers*                     m_pTeamKeyboardPlayer[3];
+	COtherPlayers*                     m_pTeamDrumPlayer[3];
+	COtherPlayers*                     m_pTeamVocalPlayer[3];
 
 	CLoadedModelInfo*                     m_pEnemyGuitarModel[3];
 	CLoadedModelInfo*                     m_pEnemyBassModel[3];
@@ -31,11 +31,11 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 	CLoadedModelInfo*                     m_pEnemyDrumModel[3];
 	CLoadedModelInfo*                     m_pEnemyVocalModel[3];
 
-	CLoadedModelInfo*                     m_pTeamGuitarModel = nullptr;
-	CLoadedModelInfo*                     m_pTeamBassModel = nullptr;
-	CLoadedModelInfo*                     m_pTeamKeyboardModel = nullptr;
-	CLoadedModelInfo*                     m_pTeamDrumModel = nullptr;
-	CLoadedModelInfo*                     m_pTeamVocalModel = nullptr;
+	CLoadedModelInfo*                     m_pTeamGuitarModel;
+	CLoadedModelInfo*                     m_pTeamBassModel;
+	CLoadedModelInfo*                     m_pTeamKeyboardModel;
+	CLoadedModelInfo*                     m_pTeamDrumModel;
+	CLoadedModelInfo*                     m_pTeamVocalModel;
 public:
 	std::vector<COtherPlayers*>								m_pOtherPlayerMap;
 	std::vector<COtherPlayers*>								m_pTeamPlayerMap;

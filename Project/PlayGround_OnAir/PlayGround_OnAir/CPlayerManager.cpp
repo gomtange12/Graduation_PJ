@@ -56,15 +56,16 @@ void CPlayerManager::SetOtherModelResource(ID3D12Device * pd3dDevice, ID3D12Grap
 		m_pEnemyGuitarModel[i] = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
 		m_pEnemyKeyboardModel[i] = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
 		m_pEnemyDrumModel[i] = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);;
-		m_pEnemyVocalModel[i] = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
-		m_pEnemyBassModel[i] = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
+		m_pEnemyBassModel[i] = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
+		m_pEnemyVocalModel[i] = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
+		
 	}
 
 
 	m_pTeamGuitarModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
-	m_pTeamBassModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
-	m_pTeamKeyboardModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);;
-	m_pTeamDrumModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
+	m_pTeamKeyboardModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
+	m_pTeamDrumModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);;
+	m_pTeamBassModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
 	m_pTeamVocalModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
 
 }
@@ -78,12 +79,16 @@ void CPlayerManager::SetOtherPlayerResourceFromPool(ID3D12Device * pd3dDevice, I
 		m_pEnemyVocalPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext);
 		m_pEnemyBassPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext);
 	}
+	for (int i = 0; i < 3; ++i)
 
-	m_pTeamGuitarPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
-	m_pTeamBassPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext);
-	m_pTeamKeyboardPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext);
-	m_pTeamDrumPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext);
-	m_pTeamVocalPlayer = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext);
+	{
+
+	m_pTeamGuitarPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
+	m_pTeamBassPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext);
+	m_pTeamKeyboardPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext);
+	m_pTeamDrumPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext);
+	m_pTeamVocalPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext);
+	}
 
 
 }
@@ -95,23 +100,30 @@ COtherPlayers* CPlayerManager::GetOtherPlayerResourceFromPool(int num, E_CHARACT
 		{
 			return m_pEnemyGuitarPlayer[num];
 		}
-		return m_pTeamGuitarPlayer;
+		else
+			return m_pTeamGuitarPlayer[num];
 	}
 	else if (type == BASS)
 	{
 		if (!isTeam)
 		{
+			cout << num << "번쨰 클라" << endl;
+
 			return m_pEnemyBassPlayer[num];
 		}
-		return m_pTeamBassPlayer;
+		else
+			return m_pTeamBassPlayer[num];
 	}
 	else if (type == KEYBOARD)
 	{
 		if (!isTeam)
 		{
+			cout << num << "번쨰 클라" << endl;
 			return m_pEnemyKeyboardPlayer[num];
 		}
-		return m_pTeamKeyboardPlayer;
+		else
+
+		return m_pTeamKeyboardPlayer[num];
 	}
 	else if (type == DRUM)
 	{
@@ -119,15 +131,20 @@ COtherPlayers* CPlayerManager::GetOtherPlayerResourceFromPool(int num, E_CHARACT
 		{
 			return m_pEnemyDrumPlayer[num];
 		}
-		return m_pTeamDrumPlayer;
+		else
+
+		return m_pTeamDrumPlayer[num];
 	}
 	else if (type == VOCAL)
 	{
 		if (!isTeam)
 		{
+			cout << num << "번쨰 클라" << endl;
+
 			return m_pEnemyVocalPlayer[num];
 		}
-		return m_pTeamVocalPlayer;
+		else
+			return m_pTeamVocalPlayer[num];
 	}
 }
 
@@ -139,7 +156,8 @@ CLoadedModelInfo* CPlayerManager::GetOtherModelResourceFromPool(int num, E_CHARA
 		{
 			return m_pEnemyGuitarModel[num];
 		}
-		return m_pTeamGuitarModel;
+		else
+			return m_pTeamGuitarModel;
 	}
 	else if (type == BASS)
 	{
@@ -147,7 +165,9 @@ CLoadedModelInfo* CPlayerManager::GetOtherModelResourceFromPool(int num, E_CHARA
 		{
 			return m_pEnemyBassModel[num];
 		}
-		return m_pTeamBassModel;
+		else
+
+			return m_pTeamBassModel;
 	}
 	else if (type == KEYBOARD)
 	{
@@ -155,7 +175,9 @@ CLoadedModelInfo* CPlayerManager::GetOtherModelResourceFromPool(int num, E_CHARA
 		{
 			return m_pEnemyKeyboardModel[num];
 		}
-		return m_pTeamKeyboardModel;
+		else
+
+			return m_pTeamKeyboardModel;
 	}
 	else if (type == DRUM)
 	{
@@ -163,6 +185,8 @@ CLoadedModelInfo* CPlayerManager::GetOtherModelResourceFromPool(int num, E_CHARA
 		{
 			return m_pEnemyDrumModel[num];
 		}
+		else
+
 		return m_pTeamDrumModel;
 	}
 	else if (type == VOCAL)
@@ -171,6 +195,8 @@ CLoadedModelInfo* CPlayerManager::GetOtherModelResourceFromPool(int num, E_CHARA
 		{
 			return m_pEnemyVocalModel[num];
 		}
+		else
+
 		return m_pTeamVocalModel;
 	}
 }
@@ -273,6 +299,7 @@ void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsC
 		m_pTeamPlayerMap.reserve(m_MaxPlayerNum);
 		m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
 		m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext));
+		//m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext));
 
 
 		m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext));

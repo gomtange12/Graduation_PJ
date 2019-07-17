@@ -437,37 +437,47 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 			break;
 	}
 }
-void CGameFramework::ChangePlayerCharacter(){
-	cout << "pckChecked" << endl;
+void CGameFramework::ChangePlayerCharacter()
+{
+	//cout << "pckChecked" << endl;
 	if (PLAYER->GetOtherPlayerMap().size() > 0)
 	{
-
 		int i = 0;
-		//for (auto&& p= PLAYER->GetOtherPlayerMap().begin(); p< p + 2; ++p)
-		for (auto p : PLAYER->GetOtherPlayerMap())
-		{
-			p->SetPlayerCharacter(false, p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-			i++;
-			cout << i << "enemyChecked" << endl;
 
+		//for (auto&& p= PLAYER->GetOtherPlayerMap().begin(); p< p + 2; ++p)
+		//for (auto p : PLAYER->GetOtherPlayerMap())
+		//{
+		for(int i = 0 ; i <2 ; ++i)
+		{
+			cout << "¸Ê»çÀÌÁî" << PLAYER->GetOtherPlayerMap().size() << endl;
+			PLAYER->GetOtherPlayerMap()[i]->SetPlayerCharacter(false, PLAYER->GetOtherPlayerMap()[i]->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+			cout << i << ": enemyChecked, type:" << PLAYER->GetOtherPlayerMap()[i]->GetCharacterType() << endl;
+			//i++;
+			
 		}
 
 	}
 	if (PLAYER->GetTeamPlayerMap().size() > 0)
 	{
-		int i = 0;
-		for (auto p : PLAYER->GetTeamPlayerMap())
+	
+		//for (auto p : PLAYER->GetTeamPlayerMap())
 		//for (auto&& p = PLAYER->GetTeamPlayerMap().begin(); p < p + 2; ++p)
-		{
-			if (p->GetClientNum() != -1) {
-				p->SetPlayerCharacter(true, p->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-				i++;
-			}
-			cout << i << "TeamChecked" << endl;
+		
+			for(int i = 0 ; i<2 ; ++i)
+			{
+			cout << "¸Ê»çÀÌÁî" << PLAYER->GetTeamPlayerMap().size() << endl;
 
-		}
+			//if (PLAYER->GetTeamPlayerMap()[i]->GetClientNum() != -1) {
+				PLAYER->GetTeamPlayerMap()[i]->SetPlayerCharacter(true, PLAYER->GetTeamPlayerMap()[i]->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+				cout << i << ": TeamChecked, type:" << PLAYER->GetTeamPlayerMap()[i]->GetCharacterType() << endl;
+			}
+			//i;
+			
+
+			//}
 
 	}
+	
 }
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
