@@ -46,7 +46,7 @@ void TimerThread::PopTimer(int roomN)
 	timerQueue.pop();
 	timerLock.unlock();
 	stOverEx *ex = new stOverEx;
-	ex->m_todo = OP_STOP;
+	//ex->m_todo = OP_STOP;
 	ex->roomNum = roomN;
 	PostQueuedCompletionStatus(IOCPSERVER->GetIocp(), 1, NULL, &ex->m_wsaOver);
 }

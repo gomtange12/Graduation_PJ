@@ -35,59 +35,15 @@ void PacketManager::LoginPacket(int id)
 	pkt.type = SC_LOGIN_OK;
 	SendPacket(id, &pkt);
 }
-//void PacketManager::PutPlayerPacket(int id) //필요없을듯
-//{
-//	for (int i = 0; i < MAX_USER; ++i) {
-//		if (true == objectManager->GetPlayer(i)->m_connected) {
-//			sc_packet_put_player packet;
-//			packet.id = id;
-//		/*	packet.x = objectManager->GetPlayer(id)->m_x;
-//			packet.y = objectManager->GetPlayer(id)->m_y;*/
-//			packet.size = sizeof(sc_packet_put_player);
-//			packet.type = SC_PUT_PLAYER;
-//			SendPacket(i, &packet);
-//		}
-//	}
-//	for (int i = 0; i < MAX_USER; ++i) {
-//		if (false == objectManager->GetPlayer(i)->m_connected) continue;
-//		if (i == id) continue;
-//		sc_packet_put_player packet;
-//		packet.id = i;
-//		/*packet.x = objectManager->GetPlayer(i)->m_x;
-//		packet.y = objectManager->GetPlayer(i)->m_y;*/
-//		packet.size = sizeof(sc_packet_put_player);
-//		packet.type = SC_PUT_PLAYER;
-//		SendPacket(id, &packet);
-//	}	
-//	
-//};
-void PacketManager::MovePacket(int id, const XMFLOAT3& shift)
-{
-	//매칭시 
-			// 같은방에 있는 '모든' id들 에게 나의 변경된 포지션 값을 준다.
-	sc_packet_move pkt;
-	pkt.size = sizeof(sc_packet_move);
-	pkt.type = SC_MOVE_PLAYER;
-	pkt.id = id;
-	pkt.velocity = true;
-	pkt.posX = shift.x;
-	pkt.posY = shift.y;
-	pkt.posZ = shift.z;
 
-	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_NUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
-	}
 
-		
-}
 void PacketManager::ClientDisconnect(int id)
 {
 	//int otherId;
 	//int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	//for (int i = 0; i < SOLO_NUM; ++i) {
-	//	if (id != ROOMMANAGER->room[roomNum]->m_ids[i])
-	//		otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
+	//for (int i = 0; i < SOLO_RNUM; ++i) {
+	//	if (id != ROOMMANAGER->room[roomNum]->m_SoloIds[i])
+	//		otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
 	//}
 	//
 	//sc_packet_remove_player pkt;
@@ -108,25 +64,62 @@ void PacketManager::ClientDisconnect(int id)
 	//SendPacket(otherId, &pkt);
 
 	closesocket(objectManager->GetPlayer(id)->m_socket);
-	objectManager->GetPlayer(id)->m_connected = false;
+	objectManager->GetPlayer(id)->m_connected = false;	
 }
-void PacketManager::IngamePacket(int id, int roomNum, int avatar) { //Solo 매칭용임 2인용
+void PacketManager::IngamePacket(int id, int roomNum) {
 	//해당 채널 매칭된 클라 모두에게
+
 	sc_packet_scene pkt;
 	pkt.size = sizeof(sc_packet_scene);
 	pkt.type = SC_SCENE;
-	pkt.sceneNum = PLAYGROUNDMAP;
-	pkt.roomNum = roomNum;
-	pkt.avatar = avatar;
+	pkt.sceneNum = objectManager->GetPlayer(pkt.ids[id])->map;
+	//pkt.roomNum = roomNum;
+	pkt.mod = ROOMMANAGER->room[roomNum]->mod;
+
 	
-	if (ROOMMANAGER->room[roomNum]->m_ids[0] != id) {
-		pkt.ids = ROOMMANAGER->room[roomNum]->m_ids[0];
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) 
+		{
+			pkt.ids[i] = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
+			pkt.posN[i] = objectManager->GetPlayer(pkt.ids[i])->posN;
+			pkt.avatar[i] = objectManager->GetPlayer(pkt.ids[i])->avatar;
+		}
+		SendPacket(id, &pkt);
 	}
-	else{ 
-		pkt.ids = ROOMMANAGER->room[roomNum]->m_ids[1]; 
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i)
+		{
+			pkt.ids[i] = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
+			pkt.posN[i] = objectManager->GetPlayer(pkt.ids[i])->posN;
+			pkt.avatar[i] = objectManager->GetPlayer(pkt.ids[i])->avatar;
+		}	
+		SendPacket(id, &pkt);	
 	}
 	
-	SendPacket(id, &pkt);
+}
+void PacketManager::MovePacket(int id)
+{
+	//매칭시 
+	// 같은방에 있는 '모든' id들 에게 나의 변경된 포지션 값을 준다.
+	sc_packet_move pkt;
+	pkt.size = sizeof(sc_packet_move);
+	pkt.type = SC_MOVE_PLAYER;
+	pkt.id = id;
+	pkt.posX = objectManager->GetPlayer(id)->m_xmf3Position.x;
+	pkt.posY = objectManager->GetPlayer(id)->m_xmf3Position.y;
+	pkt.posZ = objectManager->GetPlayer(id)->m_xmf3Position.z;
+
+	int roomNum = objectManager->GetPlayer(id)->roomNumber;
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+		}
+	}
 }
 void PacketManager::VectorPacket(int id)
 {
@@ -142,9 +135,17 @@ void PacketManager::VectorPacket(int id)
 	pkt.LposZ = objectManager->GetPlayer(id)->m_xmf4x4ToParent._33;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_NUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
 
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+
+		}
 	}
 		
 }
@@ -153,10 +154,22 @@ void PacketManager::CollisionPacket(int id, int otherId) {
 	pkt.size = sizeof(sc_packet_collision);
 	pkt.type = SC_COLLISION;
 	pkt.id = id;
+	pkt.otherid = otherId;
 	pkt.check = true;
+	
+	int roomNum = objectManager->GetPlayer(id)->roomNumber;
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
 
-	SendPacket(id, &pkt);
-	SendPacket(otherId, &pkt);
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+
+		}
+	}
 }
 void PacketManager::KeyPacket(int id, bool jump, bool attack, bool skill)
 {
@@ -168,8 +181,17 @@ void PacketManager::KeyPacket(int id, bool jump, bool attack, bool skill)
 	pkt.attack = attack;
 	pkt.skill = skill;
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_NUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+
+		}
 	}
 }
 void PacketManager::AttackPacKet(int id) 
@@ -180,8 +202,17 @@ void PacketManager::AttackPacKet(int id)
 	pkt.id = id;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_NUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+
+		}
 	}
 }
 void PacketManager::LobbyPacket(int id) 
@@ -189,18 +220,33 @@ void PacketManager::LobbyPacket(int id)
 	sc_packet_lobby pkt;
 	pkt.size = sizeof(sc_packet_lobby);
 	pkt.type = SC_LOBBY_IN;
-	pkt.out = true;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_NUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+
+		}
 	}
 
 	
 	//방 초기화
 	ROOMMANAGER->room[roomNum]->m_full == false;
-	for (int i = 0; i < SOLO_NUM; ++i) {
-		ROOMMANAGER->room[roomNum]->m_ids[i] = -1;
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			ROOMMANAGER->room[roomNum]->m_SoloIds[i] = -1;
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			ROOMMANAGER->room[roomNum]->m_TeamIds[i] = -1;
+		}
 	}
 }
 void PacketManager::ResultPacket(int id)
@@ -212,24 +258,16 @@ void PacketManager::ResultPacket(int id)
 
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_NUM; ++i) {
-		SendPacket(ROOMMANAGER->room[roomNum]->m_ids[i], &pkt);
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+
+		}
 	}
-}
-void PacketManager::AllPos(int id) 
-{
-	int otherId;
-	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	for (int i = 0; i < SOLO_NUM; ++i) {
-		if(id!=ROOMMANAGER->room[roomNum]->m_ids[i])
-			otherId = ROOMMANAGER->room[roomNum]->m_ids[i];
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+
+		}
 	}
-	sc_packet_allpos pkt;
-	pkt.size = sizeof(sc_packet_allpos);
-	pkt.type = SC_ALL_POS;
-	pkt.id = id;
-	pkt.posX = objectManager->GetPlayer(otherId)->m_xmf3Position.x;
-	pkt.posZ = objectManager->GetPlayer(otherId)->m_xmf3Position.z;
-	SendPacket(id, &pkt);
-	SendPacket(otherId, &pkt);
 }

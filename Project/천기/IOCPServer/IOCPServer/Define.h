@@ -2,7 +2,8 @@
 
 #include "Protocol.h"
 
-#define SOLO_NUM 2
+#define SOLO_RNUM 2
+#define TEAM_RNUM 4
 
 struct stOverEx {
 	WSAOVERLAPPED m_wsaOver;
@@ -19,15 +20,15 @@ enum ThreadNum {
 	WORKER_TH03,
 	TIMER_TH
 };
-enum AVATARNumber {
-	A, //ÀÓ½Ã¸íÄª
-	B
+enum E_CHARACTERTYPE
+{
+	BASS,
+	GUITAR,
+	KEYBOARD,
+	DRUM,
+	VOCAL
 };
-//enum MAPNumber {
-//	PLAYGROUND,
-//	CONCERT
-//
-//};
+
 enum ModNumber {
 	SOLO,
 	DUO,

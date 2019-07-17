@@ -2,7 +2,7 @@
 
 #include <d3d12.h>
 #include <DirectXCollision.h>
-
+#include <DirectXMath.h>
 
 
 using namespace DirectX;

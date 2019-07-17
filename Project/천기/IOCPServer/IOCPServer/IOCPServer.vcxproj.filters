@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\ThreadManager">
-      <UniqueIdentifier>{a4a9f3dd-302f-4d94-b312-61d1d64e6c99}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\ObjManager">
       <UniqueIdentifier>{5d3f87f8-282d-48b8-b3fd-2da493f5a663}</UniqueIdentifier>
     </Filter>
@@ -24,15 +21,6 @@
     </Filter>
     <Filter Include="소스 파일\PacketManager">
       <UniqueIdentifier>{72468219-3399-4831-971e-ee6cdadb25b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\MyThread">
-      <UniqueIdentifier>{9a660fd7-1658-4df3-b25d-29b2c030ca20}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\MyThread\AcceptThread">
-      <UniqueIdentifier>{0ef50b97-0d26-42f1-972d-6c6841ff77ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\MyThread\WorkerThread">
-      <UniqueIdentifier>{72f12d81-5732-44d8-9dc4-e459217adc7c}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\ServerMain">
       <UniqueIdentifier>{2652ab1a-ca40-41b9-8f2b-9d5726b48df3}</UniqueIdentifier>
@@ -49,8 +37,26 @@
     <Filter Include="소스 파일\GameObject">
       <UniqueIdentifier>{f1ec75fd-adcb-4218-85de-26eb7ff7e3e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\MyThread\TimerThread">
+    <Filter Include="소스 파일\ThreadManager">
+      <UniqueIdentifier>{a4a9f3dd-302f-4d94-b312-61d1d64e6c99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ThreadManager\MyThread">
+      <UniqueIdentifier>{9a660fd7-1658-4df3-b25d-29b2c030ca20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ThreadManager\MyThread\AcceptThread">
+      <UniqueIdentifier>{0ef50b97-0d26-42f1-972d-6c6841ff77ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ThreadManager\MyThread\WorkerThread">
+      <UniqueIdentifier>{72f12d81-5732-44d8-9dc4-e459217adc7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ThreadManager\MyThread\TimerThread">
       <UniqueIdentifier>{b7f70d7c-f6e0-4051-b046-99e2da69f159}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ThreadManager\TwitchIRC">
+      <UniqueIdentifier>{b0ea519a-5c65-4dce-9630-9b68c1bbd52b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ThreadManager\TwitchIRC\Chat">
+      <UniqueIdentifier>{8052481f-91da-419c-bcf0-99f507c5e1a5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,13 +85,13 @@
       <Filter>소스 파일\PacketManager</Filter>
     </ClInclude>
     <ClInclude Include="AcceptThread.h">
-      <Filter>소스 파일\MyThread\AcceptThread</Filter>
+      <Filter>소스 파일\ThreadManager\MyThread\AcceptThread</Filter>
     </ClInclude>
     <ClInclude Include="WorkerThread.h">
-      <Filter>소스 파일\MyThread\WorkerThread</Filter>
+      <Filter>소스 파일\ThreadManager\MyThread\WorkerThread</Filter>
     </ClInclude>
     <ClInclude Include="MyThread.h">
-      <Filter>소스 파일\MyThread</Filter>
+      <Filter>소스 파일\ThreadManager\MyThread</Filter>
     </ClInclude>
     <ClInclude Include="RoomManager.h">
       <Filter>소스 파일\RoomManager</Filter>
@@ -100,10 +106,13 @@
       <Filter>소스 파일\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="TimerThread.h">
-      <Filter>소스 파일\MyThread\TimerThread</Filter>
+      <Filter>소스 파일\ThreadManager\MyThread\TimerThread</Filter>
     </ClInclude>
     <ClInclude Include="Define.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TwitchIRC.h">
+      <Filter>소스 파일\ThreadManager\TwitchIRC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -129,13 +138,13 @@
       <Filter>소스 파일\PacketManager</Filter>
     </ClCompile>
     <ClCompile Include="AcceptThread.cpp">
-      <Filter>소스 파일\MyThread\AcceptThread</Filter>
+      <Filter>소스 파일\ThreadManager\MyThread\AcceptThread</Filter>
     </ClCompile>
     <ClCompile Include="WorkerThread.cpp">
-      <Filter>소스 파일\MyThread\WorkerThread</Filter>
+      <Filter>소스 파일\ThreadManager\MyThread\WorkerThread</Filter>
     </ClCompile>
     <ClCompile Include="MyThread.cpp">
-      <Filter>소스 파일\MyThread</Filter>
+      <Filter>소스 파일\ThreadManager\MyThread</Filter>
     </ClCompile>
     <ClCompile Include="RoomManager.cpp">
       <Filter>소스 파일\RoomManager</Filter>
@@ -147,7 +156,10 @@
       <Filter>소스 파일\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="TimerThread.cpp">
-      <Filter>소스 파일\MyThread\TimerThread</Filter>
+      <Filter>소스 파일\ThreadManager\MyThread\TimerThread</Filter>
+    </ClCompile>
+    <ClCompile Include="TwitchIRC.cpp">
+      <Filter>소스 파일\ThreadManager\TwitchIRC</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

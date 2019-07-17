@@ -88,19 +88,19 @@ void WorkerThread::Proc()
 		else if (OP_SEND == over->m_todo) {
 			delete over;
 		}
-		else if (OP_STOP == over->m_todo) {
-			if (ROOMMANAGER->room[over->roomNum]->m_full == false) {
-				//std::cout << over->roomNum << " : ROOM SYNC END" << std::endl;
-				delete over;
-			}
-		}
-		else if (OP_ALLPOS == over->m_todo) {
-			PACKETMANAGER->AllPos(over->id);
+		//else if (OP_STOP == over->m_todo) {
+			//if (ROOMMANAGER->room[over->roomNum]->m_full == false) {
+			//	//std::cout << over->roomNum << " : ROOM SYNC END" << std::endl;
+			//	delete over;
+			//}
+		//}
+		//else if (OP_ALLPOS == over->m_todo) {
+			//PACKETMANAGER->AllPos(over->id);
 			//std::cout << over->roomNum << " : ROOM SYNC" << std::endl;
-			if(ROOMMANAGER->room[over->roomNum]->m_full == true)
+			/*if(ROOMMANAGER->room[over->roomNum]->m_full == true)
 				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(over->id, OP_ALLPOS, over->roomNum, GetTickCount() + 4000);
-			delete over;
-		}
+			delete over;*/
+		//}
 		
 	}
 }

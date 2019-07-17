@@ -5,7 +5,7 @@
 void IOCPServer::InitNetwork()
 {
 	std::wcout.imbue(std::locale("korean"));
-	// Winsock Start - windock.dll ·Îµå
+	
 	WSADATA WSAData;
 	WSAStartup(MAKEWORD(2, 2), &WSAData);
 	

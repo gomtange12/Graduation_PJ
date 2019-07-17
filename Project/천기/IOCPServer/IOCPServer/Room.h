@@ -5,8 +5,10 @@ class Room
 {
 public:
 	int RoomNumber;
-	int m_ids[SOLO_NUM];
-	//int mod;
+	int m_SoloIds[SOLO_RNUM];
+	int m_TeamIds[TEAM_RNUM];
+	int mod;
+	int map;
 	bool m_full;
 public:
 	Room();
