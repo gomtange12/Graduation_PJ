@@ -1163,15 +1163,90 @@ void COtherPlayers::SetPlayerCharacter(bool isTeam, E_CHARACTERTYPE type, int nu
 	cout << "num은: " << num << endl;
 	//iter2 += type;
 	cout<<"들어온 타입" << type << endl;
-
 	if (isTeam)
 	{
-		PLAYER->GetTeamPlayerMap()[num] = PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam);
+		//vector<COtherPlayers*>::pointer ptr = PLAYER->m_pTeamPlayerMap()[num];
+		
+		cout <<"전"<< PLAYER->m_pTeamPlayerMap[num] << endl;
+		XMFLOAT3 xmPos = PLAYER->m_pTeamPlayerMap[num]->GetPosition();
+		int clientNum = PLAYER->m_pTeamPlayerMap[num]->GetClientNum();
+		E_CHARACTERTYPE type = PLAYER->m_pTeamPlayerMap[num]->GetCharacterType();
 
+		//int clientNum = PLAYER->m_pTeamPlayerMap[num]->GetClientNum();
+
+		PLAYER->m_pTeamPlayerMap[num] = PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam);
+		PLAYER->m_pTeamPlayerMap[num]->SetPosition(xmPos);
+		PLAYER->m_pTeamPlayerMap[num]->SetClientNum(clientNum);
+		PLAYER->m_pTeamPlayerMap[num]->SetCharacterType(type);
+		PLAYER->m_pTeamPlayerMap[num]->SetScale(XMFLOAT3(60, 60, 60));
+
+		//cout << *ptr << "team포인터: " << PLAYER->GetTeamPlayerMap()[num] << endl;
+		cout <<"후"<< PLAYER->m_pTeamPlayerMap[num] << endl;
+
+		//CLoadedModelInfo* pModel{ nullptr };
+		//pModel = PLAYER->GetOtherModelResourceFromPool(num, type, isTeam);
+		//
+		//PLAYER->m_pTeamPlayerMap[num]->SetChild(pModel->m_pModelRootObject);
+		//PLAYER->m_pTeamPlayerMap[num]->SetMesh(pModel->m_pModelRootObject->m_pMesh);//PLAYER->GetOtherPlayerMap()[num] = PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam);
+		//PLAYER->m_pTeamPlayerMap[num]->SetScale(XMFLOAT3(60, 60, 60));//PLAYER->GetOtherPlayerMap().assign(num, PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam));
+
+		
+		//PLAYER->GetTeamPlayerMap()[num] = PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam);
+		//CLoadedModelInfo* pModel{ nullptr };
+		//PLAYER->GetTeamPlayerMap().assign(num, PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam));
+		//pModel = PLAYER->GetOtherModelResourceFromPool(num, type, isTeam);
+		//PLAYER->GetTeamPlayerMap()[num]->SetChild(pModel->m_pModelRootObject);
+		//PLAYER->GetTeamPlayerMap()[num]->SetMesh(pModel->m_pModelRootObject->m_pMesh);
+		//PLAYER->GetTeamPlayerMap()[num]->SetScale(XMFLOAT3(60, 60, 60));
+		
+
+		//vector<COtherPlayers*> temp;
+		//temp.reserve(5);
+		//temp= PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam);
+
+		//PLAYER->GetTeamPlayerMap().swap(temp);
 	}
 	else
-		PLAYER->GetOtherPlayerMap()[num] = PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam);
+	{
+		cout << "전" << PLAYER->m_pOtherPlayerMap[num] << endl;
+		XMFLOAT3 xmPos = PLAYER->m_pOtherPlayerMap[num]->GetPosition();
+		int clientNum = PLAYER->m_pOtherPlayerMap[num]->GetClientNum();
+		E_CHARACTERTYPE type = PLAYER->m_pOtherPlayerMap[num]->GetCharacterType();
+
+		PLAYER->m_pOtherPlayerMap[num] = PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam);
+		PLAYER->m_pOtherPlayerMap[num]->SetPosition(xmPos);
+		PLAYER->m_pOtherPlayerMap[num]->SetClientNum(clientNum);
+		PLAYER->m_pOtherPlayerMap[num]->SetCharacterType(type);
+		PLAYER->m_pOtherPlayerMap[num]->SetScale(XMFLOAT3(60, 60, 60));
+
+		//cout << *ptr << "team포인터: " << PLAYER->GetTeamPlayerMap()[num] << endl;
+		cout << "후" << PLAYER->m_pOtherPlayerMap[num] << endl;
 
 
+		//CLoadedModelInfo* pModel{ nullptr };
+		//pModel = PLAYER->GetOtherModelResourceFromPool(num, type, isTeam);
+		//PLAYER->m_pOtherPlayerMap[num]->SetChild(pModel->m_pModelRootObject);
+		//PLAYER->m_pOtherPlayerMap[num]->SetMesh(pModel->m_pModelRootObject->m_pMesh);//PLAYER->GetOtherPlayerMap()[num] = PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam);
+		//PLAYER->m_pOtherPlayerMap[num]->SetScale(XMFLOAT3(60, 60, 60));//PLAYER->GetOtherPlayerMap().assign(num, PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam));
+		//vector<COtherPlayers*>::pointer ptr = &PLAYER->GetOtherPlayerMap()[num];
+		//PLAYER->GetTeamPlayerMap()[num] = PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam);
+		//PLAYER->GetTeamPlayerMap().assign(num, PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam));
+		//*ptr = PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam);
+
+		//CLoadedModelInfo* pModel{ nullptr };
+		///pModel = PLAYER->GetOtherModelResourceFromPool(num, type, isTeam);
+		///PLAYER->GetOtherPlayerMap()[num]->SetChild(pModel->m_pModelRootObject);
+		///PLAYER->GetOtherPlayerMap()[num]->SetMesh(pModel->m_pModelRootObject->m_pMesh);
+		///PLAYER->GetOtherPlayerMap()[num]->SetScale(XMFLOAT3(60, 60, 60));
+
+
+		//vector<COtherPlayers*> temp;
+		//temp.reserve(5);
+		//temp = PLAYER->GetOtherPlayerResourceFromPool(num, type, isTeam);
+
+		//PLAYER->GetTeamPlayerMap()[num].swap(temp[num]);
+	}
+
+	//PLAYER->GetTeamPlayerMap()[num]->SetCharacterType(type);
 
 }

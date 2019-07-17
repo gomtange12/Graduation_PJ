@@ -13,18 +13,6 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 
 	//std::vector<std::shared_ptr<COtherPlayer>>				m_pOtherPlayer;
 	std::map<E_PLAYERTYPE, vector<CTerrainPlayer*>>			m_PlayerMap;
-	COtherPlayers*                     m_pEnemyGuitarPlayer[3];
-	COtherPlayers*                     m_pEnemyBassPlayer[3];
-	COtherPlayers*                     m_pEnemyKeyboardPlayer[3];
-	COtherPlayers*                     m_pEnemyDrumPlayer[3];
-	COtherPlayers*                     m_pEnemyVocalPlayer[3];
-
-	COtherPlayers*                     m_pTeamGuitarPlayer[3];
-	COtherPlayers*                     m_pTeamBassPlayer[3];
-	COtherPlayers*                     m_pTeamKeyboardPlayer[3];
-	COtherPlayers*                     m_pTeamDrumPlayer[3];
-	COtherPlayers*                     m_pTeamVocalPlayer[3];
-
 	CLoadedModelInfo*                     m_pEnemyGuitarModel[3];
 	CLoadedModelInfo*                     m_pEnemyBassModel[3];
 	CLoadedModelInfo*                     m_pEnemyKeyboardModel[3];
@@ -37,6 +25,18 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 	CLoadedModelInfo*                     m_pTeamDrumModel;
 	CLoadedModelInfo*                     m_pTeamVocalModel;
 public:
+	COtherPlayers*                      m_pEnemyGuitarPlayer[3];
+	COtherPlayers*                      m_pEnemyBassPlayer[3];
+	COtherPlayers*                      m_pEnemyKeyboardPlayer[3];
+	COtherPlayers*                      m_pEnemyDrumPlayer[3];
+	COtherPlayers*                      m_pEnemyVocalPlayer[3];
+
+	COtherPlayers*                      m_pTeamGuitarPlayer[3];
+	COtherPlayers*                      m_pTeamBassPlayer[3];
+	COtherPlayers*                      m_pTeamKeyboardPlayer[3];
+	COtherPlayers*                      m_pTeamDrumPlayer[3];
+	COtherPlayers*                      m_pTeamVocalPlayer[3];
+
 	std::vector<COtherPlayers*>								m_pOtherPlayerMap;
 	std::vector<COtherPlayers*>								m_pTeamPlayerMap;
 	std::shared_ptr<CTerrainPlayer>							m_pGuitarPlayer = nullptr;
@@ -59,6 +59,7 @@ public:
 	std::vector<COtherPlayers*>		GetOtherPlayerMap() { return m_pOtherPlayerMap; }
 	std::vector<COtherPlayers*>		GetTeamPlayerMap() { return m_pTeamPlayerMap; }
 
+	COtherPlayers* GetOtherByNum(int num, bool isTeam);
 	vector<CTerrainPlayer*>									m_vecPlayerList;
 	//void 
 	CPlayerManager();

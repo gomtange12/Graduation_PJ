@@ -43,6 +43,18 @@ E_CHARACTERTYPE CPlayerManager::CheckSceneCharacter(const POINT& pos)
 	}
 	
 }
+COtherPlayers * CPlayerManager::GetOtherByNum(int num, bool isTeam)
+{
+	if (isTeam)
+	{
+
+
+	}
+	else
+	{
+
+	}
+}
 CPlayerManager::CPlayerManager()
 {
 	m_pPlayer = nullptr;
@@ -71,6 +83,7 @@ void CPlayerManager::SetOtherModelResource(ID3D12Device * pd3dDevice, ID3D12Grap
 }
 void CPlayerManager::SetOtherPlayerResourceFromPool(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
+	//m_pEnemyGuitarPlayer[0] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
 	for (int i = 0; i < 3; ++i)
 	{
 		m_pEnemyGuitarPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
@@ -78,18 +91,27 @@ void CPlayerManager::SetOtherPlayerResourceFromPool(ID3D12Device * pd3dDevice, I
 		m_pEnemyDrumPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext);
 		m_pEnemyVocalPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext);
 		m_pEnemyBassPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext);
-	}
-	for (int i = 0; i < 3; ++i)
 
+		m_pTeamGuitarPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
+		m_pTeamBassPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext);
+		m_pTeamKeyboardPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext);
+		m_pTeamDrumPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext);
+		m_pTeamVocalPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext);
+	}
+	/*for (int i = 0; i < 3; ++i)
 	{
+		m_pEnemyBassPlayer.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext));
+		m_pEnemyKeyboardPlayer.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext));
+		m_pEnemyDrumPlayer.emplace_back( new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext));
+		m_pEnemyVocalPlayer.emplace_back( new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext));
+		m_pEnemyGuitarPlayer.emplace_back( new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
 
-	m_pTeamGuitarPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext);
-	m_pTeamBassPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext);
-	m_pTeamKeyboardPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext);
-	m_pTeamDrumPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext);
-	m_pTeamVocalPlayer[i] = new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext);
-	}
-
+		m_pTeamGuitarPlayer.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
+		m_pTeamBassPlayer.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASS, pContext));
+		m_pTeamDrumPlayer.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, DRUM, pContext));
+		m_pTeamVocalPlayer.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, VOCAL, pContext));
+		m_pTeamKeyboardPlayer.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext));
+	}*/
 
 }
 COtherPlayers* CPlayerManager::GetOtherPlayerResourceFromPool(int num, E_CHARACTERTYPE type, bool isTeam)
@@ -98,6 +120,7 @@ COtherPlayers* CPlayerManager::GetOtherPlayerResourceFromPool(int num, E_CHARACT
 	{
 		if (!isTeam)
 		{
+			//cout << "모델의 타입: " << m_pEnemyGuitarPlayer[num]->GetCharacterType() << endl;
 			return m_pEnemyGuitarPlayer[num];
 		}
 		else
@@ -107,8 +130,8 @@ COtherPlayers* CPlayerManager::GetOtherPlayerResourceFromPool(int num, E_CHARACT
 	{
 		if (!isTeam)
 		{
-			cout << num << "번쨰 클라" << endl;
-
+			//cout << num << "번쨰 클라" << endl;
+			//cout << "모델의 타입: " << m_pEnemyGuitarPlayer[num]->GetCharacterType() << endl;
 			return m_pEnemyBassPlayer[num];
 		}
 		else
@@ -118,29 +141,31 @@ COtherPlayers* CPlayerManager::GetOtherPlayerResourceFromPool(int num, E_CHARACT
 	{
 		if (!isTeam)
 		{
-			cout << num << "번쨰 클라" << endl;
+			//cout << "모델의 타입: " << m_pEnemyGuitarPlayer[num]->GetCharacterType() << endl;
+			//
+			//cout << num << "번쨰 클라" << endl;
 			return m_pEnemyKeyboardPlayer[num];
 		}
 		else
-
-		return m_pTeamKeyboardPlayer[num];
+			return m_pTeamKeyboardPlayer[num];
 	}
 	else if (type == DRUM)
 	{
 		if (!isTeam)
 		{
+			//cout << "모델의 타입: " << m_pEnemyGuitarPlayer[num]->GetCharacterType() << endl;
+
 			return m_pEnemyDrumPlayer[num];
 		}
 		else
-
-		return m_pTeamDrumPlayer[num];
+			return m_pTeamDrumPlayer[num];
 	}
 	else if (type == VOCAL)
 	{
 		if (!isTeam)
 		{
-			cout << num << "번쨰 클라" << endl;
-
+			//cout << num << "번쨰 클라" << endl;
+			//cout << "모델의 타입: " << m_pEnemyGuitarPlayer[num]->GetCharacterType() << endl;
 			return m_pEnemyVocalPlayer[num];
 		}
 		else
@@ -359,15 +384,6 @@ void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsC
 		//m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext));
 		//m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext));
 		//m_pTeamPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, KEYBOARD, pContext));
-	
-
-	
-
-
-		//default_random_engine dre;
-		//uniform_int_distribution<> otherUid(200, 600);
-		//uniform_int_distribution<> teamUid(2300, 2800);
-		//uniform_int_distribution<> zUid(1600, 1800);
 
 
 		m_pTeamPlayerMap[0]->SetPosition(XMFLOAT3(12750, 10, 1745));

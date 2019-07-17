@@ -440,41 +440,27 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 void CGameFramework::ChangePlayerCharacter()
 {
 	//cout << "pckChecked" << endl;
-	if (PLAYER->GetOtherPlayerMap().size() > 0)
+	//if (PLAYER->GetOtherPlayerMap().size() > 0)
 	{
-		int i = 0;
-
-		//for (auto&& p= PLAYER->GetOtherPlayerMap().begin(); p< p + 2; ++p)
-		//for (auto p : PLAYER->GetOtherPlayerMap())
-		//{
 		for(int i = 0 ; i <2 ; ++i)
 		{
-			cout << "¸Ê»çÀÌÁî" << PLAYER->GetOtherPlayerMap().size() << endl;
-			PLAYER->GetOtherPlayerMap()[i]->SetPlayerCharacter(false, PLAYER->GetOtherPlayerMap()[i]->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-			cout << i << ": enemyChecked, type:" << PLAYER->GetOtherPlayerMap()[i]->GetCharacterType() << endl;
-			//i++;
-			
+			//cout << "¸Ê»çÀÌÁî" << PLAYER->GetOtherPlayerMap().size() << endl;
+			PLAYER->m_pOtherPlayerMap[i]->SetPlayerCharacter(false, PLAYER->m_pOtherPlayerMap[i]->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+			//Å¬¶ó³Ñ¹ö, 
+			//cout << PLAYER->m_pOtherPlayerMap[i]->GetClientNum() << ": enemyChecked, type:" << PLAYER->m_pOtherPlayerMap[i]->GetCharacterType() << endl;
 		}
-
 	}
-	if (PLAYER->GetTeamPlayerMap().size() > 0)
+	//if (PLAYER->GetTeamPlayerMap().size() > 0)
 	{
-	
-		//for (auto p : PLAYER->GetTeamPlayerMap())
-		//for (auto&& p = PLAYER->GetTeamPlayerMap().begin(); p < p + 2; ++p)
-		
 			for(int i = 0 ; i<2 ; ++i)
 			{
-			cout << "¸Ê»çÀÌÁî" << PLAYER->GetTeamPlayerMap().size() << endl;
+			//cout << "¸Ê»çÀÌÁî" << PLAYER->GetTeamPlayerMap().size() << endl;
 
-			//if (PLAYER->GetTeamPlayerMap()[i]->GetClientNum() != -1) {
-				PLAYER->GetTeamPlayerMap()[i]->SetPlayerCharacter(true, PLAYER->GetTeamPlayerMap()[i]->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-				cout << i << ": TeamChecked, type:" << PLAYER->GetTeamPlayerMap()[i]->GetCharacterType() << endl;
+			if (PLAYER->m_pTeamPlayerMap[i]->GetClientNum() != -1) {
+				PLAYER->m_pTeamPlayerMap[i]->SetPlayerCharacter(true, PLAYER->m_pTeamPlayerMap[i]->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+				//cout << PLAYER->m_pTeamPlayerMap[i]->GetClientNum() << ": TeamChecked, type:" << PLAYER->m_pTeamPlayerMap[i]->GetCharacterType() << endl;
 			}
-			//i;
-			
-
-			//}
+			}
 
 	}
 	
@@ -853,18 +839,18 @@ void CGameFramework::ProcessInput()
 		PLAYER->GetPlayer()->Update(m_GameTimer.GetTimeElapsed());
 	PLAYER->GetOtherPlayer()->Update(m_GameTimer.GetTimeElapsed());
 
-	if (PLAYER->GetOtherPlayerMap().size() > 0)
+	if (PLAYER->m_pTeamPlayerMap.size() > 0)
 	{
 
-		for (auto&& p : PLAYER->GetOtherPlayerMap())
+		for (auto&& p : PLAYER->m_pTeamPlayerMap)
 			p->Update(m_GameTimer.GetTimeElapsed());
 
 	}
 
-	if (PLAYER->GetOtherPlayerMap().size() > 0)
+	if (PLAYER->m_pOtherPlayerMap.size() > 0)
 	{
 
-		for (auto&& p : PLAYER->GetTeamPlayerMap())
+		for (auto&& p : PLAYER->m_pOtherPlayerMap)
 			p->Update(m_GameTimer.GetTimeElapsed());
 
 	}
@@ -885,35 +871,35 @@ void CGameFramework::AnimateObjects()
 	if (PLAYER->GetPlayer() != nullptr)
 		PLAYER->GetPlayer()->Animate(fTimeElapsed);
 	//PLAYER->GetOtherPlayer()->Animate(fTimeElapsed);
-	if (PLAYER->GetOtherPlayerMap().size() > 0)
+	if (PLAYER->m_pOtherPlayerMap.size() > 0)
 	{
 
-		for (auto&& p : PLAYER->GetOtherPlayerMap())
+		for (auto&& p : PLAYER->m_pOtherPlayerMap)
 			p->Animate(fTimeElapsed);
 
 	}
 
-	if (PLAYER->GetTeamPlayerMap().size() > 0)
+	if (PLAYER->m_pTeamPlayerMap.size() > 0)
 	{
 
-		for (auto&& p : PLAYER->GetTeamPlayerMap())
+		for (auto&& p : PLAYER->m_pTeamPlayerMap)
 			p->Animate(fTimeElapsed);
 
 	}
 	if (PLAYER->GetPlayer() != nullptr)
 		PLAYER->GetPlayer()->UpdateTransform(NULL);
 	//PLAYER->GetOtherPlayer()->UpdateTransform(NULL);
-	if (PLAYER->GetOtherPlayerMap().size() > 0)
+	if (PLAYER->m_pOtherPlayerMap.size() > 0)
 	{
 
-		for (auto&& p : PLAYER->GetOtherPlayerMap())
+		for (auto&& p : PLAYER->m_pOtherPlayerMap)
 			p->UpdateTransform(NULL);
 
 	}
-	if (PLAYER->GetTeamPlayerMap().size() > 0)
+	if (PLAYER->m_pTeamPlayerMap.size() > 0)
 	{
 
-		for (auto&& p : PLAYER->GetTeamPlayerMap())
+		for (auto&& p : PLAYER->m_pTeamPlayerMap)
 			p->UpdateTransform(NULL);
 
 	}
@@ -1017,17 +1003,17 @@ void CGameFramework::FrameAdvance()
 	if (PLAYER->GetPlayer()!=NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
 	//if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
 	//cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
-	if (PLAYER->GetOtherPlayerMap().size() > 0)
+	if (PLAYER->m_pOtherPlayerMap.size() > 0)
 	{
 
-		for (auto&& p : PLAYER->GetOtherPlayerMap())
+		for (auto&& p : PLAYER->m_pOtherPlayerMap)
 			p->Render(m_pd3dCommandList, m_pCamera);
 
 	}
-	if (PLAYER->GetTeamPlayerMap().size() > 0)
+	if (PLAYER->m_pTeamPlayerMap.size() > 0)
 	{
 
-		for (auto&& p : PLAYER->GetTeamPlayerMap())
+		for (auto&& p : PLAYER->m_pTeamPlayerMap)
 			p->Render(m_pd3dCommandList, m_pCamera);
 
 	}

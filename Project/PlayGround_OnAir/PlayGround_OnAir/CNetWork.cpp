@@ -91,7 +91,10 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_scene *paket = reinterpret_cast<sc_packet_scene *>(ptr);
 		//SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
-
+		cout << "===================" << endl;
+		for (int i = 0; i < 4; ++i) {
+			cout << (E_CHARACTERTYPE)paket->avatar[i] << endl;
+		}
 		//솔로모드면
 		if (paket->mod == SOLO) {
 			for (int i = 0; i < 2; ++i) {
@@ -178,7 +181,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		}
 		PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(25, 10, 25), XMFLOAT4(0, 0, 0, 1));
 		CNetCGameFramework->ChangePlayerCharacter();
-
+		//CNetCGameFramework->Ch
 		PLAYER->GetPlayer()->m_match = true;
 		CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
 		break;
