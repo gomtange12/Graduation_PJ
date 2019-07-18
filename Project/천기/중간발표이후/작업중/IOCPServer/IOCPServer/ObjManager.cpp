@@ -218,7 +218,7 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 				PACKETMANAGER->MovePacket(otherId);
 				PACKETMANAGER->AttackPacKet(otherId);
 				--g_clients[otherId]->hp;
-				if (g_clients[otherId]->hp <= 0) PACKETMANAGER->ResultPacket(otherId);
+				//if (g_clients[otherId]->hp <= 0) PACKETMANAGER->ResultPacket(otherId);
 			}
 		}
 		else {
