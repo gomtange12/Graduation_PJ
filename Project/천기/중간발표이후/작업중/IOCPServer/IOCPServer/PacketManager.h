@@ -26,4 +26,5 @@ public:
 	void WinPacket(int id);
 	void LosePacket(int id);
 	void DeathPacket(int id);
+	void TwitchChat(std::string &name);
 };

@@ -371,7 +371,15 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		}
 		break;
 	}
-
+	case SC_CHAT:
+	{
+		SetConsoleOutputCP(65001);
+		sc_packet_chat *pkt = reinterpret_cast<sc_packet_chat *>(ptr);
+		
+		const char* dd = pkt->name.c_str() ;
+		cout << dd;
+		break;
+	}
 	default:
 		printf("Unknown PACKET type [%d]\n", ptr[1]);
 	}

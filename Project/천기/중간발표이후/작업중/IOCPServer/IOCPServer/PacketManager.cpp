@@ -287,7 +287,7 @@ void PacketManager::LobbyPacket(int id)
 //}
 void PacketManager::DeathPacket(int id) {
 	sc_packet_death pkt;
-	pkt.size = sizeof(sc_packet_result);
+	pkt.size = sizeof(sc_packet_death);
 	pkt.type = SC_DEATH;
 	pkt.id = id;
 
@@ -302,6 +302,21 @@ void PacketManager::DeathPacket(int id) {
 		for (int i = 0; i < TEAM_RNUM; ++i) {
 			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
 
+		}
+	}
+}
+void PacketManager::TwitchChat(std::string &name) {
+	sc_packet_chat pkt;
+	pkt.size = sizeof(sc_packet_chat);
+	pkt.type = SC_CHAT;
+	pkt.name = name;
+	//pkt.chat = message;
+	std::cout << name.size();
+
+	for (int i = 0; i < MAX_USER; ++i) {
+		if (true == objectManager->GetPlayer(i)->m_connected) {
+
+			SendPacket(objectManager->GetPlayer(i)->m_id, &pkt);
 		}
 	}
 }

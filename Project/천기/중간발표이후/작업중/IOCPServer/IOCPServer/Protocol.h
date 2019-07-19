@@ -33,6 +33,7 @@ constexpr int SC_ATTACK_INFO = 15;\
 constexpr int SC_LOBBY_IN = 17;
 constexpr int SC_RESULT_INFO = 18;
 constexpr int SC_DEATH = 19;
+constexpr int SC_CHAT = 20;
 //
 constexpr int CS_MATCHING_PLAYER = 9;
 constexpr int CS_MOVE_STATE_INFO = 10;
@@ -131,6 +132,12 @@ struct sc_packet_death {
 	BYTE size;
 	BYTE type;
 	char id;
+};
+struct sc_packet_chat {
+	BYTE size;
+	BYTE type;
+	std::string name;
+	//std::string chat;
 };
 /////////////////////////Å¬¶ó//////////////////////
 struct cs_packet_matching {
