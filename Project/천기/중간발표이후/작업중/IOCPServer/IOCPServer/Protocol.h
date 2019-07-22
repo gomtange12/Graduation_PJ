@@ -136,7 +136,8 @@ struct sc_packet_death {
 struct sc_packet_chat {
 	BYTE size;
 	BYTE type;
-	std::string name;
+	char name[255];
+	BYTE c_size;
 	//std::string chat;
 };
 /////////////////////////Å¬¶ó//////////////////////

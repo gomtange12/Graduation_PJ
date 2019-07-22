@@ -307,11 +307,12 @@ void PacketManager::DeathPacket(int id) {
 }
 void PacketManager::TwitchChat(std::string &name) {
 	sc_packet_chat pkt;
-	pkt.size = sizeof(sc_packet_chat);
 	pkt.type = SC_CHAT;
-	pkt.name = name;
+	strcpy(pkt.name, name.c_str());
+	pkt.c_size = name.size();
+	pkt.size = sizeof(sc_packet_chat);
 	//pkt.chat = message;
-	std::cout << name.size();
+	std::cout << sizeof(sc_packet_chat);
 
 	for (int i = 0; i < MAX_USER; ++i) {
 		if (true == objectManager->GetPlayer(i)->m_connected) {
