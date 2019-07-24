@@ -13,6 +13,7 @@ public:
 	~PacketManager();
 
 	void SendPacket(int id, void *packet);
+	void SendChat(int id, void *packet);
 	void LoginPacket(int id);
 	//void PutPlayerPacket(int id);
 	void ClientDisconnect(int id);
@@ -26,5 +27,6 @@ public:
 	void WinPacket(int id);
 	void LosePacket(int id);
 	void DeathPacket(int id);
-	void TwitchChat(std::string &name);
+	void TwitchChat(std::string &chat);
+
 };

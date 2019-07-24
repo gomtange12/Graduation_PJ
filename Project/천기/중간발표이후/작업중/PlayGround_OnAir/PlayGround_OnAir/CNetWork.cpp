@@ -375,10 +375,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		SetConsoleOutputCP(65001);
 		sc_packet_chat *pkt = reinterpret_cast<sc_packet_chat *>(ptr);
-		
-		string chat;
-		chat.resize(pkt->c_size);
-		cout << chat;
+		cout << pkt->chat;
 		cout << "======" << endl;
 		break;
 	}

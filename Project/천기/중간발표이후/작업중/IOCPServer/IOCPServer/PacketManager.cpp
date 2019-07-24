@@ -27,6 +27,22 @@ void PacketManager::SendPacket(int id, void *packet)
 			//printf("오류");
 	}
 };
+void PacketManager::SendChat(int id, void *packet)
+{
+	chetEx *ex = new chetEx;
+	memcpy(ex->Chatbuf, packet, reinterpret_cast<unsigned char *>(packet)[0]);
+	ex->m_todo = OP_SEND;
+	ex->m_wsaBuf.buf = (char *)ex->Chatbuf;
+	ex->m_wsaBuf.len = ex->Chatbuf[0];
+	ZeroMemory(&ex->m_wsaOver, sizeof(WSAOVERLAPPED));
+
+	int ret = WSASend(objectManager->GetPlayer(id)->m_socket, &ex->m_wsaBuf, 1, NULL, 0, &ex->m_wsaOver, 0);
+	if (0 != ret) {
+		int err_no = WSAGetLastError();
+		if (WSA_IO_PENDING != err_no);
+		//printf("오류");
+	}
+};
 void PacketManager::LoginPacket(int id) 
 {
 	sc_packet_login_ok pkt;
@@ -305,19 +321,17 @@ void PacketManager::DeathPacket(int id) {
 		}
 	}
 }
-void PacketManager::TwitchChat(std::string &name) {
+void PacketManager::TwitchChat(std::string &chat) {
 	sc_packet_chat pkt;
 	pkt.type = SC_CHAT;
-	strcpy(pkt.name, name.c_str());
-	pkt.c_size = name.size();
-	pkt.size = sizeof(sc_packet_chat);
-	//pkt.chat = message;
-	std::cout << sizeof(sc_packet_chat);
+	pkt.size = chat.size();
+	strcpy(pkt.chat, chat.c_str());
+	
 
 	for (int i = 0; i < MAX_USER; ++i) {
 		if (true == objectManager->GetPlayer(i)->m_connected) {
 
-			SendPacket(objectManager->GetPlayer(i)->m_id, &pkt);
+			SendChat(objectManager->GetPlayer(i)->m_id, &pkt);
 		}
 	}
 }
