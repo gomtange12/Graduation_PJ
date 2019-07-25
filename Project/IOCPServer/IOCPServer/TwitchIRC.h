@@ -1,6 +1,6 @@
 #pragma once
 #include "MyThread.h"
-
+#include "ObjManager.h"
 
 class TwitchIRC : public MyThread
 {
@@ -8,14 +8,18 @@ private:
 	std::vector<std::string> config;
 
 	WSADATA			 wsaData;
-	SOCKET			 tw_sock;
+	SOCKET			 sock;
 	SOCKADDR_IN		 ServerAddr;
 	struct hostent   *hostAdd;
 
 	char			 recv_buffer[MAX_BUFFER];
 	std::string		 pkt;
 
+	bool first = true;
+
 public:
+	ObjManager* objectManager = OBJMANAGER->GetObjectManager();
+	std::string chat;
 	TwitchIRC();
 	virtual ~TwitchIRC();
 

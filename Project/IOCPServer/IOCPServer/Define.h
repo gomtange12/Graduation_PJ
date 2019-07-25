@@ -13,6 +13,14 @@ struct stOverEx {
 	int id;
 	int roomNum;
 };
+struct chetEx {
+	WSAOVERLAPPED m_wsaOver;
+	WSABUF m_wsaBuf;
+	unsigned char Chatbuf[MAX_BUFFER]; // IOCP send/recv ¹öÆÛ
+	unsigned char	m_todo;
+	int id;
+	int roomNum;
+};
 enum ThreadNum {
 	ACCEPT_TH,
 	WORKER_TH01,

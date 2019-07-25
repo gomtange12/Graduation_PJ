@@ -17,11 +17,12 @@ public: //
 public:
 	bool m_connected; //연결상태
 	bool m_match; //매칭확인용
-	bool gameEnd = false;
+	bool death = false;
+	bool lose = false;
 
 	int m_id;
 	int roomNumber = 0;
-	int hp = 3;
+	int hp = 6;
 	int posN = 0;
 public:
 	XMFLOAT3					m_xmf3Position = XMFLOAT3(2560, 10, 1745);
