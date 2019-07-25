@@ -1,11 +1,12 @@
 #pragma once
 #include "MyThread.h"
 #include "ObjManager.h"
-
+#include <mutex>
 class ObjManager;
 class WorkerThread : public MyThread
 {
 private:
+	std::mutex WorkerLock;
 	ObjManager* objectManager ;
 public:
 

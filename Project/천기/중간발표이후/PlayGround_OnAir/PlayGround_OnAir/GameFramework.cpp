@@ -708,6 +708,8 @@ void CGameFramework::ProcessInput()
 	bool bProcessedByScene = false;
 	if (GetKeyboardState(pKeysBuffer) && m_pScene)
 		bProcessedByScene = m_pScene->ProcessInput(pKeysBuffer);
+
+	if(PLAYER->GetPlayer()->GetPlayerState() != PlayerState::DEATH)
 	if (!bProcessedByScene || PLAYER->GetPlayer()->GetAllowKey() || PLAYER->GetOtherPlayer()->GetAllowKey())
 	{
 		if (pKeysBuffer[VK_RSHIFT] & 0xF0)
@@ -791,7 +793,7 @@ void CGameFramework::ProcessInput()
 			}
 		}
 		if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::HAPPY){// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::HAPPY) {
-			if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::ATTACK){// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::ATTACK) {
+			if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::ATTACK && PLAYER->GetPlayer()->GetPlayerState() != PlayerState::STUN){// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::ATTACK) {
 				if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
 				{
 					CNETWORK->KeyPkt(false, true, false);

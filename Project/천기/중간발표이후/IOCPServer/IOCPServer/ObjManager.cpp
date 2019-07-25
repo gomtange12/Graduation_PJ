@@ -238,21 +238,23 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 						if (g_clients[otherId]->hp <= 0) {
 							g_clients[otherId]->death = true;
 							PACKETMANAGER->DeathPacket(otherId);
-						}
-						if (g_clients[0]->death == true && g_clients[1]->death == true) {
-							g_clients[0]->lose = true; g_clients[1]->lose = true;
-							//PACKETMANAGER->ResultPacket(id);
-							dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_LOBBY, roomNum, GetTickCount() + 5000);
-						}
-						if (g_clients[2]->death == true && g_clients[3]->death == true) {
-							g_clients[2]->lose = true; g_clients[3]->lose = true;
-							//PACKETMANAGER->ResultPacket(id);
-							dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_LOBBY, roomNum, GetTickCount() + 5000);
-						}
+						}	
 					}
 				}
 			}
+
+			if (g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[0]]->death == true && g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[1]]->death == true) {
+				g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[0]]->lose = true; g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[1]]->lose = true;
+				//PACKETMANAGER->ResultPacket(id);
+				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_LOBBY, roomNum, GetTickCount() + 500);
+			}
+			if (g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[2]]->death == true && g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[3]]->death == true) {
+				g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[2]]->lose = true; g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[3]]->lose = true;
+				//PACKETMANAGER->ResultPacket(id);
+				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_LOBBY, roomNum, GetTickCount() + 500);
+			}
 		}
+
 	}
 }
 void ObjManager::LobbyPkt(int id)

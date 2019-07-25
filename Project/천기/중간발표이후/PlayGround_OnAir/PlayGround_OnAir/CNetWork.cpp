@@ -172,7 +172,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 			}
 		}
 		PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(25, 10, 25), XMFLOAT4(0, 0, 0, 1));
-		//CNetCGameFramework->ChangePlayerCharacter();
+		CNetCGameFramework->ChangePlayerCharacter();
 
 		PLAYER->GetPlayer()->m_match = true;
 		CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());

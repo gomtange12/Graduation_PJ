@@ -89,9 +89,11 @@ void WorkerThread::Proc()
 			delete over;
 		}
 		else if (OP_LOBBY == over->m_todo) {
-			if (ROOMMANAGER->room[over->roomNum]->m_full == false) {
-				objectManager->LobbyPkt(over->id);
+			if (ROOMMANAGER->room[over->roomNum]->m_full == true) {
 				std::cout << over->roomNum << " : GO TO LOBBY" << std::endl;
+				
+				objectManager->LobbyPkt(over->id);
+				
 				delete over;
 			}
 		}
