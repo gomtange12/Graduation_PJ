@@ -6,6 +6,8 @@
 #include <string>
 #include <fstream>
 #include "TwitchIRC.h"
+#include "PacketManager.h"
+#include "Player.h"
 
 void TwitchIRC::Init()
 {
@@ -32,14 +34,14 @@ void TwitchIRC::Proc() {
 	}
 	char *ipaddr = inet_ntoa(ServerAddr.sin_addr);
 
-	tw_sock = socket(AF_INET, SOCK_STREAM, 0);
+	sock = socket(AF_INET, SOCK_STREAM, 0);
 
 	ZeroMemory(&ServerAddr, sizeof(SOCKADDR_IN));
 	ServerAddr.sin_family = AF_INET;
 	ServerAddr.sin_port = htons(atoi(config[1].c_str()));
 	ServerAddr.sin_addr.s_addr = inet_addr(ipaddr);
 
-	if (connect(tw_sock, (struct sockaddr *)&ServerAddr, sizeof(ServerAddr)) == 0)
+	if (connect(sock, (struct sockaddr *)&ServerAddr, sizeof(ServerAddr)) == 0)
 	{
 		printf("TwitchIRC Connected..! \n");
 
@@ -61,13 +63,13 @@ void TwitchIRC::Run()
 		//메세지 전송용
 	/*	char text[1024] = { 0 };
 		ReadFile(GetStdHandle(STD_INPUT_HANDLE), text, 1024, &dwTmp, NULL);
-		send(tw_sock, text, strlen(text), 0);
+		send(sock, text, strlen(text), 0);
 		if (strcmp(recv_buffer, "exit") == 0) {
-			send(tw_sock, recv_buffer, (int)strlen(recv_buffer), 0);
+			send(sock, recv_buffer, (int)strlen(recv_buffer), 0);
 			break;
 		}*/
 		
-		recv(tw_sock, (char *)recv_buffer, sizeof(MAX_BUFFER) - 1, 0);
+		recv(sock, (char *)recv_buffer, sizeof(MAX_BUFFER) - 1, 0);
 		pkt += std::string((char *)recv_buffer);
 		ZeroMemory(&recv_buffer, sizeof(recv_buffer));
 		
@@ -75,11 +77,13 @@ void TwitchIRC::Run()
 			if (pkt.find("PRIVMSG") !=  std::string::npos) {
 				std::string name, message;
 				stripMessage(pkt, name, message);
-				std::cout << "Chat: " << name << ": " << message << std::endl;
+				
+				
+				std::cout << "Chat: " << chat << std::endl;
 				pkt.resize(0);
 			}
 			if (pkt.find("PING") != std::string::npos) {
-				send(tw_sock, "PONG :tmi.twitch.tv\r\n", strlen("PONG :tmi.twitch.tv\r") + 1, 0);
+				send(sock, "PONG :tmi.twitch.tv\r\n", strlen("PONG :tmi.twitch.tv\r") + 1, 0);
 			}
 		}
 		
@@ -87,18 +91,26 @@ void TwitchIRC::Run()
 
 }
 void TwitchIRC::stripMessage(std::string incoming, std::string &username, std::string &message) {
-	std::string cName = config[4];
-	SIZE_T nameBegin = incoming.find("display-name=") + 13;
-	SIZE_T nameEnd = incoming.find(";", nameBegin);
-	SIZE_T messageStart = incoming.find(cName + " :") + cName.size() + 2;
+	
+	if (first == false) {
+		std::string cName = config[4];
+		SIZE_T nameBegin = incoming.find("display-name=") + 13;
+		SIZE_T nameEnd = incoming.find(";", nameBegin);
+		SIZE_T messageStart = incoming.find(cName + " :") + cName.size() + 2;
 
-	username = incoming.substr(nameBegin, (nameEnd - nameBegin));
+		username = incoming.substr(nameBegin, (nameEnd - nameBegin));
 
-	if (messageStart != std::string::npos) {
-		for (SIZE_T i = messageStart; i < incoming.size(); i++) {
-			message.push_back(incoming[i]);
+		if (messageStart != std::string::npos) {
+			for (SIZE_T i = messageStart; i < incoming.size(); i++) {
+				message.push_back(incoming[i]);
+			}
 		}
+		chat = std::string(username + " : " + message + " \r");
+		
+		PACKETMANAGER->TwitchChat(chat);
+	
 	}
+	first = false;
 }
 void TwitchIRC::InitSend() {
 	const std::string pS = std::string("PASS " + config[2] + "\r\n");
@@ -107,9 +119,9 @@ void TwitchIRC::InitSend() {
 	sendCommand(nS.c_str());
 
 	//권한 부여
-	send(tw_sock, "CAP REQ :twitch.tv/commands\r\n", strlen("CAP REQ :twitch.tv/commands\r") + 1, 0);
-	send(tw_sock, "CAP REQ :twitch.tv/membership\r\n", strlen("CAP REQ :twitch.tv/membership\r") + 1, 0);
-	send(tw_sock, "CAP REQ :twitch.tv/tags\r\n", strlen("CAP REQ :twitch.tv/tags\r") + 1, 0);
+	send(sock, "CAP REQ :twitch.tv/commands\r\n", strlen("CAP REQ :twitch.tv/commands\r") + 1, 0);
+	send(sock, "CAP REQ :twitch.tv/membership\r\n", strlen("CAP REQ :twitch.tv/membership\r") + 1, 0);
+	send(sock, "CAP REQ :twitch.tv/tags\r\n", strlen("CAP REQ :twitch.tv/tags\r") + 1, 0);
 
 
 	const std::string jS = std::string("JOIN " + config[4] + "\r\n");
@@ -117,7 +129,7 @@ void TwitchIRC::InitSend() {
 
 }
 void TwitchIRC::sendCommand(const char* command) {
-	send(tw_sock, command, strlen(command), 0);
+	send(sock, command, strlen(command), 0);
 }
 
 TwitchIRC::TwitchIRC()
@@ -126,6 +138,6 @@ TwitchIRC::TwitchIRC()
 
 TwitchIRC::~TwitchIRC()
 {
-	closesocket(tw_sock);
+	closesocket(sock);
 	WSACleanup();
 }

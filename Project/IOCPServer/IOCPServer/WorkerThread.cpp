@@ -88,12 +88,13 @@ void WorkerThread::Proc()
 		else if (OP_SEND == over->m_todo) {
 			delete over;
 		}
-		//else if (OP_STOP == over->m_todo) {
-			//if (ROOMMANAGER->room[over->roomNum]->m_full == false) {
-			//	//std::cout << over->roomNum << " : ROOM SYNC END" << std::endl;
-			//	delete over;
-			//}
-		//}
+		else if (OP_LOBBY == over->m_todo) {
+			if (ROOMMANAGER->room[over->roomNum]->m_full == false) {
+				objectManager->LobbyPkt(over->id);
+				std::cout << over->roomNum << " : GO TO LOBBY" << std::endl;
+				delete over;
+			}
+		}
 		//else if (OP_ALLPOS == over->m_todo) {
 			//PACKETMANAGER->AllPos(over->id);
 			//std::cout << over->roomNum << " : ROOM SYNC" << std::endl;

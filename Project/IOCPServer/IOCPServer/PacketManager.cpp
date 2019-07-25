@@ -27,6 +27,22 @@ void PacketManager::SendPacket(int id, void *packet)
 			//printf("오류");
 	}
 };
+void PacketManager::SendChat(int id, void *packet)
+{
+	chetEx *ex = new chetEx;
+	memcpy(ex->Chatbuf, packet, reinterpret_cast<unsigned char *>(packet)[0]);
+	ex->m_todo = OP_SEND;
+	ex->m_wsaBuf.buf = (char *)ex->Chatbuf;
+	ex->m_wsaBuf.len = ex->Chatbuf[0];
+	ZeroMemory(&ex->m_wsaOver, sizeof(WSAOVERLAPPED));
+
+	int ret = WSASend(objectManager->GetPlayer(id)->m_socket, &ex->m_wsaBuf, 1, NULL, 0, &ex->m_wsaOver, 0);
+	if (0 != ret) {
+		int err_no = WSAGetLastError();
+		if (WSA_IO_PENDING != err_no);
+		//printf("오류");
+	}
+};
 void PacketManager::LoginPacket(int id) 
 {
 	sc_packet_login_ok pkt;
@@ -221,23 +237,15 @@ void PacketManager::LobbyPacket(int id)
 	pkt.size = sizeof(sc_packet_lobby);
 	pkt.type = SC_LOBBY_IN;
 
+
+	SendPacket(id, &pkt);
+
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
-		for (int i = 0; i < SOLO_RNUM; ++i) {
-			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
-
-		}
-	}
-	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
-		for (int i = 0; i < TEAM_RNUM; ++i) {
-			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
-
-		}
-	}
 
 	
 	//방 초기화
 	ROOMMANAGER->room[roomNum]->m_full == false;
+	
 	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
 		for (int i = 0; i < SOLO_RNUM; ++i) {
 			ROOMMANAGER->room[roomNum]->m_SoloIds[i] = -1;
@@ -249,13 +257,55 @@ void PacketManager::LobbyPacket(int id)
 		}
 	}
 }
-void PacketManager::ResultPacket(int id)
-{
-	sc_packet_result pkt;
-	pkt.size = sizeof(sc_packet_result);
-	pkt.type = SC_RESULT_INFO;
-	pkt.id = id; //lose id 확인용
-
+//void PacketManager::WinPacket(int id)
+//{
+//	sc_packet_result pkt;
+//	pkt.size = sizeof(sc_packet_result);
+//	pkt.type = SC_RESULT_INFO;
+//	pkt.id = id; //lose id 확인용
+//	pkt.result = objectManager->GetPlayer(id)->lose;
+//
+//	int roomNum = objectManager->GetPlayer(id)->roomNumber;
+//	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+//		for (int i = 0; i < SOLO_RNUM; ++i) {
+//			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+//
+//		}
+//	}
+//	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+//		for (int i = 0; i < TEAM_RNUM; ++i) {
+//			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+//
+//		}
+//	}
+//}
+//void PacketManager::LosePacket(int id)
+//{
+//	sc_packet_result pkt;
+//	pkt.size = sizeof(sc_packet_result);
+//	pkt.type = SC_RESULT_INFO;
+//	pkt.id = id; //lose id 확인용
+//	pkt.result = objectManager->GetPlayer(id)->lose;
+//
+//	int roomNum = objectManager->GetPlayer(id)->roomNumber;
+//	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+//		for (int i = 0; i < SOLO_RNUM; ++i) {
+//			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+//
+//		}
+//	}
+//	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+//		for (int i = 0; i < TEAM_RNUM; ++i) {
+//			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+//
+//		}
+//	}
+//}
+void PacketManager::DeathPacket(int id) {
+	sc_packet_death pkt;
+	pkt.size = sizeof(sc_packet_death);
+	pkt.type = SC_DEATH;
+	pkt.id = id;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
 	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
@@ -268,6 +318,20 @@ void PacketManager::ResultPacket(int id)
 		for (int i = 0; i < TEAM_RNUM; ++i) {
 			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
 
+		}
+	}
+}
+void PacketManager::TwitchChat(std::string &chat) {
+	sc_packet_chat pkt;
+	pkt.type = SC_CHAT;
+	pkt.size = chat.size();
+	strcpy(pkt.chat, chat.c_str());
+	
+
+	for (int i = 0; i < MAX_USER; ++i) {
+		if (true == objectManager->GetPlayer(i)->m_connected) {
+
+			SendChat(objectManager->GetPlayer(i)->m_id, &pkt);
 		}
 	}
 }

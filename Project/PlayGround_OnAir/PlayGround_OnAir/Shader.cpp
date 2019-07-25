@@ -1695,3 +1695,83 @@ void CLoseUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComman
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
 
 }
+CHPUIShader::CHPUIShader()
+{
+}
+
+CHPUIShader::~CHPUIShader()
+{
+}
+
+void CHPUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+
+	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	m_nObjects = 1;
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/hpBar.dds", 0);
+
+	/*m_ppObjects = new CGameObject*[m_nObjects];
+	CTexturedRectMesh* pRectMesh[1];
+
+	pRectMesh[0] = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 1.0, 1.0,1, 0.8, -0.3, 1);
+
+	CBillboardObject* pBillboard = new CBillboardObject();
+
+	pBillboard->SetMesh(m_pTexture);
+*/
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+
+	m_cbHp = new CB_HP_INFO;
+	::ZeroMemory(m_cbHp, sizeof(CB_HP_INFO));
+
+	m_cbHp->hp = 3;
+}
+
+D3D12_SHADER_BYTECODE CHPUIShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSHPTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CHPUIShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSHPTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+
+}
+
+void CHPUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_HP_INFO) + 255) & ~255); //256ÀÇ ¹è¼ö
+	m_cbHPResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes * m_nObjects, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_cbHPResouce->Map(0, NULL, (void **)&m_cbMappedHp);
+
+}
+
+void CHPUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+
+	m_cbHp->hp = 3;//PLAYER->GetPlayer()->GetHP();
+
+	//cout << "hp: " << m_cbHp->hp << endl;
+	UINT ncbElementBytes = ((sizeof(CB_HP_INFO) + 255) & ~255);
+
+	CB_HP_INFO *pbMappedcbHPInfo = (CB_HP_INFO *)((UINT8 *)m_cbMappedHp + (0 * ncbElementBytes));
+	::memcpy(m_cbMappedHp, m_cbHp, sizeof(CB_HP_INFO));
+
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbHPResouce->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(18, d3dGpuVirtualAddress);
+
+}
+
+void CHPUIShader::ReleaseShaderVariables()
+{
+	if (m_cbHPResouce)
+	{
+		m_cbHPResouce->Unmap(0, NULL);
+		m_cbHPResouce->Release();
+	}
+
+}

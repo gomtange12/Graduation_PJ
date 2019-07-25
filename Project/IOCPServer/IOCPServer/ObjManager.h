@@ -10,7 +10,7 @@ private:
 	std::array<Player*, MAX_USER>		g_clients;
 	
 	int soloRoomNum;
-	float fCollDistance = 40.0f;
+	float fCollDistance = 5.25f;
 
 	
 	
@@ -32,5 +32,5 @@ public:
 	void RotePkt(int id, unsigned char *packet);
 	bool collisionPlayerByPlayer(int id);
 	void KeyPkt(int id, unsigned char *packet);
-	void LobbyPkt(int id, unsigned char *packet);
+	void LobbyPkt(int id);
 };

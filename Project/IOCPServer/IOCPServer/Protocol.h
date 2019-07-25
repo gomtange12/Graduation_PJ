@@ -16,7 +16,7 @@
 //
 const int OP_RECV = 1;
 const int OP_SEND = 2;
-//const int OP_ALLPOS = 3;  //동기화 테스트용
+const int OP_LOBBY = 3; 
 //const int OP_STOP = 4;
 //
 
@@ -32,7 +32,8 @@ constexpr int SC_KEY_INFO = 14;
 constexpr int SC_ATTACK_INFO = 15;\
 constexpr int SC_LOBBY_IN = 17;
 constexpr int SC_RESULT_INFO = 18;
-//constexpr int SC_ALL_POS = 19;
+constexpr int SC_DEATH = 19;
+constexpr int SC_CHAT = 20;
 //
 constexpr int CS_MATCHING_PLAYER = 9;
 constexpr int CS_MOVE_STATE_INFO = 10;
@@ -125,14 +126,18 @@ struct sc_packet_result {
 	BYTE size;
 	BYTE type;
 	char id;
-	
+	bool result;
 };
-struct sc_packet_allpos {
+struct sc_packet_death {
 	BYTE size;
 	BYTE type;
 	char id;
-	float posX;
-	int posZ;
+};
+struct sc_packet_chat {
+	BYTE size;
+	BYTE type;
+	char chat[255];
+
 };
 /////////////////////////클라//////////////////////
 struct cs_packet_matching {

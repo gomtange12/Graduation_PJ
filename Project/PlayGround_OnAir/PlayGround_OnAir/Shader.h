@@ -10,6 +10,10 @@ struct VS_VB_INSTANCE
 {
 	XMFLOAT4X4 m_xmf4x4Transform;
 };
+struct CB_HP_INFO
+{
+	float hp;
+};
 struct UI_Data
 {
 	XMFLOAT4X4 m_xmf4x4Transform;
@@ -390,5 +394,28 @@ public:
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+
+};
+class CHPUIShader : public CUiShader
+{
+public:
+	CHPUIShader();
+	~CHPUIShader();
+
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
+	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void ReleaseShaderVariables();
+	//virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
+
+protected:
+	CGameObject				**m_ppObjects = 0;
+	int m_nObjects{ 0 };
+	CB_HP_INFO				*m_cbHp;
+	ID3D12Resource			*m_cbHPResouce = NULL;
+	CB_HP_INFO				*m_cbMappedHp = NULL;
+
 
 };
