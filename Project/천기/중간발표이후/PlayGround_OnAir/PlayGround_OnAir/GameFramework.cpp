@@ -495,7 +495,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 					break;
 				}
 				case VK_F6:
-					SCENEMANAGER->SetScene(PLAYGROUNDMAP);
+					SCENEMANAGER->SetScene(CONCERTMAP);
 					break;
 				case VK_F7: {
 					CNETWORK->LobbyPkt(true);
@@ -709,130 +709,131 @@ void CGameFramework::ProcessInput()
 	if (GetKeyboardState(pKeysBuffer) && m_pScene)
 		bProcessedByScene = m_pScene->ProcessInput(pKeysBuffer);
 
-	if(PLAYER->GetPlayer()->GetPlayerState() != PlayerState::DEATH)
-	if (!bProcessedByScene || PLAYER->GetPlayer()->GetAllowKey() || PLAYER->GetOtherPlayer()->GetAllowKey())
-	{
-		if (pKeysBuffer[VK_RSHIFT] & 0xF0)
+	if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::DEATH || PLAYER->GetPlayer()->GetPlayerState() != PlayerState::HAPPY || PLAYER->GetPlayer()->GetPlayerState() != PlayerState::SAD) {
+		if (!bProcessedByScene || PLAYER->GetPlayer()->GetAllowKey() || PLAYER->GetOtherPlayer()->GetAllowKey())
 		{
-			SCENEMANAGER->SetScene(CONCERTMAP);
-			//PLAYER->GetPlayer()->SetPosition(XMFLOAT3());
-			//PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3());
-		}
-		//PLAYER->GetPlayer()->GetDirectiond() = 0;
-		dwDirection = 0;
-		otherPlayerDirection = 0;
-		if (pKeysBuffer[0x57] & 0xF0)
-		{
-		
-			//PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-			PLAYER->GetPlayer()->SetPlayerState(RUN);
-
-			dwDirection |= DIR_FORWARD;
-
-			//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
-		}
-		if (pKeysBuffer[0x53] & 0xF0)
-		{
-			PLAYER->GetPlayer()->SetPlayerState(RUN);
-
-			dwDirection |= DIR_BACKWARD;
-		}
-		if (pKeysBuffer[0x41] & 0xF0)
-		{
-			PLAYER->GetPlayer()->SetPlayerState(RUN);
-
-			dwDirection |= DIR_LEFT;
-		}
-		if (pKeysBuffer[0x44] & 0xF0)
-		{
-			PLAYER->GetPlayer()->SetPlayerState(RUN);
-
-			dwDirection |= DIR_RIGHT;
-		}
-
-		//2플레이어
-		//if (pKeysBuffer[VK_HANGUL] & 0xF0)
-		//{
-		//	//PLAYER->GetPlayer()->SetPlayerState(RUN);
-		//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-		//	otherPlayerDirection |= DIR_FORWARD;
-
-		//	//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
-		//}
-		//if (pKeysBuffer[VK_HELP] & 0xF0)
-		//{
-		//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-		//	otherPlayerDirection |= DIR_BACKWARD;
-		//}
-		//if (pKeysBuffer[VK_INSERT] & 0xF0)
-		//{
-		//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-		//	otherPlayerDirection |= DIR_LEFT;
-		//}
-		//if (pKeysBuffer[VK_LCONTROL] & 0xF0)
-		//{
-		//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-		//	otherPlayerDirection |= DIR_RIGHT;
-		//}
-
-		//if (pKeysBuffer[VK_PRIOR] & 0xF0) {
-		//	//PLAYER->GetPlayer()->SetPlayerState(RUN);
-		//	dwDirection |= DIR_UP;
-		//} 
-		//if (pKeysBuffer[VK_NEXT] & 0xF0)
-		//{
-		//	//PLAYER->GetPlayer()->SetPlayerState(RUN); 
-		//	dwDirection |= DIR_DOWN;
-		//}
-		if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::JUMP) {
-			if (pKeysBuffer[VK_SPACE] & 0xF0)
+			if (pKeysBuffer[VK_RSHIFT] & 0xF0)
 			{
-				CNETWORK->KeyPkt(true, false, false);
-				PLAYER->GetPlayer()->SetPlayerState(PlayerState::JUMP);
-				//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
+				SCENEMANAGER->SetScene(CONCERTMAP);
+				//PLAYER->GetPlayer()->SetPosition(XMFLOAT3());
+				//PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3());
 			}
-		}
-		if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::HAPPY){// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::HAPPY) {
-			if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::ATTACK && PLAYER->GetPlayer()->GetPlayerState() != PlayerState::STUN){// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::ATTACK) {
-				if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
+			//PLAYER->GetPlayer()->GetDirectiond() = 0;
+			dwDirection = 0;
+			otherPlayerDirection = 0;
+			if (pKeysBuffer[0x57] & 0xF0)
+			{
+
+				//PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+				PLAYER->GetPlayer()->SetPlayerState(RUN);
+
+				dwDirection |= DIR_FORWARD;
+
+				//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
+			}
+			if (pKeysBuffer[0x53] & 0xF0)
+			{
+				PLAYER->GetPlayer()->SetPlayerState(RUN);
+
+				dwDirection |= DIR_BACKWARD;
+			}
+			if (pKeysBuffer[0x41] & 0xF0)
+			{
+				PLAYER->GetPlayer()->SetPlayerState(RUN);
+
+				dwDirection |= DIR_LEFT;
+			}
+			if (pKeysBuffer[0x44] & 0xF0)
+			{
+				PLAYER->GetPlayer()->SetPlayerState(RUN);
+
+				dwDirection |= DIR_RIGHT;
+			}
+
+			//2플레이어
+			//if (pKeysBuffer[VK_HANGUL] & 0xF0)
+			//{
+			//	//PLAYER->GetPlayer()->SetPlayerState(RUN);
+			//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+			//	otherPlayerDirection |= DIR_FORWARD;
+
+			//	//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
+			//}
+			//if (pKeysBuffer[VK_HELP] & 0xF0)
+			//{
+			//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+			//	otherPlayerDirection |= DIR_BACKWARD;
+			//}
+			//if (pKeysBuffer[VK_INSERT] & 0xF0)
+			//{
+			//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+			//	otherPlayerDirection |= DIR_LEFT;
+			//}
+			//if (pKeysBuffer[VK_LCONTROL] & 0xF0)
+			//{
+			//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+			//	otherPlayerDirection |= DIR_RIGHT;
+			//}
+
+			//if (pKeysBuffer[VK_PRIOR] & 0xF0) {
+			//	//PLAYER->GetPlayer()->SetPlayerState(RUN);
+			//	dwDirection |= DIR_UP;
+			//} 
+			//if (pKeysBuffer[VK_NEXT] & 0xF0)
+			//{
+			//	//PLAYER->GetPlayer()->SetPlayerState(RUN); 
+			//	dwDirection |= DIR_DOWN;
+			//}
+			if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::JUMP) {
+				if (pKeysBuffer[VK_SPACE] & 0xF0)
 				{
-					CNETWORK->KeyPkt(false, true, false);
-					PLAYER->GetPlayer()->SetPlayerState(PlayerState::ATTACK);
+					CNETWORK->KeyPkt(true, false, false);
+					PLAYER->GetPlayer()->SetPlayerState(PlayerState::JUMP);
+					//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
 				}
 			}
-		}
-		float cxDelta = 0.0f, cyDelta = 0.0f;
-		POINT ptCursorPos;
-		if (GetCapture() == m_hWnd)
-		{
-			SetCursor(NULL);
-			GetCursorPos(&ptCursorPos);
-			cxDelta = (float)(ptCursorPos.x - m_ptOldCursorPos.x) / 4.0f;
-			cyDelta = (float)(ptCursorPos.y - m_ptOldCursorPos.y) / 4.0f;
-			SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
-		}
-
-		if ((otherPlayerDirection != 0) || (dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
-		{
-			if (cxDelta || cyDelta)
-			{
-				//if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
-				//	PLAYER->GetPlayer()->Rotate(cyDelta, 0.0f, -cxDelta);
-				if (pKeysBuffer[VK_RBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설
-				{
-
-					PLAYER->GetPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
-					
-
+			if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::HAPPY) {// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::HAPPY) {
+				if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::ATTACK && PLAYER->GetPlayer()->GetPlayerState() != PlayerState::STUN) {// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::ATTACK) {
+					if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
+					{
+						CNETWORK->KeyPkt(false, true, false);
+						PLAYER->GetPlayer()->SetPlayerState(PlayerState::ATTACK);
+					}
 				}
 			}
-			if (dwDirection)
+			float cxDelta = 0.0f, cyDelta = 0.0f;
+			POINT ptCursorPos;
+			if (GetCapture() == m_hWnd)
 			{
-				//PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
-				
-				if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN)
-					CNETWORK->StatePkt(dwDirection);
+				SetCursor(NULL);
+				GetCursorPos(&ptCursorPos);
+				cxDelta = (float)(ptCursorPos.x - m_ptOldCursorPos.x) / 4.0f;
+				cyDelta = (float)(ptCursorPos.y - m_ptOldCursorPos.y) / 4.0f;
+				SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
+			}
 
+			if ((otherPlayerDirection != 0) || (dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
+			{
+				if (cxDelta || cyDelta)
+				{
+					//if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
+					//	PLAYER->GetPlayer()->Rotate(cyDelta, 0.0f, -cxDelta);
+					if (pKeysBuffer[VK_RBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설
+					{
+
+						PLAYER->GetPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
+
+
+					}
+				}
+				if (dwDirection)
+				{
+					//PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
+
+					if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN)
+						CNETWORK->StatePkt(dwDirection);
+
+				}
 			}
 		}
 	}

@@ -56,10 +56,15 @@ void RoomManager::SoloRoomMatch(int id)
 							for (int k = 0; k < SOLO_RNUM; ++k) {
 								objectManager->GetPlayer(room[i]->m_SoloIds[k])->roomNumber = i;
 								objectManager->GetPlayer(room[i]->m_SoloIds[k])->m_match = true;
-								
+
 								PACKETMANAGER->IngamePacket(room[i]->m_SoloIds[k], i);
+
+								if (k == 1) {
+									room[i]->clock = 0;
+									std::cout << room[i]->clock << std::endl;
+									dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_CLOCK, i, GetTickCount() + 2000);									
+								}
 							}
-							
 						}
 					}
 					break;
@@ -160,9 +165,14 @@ void RoomManager::TeamRoomMatch(int id)
 							for (int k = 0; k < TEAM_RNUM; ++k) {
 								objectManager->GetPlayer(room[i]->m_TeamIds[k])->roomNumber = i;
 								objectManager->GetPlayer(room[i]->m_TeamIds[k])->m_match = true;
-								
+
 								PACKETMANAGER->IngamePacket(room[i]->m_TeamIds[k], i);
-								
+
+								if (k == 3) {
+									room[i]->clock = 0;
+									std::cout << room[i]->clock << std::endl;
+									dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_CLOCK, i, GetTickCount() + 1000);
+								}
 							}
 							
 						}

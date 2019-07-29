@@ -218,7 +218,11 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 				PACKETMANAGER->MovePacket(otherId);
 				PACKETMANAGER->AttackPacKet(otherId);
 				--g_clients[otherId]->hp;
-				//if (g_clients[otherId]->hp <= 0) PACKETMANAGER->ResultPacket(otherId);
+				if (g_clients[otherId]->hp <= 0) {
+					PACKETMANAGER->DeathPacket(otherId);
+					PACKETMANAGER->ResultPacket(otherId);
+					dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(otherId, OP_LOBBY, roomNum, GetTickCount() + 4000);
+				}
 			}
 		}
 		else {
@@ -237,6 +241,7 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 						--g_clients[otherId]->hp;
 						if (g_clients[otherId]->hp <= 0) {
 							g_clients[otherId]->death = true;
+						
 							PACKETMANAGER->DeathPacket(otherId);
 						}	
 					}
@@ -245,16 +250,17 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 
 			if (g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[0]]->death == true && g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[1]]->death == true) {
 				g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[0]]->lose = true; g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[1]]->lose = true;
-				//PACKETMANAGER->ResultPacket(id);
-				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_LOBBY, roomNum, GetTickCount() + 500);
+				PACKETMANAGER->ResultPacket(id);
+
+				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(ROOMMANAGER->room[roomNum]->m_TeamIds[0], OP_LOBBY, roomNum, GetTickCount() + 4000);
 			}
 			if (g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[2]]->death == true && g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[3]]->death == true) {
 				g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[2]]->lose = true; g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[3]]->lose = true;
-				//PACKETMANAGER->ResultPacket(id);
-				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_LOBBY, roomNum, GetTickCount() + 500);
+				PACKETMANAGER->ResultPacket(id);
+
+				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(ROOMMANAGER->room[roomNum]->m_TeamIds[2], OP_LOBBY, roomNum, GetTickCount() + 4000);
 			}
 		}
-
 	}
 }
 void ObjManager::LobbyPkt(int id)
@@ -263,19 +269,39 @@ void ObjManager::LobbyPkt(int id)
 	int modNum;
 	int roomNum = g_clients[id]->roomNumber;
 	
-	if (ROOMMANAGER->room[roomNum]->mod == SOLO) modNum = SOLO_RNUM;
-	else modNum = TEAM_RNUM;
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			ids = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
 
-	for (int i = 0; i < modNum; ++i) {
-		ids = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
-
-		PACKETMANAGER->LobbyPacket(ids);
-		//초기화
-		g_clients[ids]->death = false;
-		g_clients[ids]->lose = false;
-		g_clients[ids]->m_match = false;
-		g_clients[ids]->hp = 6;
+			PACKETMANAGER->LobbyPacket(ids);
+			//초기화
+			if (i == 1) {
+				for (int i = 0; i < SOLO_RNUM; ++i) {
+					ids = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
+					g_clients[ids]->death = false;
+					g_clients[ids]->lose = false;
+					g_clients[ids]->m_match = false;
+					g_clients[ids]->hp = 6;
+				}
+			}
+		}
 	}
-		
+	else {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			ids = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
+
+			PACKETMANAGER->LobbyPacket(ids);
+			//초기화
+			if (i == 3) {
+				for (int i = 0; i < TEAM_RNUM; ++i) {
+					ids = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
+					g_clients[ids]->death = false;
+					g_clients[ids]->lose = false;
+					g_clients[ids]->m_match = false;
+					g_clients[ids]->hp = 6;
+				}
+			}
+		}
+	}
 	
 }

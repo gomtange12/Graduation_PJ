@@ -24,9 +24,8 @@ public:
 	void KeyPacket(int id, bool jump, bool attack, bool skill);
 	void AttackPacKet(int id);
 	void LobbyPacket(int id);
-	void WinPacket(int id);
-	void LosePacket(int id);
+	void ResultPacket(int id);
 	void DeathPacket(int id);
 	void TwitchChat(std::string &chat);
-
+	void ClockPacket(int id, int clock);
 };

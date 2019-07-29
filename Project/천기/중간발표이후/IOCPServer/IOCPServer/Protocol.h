@@ -17,7 +17,7 @@
 const int OP_RECV = 1;
 const int OP_SEND = 2;
 const int OP_LOBBY = 3; 
-//const int OP_STOP = 4;
+const int OP_CLOCK = 4;
 //
 
 constexpr int SC_LOGIN_OK = 1;
@@ -34,6 +34,7 @@ constexpr int SC_LOBBY_IN = 17;
 constexpr int SC_RESULT_INFO = 18;
 constexpr int SC_DEATH = 19;
 constexpr int SC_CHAT = 20;
+constexpr int SC_CLOCK = 21;
 //
 constexpr int CS_MATCHING_PLAYER = 9;
 constexpr int CS_MOVE_STATE_INFO = 10;
@@ -125,7 +126,6 @@ struct sc_packet_lobby {
 struct sc_packet_result {
 	BYTE size;
 	BYTE type;
-	char id;
 	bool result;
 };
 struct sc_packet_death {
@@ -138,6 +138,11 @@ struct sc_packet_chat {
 	BYTE type;
 	char chat[255];
 
+};
+struct sc_packet_clock {
+	BYTE size;
+	BYTE type;
+	char clock;
 };
 /////////////////////////Å¬¶ó//////////////////////
 struct cs_packet_matching {
