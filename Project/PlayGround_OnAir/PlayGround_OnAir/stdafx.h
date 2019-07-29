@@ -64,7 +64,7 @@ using Microsoft::WRL::ComPtr;
 extern HINSTANCE						ghAppInstance;
 
 //#define _WITH_SWAPCHAIN_FULLSCREEN_STATE
-//#define _WITH_DIRECT2D
+#define _WITH_DIRECT2D
 //#ifdef _WITH_DIRECT2D
 //#define _WITH_DIRECT2D_IMAGE_EFFECT
 //#endif
@@ -104,6 +104,8 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 #define SCENEMANAGER	 CSceneManager::GetInstance()
 #define OBJECTMANAGER	 CObjectManager::GetInstance()
 #define CNETWORK	CNetWork::GetInstance()
+#define CHATMANAGER	CChatManager::GetInstance()
+
 
 #define MAXOBJECTNUM 100
 #define   WM_SOCKET            WM_USER + 1

@@ -13,7 +13,7 @@ class CChatManager : public CSingleTonBase<CChatManager>
 public:
 	void Initialize();
 	std::list<wchar_t*> GetChatContailner() { return m_chatContainer; }
-	void Update();
+	void Update(string s);
 	void InputChatting();
 public:
 	CChatManager();

@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CBillboardObject.h" />
+    <ClInclude Include="CChatManager.h" />
     <ClInclude Include="CIngameScene.h" />
     <ClInclude Include="CInputManager.h" />
     <ClInclude Include="CMenuScene.h" />
@@ -178,6 +179,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CBillboardObject.cpp" />
+    <ClCompile Include="CChatManager.cpp" />
     <ClCompile Include="CIngameScene.cpp" />
     <ClCompile Include="CInputManager.cpp" />
     <ClCompile Include="CMenuScene.cpp" />

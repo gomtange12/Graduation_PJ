@@ -8,17 +8,18 @@ void CChatManager::Initialize()
 	
 }
 
-void CChatManager::Update()
+void CChatManager::Update(string s)
 {
-	ws1[0] = L"Hello, world!";
-	tempstring = L"histring";
-	//m_chatContainer.emplace_front(wcstombs(tempstring));
-	string s{ "leeso" };
+	//ws1[0] = L"Hello, world!";
+	//tempstring = L"histring";
+	////m_chatContainer.emplace_front(wcstombs(tempstring));
+	//string s{ "leeso" };
+	//if(s.size > 0)
 	wchar_t* wide_string = new wchar_t[s.length() + 1];
 	std::copy(s.begin(), s.end(), wide_string);
 	wide_string[s.length()] = 0;
 
-	m_chatContainer.emplace_front(wide_string);
+	m_chatContainer.emplace_back(wide_string);
 
 
 	//delete[] wide_string;

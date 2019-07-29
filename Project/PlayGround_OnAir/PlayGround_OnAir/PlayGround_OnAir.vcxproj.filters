@@ -73,6 +73,9 @@
     <Filter Include="소스 파일\CNetwork">
       <UniqueIdentifier>{8fd0e33c-97bb-4fa4-8931-9c07ddc32c7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\ChatManager">
+      <UniqueIdentifier>{be0900bd-9971-4b9c-a0db-633a95c1f0b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -156,6 +159,9 @@
     <ClInclude Include="CNetWork.h">
       <Filter>소스 파일\CNetwork</Filter>
     </ClInclude>
+    <ClInclude Include="CChatManager.h">
+      <Filter>소스 파일\ChatManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Player.cpp">
@@ -226,6 +232,9 @@
     </ClCompile>
     <ClCompile Include="CNetWork.cpp">
       <Filter>소스 파일\CNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="CChatManager.cpp">
+      <Filter>소스 파일\ChatManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

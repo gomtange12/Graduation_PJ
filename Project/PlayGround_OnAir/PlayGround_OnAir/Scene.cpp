@@ -1517,11 +1517,11 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 					m_ppShaders[7]->Render(pd3dCommandList, pCamera);
 			}
 		}
-		if (m_ppShaders[9])
-		{
-			m_ppShaders[9]->UpdateShaderVariables(pd3dCommandList);
-			m_ppShaders[9]->Render(pd3dCommandList, pCamera);
-		}
+		//if (m_ppShaders[9])
+		//{
+		//	m_ppShaders[9]->UpdateShaderVariables(pd3dCommandList);
+		//	m_ppShaders[9]->Render(pd3dCommandList, pCamera);
+		//}
 		//PLAYER->GetOtherPlayer()->Render(pd3dCommandList, pCamera);
 		//m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
 		//if (m_ppShaders[3]) m_ppShaders[3]->Render(pd3dCommandList, pCamera);
@@ -1559,11 +1559,11 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 					m_ppShaders[7]->Render(pd3dCommandList, pCamera);
 			}
 		}
-		if (m_ppShaders[9])
-		{
-			m_ppShaders[9]->UpdateShaderVariables(pd3dCommandList);
-			m_ppShaders[9]->Render(pd3dCommandList, pCamera);
-		}
+		//if (m_ppShaders[9])
+		//{
+		//	m_ppShaders[9]->UpdateShaderVariables(pd3dCommandList);
+		//	m_ppShaders[9]->Render(pd3dCommandList, pCamera);
+		//}
 		break;
 	}
 

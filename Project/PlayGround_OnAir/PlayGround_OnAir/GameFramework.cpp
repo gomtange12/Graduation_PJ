@@ -9,6 +9,7 @@
 #include "CIngameScene.h"
 #include "CObjectManager.h"
 #include "CNetWork.h"
+#include "CChatManager.h"
 
 CGameFramework::CGameFramework()
 {
@@ -108,7 +109,7 @@ void CGameFramework::CreateDirect2DDevice()
 	hResult = m_pdWriteFactory->CreateTextFormat(L"맑은 고딕체", NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 15.0f, L"en-US", &m_pdwFont);
 	hResult = m_pdwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	hResult = m_pdwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Purple, 1.0f), &m_pd2dbrText);
+	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White, 1.0f), &m_pd2dbrText);
 	hResult = m_pdWriteFactory->CreateTextLayout(L"텍스트 레이아웃", 8, m_pdwFont, 4096.0f, 4096.0f, &m_pdwTextLayout);
 
 #ifdef _WITH_DIRECT2D_IMAGE_EFFECT
@@ -1058,12 +1059,14 @@ void CGameFramework::FrameAdvance()
 #endif
 	D2D1_SIZE_F szRenderTarget = m_ppd2dRenderTargets[m_nSwapChainBufferIndex]->GetSize(); //D2D1::SizeF(0, szRenderTarget.height*0.2);/
 	m_GameTimer.GetFrameRate(m_pszFrameRate + 12, 37);
-	D2D1_RECT_F rcUpperText = D2D1::RectF(0, 0, szRenderTarget.width * 0.5, szRenderTarget.height*0.2);
-	m_pd2dDeviceContext->DrawTextW(m_pszFrameRate, (UINT32)wcslen(m_pszFrameRate), m_pdwFont, &rcUpperText, m_pd2dbrText);
+//	D2D1_RECT_F rcUpperText = D2D1::RectF(0, 0, szRenderTarget.width * 0.5, szRenderTarget.height*0.2);
+//	m_pd2dDeviceContext->DrawTextW(m_pszFrameRate, (UINT32)wcslen(m_pszFrameRate), m_pdwFont, &rcUpperText, m_pd2dbrText);
 
 	D2D1_RECT_F rcLowerText = D2D1::RectF(0, 0 , szRenderTarget.width * 0.5, szRenderTarget.height);
-	m_pd2dDeviceContext->DrawTextW(L"트위치 채팅창 예시", (UINT32)wcslen(L"트위치 채팅창 예시"), m_pdwFont, &rcLowerText, m_pd2dbrText);
+	//m_pd2dDeviceContext->DrawTextW(L"PLAYGROUND 개발자 이소현입니다", (UINT32)wcslen(L"PLAYGROUND 개발자 이소현입니다"), m_pdwFont, &rcLowerText, m_pd2dbrText);
 
+	if(CHATMANAGER->GetChatContailner().size()>0)
+		m_pd2dDeviceContext->DrawTextW(*CHATMANAGER->GetChatContailner().begin(), (UINT32)wcslen(*CHATMANAGER->GetChatContailner().begin()), m_pdwFont, &rcLowerText, m_pd2dbrText);
 
 	m_pd2dDeviceContext->EndDraw();
 

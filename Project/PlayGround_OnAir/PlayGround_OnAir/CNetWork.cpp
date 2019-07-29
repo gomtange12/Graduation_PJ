@@ -2,7 +2,7 @@
 #include "CNetWork.h"
 #include "CSceneManager.h"
 #include "CPlayerManager.h"
-
+#include "CChatManager.h"
 
 
 CNetWork::CNetWork()
@@ -90,11 +90,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	case SC_SCENE:
 	{
 		sc_packet_scene *paket = reinterpret_cast<sc_packet_scene *>(ptr);
-		//SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
-		cout << "===================" << endl;
-		for (int i = 0; i < 4; ++i) {
-			cout << (E_CHARACTERTYPE)paket->avatar[i] << endl;
-		}
+		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
+
 		//솔로모드면
 		if (paket->mod == SOLO) {
 			for (int i = 0; i < 2; ++i) {
@@ -135,7 +132,6 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetTeamPlayerMap()[i]->SetClientNum(paket->ids[i]);
 						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
 						PLAYER->GetTeamPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
-						//cout << "맨첫번 포문" << i << "번째 팀: " << PLAYER->GetTeamPlayerMap()[i]->GetCharacterType() << endl;
 						break;
 					}
 				}
@@ -143,7 +139,6 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i + 2]);
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i + 2]);
 					PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i + 2]);
-					//cout << " + 2된" << i << "번째 적: " << i << PLAYER->GetOtherPlayerMap()[i]->GetCharacterType() << endl;
 
 				}
 			}
@@ -162,8 +157,6 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetTeamPlayerMap()[0]->SetClientNum(paket->ids[i]);
 						PLAYER->GetTeamPlayerMap()[0]->NumberByPos(paket->posN[i]);
 						PLAYER->GetTeamPlayerMap()[0]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
-						cout << "i:2~4팀0: " << i << PLAYER->GetTeamPlayerMap()[0]->GetCharacterType() << endl;
-
 						break;
 					}
 				}
@@ -173,7 +166,6 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
 					PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
-					cout << "팀넘버 0아닌 i번쨰적: " << i << PLAYER->GetOtherPlayerMap()[i]->GetCharacterType() << endl;
 
 				}
 
@@ -181,7 +173,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		}
 		PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(25, 10, 25), XMFLOAT4(0, 0, 0, 1));
 		CNetCGameFramework->ChangePlayerCharacter();
-		//CNetCGameFramework->Ch
+
 		PLAYER->GetPlayer()->m_match = true;
 		CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
 		break;
@@ -317,10 +309,10 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				break;
 			}
 			else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
-				if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
-					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
-					break;
-				}
+
+				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
+				break;
+
 			}
 		}
 		break;
@@ -344,20 +336,51 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_result *pkt = reinterpret_cast<sc_packet_result *>(ptr);
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
-			PLAYER->GetPlayer()->SetPlayerState(SAD);
-			PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(HAPPY);
-
-
-		}
-		if (pkt->id == PLAYER->GetOtherPlayerMap()[0]->GetClientNum()) {
-			PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(SAD);
-			PLAYER->GetPlayer()->SetPlayerState(HAPPY);
-
+			if (pkt->result == true) {
+				PLAYER->GetPlayer()->SetPlayerState(SAD);
+				for (int i = 0; i < 2; ++i) {
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(SAD);
+					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::SAD);
+				}
+			}
+			else {
+				PLAYER->GetPlayer()->SetPlayerState(HAPPY);
+				for (int i = 0; i < 2; ++i) {
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(HAPPY);
+					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::HAPPY);
+				}
+			}
 		}
 		break;
 	}
+	case SC_DEATH:
+	{
+		sc_packet_death *pkt = reinterpret_cast<sc_packet_death *>(ptr);
+		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
+			PLAYER->GetPlayer()->SetPlayerState(DEATH);
+		}
+		for (int i = 0; i < 2; ++i) {
+			if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
+				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::DEATH);
+				break;
+			}
+			else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::DEATH);
+				break;
+			}
+		}
+		break;
+	}
+	case SC_CHAT:
+	{
+		SetConsoleOutputCP(65001);
+		sc_packet_chat *pkt = reinterpret_cast<sc_packet_chat *>(ptr);
+		cout << pkt->chat;
+		CHATMANAGER->Update(pkt->chat);
+		cout << "======" << endl;
 
-
+		break;
+	}
 	default:
 		printf("Unknown PACKET type [%d]\n", ptr[1]);
 	}
