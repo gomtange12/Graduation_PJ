@@ -51,6 +51,7 @@ public:
 
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	bool						m_ready = false;
+	int							control = 0;
 #ifdef _WITH_DIRECT2D
 	void CreateDirect2DDevice();
 #endif
