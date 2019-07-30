@@ -56,7 +56,8 @@ public:
 #endif
 
 private:
-
+	D2D1_SIZE_F					m_szRenderTargetForChat;
+	D2D1_RECT_F					m_rcTextRectForChat[10];
 	D3D12_VIEWPORT				m_d3dViewport;
 	D3D12_RECT					m_d3dScissorRect;
 	HINSTANCE					m_hInstance;

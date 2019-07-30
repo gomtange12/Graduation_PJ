@@ -47,7 +47,7 @@ CGameFramework::CGameFramework()
 	//m_pPlayer = NULL;
 
 	_tcscpy_s(m_pszFrameRate, _T("PlayGround ("));
-}
+	}
 
 CGameFramework::~CGameFramework()
 {
@@ -1064,9 +1064,21 @@ void CGameFramework::FrameAdvance()
 
 	D2D1_RECT_F rcLowerText = D2D1::RectF(0, 0 , szRenderTarget.width * 0.5, szRenderTarget.height);
 	//m_pd2dDeviceContext->DrawTextW(L"PLAYGROUND 개발자 이소현입니다", (UINT32)wcslen(L"PLAYGROUND 개발자 이소현입니다"), m_pdwFont, &rcLowerText, m_pd2dbrText);
+	//m_szRenderTargetForChat = m_ppd2dRenderTargets[m_nSwapChainBufferIndex]->GetSize();
+	for (int i = 0; i < 10; ++i)
+		m_rcTextRectForChat[i] = D2D1::RectF(0, 0, szRenderTarget.width * 0.3, szRenderTarget.height * ( 1 - ( 0.15 * i)));
 
-	if(CHATMANAGER->GetChatContailner().size()>0)
-		m_pd2dDeviceContext->DrawTextW(*CHATMANAGER->GetChatContailner().begin(), (UINT32)wcslen(*CHATMANAGER->GetChatContailner().begin()), m_pdwFont, &rcLowerText, m_pd2dbrText);
+	if (CHATMANAGER->GetChatContailner().size() > 0)
+	{
+		int i = 0;
+		for(auto p : CHATMANAGER->m_chatContainer)
+		{
+			m_pd2dDeviceContext->DrawTextW(p, (UINT32)wcslen(p), m_pdwFont, &m_rcTextRectForChat[i++], m_pd2dbrText);
+		if (i > 5)
+			i = 0;
+		}
+		CHATMANAGER->Update();
+	}
 
 	m_pd2dDeviceContext->EndDraw();
 
