@@ -10,14 +10,15 @@ struct VS_VB_INSTANCE
 {
 	XMFLOAT4X4 m_xmf4x4Transform;
 };
-struct CB_HP_INFO
-{
-	float hp;
-};
 struct UI_Data
 {
 	XMFLOAT4X4 m_xmf4x4Transform;
 	XMFLOAT2 m_uvCoord;
+};
+
+struct CB_HP_INFO
+{
+	float hp;
 };
 class CScene;
 class CShader
@@ -394,6 +395,14 @@ public:
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+
+};
+class CChatUIShader : public CUiShader {
+public:
+	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
+	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual D3D12_BLEND_DESC CreateBlendState();
 
 };
 class CHPUIShader : public CUiShader

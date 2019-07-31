@@ -24,7 +24,11 @@ class CPlayerManager : public CSingleTonBase<CPlayerManager>
 	CLoadedModelInfo*                     m_pTeamKeyboardModel;
 	CLoadedModelInfo*                     m_pTeamDrumModel;
 	CLoadedModelInfo*                     m_pTeamVocalModel;
+
+	bool								m_isCharacterSelected{ false };
 public:
+	bool GetCharacterSelect() { return m_isCharacterSelected; }
+	void SetCharacterSelect(bool isCheck) { m_isCharacterSelected = isCheck; }
 	COtherPlayers*                      m_pEnemyGuitarPlayer[3];
 	COtherPlayers*                      m_pEnemyBassPlayer[3];
 	COtherPlayers*                      m_pEnemyKeyboardPlayer[3];

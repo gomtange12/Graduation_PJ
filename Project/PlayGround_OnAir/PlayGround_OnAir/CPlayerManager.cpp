@@ -285,6 +285,7 @@ void CPlayerManager::ChangePlayer(E_CHARACTERTYPE type, ID3D12Device *pd3dDevice
 		m_pPlayer->SetCharacterType(BASS);
 
 	}
+	//m_isCharacterSelected= true;
 
 
 }

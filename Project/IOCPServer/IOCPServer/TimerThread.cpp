@@ -2,8 +2,10 @@
 #include "TimerThread.h"
 #include "IOCPServer.h"
 #include "Define.h"
+
 TimerThread::TimerThread()
 {
+	
 }
 
 TimerThread::~TimerThread()

@@ -240,45 +240,39 @@ void PacketManager::LobbyPacket(int id)
 
 	SendPacket(id, &pkt);
 
+	
+}
+void PacketManager::ResultPacket(int id)
+{
+	sc_packet_result pkt;
+	pkt.size = sizeof(sc_packet_result);
+	pkt.type = SC_RESULT_INFO;
+	
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-
-	
-	//방 초기화
-	ROOMMANAGER->room[roomNum]->m_full == false;
-	
 	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
 		for (int i = 0; i < SOLO_RNUM; ++i) {
-			ROOMMANAGER->room[roomNum]->m_SoloIds[i] = -1;
+			if (objectManager->GetPlayer(ROOMMANAGER->room[roomNum]->m_SoloIds[i])->lose == false) {
+				pkt.result = false;
+			}
+			else {
+				pkt.result = true;
+			}
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+
 		}
 	}
 	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
 		for (int i = 0; i < TEAM_RNUM; ++i) {
-			ROOMMANAGER->room[roomNum]->m_TeamIds[i] = -1;
+			if (objectManager->GetPlayer(ROOMMANAGER->room[roomNum]->m_TeamIds[i])->lose == false) {
+				pkt.result = false;	
+			}
+			else {
+				pkt.result = true;
+			}
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
 		}
 	}
 }
-//void PacketManager::WinPacket(int id)
-//{
-//	sc_packet_result pkt;
-//	pkt.size = sizeof(sc_packet_result);
-//	pkt.type = SC_RESULT_INFO;
-//	pkt.id = id; //lose id 확인용
-//	pkt.result = objectManager->GetPlayer(id)->lose;
-//
-//	int roomNum = objectManager->GetPlayer(id)->roomNumber;
-//	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
-//		for (int i = 0; i < SOLO_RNUM; ++i) {
-//			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
-//
-//		}
-//	}
-//	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
-//		for (int i = 0; i < TEAM_RNUM; ++i) {
-//			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
-//
-//		}
-//	}
-//}
 //void PacketManager::LosePacket(int id)
 //{
 //	sc_packet_result pkt;
@@ -327,11 +321,30 @@ void PacketManager::TwitchChat(std::string &chat) {
 	pkt.size = chat.size();
 	strcpy(pkt.chat, chat.c_str());
 	
-
 	for (int i = 0; i < MAX_USER; ++i) {
 		if (true == objectManager->GetPlayer(i)->m_connected) {
 
 			SendChat(objectManager->GetPlayer(i)->m_id, &pkt);
+		}
+	}
+}
+void PacketManager::ClockPacket(int id, int clock) {
+	sc_packet_clock pkt;
+	pkt.type = SC_CLOCK;
+	pkt.size = sizeof(sc_packet_clock);
+	pkt.clock = clock;
+	
+	int roomNum = objectManager->GetPlayer(id)->roomNumber;
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_SoloIds[i], &pkt);
+
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
+
 		}
 	}
 }

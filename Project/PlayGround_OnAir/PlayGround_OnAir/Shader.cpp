@@ -1775,3 +1775,47 @@ void CHPUIShader::ReleaseShaderVariables()
 	}
 
 }
+
+
+D3D12_SHADER_BYTECODE CChatUIShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSChatTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+
+D3D12_SHADER_BYTECODE CChatUIShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSChatTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+}
+
+void CChatUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/chatBg.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+}
+
+D3D12_BLEND_DESC CChatUIShader::CreateBlendState()
+{
+	D3D12_BLEND_DESC d3dBlendDesc;
+	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
+	d3dBlendDesc.AlphaToCoverageEnable = FALSE;
+	d3dBlendDesc.IndependentBlendEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].BlendEnable = TRUE;
+	d3dBlendDesc.RenderTarget[0].LogicOpEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
+	d3dBlendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_COLOR;
+	d3dBlendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	d3dBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	d3dBlendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA;
+	d3dBlendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	d3dBlendDesc.RenderTarget[0].LogicOp = D3D12_LOGIC_OP_NOOP;
+	d3dBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	return d3dBlendDesc;
+}

@@ -173,7 +173,9 @@ void CPlayer::Rotate(float x, float y, float z)
 		m_pCamera->Rotate(x, y, z);
 		if (y != 0.0f)
 		{
+			
 			CNETWORK->RotePkt(y);
+			
 			//서버연결시 주석
 			//XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Up), XMConvertToRadians(y));
 			//m_xmf3Look = Vector3::TransformNormal(m_xmf3Look, xmmtxRotate);
@@ -209,6 +211,7 @@ void CPlayer::Rotate(float x, float y, float z)
 	//m_xmf3Right = Vector3::CrossProduct(m_xmf3Up, m_xmf3Look, true);
 	//m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
 	//
+
 }
 
 

@@ -5,6 +5,8 @@
 #include "CChatManager.h"
 
 
+
+
 CNetWork::CNetWork()
 {
 }
@@ -323,9 +325,12 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 
 		SCENEMANAGER->SetScene(MENUSCENE);
 		PLAYER->GetPlayer()->m_match = false;
+		PLAYER->GetPlayer()->SetPlayerState(IDLE);
 		for (int i = 0; i < 2; ++i) {
 			PLAYER->GetOtherPlayerMap()[i]->m_match = false;
+			PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::IDLE);
 			PLAYER->GetTeamPlayerMap()[i]->m_match = false;
+			PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(IDLE);
 		}
 		CNetCGameFramework->m_ready = false;
 
@@ -335,20 +340,18 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	case SC_RESULT_INFO:
 	{
 		sc_packet_result *pkt = reinterpret_cast<sc_packet_result *>(ptr);
-		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
-			if (pkt->result == true) {
-				PLAYER->GetPlayer()->SetPlayerState(SAD);
-				for (int i = 0; i < 2; ++i) {
-					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(SAD);
-					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::SAD);
-				}
+		if (pkt->result == true) {
+			PLAYER->GetPlayer()->SetPlayerState(SAD);
+			for (int i = 0; i < 2; ++i) {
+				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(SAD);
+				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::SAD);
 			}
-			else {
-				PLAYER->GetPlayer()->SetPlayerState(HAPPY);
-				for (int i = 0; i < 2; ++i) {
-					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(HAPPY);
-					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::HAPPY);
-				}
+		}
+		else {
+			PLAYER->GetPlayer()->SetPlayerState(HAPPY);
+			for (int i = 0; i < 2; ++i) {
+				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(HAPPY);
+				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::HAPPY);
 			}
 		}
 		break;
@@ -375,10 +378,17 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		SetConsoleOutputCP(65001);
 		sc_packet_chat *pkt = reinterpret_cast<sc_packet_chat *>(ptr);
-		cout << pkt->chat;
+		cout << pkt->chat <<endl;
 		CHATMANAGER->InputChatting(pkt->chat);
-		cout << "======" << endl;
-
+		ZeroMemory(packet_buffer,sizeof(packet_buffer));
+		
+		break;
+	}
+	case SC_CLOCK:
+	{
+		
+		sc_packet_clock *pkt = reinterpret_cast<sc_packet_clock *>(ptr);
+		cout << (int)pkt->clock << endl;
 		break;
 	}
 	default:

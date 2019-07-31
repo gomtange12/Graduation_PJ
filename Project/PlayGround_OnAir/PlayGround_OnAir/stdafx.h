@@ -106,7 +106,6 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 #define CNETWORK	CNetWork::GetInstance()
 #define CHATMANAGER	CChatManager::GetInstance()
 
-
 #define MAXOBJECTNUM 100
 #define   WM_SOCKET            WM_USER + 1
 
@@ -141,7 +140,8 @@ enum SceneState {
 	PLAYGROUNDMAP = 1,
 	CONCERTMAP,
 	GAMEOVER,
-	LOADING
+	LOADING,
+	NONE
 };
 //enum MAPNumber {
 //	PLAYGROUND,
@@ -150,7 +150,8 @@ enum SceneState {
 enum ModNumber {
 	SOLO,
 	DUO,
-	SQUAD
+	SQUAD,
+	MODNONE
 };
 enum Result {
 	LOSE,

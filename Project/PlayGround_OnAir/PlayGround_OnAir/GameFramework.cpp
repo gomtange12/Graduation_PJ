@@ -47,7 +47,7 @@ CGameFramework::CGameFramework()
 	//m_pPlayer = NULL;
 
 	_tcscpy_s(m_pszFrameRate, _T("PlayGround ("));
-	}
+}
 
 CGameFramework::~CGameFramework()
 {
@@ -109,7 +109,7 @@ void CGameFramework::CreateDirect2DDevice()
 	hResult = m_pdWriteFactory->CreateTextFormat(L"맑은 고딕체", NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 15.0f, L"en-US", &m_pdwFont);
 	hResult = m_pdwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	hResult = m_pdwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White, 1.0f), &m_pd2dbrText);
+	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Beige, 1.0f), &m_pd2dbrText);
 	hResult = m_pdWriteFactory->CreateTextLayout(L"텍스트 레이아웃", 8, m_pdwFont, 4096.0f, 4096.0f, &m_pdwTextLayout);
 
 #ifdef _WITH_DIRECT2D_IMAGE_EFFECT
@@ -390,37 +390,48 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 
 			std::cout <<"변환전cursorPos: "<< m_LeftCursorPos.x << ", " << m_LeftCursorPos.y << endl;
 			
-			//XMFLOAT2 cursorpos{ 2.0f * (static_cast<float>(m_LeftCursorPos.x) / static_cast<float>(FRAME_BUFFER_WIDTH)) - 1.0f
-			//		, -(2.0f * (static_cast<float>(m_LeftCursorPos.y) / static_cast<float>(FRAME_BUFFER_HEIGHT)) - 1.0f) };
-
 
 			if (SCENEMANAGER->GetSceneType() == MENUSCENE)
 			{
-				
-				CNETWORK->mod = SCENEMANAGER->CheckModeButton(m_LeftCursorPos);
-				cout <<"모드: "<< CNETWORK->mod << endl;
+				//XMFLOAT2 cursorpos{ 2.0f * (static_cast<float>(m_LeftCursorPos.x) / static_cast<float>(FRAME_BUFFER_WIDTH)) - 1.0f
+				//		, -(2.0f * (static_cast<float>(m_LeftCursorPos.y) / static_cast<float>(FRAME_BUFFER_HEIGHT)) - 1.0f) };
 
-				
-				CNETWORK->map = SCENEMANAGER->CheckMapButton(m_LeftCursorPos);
-				cout << "맵: " << CNETWORK->map << endl;
+			
+				if (!SCENEMANAGER->GetSelectedMode())
+				{
+					ModNumber mode{ SOLO };
+					mode = SCENEMANAGER->CheckModeButton(m_LeftCursorPos);
+					if (mode != MODNONE)
+					{
+						CNETWORK->mod = mode;
+						cout << "모드: " << CNETWORK->mod << endl;
+					}
+				}
 
-
-				int num{ 0 };
+				SceneState state{ PLAYGROUNDMAP };
+				state = SCENEMANAGER->CheckMapButton(m_LeftCursorPos);
+				if (state != NONE)
+				{
+					CNETWORK->map = state;
+					cout << "맵: " << CNETWORK->map << endl;
+				}
 				//E_CHARACTERTYPE type = PLAYER->CheckSceneCharacter(m_LeftCursorPos.x, m_LeftCursorPos.y);
 				//PLAYER->SetCharacterArray(type, num);
-				E_CHARACTERTYPE type;
-				type = PLAYER->CheckSceneCharacter(m_LeftCursorPos);
-				cout << "type!" << type << endl;
-				PLAYER->ChangePlayer(type, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-				PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
-				//if (type == KEYBOARD)
-				//	PLAYER->GetPlayer()->SetMesh(m_pKeyBoardModel->m_pModelRootObject->m_pMesh);
-																		   //PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
-				//PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosiation(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
-				
-				SetCamera(PLAYER->GetPlayer()->GetCamera());
-				if (num > 5) num = 0;
-				num++;
+				if (!PLAYER->GetCharacterSelect())
+				{
+					E_CHARACTERTYPE type{ KEYBOARD };
+					type = PLAYER->CheckSceneCharacter(m_LeftCursorPos);
+					if (type != NONECHARACTER)
+					{
+						cout << " character type!" << type << endl;
+						PLAYER->ChangePlayer(type, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+						PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+						
+						SetCamera(PLAYER->GetPlayer()->GetCamera());
+						PLAYER->SetCharacterSelect(true);
+					}
+				}
+			
 			}
 			break;
 		case WM_RBUTTONDOWN:
@@ -496,7 +507,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 					break;
 				}
 				case VK_F6:
-					SCENEMANAGER->SetScene(PLAYGROUNDMAP);
+					SCENEMANAGER->SetScene(CONCERTMAP);
 					break;
 				case VK_F7: {
 					CNETWORK->LobbyPkt(true);
@@ -709,129 +720,134 @@ void CGameFramework::ProcessInput()
 	bool bProcessedByScene = false;
 	if (GetKeyboardState(pKeysBuffer) && m_pScene)
 		bProcessedByScene = m_pScene->ProcessInput(pKeysBuffer);
-	if (!bProcessedByScene || PLAYER->GetPlayer()->GetAllowKey() || PLAYER->GetOtherPlayer()->GetAllowKey())
-	{
-		if (pKeysBuffer[VK_RSHIFT] & 0xF0)
+
+	if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::DEATH || PLAYER->GetPlayer()->GetPlayerState() != PlayerState::HAPPY || PLAYER->GetPlayer()->GetPlayerState() != PlayerState::SAD) {
+		if (!bProcessedByScene || PLAYER->GetPlayer()->GetAllowKey() || PLAYER->GetOtherPlayer()->GetAllowKey())
 		{
-			SCENEMANAGER->SetScene(CONCERTMAP);
-			//PLAYER->GetPlayer()->SetPosition(XMFLOAT3());
-			//PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3());
-		}
-		//PLAYER->GetPlayer()->GetDirectiond() = 0;
-		dwDirection = 0;
-		otherPlayerDirection = 0;
-		if (pKeysBuffer[0x57] & 0xF0)
-		{
-		
-			//PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-			PLAYER->GetPlayer()->SetPlayerState(RUN);
-
-			dwDirection |= DIR_FORWARD;
-
-			//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
-		}
-		if (pKeysBuffer[0x53] & 0xF0)
-		{
-			PLAYER->GetPlayer()->SetPlayerState(RUN);
-
-			dwDirection |= DIR_BACKWARD;
-		}
-		if (pKeysBuffer[0x41] & 0xF0)
-		{
-			PLAYER->GetPlayer()->SetPlayerState(RUN);
-
-			dwDirection |= DIR_LEFT;
-		}
-		if (pKeysBuffer[0x44] & 0xF0)
-		{
-			PLAYER->GetPlayer()->SetPlayerState(RUN);
-
-			dwDirection |= DIR_RIGHT;
-		}
-
-		//2플레이어
-		//if (pKeysBuffer[VK_HANGUL] & 0xF0)
-		//{
-		//	//PLAYER->GetPlayer()->SetPlayerState(RUN);
-		//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-		//	otherPlayerDirection |= DIR_FORWARD;
-
-		//	//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
-		//}
-		//if (pKeysBuffer[VK_HELP] & 0xF0)
-		//{
-		//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-		//	otherPlayerDirection |= DIR_BACKWARD;
-		//}
-		//if (pKeysBuffer[VK_INSERT] & 0xF0)
-		//{
-		//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-		//	otherPlayerDirection |= DIR_LEFT;
-		//}
-		//if (pKeysBuffer[VK_LCONTROL] & 0xF0)
-		//{
-		//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
-		//	otherPlayerDirection |= DIR_RIGHT;
-		//}
-
-		//if (pKeysBuffer[VK_PRIOR] & 0xF0) {
-		//	//PLAYER->GetPlayer()->SetPlayerState(RUN);
-		//	dwDirection |= DIR_UP;
-		//} 
-		//if (pKeysBuffer[VK_NEXT] & 0xF0)
-		//{
-		//	//PLAYER->GetPlayer()->SetPlayerState(RUN); 
-		//	dwDirection |= DIR_DOWN;
-		//}
-		if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::JUMP) {
-			if (pKeysBuffer[VK_SPACE] & 0xF0)
+			if (pKeysBuffer[VK_RSHIFT] & 0xF0)
 			{
-				CNETWORK->KeyPkt(true, false, false);
-				PLAYER->GetPlayer()->SetPlayerState(PlayerState::JUMP);
-				//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
+				SCENEMANAGER->SetScene(CONCERTMAP);
+				//PLAYER->GetPlayer()->SetPosition(XMFLOAT3());
+				//PLAYER->GetOtherPlayer()->SetPosition(XMFLOAT3());
 			}
-		}
-		if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::HAPPY){// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::HAPPY) {
-			if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::ATTACK){// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::ATTACK) {
-				if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
+			//PLAYER->GetPlayer()->GetDirectiond() = 0;
+			dwDirection = 0;
+			otherPlayerDirection = 0;
+			if (pKeysBuffer[0x57] & 0xF0)
+			{
+
+				//PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+				PLAYER->GetPlayer()->SetPlayerState(RUN);
+
+				dwDirection |= DIR_FORWARD;
+
+				//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
+			}
+			if (pKeysBuffer[0x53] & 0xF0)
+			{
+				PLAYER->GetPlayer()->SetPlayerState(RUN);
+
+				dwDirection |= DIR_BACKWARD;
+			}
+			if (pKeysBuffer[0x41] & 0xF0)
+			{
+				PLAYER->GetPlayer()->SetPlayerState(RUN);
+
+				dwDirection |= DIR_LEFT;
+			}
+			if (pKeysBuffer[0x44] & 0xF0)
+			{
+				PLAYER->GetPlayer()->SetPlayerState(RUN);
+
+				dwDirection |= DIR_RIGHT;
+			}
+
+			//2플레이어
+			//if (pKeysBuffer[VK_HANGUL] & 0xF0)
+			//{
+			//	//PLAYER->GetPlayer()->SetPlayerState(RUN);
+			//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+			//	otherPlayerDirection |= DIR_FORWARD;
+
+			//	//PLAYER->GetPlayer()->SetTrackAnimationSet(0, CPlayer::PlayerState::RUN);
+			//}
+			//if (pKeysBuffer[VK_HELP] & 0xF0)
+			//{
+			//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+			//	otherPlayerDirection |= DIR_BACKWARD;
+			//}
+			//if (pKeysBuffer[VK_INSERT] & 0xF0)
+			//{
+			//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+			//	otherPlayerDirection |= DIR_LEFT;
+			//}
+			//if (pKeysBuffer[VK_LCONTROL] & 0xF0)
+			//{
+			//	PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
+			//	otherPlayerDirection |= DIR_RIGHT;
+			//}
+
+			//if (pKeysBuffer[VK_PRIOR] & 0xF0) {
+			//	//PLAYER->GetPlayer()->SetPlayerState(RUN);
+			//	dwDirection |= DIR_UP;
+			//} 
+			//if (pKeysBuffer[VK_NEXT] & 0xF0)
+			//{
+			//	//PLAYER->GetPlayer()->SetPlayerState(RUN); 
+			//	dwDirection |= DIR_DOWN;
+			//}
+			if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::JUMP) {
+				if (pKeysBuffer[VK_SPACE] & 0xF0)
 				{
-					CNETWORK->KeyPkt(false, true, false);
-					PLAYER->GetPlayer()->SetPlayerState(PlayerState::ATTACK);
+					CNETWORK->KeyPkt(true, false, false);
+					PLAYER->GetPlayer()->SetPlayerState(PlayerState::JUMP);
+					//PLAYER->GetPlayer()->m_pAnimationController->SetTrackPosition(0, 0); //여기
 				}
 			}
-		}
-		float cxDelta = 0.0f, cyDelta = 0.0f;
-		POINT ptCursorPos;
-		if (GetCapture() == m_hWnd)
-		{
-			SetCursor(NULL);
-			GetCursorPos(&ptCursorPos);
-			cxDelta = (float)(ptCursorPos.x - m_ptOldCursorPos.x) / 4.0f;
-			cyDelta = (float)(ptCursorPos.y - m_ptOldCursorPos.y) / 4.0f;
-			SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
-		}
-
-		if ((otherPlayerDirection != 0) || (dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
-		{
-			if (cxDelta || cyDelta)
+			if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::HAPPY) {// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::HAPPY) {
+				if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::ATTACK && PLAYER->GetPlayer()->GetPlayerState() != PlayerState::STUN) {// && PLAYER->GetOtherPlayer()->GetPlayerState() != PlayerState::ATTACK) {
+					if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
+					{
+						CNETWORK->KeyPkt(false, true, false);
+						PLAYER->GetPlayer()->SetPlayerState(PlayerState::ATTACK);
+					}
+				}
+			}
+			float cxDelta = 0.0f, cyDelta = 0.0f;
+			POINT ptCursorPos;
+			if (GetCapture() == m_hWnd)
 			{
-				//if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
-				//	PLAYER->GetPlayer()->Rotate(cyDelta, 0.0f, -cxDelta);
-				if (pKeysBuffer[VK_RBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설
-				{
+				SetCursor(NULL);
+				GetCursorPos(&ptCursorPos);
+				cxDelta = (float)(ptCursorPos.x - m_ptOldCursorPos.x) / 4.0f;
+				cyDelta = (float)(ptCursorPos.y - m_ptOldCursorPos.y) / 4.0f;
+				SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
+			}
 
-					PLAYER->GetPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
+			if ((otherPlayerDirection != 0) || (dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
+			{
+				if (cxDelta || cyDelta)
+				{
+					//if (pKeysBuffer[VK_LBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설정
+					//	PLAYER->GetPlayer()->Rotate(cyDelta, 0.0f, -cxDelta);
+					if (pKeysBuffer[VK_RBUTTON] & 0xF0) //왜인지 모르겠으나 LButton하면 Rboutton누른걸로 설
+					{
+
+						PLAYER->GetPlayer()->Rotate(cyDelta, cxDelta, 0.0f);
+
+
+					}
+				}
+				if (dwDirection)
+				{
+					//PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
+					if(control % 2 ==0){
+						if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN) 
+							CNETWORK->StatePkt(dwDirection);
+							
+					}
 					
-
 				}
-			}
-			if (dwDirection)
-			{
-				//PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
-				
-				if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN)
-					CNETWORK->StatePkt(dwDirection);
-
 			}
 		}
 	}
@@ -855,6 +871,7 @@ void CGameFramework::ProcessInput()
 			p->Update(m_GameTimer.GetTimeElapsed());
 
 	}
+	control++;
 }
 
 void CGameFramework::AnimateObjects()
@@ -996,28 +1013,28 @@ void CGameFramework::FrameAdvance()
 	
 	}
 
+	//if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
+	////if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
+	////cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+	//if (PLAYER->m_pOtherPlayerMap.size() > 0)
+	//{
 
+	//	for (auto&& p : PLAYER->m_pOtherPlayerMap)
+	//		p->Render(m_pd3dCommandList, m_pCamera);
+
+	//}
+	//if (PLAYER->m_pTeamPlayerMap.size() > 0)
+	//{
+
+	//	for (auto&& p : PLAYER->m_pTeamPlayerMap)
+	//		p->Render(m_pd3dCommandList, m_pCamera);
+
+	//}
 
 #ifdef _WITH_PLAYER_TOP
 	m_pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 #endif
-	if (PLAYER->GetPlayer()!=NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
-	//if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
-	//cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
-	if (PLAYER->m_pOtherPlayerMap.size() > 0)
-	{
-
-		for (auto&& p : PLAYER->m_pOtherPlayerMap)
-			p->Render(m_pd3dCommandList, m_pCamera);
-
-	}
-	if (PLAYER->m_pTeamPlayerMap.size() > 0)
-	{
-
-		for (auto&& p : PLAYER->m_pTeamPlayerMap)
-			p->Render(m_pd3dCommandList, m_pCamera);
-
-	}
+	
 	if (m_pScene)
 	{
 		m_pScene->CheckObjectByObjectCollisions();
@@ -1051,7 +1068,7 @@ void CGameFramework::FrameAdvance()
 
 	m_pd2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 #ifdef _WITH_DIRECT2D_IMAGE_EFFECT
-	m_pd2dDeviceContext->DrawImage(m_pd2dfxBitmapSource);
+	//m_pd2dDeviceContext->DrawImage(m_pd2dfxBitmapSource);
 	//	m_pd2dDeviceContext->DrawRectangle(rcText, m_pd2dbrBackground);
 
 	//	m_pd2dDeviceContext->DrawRectangle(&rcText, m_pd2dbrBorder);
@@ -1059,27 +1076,25 @@ void CGameFramework::FrameAdvance()
 #endif
 	D2D1_SIZE_F szRenderTarget = m_ppd2dRenderTargets[m_nSwapChainBufferIndex]->GetSize(); //D2D1::SizeF(0, szRenderTarget.height*0.2);/
 	m_GameTimer.GetFrameRate(m_pszFrameRate + 12, 37);
-//	D2D1_RECT_F rcUpperText = D2D1::RectF(0, 0, szRenderTarget.width * 0.5, szRenderTarget.height*0.2);
-//	m_pd2dDeviceContext->DrawTextW(m_pszFrameRate, (UINT32)wcslen(m_pszFrameRate), m_pdwFont, &rcUpperText, m_pd2dbrText);
+	//D2D1_RECT_F rcUpperText = D2D1::RectF(0, 0, szRenderTarget.width * 0.5, szRenderTarget.height*0.2);
+	//m_pd2dDeviceContext->DrawTextW(m_pszFrameRate, (UINT32)wcslen(m_pszFrameRate), m_pdwFont, &rcUpperText, m_pd2dbrText);
 
 	D2D1_RECT_F rcLowerText = D2D1::RectF(0, 0 , szRenderTarget.width * 0.5, szRenderTarget.height);
-	//m_pd2dDeviceContext->DrawTextW(L"PLAYGROUND 개발자 이소현입니다", (UINT32)wcslen(L"PLAYGROUND 개발자 이소현입니다"), m_pdwFont, &rcLowerText, m_pd2dbrText);
-	//m_szRenderTargetForChat = m_ppd2dRenderTargets[m_nSwapChainBufferIndex]->GetSize();
+	//m_pd2dDeviceContext->DrawTextW(L"트위치 채팅창 예시", (UINT32)wcslen(L"트위치 채팅창 예시"), m_pdwFont, &rcLowerText, m_pd2dbrText);
 	for (int i = 0; i < 10; ++i)
-		m_rcTextRectForChat[i] = D2D1::RectF(0, 0, szRenderTarget.width * 0.3, szRenderTarget.height * ( 1 - ( 0.15 * i)));
+		m_rcTextRectForChat[i] = D2D1::RectF(0, 0, szRenderTarget.width * 0.3, szRenderTarget.height * (1 - (0.15 * i)));
 
 	if (CHATMANAGER->GetChatContailner().size() > 0)
 	{
 		int i = 0;
-		for(auto p : CHATMANAGER->m_chatContainer)
+		for (auto p : CHATMANAGER->m_chatContainer)
 		{
 			m_pd2dDeviceContext->DrawTextW(p, (UINT32)wcslen(p), m_pdwFont, &m_rcTextRectForChat[i++], m_pd2dbrText);
-		if (i > 5)
-			i = 0;
+			if (i > 5)
+				i = 0;
 		}
 		CHATMANAGER->Update();
 	}
-
 	m_pd2dDeviceContext->EndDraw();
 
 	m_pd3d11On12Device->ReleaseWrappedResources(&m_ppd3d11WrappedBackBuffers[m_nSwapChainBufferIndex], 1);
