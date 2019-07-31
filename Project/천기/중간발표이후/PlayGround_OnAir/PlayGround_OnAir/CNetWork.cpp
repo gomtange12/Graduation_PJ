@@ -376,8 +376,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		SetConsoleOutputCP(65001);
 		sc_packet_chat *pkt = reinterpret_cast<sc_packet_chat *>(ptr);
-		cout << pkt->chat;
-		cout << "======" << endl;
+		cout << pkt->chat <<endl;
+		ZeroMemory(packet_buffer,sizeof(packet_buffer));
 		break;
 	}
 	case SC_CLOCK:

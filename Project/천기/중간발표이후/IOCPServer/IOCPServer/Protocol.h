@@ -136,7 +136,7 @@ struct sc_packet_death {
 struct sc_packet_chat {
 	BYTE size;
 	BYTE type;
-	char chat[255];
+	char chat[1024];
 
 };
 struct sc_packet_clock {
