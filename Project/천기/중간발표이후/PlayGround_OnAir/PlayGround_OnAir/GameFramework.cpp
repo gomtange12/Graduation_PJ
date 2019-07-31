@@ -829,10 +829,12 @@ void CGameFramework::ProcessInput()
 				if (dwDirection)
 				{
 					//PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
-
-					if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN)
-						CNETWORK->StatePkt(dwDirection);
-
+					if(control % 2 ==0){
+						if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN) 
+							CNETWORK->StatePkt(dwDirection);
+							
+					}
+					
 				}
 			}
 		}
@@ -857,6 +859,7 @@ void CGameFramework::ProcessInput()
 			p->Update(m_GameTimer.GetTimeElapsed());
 
 	}
+	control++;
 }
 
 void CGameFramework::AnimateObjects()

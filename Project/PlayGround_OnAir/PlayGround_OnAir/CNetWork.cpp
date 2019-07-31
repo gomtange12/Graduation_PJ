@@ -376,7 +376,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		SetConsoleOutputCP(65001);
 		sc_packet_chat *pkt = reinterpret_cast<sc_packet_chat *>(ptr);
 		cout << pkt->chat;
-		CHATMANAGER->Update(pkt->chat);
+		CHATMANAGER->InputChatting(pkt->chat);
 		cout << "======" << endl;
 
 		break;
