@@ -45,7 +45,14 @@ CGameFramework::CGameFramework()
 
 	m_pScene = NULL;
 	//m_pPlayer = NULL;
+	for (int i = 0; i < 10; ++i)
+	{
+		//m_rcTextRectForChat[i] = D2D1::RectF(0, 0, szRenderTarget.width * 1.5, szRenderTarget.height * (0.5 - (0.12 * i)));
+		m_rcTextRectForChat[i] = D2D1::RectF(FRAME_BUFFER_WIDTH - 150, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT * 2 - (20 * i));
 
+		//std::cout << i << "i: left: " << m_rcTextRectForChat[i].left << " , right" << m_rcTextRectForChat[i].right << " , top" << m_rcTextRectForChat[i].top
+		//	<< " , bottom" << m_rcTextRectForChat[i].bottom << endl;
+	}
 	_tcscpy_s(m_pszFrameRate, _T("PlayGround ("));
 }
 
@@ -106,7 +113,7 @@ void CGameFramework::CreateDirect2DDevice()
 	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(0.3f, 0.0f, 0.0f, 0.5f), &m_pd2dbrBackground);
 	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0x9ACD32, 1.0f)), &m_pd2dbrBorder);
 
-	hResult = m_pdWriteFactory->CreateTextFormat(L"맑은 고딕체", NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 15.0f, L"en-US", &m_pdwFont);
+	hResult = m_pdWriteFactory->CreateTextFormat(L"맑은 고딕체", NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 9.0f, L"en-US", &m_pdwFont);
 	hResult = m_pdwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	hResult = m_pdwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Beige, 1.0f), &m_pd2dbrText);
@@ -967,17 +974,10 @@ void CGameFramework::FrameAdvance()
 	m_GameTimer.Tick(60.0f);
 
 	if (SCENEMANAGER->GetSceneType() == PLAYGROUNDMAP || SCENEMANAGER->GetSceneType() == CONCERTMAP) {
-		//if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
-
-			ProcessInput();
-		//}
+		ProcessInput();
 	}
 	
-	
-
     AnimateObjects();
-
-
 
 	HRESULT hResult = m_pd3dCommandAllocator->Reset();
 	hResult = m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
@@ -1008,32 +1008,28 @@ void CGameFramework::FrameAdvance()
 	m_pd3dCommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
 	
 	if (m_pScene)
-	{
 		m_pScene->Render(m_pd3dCommandList, m_pCamera);
-	
+
+	if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
+	if (PLAYER->m_pOtherPlayerMap.size() > 0)
+	{
+		for (auto&& p : PLAYER->m_pOtherPlayerMap)
+			p->Render(m_pd3dCommandList, m_pCamera);
 	}
-
-	//if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
-	////if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
-	////cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
-	//if (PLAYER->m_pOtherPlayerMap.size() > 0)
-	//{
-
-	//	for (auto&& p : PLAYER->m_pOtherPlayerMap)
-	//		p->Render(m_pd3dCommandList, m_pCamera);
-
-	//}
-	//if (PLAYER->m_pTeamPlayerMap.size() > 0)
-	//{
-
-	//	for (auto&& p : PLAYER->m_pTeamPlayerMap)
-	//		p->Render(m_pd3dCommandList, m_pCamera);
-
-	//}
-
+	if (PLAYER->m_pTeamPlayerMap.size() > 0)
+	{
+		for (auto&& p : PLAYER->m_pTeamPlayerMap)
+			p->Render(m_pd3dCommandList, m_pCamera);
+	}
+	if (m_pScene)
+	{
+		if(m_pScene->m_ppShaders[10])
+			m_pScene->m_ppShaders[10]->Render(m_pd3dCommandList, m_pCamera);
+	}
 #ifdef _WITH_PLAYER_TOP
 	m_pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 #endif
+	
 	
 	if (m_pScene)
 	{
@@ -1081,8 +1077,7 @@ void CGameFramework::FrameAdvance()
 
 	D2D1_RECT_F rcLowerText = D2D1::RectF(0, 0 , szRenderTarget.width * 0.5, szRenderTarget.height);
 	//m_pd2dDeviceContext->DrawTextW(L"트위치 채팅창 예시", (UINT32)wcslen(L"트위치 채팅창 예시"), m_pdwFont, &rcLowerText, m_pd2dbrText);
-	for (int i = 0; i < 10; ++i)
-		m_rcTextRectForChat[i] = D2D1::RectF(0, 0, szRenderTarget.width * 0.3, szRenderTarget.height * (1 - (0.15 * i)));
+	
 
 	if (CHATMANAGER->GetChatContailner().size() > 0)
 	{
@@ -1090,7 +1085,7 @@ void CGameFramework::FrameAdvance()
 		for (auto p : CHATMANAGER->m_chatContainer)
 		{
 			m_pd2dDeviceContext->DrawTextW(p, (UINT32)wcslen(p), m_pdwFont, &m_rcTextRectForChat[i++], m_pd2dbrText);
-			if (i > 5)
+			if (i > 10)
 				i = 0;
 		}
 		CHATMANAGER->Update();

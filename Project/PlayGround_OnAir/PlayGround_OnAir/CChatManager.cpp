@@ -10,7 +10,7 @@ void CChatManager::Initialize()
 
 void CChatManager::Update()
 {
-	if (m_chatContainer.size() > 5)
+	if (m_chatContainer.size() > 10)
 	{
 		m_chatContainer.pop_front();
 	}

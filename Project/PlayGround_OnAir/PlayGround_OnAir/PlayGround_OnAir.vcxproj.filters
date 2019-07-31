@@ -73,6 +73,9 @@
     <Filter Include="소스 파일\CNetwork">
       <UniqueIdentifier>{8fd0e33c-97bb-4fa4-8931-9c07ddc32c7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Chatting">
+      <UniqueIdentifier>{c97d75fc-8185-4c5a-ba18-3e19706fd89f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -157,7 +160,7 @@
       <Filter>소스 파일\CNetwork</Filter>
     </ClInclude>
     <ClInclude Include="CChatManager.h">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Chatting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -231,7 +234,7 @@
       <Filter>소스 파일\CNetwork</Filter>
     </ClCompile>
     <ClCompile Include="CChatManager.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Chatting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1312,7 +1312,8 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 
 		if (m_ppShaders[2])
 			m_ppShaders[2]->Render(pd3dCommandList, pCamera);
-		
+		//if (m_ppShaders[10])
+		//	m_ppShaders[10]->Render(pd3dCommandList, pCamera);
 		break;
 	case PLAYGROUNDMAP:
 		for (int i = 0; i < m_nPlayGroundObjects; i++)
@@ -1354,23 +1355,25 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 			m_ppShaders[9]->Render(pd3dCommandList, pCamera);
 		}
 
-		if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(pd3dCommandList, pCamera);
-		//if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
-		//cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
-		if (PLAYER->m_pOtherPlayerMap.size() > 0)
-		{
+		//if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(pd3dCommandList, pCamera);
+		////if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
+		////cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+		//if (PLAYER->m_pOtherPlayerMap.size() > 0)
+		//{
 
-			for (auto&& p : PLAYER->m_pOtherPlayerMap)
-				p->Render(pd3dCommandList, pCamera);
+		//	for (auto&& p : PLAYER->m_pOtherPlayerMap)
+		//		p->Render(pd3dCommandList, pCamera);
 
-		}
-		if (PLAYER->m_pTeamPlayerMap.size() > 0)
-		{
+		//}
+		//if (PLAYER->m_pTeamPlayerMap.size() > 0)
+		//{
 
-			for (auto&& p : PLAYER->m_pTeamPlayerMap)
-				p->Render(pd3dCommandList, pCamera);
+		//	for (auto&& p : PLAYER->m_pTeamPlayerMap)
+		//		p->Render(pd3dCommandList, pCamera);
 
-		}
+		//}
+		//if (m_ppShaders[10])
+		//	m_ppShaders[10]->Render(pd3dCommandList, pCamera);
 		//if (m_ppShaders[10])
 		//	m_ppShaders[10]->Render(pd3dCommandList, pCamera);
 		//PLAYER->GetOtherPlayer()->Render(pd3dCommandList, pCamera);
@@ -1416,10 +1419,10 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 			m_ppShaders[9]->Render(pd3dCommandList, pCamera);
 		}
 
-		if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(pd3dCommandList, pCamera);
+		//if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(pd3dCommandList, pCamera);
 		//if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
 		//cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
-		if (PLAYER->m_pOtherPlayerMap.size() > 0)
+		/*if (PLAYER->m_pOtherPlayerMap.size() > 0)
 		{
 
 			for (auto&& p : PLAYER->m_pOtherPlayerMap)
@@ -1432,14 +1435,14 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 			for (auto&& p : PLAYER->m_pTeamPlayerMap)
 				p->Render(pd3dCommandList, pCamera);
 
-		}
+		}*/
 		//if (m_ppShaders[10])
 		//	m_ppShaders[10]->Render(pd3dCommandList, pCamera);
 		break;
 	}
 
-	if (m_ppShaders[10])
-		m_ppShaders[10]->Render(pd3dCommandList, pCamera);
+	//if (m_ppShaders[10])
+	//	m_ppShaders[10]->Render(pd3dCommandList, pCamera);
 	//if (billboardobj)
 	//{
 	//	//billboardobj->SetLookAt(pCamera->GetPosition());
