@@ -55,6 +55,7 @@ COtherPlayers * CPlayerManager::GetOtherByNum(int num, bool isTeam)
 	{
 
 	}
+	return nullptr;
 }
 CPlayerManager::CPlayerManager()
 {

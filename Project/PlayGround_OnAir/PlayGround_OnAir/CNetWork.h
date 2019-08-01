@@ -5,6 +5,7 @@
 #include "GameFramework.h"
 
 #include "..\..\IOCPServer\IOCPServer\Protocol.h"
+//#include "..\..\IOCPServer\IOCPServer\Protocol.h"
 
 
 //#define IP_ADDR "192.168.22.79"

@@ -10,11 +10,11 @@ class CChatManager : public CSingleTonBase<CChatManager>
 	int m_maxChatIndex{ 10 };
 	int m_curChatIndex{ 0 };
 public:
-	std::list<wchar_t*> m_chatContainer;
+	std::list<pair<wchar_t*, UINT32>> m_chatContainer;
 	void Initialize();
-	std::list<wchar_t*> GetChatContailner() { return m_chatContainer; }
+	std::list<pair<wchar_t*, UINT32>> GetChatContailner() { return m_chatContainer; }
 	void Update();
-	void InputChatting(string s);
+	void InputChatting(const char* s);
 public:
 	CChatManager();
 	~CChatManager();

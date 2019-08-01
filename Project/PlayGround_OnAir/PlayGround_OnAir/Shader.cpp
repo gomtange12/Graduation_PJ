@@ -1862,8 +1862,8 @@ void CTimerUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComma
 
 	}
 	for(int i = 0 ; i< 10; ++i)
-		CScene::CreateShaderResourceViews(pd3dDevice, m_pTimeTexture[i], 16, false);*/
-
+		CScene::CreateShaderResourceViews(pd3dDevice, m_pTimeTexture[i], 16, false);
+*/
 	////m_pTimeTexture[10]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_Colon.dds", 0);
 
 	//	

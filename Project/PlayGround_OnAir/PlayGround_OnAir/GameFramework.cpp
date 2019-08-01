@@ -10,7 +10,8 @@
 #include "CObjectManager.h"
 #include "CNetWork.h"
 #include "CChatManager.h"
-
+#include <tchar.h>
+ 
 CGameFramework::CGameFramework()
 {
 	m_pdxgiFactory = NULL;
@@ -48,7 +49,7 @@ CGameFramework::CGameFramework()
 	for (int i = 0; i < 10; ++i)
 	{
 		//m_rcTextRectForChat[i] = D2D1::RectF(0, 0, szRenderTarget.width * 1.5, szRenderTarget.height * (0.5 - (0.12 * i)));
-		m_rcTextRectForChat[i] = D2D1::RectF(FRAME_BUFFER_WIDTH - 150, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT * 2 - (20 * i));
+		m_rcTextRectForChat[i] = D2D1::RectF(FRAME_BUFFER_WIDTH - 150, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT * 2 - (30 * i));
 
 		//std::cout << i << "i: left: " << m_rcTextRectForChat[i].left << " , right" << m_rcTextRectForChat[i].right << " , top" << m_rcTextRectForChat[i].top
 		//	<< " , bottom" << m_rcTextRectForChat[i].bottom << endl;
@@ -113,7 +114,7 @@ void CGameFramework::CreateDirect2DDevice()
 	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(0.3f, 0.0f, 0.0f, 0.5f), &m_pd2dbrBackground);
 	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0x9ACD32, 1.0f)), &m_pd2dbrBorder);
 
-	hResult = m_pdWriteFactory->CreateTextFormat(L"맑은 고딕체", NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 9.0f, L"en-US", &m_pdwFont);
+	hResult = m_pdWriteFactory->CreateTextFormat(L"맑은 고딕체", NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 15.0f, L"en-US", &m_pdwFont);
 	hResult = m_pdwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	hResult = m_pdwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Beige, 1.0f), &m_pd2dbrText);
@@ -1075,16 +1076,20 @@ void CGameFramework::FrameAdvance()
 	//D2D1_RECT_F rcUpperText = D2D1::RectF(0, 0, szRenderTarget.width * 0.5, szRenderTarget.height*0.2);
 	//m_pd2dDeviceContext->DrawTextW(m_pszFrameRate, (UINT32)wcslen(m_pszFrameRate), m_pdwFont, &rcUpperText, m_pd2dbrText);
 
+	
 	D2D1_RECT_F rcLowerText = D2D1::RectF(0, 0 , szRenderTarget.width * 0.5, szRenderTarget.height);
-	//m_pd2dDeviceContext->DrawTextW(L"트위치 채팅창 예시", (UINT32)wcslen(L"트위치 채팅창 예시"), m_pdwFont, &rcLowerText, m_pd2dbrText);
+	m_pd2dDeviceContext->DrawTextW(TEXT("트위치 채팅창 예시"), (UINT32)wcslen(TEXT("트위치 채팅창 예시")), m_pdwFont, &rcLowerText, m_pd2dbrText);
 	
 
 	if (CHATMANAGER->GetChatContailner().size() > 0)
 	{
 		int i = 0;
-		for (auto p : CHATMANAGER->m_chatContainer)
+		for (auto&& p : CHATMANAGER->m_chatContainer)
 		{
-			m_pd2dDeviceContext->DrawTextW(p, (UINT32)wcslen(p), m_pdwFont, &m_rcTextRectForChat[i++], m_pd2dbrText);
+			//cout << p.first << endl;
+			//wcout << (p.first) << endl;
+			wcout.imbue(std::locale("kor"));
+			m_pd2dDeviceContext->DrawTextW((wchar_t*)p.first,(UINT32)p.second , m_pdwFont, &m_rcTextRectForChat[i++], m_pd2dbrText);
 			if (i > 10)
 				i = 0;
 		}
