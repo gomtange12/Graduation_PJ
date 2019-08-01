@@ -3,6 +3,7 @@
 //-----------------------------------------------------------------------------
 
 #pragma once
+#include <map>
 
 #include "Object.h"
 #include "Camera.h"
@@ -397,6 +398,26 @@ public:
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 
 };
+
+class CTimerUIShader : public CUiShader {
+	int m_nObjects{ 0 };
+	CMaterial** m_ppTimerObject;
+	std::map<int, CTexture*>	m_textureMap;
+	std::map<int, CGameObject*> m_MinTextureMap;
+	std::map<int, CGameObject*> m_TenSecTextureMap;
+	std::map<int, CGameObject*> m_OneSecTextureMap;
+	CTexture* m_pTexture = nullptr;
+	CTexture** m_pTimeTexture = nullptr;
+
+	CTexture* m_pColonTexture = nullptr;
+
+public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera);
+	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
+	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	
+};
 class CChatUIShader : public CUiShader {
 public:
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
@@ -425,6 +446,4 @@ protected:
 	CB_HP_INFO				*m_cbHp;
 	ID3D12Resource			*m_cbHPResouce = NULL;
 	CB_HP_INFO				*m_cbMappedHp = NULL;
-
-
 };

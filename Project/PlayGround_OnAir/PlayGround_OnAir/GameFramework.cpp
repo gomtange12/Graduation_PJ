@@ -404,11 +404,11 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 				//		, -(2.0f * (static_cast<float>(m_LeftCursorPos.y) / static_cast<float>(FRAME_BUFFER_HEIGHT)) - 1.0f) };
 
 			
-				if (!SCENEMANAGER->GetSelectedMode())
+				//if (!SCENEMANAGER->GetSelectedMode())
 				{
 					ModNumber mode{ SOLO };
 					mode = SCENEMANAGER->CheckModeButton(m_LeftCursorPos);
-					if (mode != MODNONE)
+					if (mode == SOLO || mode == SQUAD)
 					{
 						CNETWORK->mod = mode;
 						cout << "¸ðµå: " << CNETWORK->mod << endl;
@@ -417,25 +417,25 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 
 				SceneState state{ PLAYGROUNDMAP };
 				state = SCENEMANAGER->CheckMapButton(m_LeftCursorPos);
-				if (state != NONE)
+				if (state == PLAYGROUNDMAP || state == CONCERTMAP)
 				{
 					CNETWORK->map = state;
 					cout << "¸Ê: " << CNETWORK->map << endl;
 				}
 				//E_CHARACTERTYPE type = PLAYER->CheckSceneCharacter(m_LeftCursorPos.x, m_LeftCursorPos.y);
 				//PLAYER->SetCharacterArray(type, num);
-				if (!PLAYER->GetCharacterSelect())
+				//if (!PLAYER->GetCharacterSelect())
 				{
 					E_CHARACTERTYPE type{ KEYBOARD };
 					type = PLAYER->CheckSceneCharacter(m_LeftCursorPos);
-					if (type != NONECHARACTER)
+					if (type == BASS || type == GUITAR || type == KEYBOARD || type == VOCAL || type == DRUM)
 					{
 						cout << " character type!" << type << endl;
 						PLAYER->ChangePlayer(type, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 						PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 						
 						SetCamera(PLAYER->GetPlayer()->GetCamera());
-						PLAYER->SetCharacterSelect(true);
+						//PLAYER->SetCharacterSelect(true);
 					}
 				}
 			

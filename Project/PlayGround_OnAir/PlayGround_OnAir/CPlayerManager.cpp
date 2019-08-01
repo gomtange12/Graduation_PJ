@@ -41,6 +41,7 @@ E_CHARACTERTYPE CPlayerManager::CheckSceneCharacter(const POINT& pos)
 		cout << "기타 선택" << endl;
 		return GUITAR;
 	}
+	else NONECHARACTER;
 	
 }
 COtherPlayers * CPlayerManager::GetOtherByNum(int num, bool isTeam)

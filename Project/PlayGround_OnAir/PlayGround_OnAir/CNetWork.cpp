@@ -388,7 +388,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		
 		sc_packet_clock *pkt = reinterpret_cast<sc_packet_clock *>(ptr);
-		cout << (int)pkt->clock << endl;
+		m_time = (int)pkt->clock;
+		//cout << (int)pkt->clock << endl;
 		break;
 	}
 	default:

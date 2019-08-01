@@ -31,9 +31,10 @@ private:
 	bool firstCheck;
 
 	CGameFramework*			CNetCGameFramework;
-
+	int		m_time;
 	bool	m_isCheckPkt  =  false;
 public:
+	int GetTime() { return m_time; }
 	ModNumber mod = SQUAD;
 	SceneState map = PLAYGROUNDMAP;
 	int myid;
