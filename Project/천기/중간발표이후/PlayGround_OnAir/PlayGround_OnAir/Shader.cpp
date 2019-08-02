@@ -4,7 +4,7 @@
 
 #include "stdafx.h"
 #include "Shader.h"
-
+#include "CNetWork.h"
 #include "Player.h"
 #include "CPlayerManager.h"
 
@@ -1695,3 +1695,228 @@ void CLoseUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComman
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
 
 }
+CHPUIShader::CHPUIShader()
+{
+}
+
+CHPUIShader::~CHPUIShader()
+{
+}
+
+void CHPUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+
+	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	m_nObjects = 1;
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/hpBar.dds", 0);
+
+	/*m_ppObjects = new CGameObject*[m_nObjects];
+	CTexturedRectMesh* pRectMesh[1];
+
+	pRectMesh[0] = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 1.0, 1.0,1, 0.8, -0.3, 1);
+
+	CBillboardObject* pBillboard = new CBillboardObject();
+
+	pBillboard->SetMesh(m_pTexture);
+*/
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+
+	m_cbHp = new CB_HP_INFO;
+	::ZeroMemory(m_cbHp, sizeof(CB_HP_INFO));
+
+	m_cbHp->hp = 3;
+}
+
+D3D12_SHADER_BYTECODE CHPUIShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSHPTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CHPUIShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSHPTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+
+}
+
+void CHPUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_HP_INFO) + 255) & ~255); //256의 배수
+	m_cbHPResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes * m_nObjects, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_cbHPResouce->Map(0, NULL, (void **)&m_cbMappedHp);
+
+}
+
+void CHPUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+
+	m_cbHp->hp = 3;//PLAYER->GetPlayer()->GetHP();
+
+	//cout << "hp: " << m_cbHp->hp << endl;
+	UINT ncbElementBytes = ((sizeof(CB_HP_INFO) + 255) & ~255);
+
+	CB_HP_INFO *pbMappedcbHPInfo = (CB_HP_INFO *)((UINT8 *)m_cbMappedHp + (0 * ncbElementBytes));
+	::memcpy(m_cbMappedHp, m_cbHp, sizeof(CB_HP_INFO));
+
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbHPResouce->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(18, d3dGpuVirtualAddress);
+
+}
+
+void CHPUIShader::ReleaseShaderVariables()
+{
+	if (m_cbHPResouce)
+	{
+		m_cbHPResouce->Unmap(0, NULL);
+		m_cbHPResouce->Release();
+	}
+
+}
+
+
+D3D12_SHADER_BYTECODE CChatUIShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSChatTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+
+D3D12_SHADER_BYTECODE CChatUIShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSChatTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+}
+
+void CChatUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/chatBg.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+}
+
+D3D12_BLEND_DESC CChatUIShader::CreateBlendState()
+{
+	D3D12_BLEND_DESC d3dBlendDesc;
+	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
+	d3dBlendDesc.AlphaToCoverageEnable = FALSE;
+	d3dBlendDesc.IndependentBlendEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].BlendEnable = TRUE;
+	d3dBlendDesc.RenderTarget[0].LogicOpEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
+	d3dBlendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_COLOR;
+	d3dBlendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	d3dBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	d3dBlendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA;
+	d3dBlendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	d3dBlendDesc.RenderTarget[0].LogicOp = D3D12_LOGIC_OP_NOOP;
+	d3dBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	return d3dBlendDesc;
+}
+
+void CTimerUIShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
+{
+	//for (int i = 0; i < 10; ++i)
+	//{
+	//	if (CNETWORK->GetTime() % 100 == 0)
+	//		m_pTimeTexture[0]
+	//}
+
+}
+
+D3D12_SHADER_BYTECODE CTimerUIShader::CreatePixelShader()
+{
+	return D3D12_SHADER_BYTECODE();
+}
+
+D3D12_SHADER_BYTECODE CTimerUIShader::CreateVertexShader()
+{
+	return D3D12_SHADER_BYTECODE();
+}
+
+void CTimerUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	/*m_pTimeTexture = new CTexture*[10];
+	m_pTimeTexture[0]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_0.dds", 0);
+	m_pTimeTexture[1]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_1.dds", 0);
+	m_pTimeTexture[2]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_2.dds", 0);
+	m_pTimeTexture[3]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_3.dds", 0);
+	m_pTimeTexture[4]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_4.dds", 0);
+	m_pTimeTexture[5]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_5.dds", 0);
+	m_pTimeTexture[6]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_6.dds", 0);
+	m_pTimeTexture[7]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_7.dds", 0);
+	m_pTimeTexture[8]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_8.dds", 0);
+	m_pTimeTexture[9]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_9.dds", 0);
+
+	for (int i = 0; i < 10; ++i)
+	{
+		m_OneSecTextureMap.emplace(i, m_pTimeTexture[i]);
+		m_TenSecTextureMap.emplace(i, m_pTimeTexture[i]);
+		m_MinTextureMap.emplace(i, m_pTimeTexture[i]);
+
+	}
+	for(int i = 0 ; i< 10; ++i)
+		CScene::CreateShaderResourceViews(pd3dDevice, m_pTimeTexture[i], 16, false);
+*/
+	////m_pTimeTexture[10]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_Colon.dds", 0);
+
+	//	
+	//for(int i = 0; i< 10; ++i)
+	//	m_textureMap.emplace(0, m_pTimeTexture[i]);
+
+
+	//CTexturedRectMesh* pTimerMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 20.f, 20.f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	//m_nObjects = 30;
+
+	//// 일초
+	//m_ppTimerObject = new CMaterial*[m_nObjects];
+	//for (int i = 0; i < 10; ++i)
+	//{
+	//	m_ppTimerObject[i] = new CMaterial(1);
+
+	//
+	//	m_ppTimerObject[i]->SetTexture(m_pTimeTexture[i], 0);
+
+	//	CBillboardObject* pUI = new CBillboardObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	//	pUI->SetMesh(pTimerMesh);
+	//	pUI->SetMaterial(0, m_ppTimerObject[i]);
+	//	m_OneSecTextureMap.emplace(i, pUI);
+	//}
+	//// 십초
+	//for (int i = 10, j = 0; i < 20; ++i, ++j)
+	//{
+	//	m_ppTimerObject[i] = new CMaterial(1);
+
+	//	//auto iter = Context.find(to_string(i));
+	//	//if (iter != Context.end())
+	//	m_ppTimerObject[i]->SetTexture(m_pTimeTexture[i%10], 0);
+
+	//	CBillboardObject* pUI = new CBillboardObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	//	pUI->SetMesh(pTimerMesh);
+	//	pUI->SetMaterial(0, m_ppTimerObject[i]);
+	//	m_TenSecTextureMap.emplace(i, pUI);
+	//}
+	//// 일분
+	//for (int i = 20, j = 0; i < 30; ++i, ++j)
+	//{
+	//	m_ppTimerObject[i] = new CMaterial(1);
+
+	//	//auto iter = Context.find(to_string(i));
+	//	//if (iter != Context.end())
+	//	m_ppTimerObject[i]->SetTexture(m_pTimeTexture[i % 10], 0);
+
+	//	CBillboardObject* pUI = new CBillboardObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	//	pUI->SetMesh(pTimerMesh);
+	//	pUI->SetMaterial(0, m_ppTimerObject[i]);
+	//	m_MinTextureMap.emplace(i, pUI);
+	//}
+
+}
+

@@ -2,6 +2,8 @@
 #include "CNetWork.h"
 #include "CSceneManager.h"
 #include "CPlayerManager.h"
+#include "CChatManager.h"
+
 
 
 
@@ -376,15 +378,20 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		SetConsoleOutputCP(65001);
 		sc_packet_chat *pkt = reinterpret_cast<sc_packet_chat *>(ptr);
-		cout << pkt->chat <<endl;
+		//pkt->cSize;
+		//cout << pkt->chat << endl; 
+	
+		CHATMANAGER->InputChatting(pkt->chat);
 		ZeroMemory(packet_buffer,sizeof(packet_buffer));
+		
 		break;
 	}
 	case SC_CLOCK:
 	{
 		
 		sc_packet_clock *pkt = reinterpret_cast<sc_packet_clock *>(ptr);
-		cout << (int)pkt->clock << endl;
+		m_time = (int)pkt->clock;
+		//cout << (int)pkt->clock << endl;
 		break;
 	}
 	default:

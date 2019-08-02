@@ -9,7 +9,9 @@
 #include "CIngameScene.h"
 #include "CObjectManager.h"
 #include "CNetWork.h"
-
+#include "CChatManager.h"
+#include <tchar.h>
+ 
 CGameFramework::CGameFramework()
 {
 	m_pdxgiFactory = NULL;
@@ -44,7 +46,14 @@ CGameFramework::CGameFramework()
 
 	m_pScene = NULL;
 	//m_pPlayer = NULL;
+	for (int i = 0; i < 10; ++i)
+	{
+		//m_rcTextRectForChat[i] = D2D1::RectF(0, 0, szRenderTarget.width * 1.5, szRenderTarget.height * (0.5 - (0.12 * i)));
+		m_rcTextRectForChat[i] = D2D1::RectF(FRAME_BUFFER_WIDTH - 150, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT * 2 - (30 * i));
 
+		//std::cout << i << "i: left: " << m_rcTextRectForChat[i].left << " , right" << m_rcTextRectForChat[i].right << " , top" << m_rcTextRectForChat[i].top
+		//	<< " , bottom" << m_rcTextRectForChat[i].bottom << endl;
+	}
 	_tcscpy_s(m_pszFrameRate, _T("PlayGround ("));
 }
 
@@ -108,7 +117,7 @@ void CGameFramework::CreateDirect2DDevice()
 	hResult = m_pdWriteFactory->CreateTextFormat(L"맑은 고딕체", NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 15.0f, L"en-US", &m_pdwFont);
 	hResult = m_pdwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	hResult = m_pdwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Purple, 1.0f), &m_pd2dbrText);
+	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Beige, 1.0f), &m_pd2dbrText);
 	hResult = m_pdWriteFactory->CreateTextLayout(L"텍스트 레이아웃", 8, m_pdwFont, 4096.0f, 4096.0f, &m_pdwTextLayout);
 
 #ifdef _WITH_DIRECT2D_IMAGE_EFFECT
@@ -389,37 +398,48 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 
 			std::cout <<"변환전cursorPos: "<< m_LeftCursorPos.x << ", " << m_LeftCursorPos.y << endl;
 			
-			//XMFLOAT2 cursorpos{ 2.0f * (static_cast<float>(m_LeftCursorPos.x) / static_cast<float>(FRAME_BUFFER_WIDTH)) - 1.0f
-			//		, -(2.0f * (static_cast<float>(m_LeftCursorPos.y) / static_cast<float>(FRAME_BUFFER_HEIGHT)) - 1.0f) };
-
 
 			if (SCENEMANAGER->GetSceneType() == MENUSCENE)
 			{
-				
-				CNETWORK->mod = SCENEMANAGER->CheckModeButton(m_LeftCursorPos);
-				cout <<"모드: "<< CNETWORK->mod << endl;
+				//XMFLOAT2 cursorpos{ 2.0f * (static_cast<float>(m_LeftCursorPos.x) / static_cast<float>(FRAME_BUFFER_WIDTH)) - 1.0f
+				//		, -(2.0f * (static_cast<float>(m_LeftCursorPos.y) / static_cast<float>(FRAME_BUFFER_HEIGHT)) - 1.0f) };
 
-				
-				CNETWORK->map = SCENEMANAGER->CheckMapButton(m_LeftCursorPos);
-				cout << "맵: " << CNETWORK->map << endl;
+			
+				//if (!SCENEMANAGER->GetSelectedMode())
+				{
+					ModNumber mode{ SOLO };
+					mode = SCENEMANAGER->CheckModeButton(m_LeftCursorPos);
+					if (mode == SOLO || mode == SQUAD)
+					{
+						CNETWORK->mod = mode;
+						cout << "모드: " << CNETWORK->mod << endl;
+					}
+				}
 
-
-				int num{ 0 };
+				SceneState state{ PLAYGROUNDMAP };
+				state = SCENEMANAGER->CheckMapButton(m_LeftCursorPos);
+				if (state == PLAYGROUNDMAP || state == CONCERTMAP)
+				{
+					CNETWORK->map = state;
+					cout << "맵: " << CNETWORK->map << endl;
+				}
 				//E_CHARACTERTYPE type = PLAYER->CheckSceneCharacter(m_LeftCursorPos.x, m_LeftCursorPos.y);
 				//PLAYER->SetCharacterArray(type, num);
-				E_CHARACTERTYPE type;
-				type = PLAYER->CheckSceneCharacter(m_LeftCursorPos);
-				cout << "type!" << type << endl;
-				PLAYER->ChangePlayer(type, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-				PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
-				//if (type == KEYBOARD)
-				//	PLAYER->GetPlayer()->SetMesh(m_pKeyBoardModel->m_pModelRootObject->m_pMesh);
-																		   //PLAYER->GetPlayer()->SetScale(XMFLOAT3(PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale, PLAYER->GetPlayer()->m_BoundScale)); //박스도 151515배 여기여기0409
-				//PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosiation(), XMFLOAT3(7, 10, 7), XMFLOAT4(0, 0, 0, 1));
-				
-				SetCamera(PLAYER->GetPlayer()->GetCamera());
-				if (num > 5) num = 0;
-				num++;
+				//if (!PLAYER->GetCharacterSelect())
+				{
+					E_CHARACTERTYPE type{ KEYBOARD };
+					type = PLAYER->CheckSceneCharacter(m_LeftCursorPos);
+					if (type == BASS || type == GUITAR || type == KEYBOARD || type == VOCAL || type == DRUM)
+					{
+						cout << " character type!" << type << endl;
+						PLAYER->ChangePlayer(type, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+						PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
+						
+						SetCamera(PLAYER->GetPlayer()->GetCamera());
+						//PLAYER->SetCharacterSelect(true);
+					}
+				}
+			
 			}
 			break;
 		case WM_RBUTTONDOWN:
@@ -955,17 +975,10 @@ void CGameFramework::FrameAdvance()
 	m_GameTimer.Tick(60.0f);
 
 	if (SCENEMANAGER->GetSceneType() == PLAYGROUNDMAP || SCENEMANAGER->GetSceneType() == CONCERTMAP) {
-		//if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
-
-			ProcessInput();
-		//}
+		ProcessInput();
 	}
 	
-	
-
     AnimateObjects();
-
-
 
 	HRESULT hResult = m_pd3dCommandAllocator->Reset();
 	hResult = m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
@@ -996,33 +1009,29 @@ void CGameFramework::FrameAdvance()
 	m_pd3dCommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
 	
 	if (m_pScene)
-	{
 		m_pScene->Render(m_pd3dCommandList, m_pCamera);
-	
-	}
 
-
-
-#ifdef _WITH_PLAYER_TOP
-	m_pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-#endif
-	if (PLAYER->GetPlayer()!=NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
-	//if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
-	//cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
+	if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
 	if (PLAYER->m_pOtherPlayerMap.size() > 0)
 	{
-
 		for (auto&& p : PLAYER->m_pOtherPlayerMap)
 			p->Render(m_pd3dCommandList, m_pCamera);
-
 	}
 	if (PLAYER->m_pTeamPlayerMap.size() > 0)
 	{
-
 		for (auto&& p : PLAYER->m_pTeamPlayerMap)
 			p->Render(m_pd3dCommandList, m_pCamera);
-
 	}
+	if (m_pScene)
+	{
+		if(m_pScene->m_ppShaders[10])
+			m_pScene->m_ppShaders[10]->Render(m_pd3dCommandList, m_pCamera);
+	}
+#ifdef _WITH_PLAYER_TOP
+	m_pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
+#endif
+	
+	
 	if (m_pScene)
 	{
 		m_pScene->CheckObjectByObjectCollisions();
@@ -1056,7 +1065,7 @@ void CGameFramework::FrameAdvance()
 
 	m_pd2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 #ifdef _WITH_DIRECT2D_IMAGE_EFFECT
-	m_pd2dDeviceContext->DrawImage(m_pd2dfxBitmapSource);
+	//m_pd2dDeviceContext->DrawImage(m_pd2dfxBitmapSource);
 	//	m_pd2dDeviceContext->DrawRectangle(rcText, m_pd2dbrBackground);
 
 	//	m_pd2dDeviceContext->DrawRectangle(&rcText, m_pd2dbrBorder);
@@ -1064,13 +1073,28 @@ void CGameFramework::FrameAdvance()
 #endif
 	D2D1_SIZE_F szRenderTarget = m_ppd2dRenderTargets[m_nSwapChainBufferIndex]->GetSize(); //D2D1::SizeF(0, szRenderTarget.height*0.2);/
 	m_GameTimer.GetFrameRate(m_pszFrameRate + 12, 37);
-	D2D1_RECT_F rcUpperText = D2D1::RectF(0, 0, szRenderTarget.width * 0.5, szRenderTarget.height*0.2);
-	m_pd2dDeviceContext->DrawTextW(m_pszFrameRate, (UINT32)wcslen(m_pszFrameRate), m_pdwFont, &rcUpperText, m_pd2dbrText);
+	//D2D1_RECT_F rcUpperText = D2D1::RectF(0, 0, szRenderTarget.width * 0.5, szRenderTarget.height*0.2);
+	//m_pd2dDeviceContext->DrawTextW(m_pszFrameRate, (UINT32)wcslen(m_pszFrameRate), m_pdwFont, &rcUpperText, m_pd2dbrText);
 
+	
 	D2D1_RECT_F rcLowerText = D2D1::RectF(0, 0 , szRenderTarget.width * 0.5, szRenderTarget.height);
-	m_pd2dDeviceContext->DrawTextW(L"트위치 채팅창 예시", (UINT32)wcslen(L"트위치 채팅창 예시"), m_pdwFont, &rcLowerText, m_pd2dbrText);
+	m_pd2dDeviceContext->DrawTextW(TEXT("트위치 채팅창 예시"), (UINT32)wcslen(TEXT("트위치 채팅창 예시")), m_pdwFont, &rcLowerText, m_pd2dbrText);
+	
 
-
+	if (CHATMANAGER->GetChatContailner().size() > 0)
+	{
+		int i = 0;
+		for (auto&& p : CHATMANAGER->m_chatContainer)
+		{
+			//cout << p.first << endl;
+			//wcout << (p.first) << endl;
+			wcout.imbue(std::locale("kor"));
+			m_pd2dDeviceContext->DrawTextW((wchar_t*)p.first,(UINT32)p.second , m_pdwFont, &m_rcTextRectForChat[i++], m_pd2dbrText);
+			if (i > 10)
+				i = 0;
+		}
+		CHATMANAGER->Update();
+	}
 	m_pd2dDeviceContext->EndDraw();
 
 	m_pd3d11On12Device->ReleaseWrappedResources(&m_ppd3d11WrappedBackBuffers[m_nSwapChainBufferIndex], 1);

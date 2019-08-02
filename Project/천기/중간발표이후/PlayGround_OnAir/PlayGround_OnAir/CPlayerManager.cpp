@@ -41,6 +41,7 @@ E_CHARACTERTYPE CPlayerManager::CheckSceneCharacter(const POINT& pos)
 		cout << "기타 선택" << endl;
 		return GUITAR;
 	}
+	else NONECHARACTER;
 	
 }
 COtherPlayers * CPlayerManager::GetOtherByNum(int num, bool isTeam)
@@ -54,6 +55,7 @@ COtherPlayers * CPlayerManager::GetOtherByNum(int num, bool isTeam)
 	{
 
 	}
+	return nullptr;
 }
 CPlayerManager::CPlayerManager()
 {
@@ -285,6 +287,7 @@ void CPlayerManager::ChangePlayer(E_CHARACTERTYPE type, ID3D12Device *pd3dDevice
 		m_pPlayer->SetCharacterType(BASS);
 
 	}
+	//m_isCharacterSelected= true;
 
 
 }

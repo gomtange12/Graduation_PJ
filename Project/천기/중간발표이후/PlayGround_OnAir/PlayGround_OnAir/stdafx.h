@@ -19,6 +19,7 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+
 #include <math.h>
 
 #include <string>
@@ -64,7 +65,7 @@ using Microsoft::WRL::ComPtr;
 extern HINSTANCE						ghAppInstance;
 
 //#define _WITH_SWAPCHAIN_FULLSCREEN_STATE
-//#define _WITH_DIRECT2D
+#define _WITH_DIRECT2D
 //#ifdef _WITH_DIRECT2D
 //#define _WITH_DIRECT2D_IMAGE_EFFECT
 //#endif
@@ -88,6 +89,8 @@ extern HINSTANCE						ghAppInstance;
 
 #pragma comment(lib, "dxguid.lib")
 
+
+typedef std::basic_string<TCHAR> tstring;
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.
 
 extern UINT gnCbvSrvDescriptorIncrementSize;
@@ -104,6 +107,7 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 #define SCENEMANAGER	 CSceneManager::GetInstance()
 #define OBJECTMANAGER	 CObjectManager::GetInstance()
 #define CNETWORK	CNetWork::GetInstance()
+#define CHATMANAGER	CChatManager::GetInstance()
 
 #define MAXOBJECTNUM 100
 #define   WM_SOCKET            WM_USER + 1
@@ -139,7 +143,8 @@ enum SceneState {
 	PLAYGROUNDMAP = 1,
 	CONCERTMAP,
 	GAMEOVER,
-	LOADING
+	LOADING,
+	NONE
 };
 //enum MAPNumber {
 //	PLAYGROUND,
@@ -148,7 +153,8 @@ enum SceneState {
 enum ModNumber {
 	SOLO,
 	DUO,
-	SQUAD
+	SQUAD,
+	MODNONE
 };
 enum Result {
 	LOSE,

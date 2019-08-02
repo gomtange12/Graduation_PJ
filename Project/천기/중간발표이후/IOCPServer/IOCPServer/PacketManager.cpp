@@ -319,8 +319,9 @@ void PacketManager::TwitchChat(std::string &chat) {
 	sc_packet_chat pkt;
 	pkt.type = SC_CHAT;
 	pkt.size = chat.size();
+	pkt.cSize = chat.size();
+	std::cout << "chat size : " << chat.size() << std::endl;
 	strcpy(pkt.chat, chat.c_str());
-	
 	for (int i = 0; i < MAX_USER; ++i) {
 		if (true == objectManager->GetPlayer(i)->m_connected) {
 
