@@ -1078,7 +1078,7 @@ void CGameFramework::FrameAdvance()
 
 	
 	D2D1_RECT_F rcLowerText = D2D1::RectF(0, 0 , szRenderTarget.width * 0.5, szRenderTarget.height);
-	m_pd2dDeviceContext->DrawTextW(TEXT("트위치 채팅창 예시"), (UINT32)wcslen(TEXT("트위치 채팅창 예시")), m_pdwFont, &rcLowerText, m_pd2dbrText);
+	//m_pd2dDeviceContext->DrawTextW(TEXT("트위치 채팅창 예시"), (UINT32)wcslen(TEXT("트위치 채팅창 예시")), m_pdwFont, &rcLowerText, m_pd2dbrText);
 	
 
 	if (CHATMANAGER->GetChatContailner().size() > 0)
@@ -1088,8 +1088,9 @@ void CGameFramework::FrameAdvance()
 		{
 			//cout << p.first << endl;
 			//wcout << (p.first) << endl;
-			wcout.imbue(std::locale("kor"));
-			m_pd2dDeviceContext->DrawTextW((wchar_t*)p.first,(UINT32)p.second , m_pdwFont, &m_rcTextRectForChat[i++], m_pd2dbrText);
+			//wcout.imbue(std::locale("kor"));
+			//SetWindowTextA(HWND, p.first);
+			m_pd2dDeviceContext->DrawTextW((wchar_t*)p.first,p.second , m_pdwFont, &m_rcTextRectForChat[i++], m_pd2dbrText);
 			if (i > 10)
 				i = 0;
 		}

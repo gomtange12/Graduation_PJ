@@ -376,17 +376,18 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	}
 	case SC_CHAT:
 	{
-		SetConsoleOutputCP(65001);
+		//SetConsoleOutputCP(65001);
 		sc_packet_chat *pkt = reinterpret_cast<sc_packet_chat *>(ptr);
-		cout << pkt->chat <<endl;
-		CHATMANAGER->InputChatting(pkt->chat);
+		cout <<"cnet- " << pkt->chat <<endl;
+		//cout << sizeof(pkt->chat) << endl;
+		CHATMANAGER->TextChange(pkt->chat);
+		//CHATMANAGER->InputChatting(pkt->chat, pkt->cSize);
 		ZeroMemory(packet_buffer,sizeof(packet_buffer));
 		
 		break;
 	}
 	case SC_CLOCK:
 	{
-		
 		sc_packet_clock *pkt = reinterpret_cast<sc_packet_clock *>(ptr);
 		m_time = (int)pkt->clock;
 		//cout << (int)pkt->clock << endl;
@@ -398,7 +399,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 }
 void CNetWork::MatchPkt()
 {
-	cs_packet_matching *pkt = reinterpret_cast<cs_packet_matching *>(send_buffer);
+	cs_packet_matching* pkt = reinterpret_cast<cs_packet_matching*>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_MATCHING_PLAYER;

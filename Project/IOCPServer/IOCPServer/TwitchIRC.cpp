@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Protocol.h"
-#pragma execution_character_Set("utf-8")
 
 #include <winsock2.h>
 #include <string>
@@ -8,7 +7,7 @@
 #include "TwitchIRC.h"
 #include "PacketManager.h"
 #include "Player.h"
-
+#include <locale>
 void TwitchIRC::Init()
 {
 	mythread = std::thread([&]() { TwitchIRC::Proc(); });

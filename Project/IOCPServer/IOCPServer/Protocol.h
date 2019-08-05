@@ -137,6 +137,7 @@ struct sc_packet_chat {
 	BYTE size;
 	BYTE type;
 	char chat[1024];
+	char cSize;
 };
 struct sc_packet_clock {
 	BYTE size;
