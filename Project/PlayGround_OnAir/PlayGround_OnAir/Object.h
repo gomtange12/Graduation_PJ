@@ -29,7 +29,7 @@ class CStandardShader;
 struct CB_GAMEOBJECT_INFO
 {
 	XMFLOAT4X4						m_xmf4x4World;
-	UINT								m_terrainID;
+	UINT							m_terrainID;
 };
 struct SRVROOTARGUMENTINFO
 {

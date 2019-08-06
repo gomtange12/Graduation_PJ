@@ -21,6 +21,10 @@ struct CB_HP_INFO
 {
 	float hp;
 };
+struct CB_SKILL_INFO
+{
+	int Cooldown;
+};
 class CScene;
 class CShader
 {
@@ -398,7 +402,15 @@ public:
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 
 };
+class CAllPlayersUIShader : public CUiShader {
 
+
+public:
+	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
+	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+
+};
 class CTimerUIShader : public CUiShader {
 	int m_nObjects{ 0 };
 	CMaterial** m_ppTimerObject;
@@ -426,6 +438,8 @@ public:
 	virtual D3D12_BLEND_DESC CreateBlendState();
 
 };
+
+
 class CHPUIShader : public CUiShader
 {
 public:
@@ -446,4 +460,35 @@ protected:
 	CB_HP_INFO				*m_cbHp;
 	ID3D12Resource			*m_cbHPResouce = NULL;
 	CB_HP_INFO				*m_cbMappedHp = NULL;
+};
+
+class CSkillCoolDownUIShader : public CUiShader {
+public:
+	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
+	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void ReleaseShaderVariables();
+protected:
+
+	CB_SKILL_INFO *m_cbSkillCool;
+	CB_SKILL_INFO *m_cbMappedSkillCool;
+	ID3D12Resource *m_cbResouce = NULL;
+
+};
+
+class CSkillEffectUIShader : public CUiShader {
+public:
+	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
+	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void ReleaseShaderVariables();
+protected:
+	CB_GAMEOBJECT_INFO *m_cbSkillEffect;
+	CB_GAMEOBJECT_INFO *m_cbMappedSkillEffect;
+	ID3D12Resource	   *m_cbResouce = NULL;
+
 };

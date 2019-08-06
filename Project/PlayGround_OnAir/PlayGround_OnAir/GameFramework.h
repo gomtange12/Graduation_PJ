@@ -57,6 +57,7 @@ public:
 #endif
 
 private:
+	D2D1_RECT_F					m_rcClockText;
 	D2D1_SIZE_F					m_szRenderTargetForChat;
 	D2D1_RECT_F					m_rcTextRectForChat[10];
 	D3D12_VIEWPORT				m_d3dViewport;
@@ -124,6 +125,8 @@ private:
 	ID2D1SolidColorBrush		*m_pd2dbrBackground = NULL;
 	ID2D1SolidColorBrush		*m_pd2dbrBorder = NULL;
 	IDWriteTextFormat			*m_pdwFont = NULL;
+	IDWriteTextFormat			*m_pdwClockFont = NULL;
+
 	IDWriteTextLayout			*m_pdwTextLayout = NULL;
 	ID2D1SolidColorBrush		*m_pd2dbrText = NULL;
 

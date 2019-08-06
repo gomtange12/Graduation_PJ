@@ -46,6 +46,14 @@
 
 
 
+void CPlayer::SetSkillCoolDown(int count)
+{
+	m_skillCool = count;
+
+	if (m_skillCool < 1)
+		count = 4;
+}
+
 CPlayer::CPlayer()
 {
 
@@ -325,6 +333,8 @@ void CPlayer::Update(float fTimeElapsed)
 		//cout << m_JumpPower << endl;
 
 		SetTrackAnimationSet(0, JUMP);
+		m_isSkillOn = true;
+		
 		//M_JumpPower = 500;
 		break;
 	case STUN:
@@ -363,7 +373,16 @@ void CPlayer::Update(float fTimeElapsed)
 	//SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 	//cout <<"Á¡ÇÁ ÈÄ"<< m_xmf3Position.y << endl;
 
+	if (m_isSkillOn)
+	{
+		m_skillCool += 1;
+		if (m_skillCool > 4)
+		{
+			m_skillCool = 0;
+			//m_isSkillOn = false;
+		}
 
+	}
 	m_xmOOBB.Center = m_xmf3Position;
 	m_xmOOBB.Center.y = m_xmf3Position.y + GetBoundingBox().Extents.y;
 	//SetTrackAnimationSet(0, 2);
