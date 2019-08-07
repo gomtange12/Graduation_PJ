@@ -59,7 +59,10 @@ protected:
 	bool						m_isAnimationOver{ false };
 	E_CHARACTERTYPE                m_CharacterType;
 	bool						m_isSkillOn = false;
+	bool						m_isDead{ false };
 public:
+	bool GetPlayerDead() { return m_isDead; }
+	void SetPlayerDead(bool isDead) { m_isDead = isDead; };
 	int GetSkillCount() { return m_skillCool; }
 	void SetSkillCoolDown(int count);
 	E_CHARACTERTYPE GetCharacterType() { return m_CharacterType; }
@@ -72,6 +75,8 @@ public:
 	void SetAniOver(bool isOver) { m_isAnimationOver = isOver; }
 	bool						m_match = false;
 	int							teamNum = -1;
+	int GetTeamNum() { return teamNum; }
+	void SetTeamNum(int n) { teamNum = n; }
 	bool GetCollisionState() { return XZcollision; }
 	void SetCollisionState(bool check) { XZcollision = check; }
 

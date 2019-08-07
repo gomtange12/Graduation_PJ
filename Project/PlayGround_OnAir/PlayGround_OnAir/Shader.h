@@ -16,10 +16,14 @@ struct UI_Data
 	XMFLOAT4X4 m_xmf4x4Transform;
 	XMFLOAT2 m_uvCoord;
 };
-
+struct CB_CHARACTER_INFO
+{
+	int character;
+	int isAlive;
+};
 struct CB_HP_INFO
 {
-	float hp;
+	int hp;
 };
 struct CB_SKILL_INFO
 {
@@ -346,19 +350,31 @@ protected:
 	CTexture* m_pTexture = nullptr;
 };
 
-class CUIPlayerShader : public CUiShader {
+class CUIPlayerShader : public CUiShader { //솔로 플레이어
 public:
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
-
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void ReleaseShaderVariables();
+protected:
+	CB_CHARACTER_INFO			*m_cbCharacter;
+	CB_CHARACTER_INFO			*m_cbMappedCharacter = NULL;
+	ID3D12Resource				*m_cbResouce = NULL;
 };
-class CUIOtherPlayerShader : public CUiShader {
+class CUIOtherPlayerShader : public CUiShader { //솔로 적군 플레이어
 public:
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
-
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void ReleaseShaderVariables();
+protected:
+	CB_CHARACTER_INFO			*m_cbCharacter;
+	CB_CHARACTER_INFO			*m_cbMappedCharacter = NULL;
+	ID3D12Resource				*m_cbResouce = NULL;
 };
 class CUISKillShader : public CUiShader {
 public:
@@ -404,12 +420,13 @@ public:
 };
 class CAllPlayersUIShader : public CUiShader {
 
-
 public:
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
-
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void ReleaseShaderVariables();
 };
 class CTimerUIShader : public CUiShader {
 	int m_nObjects{ 0 };
@@ -446,9 +463,9 @@ public:
 	CHPUIShader();
 	~CHPUIShader();
 
-	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void ReleaseShaderVariables();
@@ -492,3 +509,4 @@ protected:
 	ID3D12Resource	   *m_cbResouce = NULL;
 
 };
+

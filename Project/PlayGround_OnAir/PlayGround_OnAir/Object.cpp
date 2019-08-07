@@ -1343,6 +1343,10 @@ CAnimationSets *CGameObject::LoadAnimationFromFile(FILE *pInFile, CGameObject *p
 				pAnimationSet->m_nType = ANIMATION_TYPE_MOVING;
 
 			}*/
+			else if (!strcmp(pAnimationSet->m_pstrName, "death") || !strcmp(pAnimationSet->m_pstrName, "Death"))
+			{
+				pAnimationSet->m_nType = ANIMATION_TYPE_DEATH;
+			}
 			else
 			{
 				pAnimationSet->m_nType = ANIMATION_TYPE_ONCE;

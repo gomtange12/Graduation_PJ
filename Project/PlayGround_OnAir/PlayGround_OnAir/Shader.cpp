@@ -1584,11 +1584,50 @@ void CUIPlayerShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComm
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 	
 	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/여_키타_L.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/teamBlue.dds", 0);
 
 	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/메뉴씬.dds", 0);
 
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+	m_cbCharacter = new CB_CHARACTER_INFO;
+	::ZeroMemory(m_cbCharacter, sizeof(CB_CHARACTER_INFO));
+
+	m_cbCharacter->isAlive = 1;
+	m_cbCharacter->character =	KEYBOARD;
+}
+
+void CUIPlayerShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_CHARACTER_INFO) + 255) & ~255); //256의 배수
+	m_cbResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_cbResouce->Map(0, NULL, (void **)&m_cbMappedCharacter);
+}
+
+void CUIPlayerShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	bool isAlive = PLAYER->GetPlayer()->GetHP();
+	if (isAlive > 0)
+		m_cbCharacter->isAlive = 1;
+	else
+		m_cbCharacter->isAlive = 0;
+	//cout << "hp: " << m_cbHp->hp << endl;
+	UINT ncbElementBytes = ((sizeof(CB_CHARACTER_INFO) + 255) & ~255);
+
+	CB_CHARACTER_INFO *pbMappedcbInfo = (CB_CHARACTER_INFO *)((UINT8 *)m_cbMappedCharacter + (0 * ncbElementBytes));
+	::memcpy(m_cbMappedCharacter, m_cbCharacter, sizeof(CB_CHARACTER_INFO));
+
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbResouce->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(18, d3dGpuVirtualAddress);
+}
+
+void CUIPlayerShader::ReleaseShaderVariables()
+{
+	if (m_cbResouce)
+	{
+		m_cbResouce->Unmap(0, NULL);
+		m_cbResouce->Release();
+	}
 
 }
 
@@ -1597,11 +1636,48 @@ void CUIOtherPlayerShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12Graphic
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 
 	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/남R_기타_L.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/teamRed.dds", 0);
 
 	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/LobbyUI/메뉴씬.dds", 0);
 
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+	m_cbCharacter = new CB_CHARACTER_INFO;
+	::ZeroMemory(m_cbCharacter, sizeof(CB_CHARACTER_INFO));
+
+	m_cbCharacter->isAlive = 1;
+	m_cbCharacter->character = KEYBOARD;
+}
+void CUIOtherPlayerShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_CHARACTER_INFO) + 255) & ~255); //256의 배수
+	m_cbResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_cbResouce->Map(0, NULL, (void **)&m_cbMappedCharacter);
+}
+void CUIOtherPlayerShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	bool isAlive = PLAYER->GetOtherPlayerMap()[0]->GetHP();
+	if (isAlive > 0)
+		m_cbCharacter->isAlive = 1;
+	else
+		m_cbCharacter->isAlive = 0;
+
+	//cout << "hp: " << m_cbHp->hp << endl;
+	UINT ncbElementBytes = ((sizeof(CB_CHARACTER_INFO) + 255) & ~255);
+
+	CB_CHARACTER_INFO *pbMappedcbHPInfo = (CB_CHARACTER_INFO *)((UINT8 *)m_cbMappedCharacter + (0 * ncbElementBytes));
+	::memcpy(m_cbMappedCharacter, m_cbCharacter, sizeof(CB_CHARACTER_INFO));
+
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbResouce->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(18, d3dGpuVirtualAddress);
+}
+void CUIOtherPlayerShader::ReleaseShaderVariables()
+{
+	if (m_cbResouce)
+	{
+		m_cbResouce->Unmap(0, NULL);
+		m_cbResouce->Release();
+	}
 
 }
 D3D12_SHADER_BYTECODE CUIOtherPlayerShader::CreatePixelShader()
@@ -1710,24 +1786,15 @@ void CHPUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandL
 	m_nObjects = 1;
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/hpBar.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/hearthpBar.dds", 0);
 
-	/*m_ppObjects = new CGameObject*[m_nObjects];
-	CTexturedRectMesh* pRectMesh[1];
-
-	pRectMesh[0] = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 1.0, 1.0,1, 0.8, -0.3, 1);
-
-	CBillboardObject* pBillboard = new CBillboardObject();
-
-	pBillboard->SetMesh(m_pTexture);
-*/
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
 
 
 	m_cbHp = new CB_HP_INFO;
 	::ZeroMemory(m_cbHp, sizeof(CB_HP_INFO));
 
-	m_cbHp->hp = 3;
+	m_cbHp->hp = 8;
 }
 
 D3D12_SHADER_BYTECODE CHPUIShader::CreatePixelShader()
@@ -1753,7 +1820,7 @@ void CHPUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12Graphic
 void CHPUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 
-	m_cbHp->hp = 3;//PLAYER->GetPlayer()->GetHP();
+	m_cbHp->hp = PLAYER->GetPlayer()->GetHP();
 
 	//cout << "hp: " << m_cbHp->hp << endl;
 	UINT ncbElementBytes = ((sizeof(CB_HP_INFO) + 255) & ~255);
@@ -1860,6 +1927,18 @@ void CAllPlayersUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12Graphics
 {
 }
 
+void CAllPlayersUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+}
+
+void CAllPlayersUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+}
+
+void CAllPlayersUIShader::ReleaseShaderVariables()
+{
+}
+
 D3D12_SHADER_BYTECODE CSkillCoolDownUIShader::CreatePixelShader()
 {
 	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSSkillCoolTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
@@ -1920,12 +1999,12 @@ void CSkillCoolDownUIShader::ReleaseShaderVariables()
 
 D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreatePixelShader()
 {
-	return D3D12_SHADER_BYTECODE();
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSSkillCoolTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
 }
 
 D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreateVertexShader()
 {
-	return D3D12_SHADER_BYTECODE();
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSSkillCoolTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
 }
 
 void CSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
