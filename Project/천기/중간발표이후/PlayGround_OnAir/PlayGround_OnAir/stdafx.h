@@ -89,8 +89,6 @@ extern HINSTANCE						ghAppInstance;
 
 #pragma comment(lib, "dxguid.lib")
 
-
-typedef std::basic_string<TCHAR> tstring;
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.
 
 extern UINT gnCbvSrvDescriptorIncrementSize;
@@ -116,6 +114,9 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 #define FPS_PERSECOND 60
 #define EPSILON					1.0e-10f
 #define MIRAHEIGHT				10
+
+#define BLUETEAM   0
+#define REDTEAM    1
 inline bool IsZero(float fValue) { return((fabsf(fValue) < EPSILON)); }
 inline bool IsEqual(float fA, float fB) { return(::IsZero(fA - fB)); }
 inline bool IsZero(float fValue, float fEpsilon) { return((fabsf(fValue) < fEpsilon)); }

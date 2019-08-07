@@ -54,6 +54,9 @@ CGameFramework::CGameFramework()
 		//std::cout << i << "i: left: " << m_rcTextRectForChat[i].left << " , right" << m_rcTextRectForChat[i].right << " , top" << m_rcTextRectForChat[i].top
 		//	<< " , bottom" << m_rcTextRectForChat[i].bottom << endl;
 	}
+
+	 m_rcClockText = D2D1::RectF(FRAME_BUFFER_WIDTH * 0.4 , 0 , FRAME_BUFFER_WIDTH * 0.6, FRAME_BUFFER_HEIGHT * 0.2);
+
 	_tcscpy_s(m_pszFrameRate, _T("PlayGround ("));
 }
 
@@ -1071,15 +1074,13 @@ void CGameFramework::FrameAdvance()
 	//	m_pd2dDeviceContext->DrawRectangle(&rcText, m_pd2dbrBorder);
 	//	m_pd2dDeviceContext->FillRectangle(&rcText, m_pd2dbrBackground);
 #endif
-	D2D1_SIZE_F szRenderTarget = m_ppd2dRenderTargets[m_nSwapChainBufferIndex]->GetSize(); //D2D1::SizeF(0, szRenderTarget.height*0.2);/
+	//D2D1_SIZE_F szRenderTarget = m_ppd2dRenderTargets[m_nSwapChainBufferIndex]->GetSize(); //D2D1::SizeF(0, szRenderTarget.height*0.2);/
 	m_GameTimer.GetFrameRate(m_pszFrameRate + 12, 37);
 	//D2D1_RECT_F rcUpperText = D2D1::RectF(0, 0, szRenderTarget.width * 0.5, szRenderTarget.height*0.2);
 	//m_pd2dDeviceContext->DrawTextW(m_pszFrameRate, (UINT32)wcslen(m_pszFrameRate), m_pdwFont, &rcUpperText, m_pd2dbrText);
 
 	
-	D2D1_RECT_F rcLowerText = D2D1::RectF(0, 0 , szRenderTarget.width * 0.5, szRenderTarget.height);
-	m_pd2dDeviceContext->DrawTextW(TEXT("트위치 채팅창 예시"), (UINT32)wcslen(TEXT("트위치 채팅창 예시")), m_pdwFont, &rcLowerText, m_pd2dbrText);
-	
+	//D2D1_RECT_F rcLowerText = D2D1::RectF(0, 0 , szRenderTarget.width * 0.5, szRenderTarget.height);
 
 	if (CHATMANAGER->GetChatContailner().size() > 0)
 	{
@@ -1088,8 +1089,9 @@ void CGameFramework::FrameAdvance()
 		{
 			//cout << p.first << endl;
 			//wcout << (p.first) << endl;
-			wcout.imbue(std::locale("kor"));
-			m_pd2dDeviceContext->DrawTextW((wchar_t*)p.first,(UINT32)p.second , m_pdwFont, &m_rcTextRectForChat[i++], m_pd2dbrText);
+			//wcout.imbue(std::locale("kor"));
+			//SetWindowTextA(HWND, p.first);
+			m_pd2dDeviceContext->DrawTextW((wchar_t*)p.first,p.second , m_pdwFont, &m_rcTextRectForChat[i++], m_pd2dbrText);
 			if (i > 10)
 				i = 0;
 		}

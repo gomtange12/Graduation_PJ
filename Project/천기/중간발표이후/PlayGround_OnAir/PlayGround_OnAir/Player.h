@@ -38,7 +38,7 @@ protected:
 	float						m_JumpPower{ 500.0 };
 	//CCamera						*m_pCamera = NULL;
 	//이넘만들기
-	
+	int							m_skillCool{ 0 };
 	int							m_collideBox{ 0 };
 	std::shared_ptr<CCamera>	m_pCamera;
 
@@ -58,9 +58,10 @@ protected:
 	bool						XZcollision=false;
 	bool						m_isAnimationOver{ false };
 	E_CHARACTERTYPE                m_CharacterType;
-
+	bool						m_isSkillOn = false;
 public:
-	
+	int GetSkillCount() { return m_skillCool; }
+	void SetSkillCoolDown(int count);
 	E_CHARACTERTYPE GetCharacterType() { return m_CharacterType; }
 	void SetCharacterType(E_CHARACTERTYPE type) { m_CharacterType = type; }
 public:

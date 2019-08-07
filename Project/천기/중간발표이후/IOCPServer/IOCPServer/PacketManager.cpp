@@ -349,3 +349,15 @@ void PacketManager::ClockPacket(int id, int clock) {
 		}
 	}
 }
+void PacketManager::DonaPacket() {
+	sc_packet_dona pkt;
+	pkt.type = SC_DONA;
+	pkt.size = sizeof(sc_packet_dona);
+
+	for (int i = 0; i < MAX_USER; ++i) {
+		if (true == objectManager->GetPlayer(i)->m_connected)
+		{
+			SendChat(objectManager->GetPlayer(i)->m_id, &pkt);
+		}
+	}
+}

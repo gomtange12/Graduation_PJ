@@ -99,6 +99,7 @@ void TwitchIRC::stripMessage(std::string incoming, std::string &username, std::s
 
 		username = incoming.substr(nameBegin, (nameEnd - nameBegin));
 
+
 		if (messageStart != std::string::npos) {
 			for (SIZE_T i = messageStart; i < incoming.size(); i++) {
 				message.push_back(incoming[i]);
@@ -107,6 +108,12 @@ void TwitchIRC::stripMessage(std::string incoming, std::string &username, std::s
 		chat = std::string(username + " : " + message + " \r");
 		
 		PACKETMANAGER->TwitchChat(chat);
+		
+		SIZE_T dona = incoming.find("donation");
+		if (dona == 278) {//278이면 도네이션보낸것
+			PACKETMANAGER->DonaPacket();
+			std::cout << "donation" << std::endl;
+		}
 	
 	}
 	first = false;

@@ -101,13 +101,20 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 					PLAYER->GetPlayer()->SetClientNum(myid);
 					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
-
+					if(i==0)
+						PLAYER->GetPlayer()->teamNum = BLUETEAM;
+					else
+						PLAYER->GetPlayer()->teamNum = REDTEAM;
 				}
 
 				else {
 					PLAYER->GetOtherPlayerMap()[0]->SetClientNum(paket->ids[i]);
 					PLAYER->GetOtherPlayerMap()[0]->NumberByPos(paket->posN[i]);
 					PLAYER->GetOtherPlayerMap()[0]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+					if (i == 0)
+						PLAYER->GetPlayer()->teamNum = BLUETEAM;
+					else
+						PLAYER->GetPlayer()->teamNum = REDTEAM;
 				}
 			}
 		}
@@ -115,11 +122,11 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 			//팀모드면
 			for (int i = 0; i < 2; ++i) {
 				if (myid == paket->ids[i]) {
-					PLAYER->GetPlayer()->teamNum = 0;
+					PLAYER->GetPlayer()->teamNum = BLUETEAM;
 
 				}
 			}
-			if (PLAYER->GetPlayer()->teamNum == 0) {
+			if (PLAYER->GetPlayer()->teamNum == BLUETEAM) {
 				for (int i = 0; i < 2; ++i) {
 					if (myid == paket->ids[i]) {
 						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
@@ -134,6 +141,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetTeamPlayerMap()[i]->SetClientNum(paket->ids[i]);
 						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
 						PLAYER->GetTeamPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+						PLAYER->GetTeamPlayerMap()[i]->teamNum = BLUETEAM;
 						break;
 					}
 				}
@@ -141,7 +149,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i + 2]);
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i + 2]);
 					PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i + 2]);
-
+					PLAYER->GetOtherPlayerMap()[i]->teamNum = REDTEAM;
 				}
 			}
 			else {
@@ -150,7 +158,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 						PLAYER->GetPlayer()->SetClientNum(myid);
 						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
-
+						PLAYER->GetPlayer()->teamNum = REDTEAM;
 					}
 				}
 
@@ -159,6 +167,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetTeamPlayerMap()[0]->SetClientNum(paket->ids[i]);
 						PLAYER->GetTeamPlayerMap()[0]->NumberByPos(paket->posN[i]);
 						PLAYER->GetTeamPlayerMap()[0]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+						PLAYER->GetTeamPlayerMap()[0]->teamNum = REDTEAM;
 						break;
 					}
 				}
@@ -168,7 +177,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[i]->SetClientNum(paket->ids[i]);
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
 					PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
-
+					PLAYER->GetOtherPlayerMap()[i]->teamNum = BLUETEAM;
 				}
 
 			}
@@ -376,22 +385,27 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	}
 	case SC_CHAT:
 	{
-		SetConsoleOutputCP(65001);
+		//SetConsoleOutputCP(65001);
 		sc_packet_chat *pkt = reinterpret_cast<sc_packet_chat *>(ptr);
-		//pkt->cSize;
-		//cout << pkt->chat << endl; 
-	
-		CHATMANAGER->InputChatting(pkt->chat);
+		cout <<"cnet- " << pkt->chat <<endl;
+		//cout << sizeof(pkt->chat) << endl;
+		CHATMANAGER->TextChange(pkt->chat);
+		//CHATMANAGER->InputChatting(pkt->chat, pkt->cSize);
 		ZeroMemory(packet_buffer,sizeof(packet_buffer));
 		
 		break;
 	}
 	case SC_CLOCK:
 	{
-		
 		sc_packet_clock *pkt = reinterpret_cast<sc_packet_clock *>(ptr);
 		m_time = (int)pkt->clock;
 		//cout << (int)pkt->clock << endl;
+		break;
+	}
+	case SC_DONA:
+	{
+		sc_packet_dona *pkt = reinterpret_cast<sc_packet_dona *>(ptr);
+		cout << "도네이션이 들어옴" << endl;
 		break;
 	}
 	default:
@@ -400,7 +414,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 }
 void CNetWork::MatchPkt()
 {
-	cs_packet_matching *pkt = reinterpret_cast<cs_packet_matching *>(send_buffer);
+	cs_packet_matching* pkt = reinterpret_cast<cs_packet_matching*>(send_buffer);
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_MATCHING_PLAYER;

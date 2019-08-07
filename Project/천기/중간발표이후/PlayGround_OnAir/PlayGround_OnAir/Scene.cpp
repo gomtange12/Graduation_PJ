@@ -247,7 +247,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 	//m_pPlayGroundTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 
-	m_nShaders = 11;
+	m_nShaders = 12;
 	m_ppShaders = new CShader*[m_nShaders];
 
 	/*CHellicopterObjectsShader *pHellicopterObjectsShader = new CHellicopterObjectsShader();
@@ -318,6 +318,13 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	pChatUIShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	pChatUIShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
 	m_ppShaders[10] = pChatUIShader;
+
+	CSkillCoolDownUIShader *psSkillCoolUIShader = new CSkillCoolDownUIShader();
+	psSkillCoolUIShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	psSkillCoolUIShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
+	psSkillCoolUIShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	m_ppShaders[11] = psSkillCoolUIShader;
+
 	/*CTexturedShader* pTexturedShader = new CTexturedShader();
 	pTexturedShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	pTexturedShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
@@ -934,7 +941,7 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	//pd3dDescriptorRanges[10].BaseShaderRegister = 20; //T20: gtxtScene
 	//pd3dDescriptorRanges[10].RegisterSpace = 0;
 	//pd3dDescriptorRanges[10].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	D3D12_ROOT_PARAMETER pd3dRootParameters[19];
+	D3D12_ROOT_PARAMETER pd3dRootParameters[20];
 
 	pd3dRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pd3dRootParameters[0].Descriptor.ShaderRegister = 1; //Camera
@@ -1028,9 +1035,14 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dRootParameters[17].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	
 	pd3dRootParameters[18].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	pd3dRootParameters[18].Descriptor.ShaderRegister = 9; //Lights
+	pd3dRootParameters[18].Descriptor.ShaderRegister = 9; //HP
 	pd3dRootParameters[18].Descriptor.RegisterSpace = 0;
 	pd3dRootParameters[18].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	pd3dRootParameters[19].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pd3dRootParameters[19].Descriptor.ShaderRegister = 10; //Skill
+	pd3dRootParameters[19].Descriptor.RegisterSpace = 0;
+	pd3dRootParameters[19].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	D3D12_STATIC_SAMPLER_DESC pd3dSamplerDescs[2];
 
 	pd3dSamplerDescs[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
@@ -1349,12 +1361,16 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 					m_ppShaders[7]->Render(pd3dCommandList, pCamera);
 			}
 		}
-		if (m_ppShaders[9])
+		if (m_ppShaders[9]) 
 		{
 			m_ppShaders[9]->UpdateShaderVariables(pd3dCommandList);
 			m_ppShaders[9]->Render(pd3dCommandList, pCamera);
 		}
-
+		if (m_ppShaders[11])
+		{
+			m_ppShaders[11]->UpdateShaderVariables(pd3dCommandList);
+			m_ppShaders[11]->Render(pd3dCommandList, pCamera);
+		}
 		//if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(pd3dCommandList, pCamera);
 		////if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
 		////cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
@@ -1418,7 +1434,11 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 			m_ppShaders[9]->UpdateShaderVariables(pd3dCommandList);
 			m_ppShaders[9]->Render(pd3dCommandList, pCamera);
 		}
-
+		if (m_ppShaders[11])
+		{
+			m_ppShaders[11]->UpdateShaderVariables(pd3dCommandList);
+			m_ppShaders[11]->Render(pd3dCommandList, pCamera);
+		}
 		//if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(pd3dCommandList, pCamera);
 		//if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
 		//cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;

@@ -1842,81 +1842,104 @@ D3D12_SHADER_BYTECODE CTimerUIShader::CreateVertexShader()
 
 void CTimerUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
-	/*m_pTimeTexture = new CTexture*[10];
-	m_pTimeTexture[0]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_0.dds", 0);
-	m_pTimeTexture[1]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_1.dds", 0);
-	m_pTimeTexture[2]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_2.dds", 0);
-	m_pTimeTexture[3]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_3.dds", 0);
-	m_pTimeTexture[4]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_4.dds", 0);
-	m_pTimeTexture[5]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_5.dds", 0);
-	m_pTimeTexture[6]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_6.dds", 0);
-	m_pTimeTexture[7]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_7.dds", 0);
-	m_pTimeTexture[8]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_8.dds", 0);
-	m_pTimeTexture[9]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_9.dds", 0);
 
-	for (int i = 0; i < 10; ++i)
-	{
-		m_OneSecTextureMap.emplace(i, m_pTimeTexture[i]);
-		m_TenSecTextureMap.emplace(i, m_pTimeTexture[i]);
-		m_MinTextureMap.emplace(i, m_pTimeTexture[i]);
-
-	}
-	for(int i = 0 ; i< 10; ++i)
-		CScene::CreateShaderResourceViews(pd3dDevice, m_pTimeTexture[i], 16, false);
-*/
-	////m_pTimeTexture[10]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/TimeUI_Colon.dds", 0);
-
-	//	
-	//for(int i = 0; i< 10; ++i)
-	//	m_textureMap.emplace(0, m_pTimeTexture[i]);
-
-
-	//CTexturedRectMesh* pTimerMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 20.f, 20.f, 0.0f, 0.0f, 0.0f, 0.0f);
-
-	//m_nObjects = 30;
-
-	//// 일초
-	//m_ppTimerObject = new CMaterial*[m_nObjects];
-	//for (int i = 0; i < 10; ++i)
-	//{
-	//	m_ppTimerObject[i] = new CMaterial(1);
-
-	//
-	//	m_ppTimerObject[i]->SetTexture(m_pTimeTexture[i], 0);
-
-	//	CBillboardObject* pUI = new CBillboardObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-	//	pUI->SetMesh(pTimerMesh);
-	//	pUI->SetMaterial(0, m_ppTimerObject[i]);
-	//	m_OneSecTextureMap.emplace(i, pUI);
-	//}
-	//// 십초
-	//for (int i = 10, j = 0; i < 20; ++i, ++j)
-	//{
-	//	m_ppTimerObject[i] = new CMaterial(1);
-
-	//	//auto iter = Context.find(to_string(i));
-	//	//if (iter != Context.end())
-	//	m_ppTimerObject[i]->SetTexture(m_pTimeTexture[i%10], 0);
-
-	//	CBillboardObject* pUI = new CBillboardObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-	//	pUI->SetMesh(pTimerMesh);
-	//	pUI->SetMaterial(0, m_ppTimerObject[i]);
-	//	m_TenSecTextureMap.emplace(i, pUI);
-	//}
-	//// 일분
-	//for (int i = 20, j = 0; i < 30; ++i, ++j)
-	//{
-	//	m_ppTimerObject[i] = new CMaterial(1);
-
-	//	//auto iter = Context.find(to_string(i));
-	//	//if (iter != Context.end())
-	//	m_ppTimerObject[i]->SetTexture(m_pTimeTexture[i % 10], 0);
-
-	//	CBillboardObject* pUI = new CBillboardObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-	//	pUI->SetMesh(pTimerMesh);
-	//	pUI->SetMaterial(0, m_ppTimerObject[i]);
-	//	m_MinTextureMap.emplace(i, pUI);
-	//}
 
 }
 
+D3D12_SHADER_BYTECODE CAllPlayersUIShader::CreatePixelShader()
+{
+	return D3D12_SHADER_BYTECODE();
+}
+
+D3D12_SHADER_BYTECODE CAllPlayersUIShader::CreateVertexShader()
+{
+	return D3D12_SHADER_BYTECODE();
+}
+
+void CAllPlayersUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+}
+
+D3D12_SHADER_BYTECODE CSkillCoolDownUIShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSSkillCoolTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CSkillCoolDownUIShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSSkillCoolTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+
+}
+void CSkillCoolDownUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/cooldown.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+	m_cbSkillCool = new CB_SKILL_INFO;
+	::ZeroMemory(m_cbSkillCool, sizeof(CB_SKILL_INFO));
+
+	m_cbSkillCool->Cooldown = 0;
+}
+
+void CSkillCoolDownUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_SKILL_INFO) + 255) & ~255); //256의 배수
+	m_cbResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_cbResouce->Map(0, NULL, (void **)&m_cbMappedSkillCool);
+}
+
+void CSkillCoolDownUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	
+	m_cbSkillCool->Cooldown = 1;// PLAYER->GetPlayer()->GetSkillCount();
+	//cout << "updateshaderVar: " << m_cbSkillCool->Cooldown << endl;
+	UINT ncbElementBytes = ((sizeof(CB_SKILL_INFO) + 255) & ~255);
+
+	CB_SKILL_INFO *pbMappedcbSkillInfo = (CB_SKILL_INFO *)((UINT8 *)m_cbMappedSkillCool + (0 * ncbElementBytes));
+	::memcpy(m_cbMappedSkillCool, m_cbSkillCool, sizeof(CB_SKILL_INFO));
+
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbResouce->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(19, d3dGpuVirtualAddress);
+
+}
+
+void CSkillCoolDownUIShader::ReleaseShaderVariables()
+{
+	if (m_cbResouce)
+	{
+		m_cbResouce->Unmap(0, NULL);
+		m_cbResouce->Release();
+	}
+
+}
+
+D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreatePixelShader()
+{
+	return D3D12_SHADER_BYTECODE();
+}
+
+D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreateVertexShader()
+{
+	return D3D12_SHADER_BYTECODE();
+}
+
+void CSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+}
+
+void CSkillEffectUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+}
+
+void CSkillEffectUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+}
+
+void CSkillEffectUIShader::ReleaseShaderVariables()
+{
+}
