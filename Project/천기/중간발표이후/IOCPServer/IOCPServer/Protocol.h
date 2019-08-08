@@ -119,6 +119,7 @@ struct sc_packet_attack
 	BYTE size;
 	BYTE type;
 	char id;
+	char hp;
 };
 struct sc_packet_lobby {
 	BYTE size;

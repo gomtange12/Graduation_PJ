@@ -216,6 +216,7 @@ void PacketManager::AttackPacKet(int id)
 	pkt.size = sizeof(sc_packet_attack);
 	pkt.type = SC_ATTACK_INFO;
 	pkt.id = id;
+	pkt.hp = objectManager->GetPlayer(id)->hp;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
 	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {

@@ -279,6 +279,10 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				PLAYER->GetPlayer()->SetPlayerState(ATTACK);
 				break;
 			}
+			if (pkt->skill == true) {
+				PLAYER->GetPlayer()->SetPlayerState(ATTACK);
+				break;
+			}
 
 		}
 		for (int i = 0; i < 2; ++i) {
@@ -292,6 +296,10 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				if (pkt->attack == true) {
 					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(ATTACK);
 					break;
+					if (pkt->skill == true) {
+						PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(ATTACK);
+						break;
+					}
 				}
 			}
 			else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
@@ -304,6 +312,10 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(ATTACK);
 					break;
 				}
+				if (pkt->skill == true) {
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(ATTACK);
+					break;
+				}
 			}
 		}
 		break;
@@ -312,16 +324,18 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		sc_packet_attack *pkt = reinterpret_cast<sc_packet_attack *>(ptr);
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
 			PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
+			PLAYER->GetPlayer()->SetHp(pkt->hp);
 			break;
 		}
 		for (int i = 0; i < 2; ++i) {
 			if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
 				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
+				PLAYER->GetOtherPlayerMap()[i]->SetHp(pkt->hp);
 				break;
 			}
 			else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
-
 				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
+				PLAYER->GetTeamPlayerMap()[i]->SetHp(pkt->hp);
 				break;
 
 			}
