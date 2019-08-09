@@ -46,6 +46,38 @@
 
 
 
+void CPlayer::MakeEffect(E_CHARACTERTYPE type)
+{
+	XMFLOAT3 effectPos{ 0,0,0 };
+	switch (type)
+	{
+	case BASS:
+		effectPos =  FindFrame("BassGuitar_cl")->GetPosition();
+		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		break;
+	case GUITAR:
+		effectPos = FindFrame("ElectricGuitar_st")->GetPosition();
+		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		break;
+	case KEYBOARD:
+		effectPos = FindFrame("keytar")->GetPosition();
+		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		break;
+	case DRUM:
+		effectPos = FindFrame("DKFYB_drumstick")->GetPosition();
+		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		break;
+	case VOCAL:
+		effectPos = FindFrame("BoomMic_Cylinder")->GetPosition();
+		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		break;
+	case NONECHARACTER:
+		break;
+	default:
+		break;
+	}
+}
+
 void CPlayer::SetSkillCoolDown(int count)
 {
 	m_skillCool = count;

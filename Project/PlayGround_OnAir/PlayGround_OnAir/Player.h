@@ -59,7 +59,9 @@ protected:
 	bool						m_isAnimationOver{ false };
 	E_CHARACTERTYPE                m_CharacterType;
 	bool						m_isSkillOn = false;
+	XMFLOAT3					m_EffectPos{ 0,0,0 };
 public:
+	void MakeEffect(E_CHARACTERTYPE type);
 	int GetSkillCount() { return m_skillCool; }
 	void SetSkillCoolDown(int count);
 	E_CHARACTERTYPE GetCharacterType() { return m_CharacterType; }

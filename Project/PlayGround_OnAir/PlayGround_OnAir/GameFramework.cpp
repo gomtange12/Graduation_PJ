@@ -791,7 +791,11 @@ void CGameFramework::ProcessInput()
 
 				dwDirection |= DIR_RIGHT;
 			}
-
+			if (pKeysBuffer[0x44] & 0xF0) //스킬키
+			{
+				PLAYER->GetPlayer()->SetPlayerState(ATTACK_3);
+				CNETWORK->KeyPkt(false, false, true);
+			}
 			//2플레이어
 			//if (pKeysBuffer[VK_HANGUL] & 0xF0)
 			//{
@@ -843,6 +847,8 @@ void CGameFramework::ProcessInput()
 					}
 				}
 			}
+
+			
 			float cxDelta = 0.0f, cyDelta = 0.0f;
 			POINT ptCursorPos;
 			if (GetCapture() == m_hWnd)
