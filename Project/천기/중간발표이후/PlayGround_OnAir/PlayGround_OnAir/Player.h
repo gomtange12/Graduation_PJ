@@ -59,7 +59,19 @@ protected:
 	bool						m_isAnimationOver{ false };
 	E_CHARACTERTYPE                m_CharacterType;
 	bool						m_isSkillOn = false;
+
+	//effect
+	CTexture*					m_pTexture = nullptr;
+	XMFLOAT3					m_EffectPos{ 0,0,0 };
+	bool						m_RenderEffect = false;
+
+	CMaterial				*m_pMaterial = NULL;
+
 public:
+	CEffectObject*				m_EffectObj = nullptr;
+	XMFLOAT3 GetEffectPos() { return m_EffectPos; }
+	void SetEffextPos(XMFLOAT3 pos) { m_EffectPos = pos; }
+	void MakeEffect(E_CHARACTERTYPE type);
 	int GetSkillCount() { return m_skillCool; }
 	void SetSkillCoolDown(int count);
 	E_CHARACTERTYPE GetCharacterType() { return m_CharacterType; }

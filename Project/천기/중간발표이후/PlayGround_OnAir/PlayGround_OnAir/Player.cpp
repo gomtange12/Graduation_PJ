@@ -46,6 +46,38 @@
 
 
 
+void CPlayer::MakeEffect(E_CHARACTERTYPE type)
+{
+	XMFLOAT3 effectPos{ 0,0,0 };
+	switch (type)
+	{
+	case BASS:
+		effectPos =  FindFrame("BassGuitar_cl")->GetPosition();
+		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		break;
+	case GUITAR:
+		effectPos = FindFrame("ElectricGuitar_st")->GetPosition();
+		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		break;
+	case KEYBOARD:
+		effectPos = FindFrame("keytar")->GetPosition();
+		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		break;
+	case DRUM:
+		effectPos = FindFrame("DKFYB_drumstick")->GetPosition();
+		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		break;
+	case VOCAL:
+		effectPos = FindFrame("BoomMic_Cylinder")->GetPosition();
+		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		break;
+	case NONECHARACTER:
+		break;
+	default:
+		break;
+	}
+}
+
 void CPlayer::SetSkillCoolDown(int count)
 {
 	m_skillCool = count;
@@ -88,6 +120,9 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	m_pCameraUpdatedContext = NULL;
 	m_PlayerState = PlayerState::IDLE;
 
+
+	
+	
 	if (this != nullptr)
 	{
 		CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -111,6 +146,7 @@ void CPlayer::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsComm
 
 void CPlayer::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 {
+
 }
 
 void CPlayer::ReleaseShaderVariables()
@@ -234,7 +270,8 @@ void CPlayer::Update(float fTimeElapsed)
 	if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
 		if (PLAYER->GetPlayer()->GetCollisionState() == true)
 		{
-			PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -12.25f));
+			CNETWORK->StatePkt(DIR_BACKWARD);
+			//PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -12.25f));
 			PLAYER->GetPlayer()->SetCollisionState(false);
 		}
 	}
@@ -351,6 +388,7 @@ void CPlayer::Update(float fTimeElapsed)
 		break;
 	case ATTACK_3:
 		m_OnAacting = TRUE;
+		MakeEffect(m_CharacterType);
 		SetTrackAnimationSet(0, ATTACK_3);
 		break;
 	case ATTACK:
@@ -741,7 +779,56 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	//CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
 	m_CharacterType = type;
 	
+	
+
 	SetChild(pPlayerModel->m_pModelRootObject, true);
+	m_EffectObj = new CEffectObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, 1);
+	XMFLOAT3 effectPos{ 0,0,0 };
+	switch (type)
+	{
+	case BASS:
+		FindFrame("BassGuitar_cl")->SetChild(m_EffectObj);
+		m_EffectObj->SetPosition(FindFrame("BassGuitar_cl")->GetPosition());
+		cout << "x: " << m_EffectObj->GetPosition().x << "y: " << m_EffectObj->GetPosition().x << "z: " << m_EffectObj->GetPosition().x << endl;
+
+		break;
+	case GUITAR:
+		FindFrame("ElectricGuitar_st")->SetChild(m_EffectObj);
+		m_EffectObj->SetPosition(FindFrame("ElectricGuitar_st")->GetPosition());
+		cout << "x: " << m_EffectObj->GetPosition().x << "y: " << m_EffectObj->GetPosition().x << "z: " << m_EffectObj->GetPosition().x << endl;
+
+
+		break;
+	case KEYBOARD:
+		FindFrame("keytar")->SetChild(m_EffectObj);
+		m_EffectObj->SetPosition(FindFrame("keytar")->GetPosition());
+		cout << "x: " << m_EffectObj->GetPosition().x << "y: " << m_EffectObj->GetPosition().x << "z: " << m_EffectObj->GetPosition().x << endl;
+
+
+		break;
+	case DRUM:
+		FindFrame("DKFYB_drumstick")->SetChild(m_EffectObj);
+		m_EffectObj->SetPosition(FindFrame("DKFYB_drumstick")->GetPosition());
+		cout << "x: " << m_EffectObj->GetPosition().x << "y: " << m_EffectObj->GetPosition().x << "z: " << m_EffectObj->GetPosition().x << endl;
+
+
+		break;
+	case VOCAL:
+		FindFrame("BoomMic_Cylinder")->SetChild(m_EffectObj);
+		m_EffectObj->SetPosition(FindFrame("BoomMic_Cylinder")->GetPosition());
+		cout << "x: " << m_EffectObj->GetPosition().x << "y: " << m_EffectObj->GetPosition().x << "z: " << m_EffectObj->GetPosition().x << endl;
+
+		
+		break;
+	case NONECHARACTER:
+		break;
+	default:
+		break;
+	}
+
+	m_EffectObj->SetScale(100, 100,100);
+
+
 	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
 	//if(m_pMesh!=nullptr)
 	//this->SetMesh(pPlayerModel->m_pModelRootObject->m_pMesh);
@@ -764,6 +851,8 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 #endif
 	CAnimationCallbackHandler *pAnimationCallbackHandler = new CSoundCallbackHandler();
 	m_pAnimationController->SetAnimationCallbackHandler(1, pAnimationCallbackHandler);
+
+	
 
 	if (this != nullptr)
 	{
@@ -854,6 +943,8 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
 	XMFLOAT3 xmf3Shift{ 0.0,0.0,0.0 };
+
+
 	//cout<<endl<<"플레이어"<<xmf3PlayerPosition.x<<", "
 	/*int num = 0;
 	switch (SCENEMANAGER->GetSceneType())
@@ -1060,15 +1151,16 @@ void COtherPlayers::OnCameraUpdateCallback(float fTimeElapsed)
 
 void COtherPlayers::Update(float fTimeElapsed)
 {
-	if (PLAYER->GetOtherPlayer()->IsPlayerCrashMap() == false) {
-		if (PLAYER->GetOtherPlayer()->GetCollisionState() == true)
-		{
-			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(XMFLOAT3(0, 0, 0), PLAYER->GetOtherPlayer()->GetLookVector(), -12.25f));
+	//if (PLAYER->GetOtherPlayer()->IsPlayerCrashMap() == false) {
+	//	if (PLAYER->GetOtherPlayer()->GetCollisionState() == true)
+	//	{
+	//		
+	//		//PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(XMFLOAT3(0, 0, 0), PLAYER->GetOtherPlayer()->GetLookVector(), -12.25f));
 
-			PLAYER->GetOtherPlayer()->SetCollisionState(false);
+	//		PLAYER->GetOtherPlayer()->SetCollisionState(false);
 
-		}
-	}
+	//	}
+	//}
 
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
 	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);

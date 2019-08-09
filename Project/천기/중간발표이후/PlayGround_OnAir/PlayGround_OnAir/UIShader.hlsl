@@ -13,7 +13,7 @@ cbuffer cbUIInfo : register(b5)
 };
 cbuffer cbHpInfo : register(b9)
 {
-	float hpRatio : packoffset(c0);
+	int hpRatio : packoffset(c0);
 };
 
 cbuffer cbSkillCoolDownInfo : register(b10)
@@ -325,12 +325,12 @@ VS_TEXTURED_OUTPUT VSHPTextured(uint nVertexID : SV_VertexID)
 	//output.position = float4(input.position.x * hpRatio + (0.5f * hpRatio) - 1.f, input.position.y - 0.75f, input.position.z, 1.0f);
 	//output.uv = input.uv;
 
-	if (nVertexID == 0) { output.position = float4(0.7 + (hpRatio * 0.05), -0.7f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
-	if (nVertexID == 1) { output.position = float4(+0.8f + (hpRatio * 0.05), -0.7f, 0.0f, 1.0f); output.uv = float2(1.f, 0.f); }
-	if (nVertexID == 2) { output.position = float4(+0.8f + (hpRatio * 0.05), -0.8f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
-	if (nVertexID == 3) { output.position = float4(0.7f + (hpRatio * 0.05), -0.7f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
-	if (nVertexID == 4) { output.position = float4(+0.8f + (hpRatio * 0.05), -0.8f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
-	if (nVertexID == 5) { output.position = float4(0.7f + (hpRatio *0.05), -0.8f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
+	if (nVertexID == 0) { output.position = float4(0.2f, -0.55f, 0.0f, 1.0f); output.uv = float2(0.125f * hpRatio, 0.f); }
+	if (nVertexID == 1) { output.position = float4(0.5f, -0.55f, 0.0f, 1.0f); output.uv = float2(0.125 + (0.125f * hpRatio), 0.f); }
+	if (nVertexID == 2) { output.position = float4(0.5f, -0.95f, 0.0f, 1.0f); output.uv = float2(0.125 + (0.125f * hpRatio), 1.f); }
+	if (nVertexID == 3) { output.position = float4(0.2f, -0.55f, 0.0f, 1.0f); output.uv = float2(0.125f * hpRatio, 0.f); }
+	if (nVertexID == 4) { output.position = float4(0.5f, -0.95f, 0.0f, 1.0f); output.uv = float2(0.125 + (0.125f * hpRatio), 1.f); }
+	if (nVertexID == 5) { output.position = float4(0.2f, -0.95f, 0.0f, 1.0f); output.uv = float2(0.125 * hpRatio, 1.f); }
 
 
 	//output.position = float4(0.7, -0.2, input.position.z, 1.0f);
@@ -405,6 +405,35 @@ float4 PSSkillCoolTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //«»ºøΩ¶¿Ã¥ı
 	float4 cColor = gtxtUITexture.Sample(gSamplerState, input.uv);
 
 	if (cColor.a < 0.1) discard;
+	return(cColor);
+
+}
+
+////effect
+VS_TEXTURED_OUTPUT VSEffectTextured(VS_TEXTURED_INPUT input, uint nVertexID : SV_VertexID)
+{
+	/*VS_TEXTURED_OUTPUT output;
+
+	if (nVertexID == 0) { output.position = float4(-0.5f, +0.5f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
+	if (nVertexID == 1) { output.position = float4(+0.5f, +0.5f, 0.0f, 1.0f); output.uv = float2(1.f, 0.f); }
+	if (nVertexID == 2) { output.position = float4(+0.5f, -0.5f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+	if (nVertexID == 3) { output.position = float4(-0.5f, +0.5f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
+	if (nVertexID == 4) { output.position = float4(+0.5f, -0.5f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+	if (nVertexID == 5) { output.position = float4(-0.5f, -0.5f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
+	return output;*/
+
+	VS_TEXTURED_OUTPUT output;
+	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
+	output.uv = input.uv;
+
+	return (output);
+}
+float4 PSEffectTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //«»ºøΩ¶¿Ã¥ı 
+{
+
+	float4 cColor = float4(1,0,0,1);// gtxtTexture.Sample(gSamplerState, input.uv);
+
+	//if (cColor.a < 0.1) discard;
 	return(cColor);
 
 }

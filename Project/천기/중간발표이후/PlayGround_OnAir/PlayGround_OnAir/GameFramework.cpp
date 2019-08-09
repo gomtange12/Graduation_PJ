@@ -144,6 +144,8 @@ void CGameFramework::CreateDirect2DDevice()
 #endif
 }
 #endif
+//#define FullScreenMode
+
 void CGameFramework::CreateSwapChain()
 {
 	RECT rcClient;
@@ -199,6 +201,23 @@ void CGameFramework::CreateSwapChain()
 	//m_pdxgiSwapChain->GetDesc(&dxgiSwapChainDesc);
 	////SetFullScreenState함수를 호출해주었기 때문에 ResizeBuffers함수를 호출해줘야함.
 	//m_pdxgiSwapChain->ResizeBuffers(m_nSwapChainBuffers, m_nWndClientWidth, m_nWndClientHeight, dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
+
+#ifdef FullScreenMode
+	//전체 모드로 시작
+	hResult = m_pdxgiSwapChain->SetFullscreenState(true, NULL);
+#else
+	hResult = m_pdxgiSwapChain->SetFullscreenState(false, NULL);
+#endif
+	if (hResult == E_FAIL)
+		return;
+	m_pdxgiSwapChain->GetDesc(&dxgiSwapChainDesc);
+	//SetFullScreenState함수를 호출해주었기 때문에 ResizeBuffers함수를 호출해줘야함.
+	m_pdxgiSwapChain->ResizeBuffers(m_nSwapChainBuffers, m_nWndClientWidth, m_nWndClientHeight, dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
+
+
+
+
+
 #endif
 
 	m_nSwapChainBufferIndex = m_pdxgiSwapChain->GetCurrentBackBufferIndex();
@@ -772,7 +791,11 @@ void CGameFramework::ProcessInput()
 
 				dwDirection |= DIR_RIGHT;
 			}
-
+			if (pKeysBuffer[0x45] & 0xF0) //스킬키
+			{
+				PLAYER->GetPlayer()->SetPlayerState(RUN_JUMP_ATTAK);
+				CNETWORK->KeyPkt(false, false, true);
+			}
 			//2플레이어
 			//if (pKeysBuffer[VK_HANGUL] & 0xF0)
 			//{
@@ -824,6 +847,8 @@ void CGameFramework::ProcessInput()
 					}
 				}
 			}
+
+			
 			float cxDelta = 0.0f, cyDelta = 0.0f;
 			POINT ptCursorPos;
 			if (GetCapture() == m_hWnd)
@@ -864,7 +889,11 @@ void CGameFramework::ProcessInput()
 	}
 	//PLAYER->GetPlayer()->SetAllowKey(true);
 	if (PLAYER->GetPlayer() != nullptr)
+	{
+
 		PLAYER->GetPlayer()->Update(m_GameTimer.GetTimeElapsed());
+		//PLAYER->GetPlayer()->m_EffectObj->UPDA
+	}
 	PLAYER->GetOtherPlayer()->Update(m_GameTimer.GetTimeElapsed());
 
 	if (PLAYER->m_pTeamPlayerMap.size() > 0)
@@ -898,7 +927,11 @@ void CGameFramework::AnimateObjects()
 	//SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->AnimateObjects(fTimeElapsed);
 
 	if (PLAYER->GetPlayer() != nullptr)
+	{
 		PLAYER->GetPlayer()->Animate(fTimeElapsed);
+	
+
+	}
 	//PLAYER->GetOtherPlayer()->Animate(fTimeElapsed);
 	if (PLAYER->m_pOtherPlayerMap.size() > 0)
 	{
@@ -1014,8 +1047,14 @@ void CGameFramework::FrameAdvance()
 	if (m_pScene)
 		m_pScene->Render(m_pd3dCommandList, m_pCamera);
 
-	if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
-	if (PLAYER->m_pOtherPlayerMap.size() > 0)
+	if (PLAYER->GetPlayer() != NULL)
+	{
+		PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
+	/*	PLAYER->GetPlayer()->m_EffectObj->SetShader(m_pScene->m_ppShaders[12]);
+		PLAYER->GetPlayer()->m_EffectObj->UpdateShaderVariable(m_pd3dCommandList, &PLAYER->GetPlayer()->m_xmf4x4World);
+		PLAYER->GetPlayer()->m_EffectObj->Render(m_pd3dCommandList, m_pCamera);*/
+	}
+		if (PLAYER->m_pOtherPlayerMap.size() > 0)
 	{
 		for (auto&& p : PLAYER->m_pOtherPlayerMap)
 			p->Render(m_pd3dCommandList, m_pCamera);

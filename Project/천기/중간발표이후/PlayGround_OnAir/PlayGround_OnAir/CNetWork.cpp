@@ -101,6 +101,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 					PLAYER->GetPlayer()->SetClientNum(myid);
 					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+					PLAYER->GetPlayer()->SetPlayerState(IDLE);
 					if(i==0)
 						PLAYER->GetPlayer()->teamNum = BLUETEAM;
 					else
@@ -111,6 +112,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[0]->SetClientNum(paket->ids[i]);
 					PLAYER->GetOtherPlayerMap()[0]->NumberByPos(paket->posN[i]);
 					PLAYER->GetOtherPlayerMap()[0]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+					PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(IDLE);
 					if (i == 0)
 						PLAYER->GetPlayer()->teamNum = BLUETEAM;
 					else
@@ -132,7 +134,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 						PLAYER->GetPlayer()->SetClientNum(myid);
 						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
-
+						PLAYER->GetPlayer()->SetPlayerState(IDLE);
 					}
 				}
 
@@ -142,6 +144,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
 						PLAYER->GetTeamPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
 						PLAYER->GetTeamPlayerMap()[i]->teamNum = BLUETEAM;
+						PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(IDLE);
 						break;
 					}
 				}
@@ -150,6 +153,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i + 2]);
 					PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i + 2]);
 					PLAYER->GetOtherPlayerMap()[i]->teamNum = REDTEAM;
+					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(IDLE);
+
 				}
 			}
 			else {
@@ -159,6 +164,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetPlayer()->SetClientNum(myid);
 						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
 						PLAYER->GetPlayer()->teamNum = REDTEAM;
+						PLAYER->GetPlayer()->SetPlayerState(IDLE);
 					}
 				}
 
@@ -168,6 +174,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetTeamPlayerMap()[0]->NumberByPos(paket->posN[i]);
 						PLAYER->GetTeamPlayerMap()[0]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
 						PLAYER->GetTeamPlayerMap()[0]->teamNum = REDTEAM;
+						PLAYER->GetTeamPlayerMap()[0]->SetPlayerState(IDLE);
 						break;
 					}
 				}
@@ -178,6 +185,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
 					PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
 					PLAYER->GetOtherPlayerMap()[i]->teamNum = BLUETEAM;
+					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(IDLE);
 				}
 
 			}
@@ -280,7 +288,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				break;
 			}
 			if (pkt->skill == true) {
-				PLAYER->GetPlayer()->SetPlayerState(ATTACK);
+				PLAYER->GetPlayer()->SetPlayerState(RUN_JUMP_ATTAK);
 				break;
 			}
 
@@ -297,7 +305,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(ATTACK);
 					break;
 					if (pkt->skill == true) {
-						PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(ATTACK);
+						PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(RUN_JUMP_ATTAK);
 						break;
 					}
 				}
@@ -313,7 +321,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					break;
 				}
 				if (pkt->skill == true) {
-					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(ATTACK);
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(RUN_JUMP_ATTAK);
 					break;
 				}
 			}

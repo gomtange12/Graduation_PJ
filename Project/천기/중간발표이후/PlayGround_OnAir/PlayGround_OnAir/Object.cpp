@@ -843,6 +843,16 @@ void CGameObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared
 	
 	if (m_pSibling) m_pSibling->Render(pd3dCommandList, pCamera);
 	if (m_pChild) m_pChild->Render(pd3dCommandList, pCamera);
+
+
+
+	if (m_pSibling)
+	{
+		if (!strcmp(m_pSibling->m_pstrFrameName, "ElectricGuitar_st") || !strcmp(m_pSibling->m_pstrFrameName, "BassGuitar_cl") || !strcmp(m_pSibling->m_pstrFrameName, "keytar") || !strcmp(m_pSibling->m_pstrFrameName, "DKFYB_drumstick") || !strcmp(m_pSibling->m_pstrFrameName, "BoomMic_Cylinder"))
+		{
+			m_pSibling->Render(pd3dCommandList, pCamera);
+		}
+	}
 }
 
 void CGameObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, CCamera * pCamera, UINT uInstances)
@@ -1662,4 +1672,69 @@ void CAngrybotObject::Animate(float fTimeElapsed)
 
 MapObject::MapObject(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 {
+}
+CPlaneObject::CPlaneObject(int nMeshes) : CGameObject(nMeshes)
+{
+}
+
+CPlaneObject::~CPlaneObject()
+{
+}
+
+
+void CPlaneObject::Animate(float fTimeElapsed, std::shared_ptr<CCamera> pCamera)
+{
+
+}
+
+void CPlaneObject::SetLookAt(XMFLOAT3 & xmf3Target)
+{
+	XMFLOAT3 xmf3Up(0.0f, 1.0f, 0.0f);
+	XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
+	XMFLOAT3 xmf3Look = Vector3::Subtract(xmf3Target, xmf3Position);
+	XMFLOAT3 xmf3Right = Vector3::CrossProduct(xmf3Up, xmf3Look, true);
+
+	m_xmf4x4World._11 = xmf3Right.x; m_xmf4x4World._12 = xmf3Right.y; m_xmf4x4World._13 = xmf3Right.z;
+	m_xmf4x4World._21 = xmf3Up.x; m_xmf4x4World._22 = xmf3Up.y; m_xmf4x4World._23 = xmf3Up.z;
+	m_xmf4x4World._31 = xmf3Look.x;	m_xmf4x4World._32 = xmf3Look.y;	m_xmf4x4World._33 = xmf3Look.z;
+}
+
+void CPlaneObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
+{
+	XMFLOAT3 xmf3CameraPosition = pCamera->GetPosition();
+
+	SetLookAt(xmf3CameraPosition);
+
+	CGameObject::Render(pd3dCommandList, pCamera);
+}
+
+CEffectObject::CEffectObject(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, int nMat) : CPlaneObject(nMat)
+{
+	CTexture* m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/남R_기타_L.dds", 0);
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 20, 20.f, 0, 0, 0, 0);
+
+	CPlayerSkillEffectUIShader* pPlayerSkillShader = new CPlayerSkillEffectUIShader();
+	pPlayerSkillShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	
+
+	CMaterial* m_pMaterial = new CMaterial(1);
+	m_pMaterial->SetTexture(m_pTexture, 0);
+	m_pMaterial->SetShader(pPlayerSkillShader);
+
+	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+}
+
+CEffectObject::~CEffectObject()
+{
+}
+
+
+void CEffectObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
+{
+	//cout << "그려짐" << endl;
+	//프레임구조로 되어있을거니까 무기에 셋차일드
+	CPlaneObject::Render(pd3dCommandList, pCamera);
 }

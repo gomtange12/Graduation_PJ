@@ -247,7 +247,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 	//m_pPlayGroundTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 
-	m_nShaders = 12;
+	m_nShaders = 13;
 	m_ppShaders = new CShader*[m_nShaders];
 
 	/*CHellicopterObjectsShader *pHellicopterObjectsShader = new CHellicopterObjectsShader();
@@ -325,6 +325,10 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	psSkillCoolUIShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	m_ppShaders[11] = psSkillCoolUIShader;
 
+	CSkillEffectUIShader *pEffectUIShader = new CSkillEffectUIShader();
+	pEffectUIShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pEffectUIShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
+	m_ppShaders[12] = pEffectUIShader;
 	/*CTexturedShader* pTexturedShader = new CTexturedShader();
 	pTexturedShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	pTexturedShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
@@ -750,7 +754,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[37]->Rotate(0.0f, 180.0f, 0.0f);
 	//map2
 
-	m_nConcertObjects = 2;
+	m_nConcertObjects = 3;
 	m_ppConcertObjects = new CGameObject*[m_nConcertObjects];
 
 	CLoadedModelInfo *ConcertFloorObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ConcertFloor.bin", NULL, false);
@@ -768,6 +772,15 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppConcertObjects[1]->SetScale(150, 150, 150);
 	m_ppConcertObjects[1]->SetMesh(pMapObject->m_pModelRootObject->m_pMesh);
 	m_ppConcertObjects[1]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo *ptempObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¿»·Î¹Ù´Ú1.bin", NULL, false);
+	m_ppConcertObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[2]->SetChild(ptempObject->m_pModelRootObject, true);
+	m_ppConcertObjects[2]->SetPosition(1600.0f, 0, 1000.0f);
+	m_ppConcertObjects[2]->SetScale(300, 300, 300);
+	m_ppConcertObjects[2]->SetMesh(ptempObject->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[2]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
@@ -919,13 +932,13 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 
 	pd3dDescriptorRanges[10].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	pd3dDescriptorRanges[10].NumDescriptors = 1;
-	pd3dDescriptorRanges[10].BaseShaderRegister = 14; //t2: gtxtTerrainDetailTexture
+	pd3dDescriptorRanges[10].BaseShaderRegister = 14; //¿©±â
 	pd3dDescriptorRanges[10].RegisterSpace = 0;
 	pd3dDescriptorRanges[10].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	pd3dDescriptorRanges[11].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	pd3dDescriptorRanges[11].NumDescriptors = 1;
-	pd3dDescriptorRanges[11].BaseShaderRegister = 15; //t15 //¸Þ´º¾À
+	pd3dDescriptorRanges[11].BaseShaderRegister = 15; //t15 
 	pd3dDescriptorRanges[11].RegisterSpace = 0;
 	pd3dDescriptorRanges[11].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
@@ -934,6 +947,7 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dDescriptorRanges[12].BaseShaderRegister = 16; //t15 //¸Þ´º¾À
 	pd3dDescriptorRanges[12].RegisterSpace = 0;
 	pd3dDescriptorRanges[12].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
 
 
 	//pd3dDescriptorRanges[10].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
@@ -1016,8 +1030,8 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 
 	pd3dRootParameters[14].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	pd3dRootParameters[14].DescriptorTable.NumDescriptorRanges = 1;
-	pd3dRootParameters[14].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[9]);
-	pd3dRootParameters[14].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	pd3dRootParameters[14].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[10]);
+	pd3dRootParameters[14].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; //¿©±ë
 
 	pd3dRootParameters[15].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pd3dRootParameters[15].Descriptor.ShaderRegister = 5;
@@ -1371,6 +1385,11 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 			m_ppShaders[11]->UpdateShaderVariables(pd3dCommandList);
 			m_ppShaders[11]->Render(pd3dCommandList, pCamera);
 		}
+
+		if (m_ppShaders[12])
+		{	
+			m_ppShaders[12]->Render(pd3dCommandList, pCamera);
+		}
 		//if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(pd3dCommandList, pCamera);
 		////if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
 		////cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
@@ -1406,7 +1425,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		}
 		for (int i = 0; i < m_nConcertObjects; i++)
 		{
-			m_ppConcertObjects[i]->Render(pd3dCommandList, pCamera);
+			m_ppConcertObjects[2]->Render(pd3dCommandList, pCamera);
 		}
 		if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
 			if (PLAYER->GetPlayer()->GetPlayerState() == HAPPY) {
@@ -1438,6 +1457,11 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		{
 			m_ppShaders[11]->UpdateShaderVariables(pd3dCommandList);
 			m_ppShaders[11]->Render(pd3dCommandList, pCamera);
+		}
+		if (m_ppShaders[12])
+		{
+			//m_ppShaders[12]->UpdateShaderVariables(pd3dCommandList);
+			m_ppShaders[12]->Render(pd3dCommandList, pCamera);
 		}
 		//if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(pd3dCommandList, pCamera);
 		//if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);

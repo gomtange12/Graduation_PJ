@@ -1706,28 +1706,18 @@ CHPUIShader::~CHPUIShader()
 void CHPUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
 
-	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	m_nObjects = 1;
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/hpBar.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/hearthpBar.dds", 0);
 
-	/*m_ppObjects = new CGameObject*[m_nObjects];
-	CTexturedRectMesh* pRectMesh[1];
-
-	pRectMesh[0] = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 1.0, 1.0,1, 0.8, -0.3, 1);
-
-	CBillboardObject* pBillboard = new CBillboardObject();
-
-	pBillboard->SetMesh(m_pTexture);
-*/
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
 
 
 	m_cbHp = new CB_HP_INFO;
 	::ZeroMemory(m_cbHp, sizeof(CB_HP_INFO));
 
-	m_cbHp->hp = 3;
+	m_cbHp->hp = 8;
 }
 
 D3D12_SHADER_BYTECODE CHPUIShader::CreatePixelShader()
@@ -1918,28 +1908,225 @@ void CSkillCoolDownUIShader::ReleaseShaderVariables()
 
 }
 
+
+
 D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreatePixelShader()
 {
-	return D3D12_SHADER_BYTECODE();
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSEffectTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
 }
 
 D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreateVertexShader()
 {
-	return D3D12_SHADER_BYTECODE();
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSEffectTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
 }
+
+D3D12_INPUT_LAYOUT_DESC CSkillEffectUIShader::CreateInputLayout()
+{
+	//UINT nInputElementDescs = 2;
+	//D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+
+	//pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	//pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 };
+
+	//D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
+	//d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
+	//d3dInputLayoutDesc.NumElements = nInputElementDescs;
+
+	//return(d3dInputLayoutDesc);
+
+
+	UINT nInputElementDescs = 2;
+	D3D12_INPUT_ELEMENT_DESC* pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+
+	pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+
+	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
+	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
+	d3dInputLayoutDesc.NumElements = nInputElementDescs;
+
+	return(d3dInputLayoutDesc);
+}
+
 
 void CSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
+	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+
+	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/남R_기타_L.dds", 0);
+
+
+	m_nObjects = 1;
+	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 20, 20.f, 0, 0, 0, 0);
+
+
+	m_pMaterial = new CMaterial(1);
+	m_pMaterial->SetTexture(pTexture, 0);
+
+	m_ppObjects = new CGameObject*[m_nObjects];
+
+
+	m_ppObjects[0] = new CPlaneObject(1);
+	m_ppObjects[0]->SetMaterial(0, m_pMaterial);
+	m_ppObjects[0]->SetPosition(1900, 10, 1300.0f);
+	m_ppObjects[0]->SetMesh(pEffectMesh);
+	m_ppObjects[0]->SetScale(100, 100, 100);
+	//pPlaneObject->SetScale(100, 100, 100);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, pTexture, 16, false);
+
+
 }
 
-void CSkillEffectUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
-{
-}
-
-void CSkillEffectUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-}
 
 void CSkillEffectUIShader::ReleaseShaderVariables()
 {
+
+}
+
+//D3D12_DEPTH_STENCIL_DESC CSkillEffectUIShader::CreateDepthStencilState()
+//{
+//	//여기
+//	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
+//	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
+//	d3dDepthStencilDesc.DepthEnable = TRUE;
+//	d3dDepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+//	d3dDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+//	d3dDepthStencilDesc.StencilEnable = FALSE;
+//	d3dDepthStencilDesc.StencilReadMask = 0x00;
+//	d3dDepthStencilDesc.StencilWriteMask = 0x00;
+//	d3dDepthStencilDesc.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+//	d3dDepthStencilDesc.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+//	d3dDepthStencilDesc.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+//	d3dDepthStencilDesc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
+//	d3dDepthStencilDesc.BackFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+//	d3dDepthStencilDesc.BackFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+//	d3dDepthStencilDesc.BackFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+//	d3dDepthStencilDesc.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
+//
+//	return d3dDepthStencilDesc;
+//
+//}
+void CSkillEffectUIShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
+{
+	OnPrepareRender(pd3dCommandList, 0);
+	CShader::Render(pd3dCommandList, pCamera);
+	if (m_pd3dPipelineState) pd3dCommandList->SetPipelineState(m_pd3dPipelineState);
+	else { cout << "없" << endl; }
+
+	for (int i = 0; i < m_nObjects; ++i)
+		reinterpret_cast<CPlaneObject*>(m_ppObjects[i])->Render(pd3dCommandList, pCamera);
+}
+
+
+
+//player skill
+D3D12_SHADER_BYTECODE CPlayerSkillEffectUIShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSEffectTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE CPlayerSkillEffectUIShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSEffectTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+}
+
+D3D12_INPUT_LAYOUT_DESC CPlayerSkillEffectUIShader::CreateInputLayout()
+{
+	//UINT nInputElementDescs = 2;
+	//D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+
+	//pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	//pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 };
+
+	//D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
+	//d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
+	//d3dInputLayoutDesc.NumElements = nInputElementDescs;
+
+	//return(d3dInputLayoutDesc);
+
+
+	UINT nInputElementDescs = 2;
+	D3D12_INPUT_ELEMENT_DESC* pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+
+	pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+
+	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
+	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
+	d3dInputLayoutDesc.NumElements = nInputElementDescs;
+
+	return(d3dInputLayoutDesc);
+}
+
+
+void CPlayerSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+
+	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/남R_기타_L.dds", 0);
+
+
+	m_nObjects = 1;
+	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 20, 20.f, 0, 0, 0, 0);
+
+
+	m_pMaterial = new CMaterial(1);
+	m_pMaterial->SetTexture(pTexture, 0);
+
+	m_ppObjects = new CGameObject*[m_nObjects];
+
+
+	m_ppObjects[0] = new CPlaneObject(1);
+	m_ppObjects[0]->SetMaterial(0, m_pMaterial);
+	m_ppObjects[0]->SetPosition(1900, 10, 1300.0f);
+	m_ppObjects[0]->SetMesh(pEffectMesh);
+	m_ppObjects[0]->SetScale(10, 10, 10);
+	//pPlaneObject->SetScale(100, 100, 100);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, pTexture, 16, false);
+
+
+}
+
+
+void CPlayerSkillEffectUIShader::ReleaseShaderVariables()
+{
+
+}
+
+//D3D12_DEPTH_STENCIL_DESC CSkillEffectUIShader::CreateDepthStencilState()
+//{
+//	//여기
+//	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
+//	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
+//	d3dDepthStencilDesc.DepthEnable = TRUE;
+//	d3dDepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+//	d3dDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+//	d3dDepthStencilDesc.StencilEnable = FALSE;
+//	d3dDepthStencilDesc.StencilReadMask = 0x00;
+//	d3dDepthStencilDesc.StencilWriteMask = 0x00;
+//	d3dDepthStencilDesc.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+//	d3dDepthStencilDesc.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+//	d3dDepthStencilDesc.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+//	d3dDepthStencilDesc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
+//	d3dDepthStencilDesc.BackFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+//	d3dDepthStencilDesc.BackFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+//	d3dDepthStencilDesc.BackFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+//	d3dDepthStencilDesc.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
+//
+//	return d3dDepthStencilDesc;
+//
+//}
+void CPlayerSkillEffectUIShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
+{
+	OnPrepareRender(pd3dCommandList, 0);
+	CShader::Render(pd3dCommandList, pCamera);
+	if (m_pd3dPipelineState) pd3dCommandList->SetPipelineState(m_pd3dPipelineState);
+	else { cout << "없" << endl; }
+
+	for (int i = 0; i < m_nObjects; ++i)
+		reinterpret_cast<CEffectObject*>(m_ppObjects[i])->Render(pd3dCommandList, pCamera);
 }

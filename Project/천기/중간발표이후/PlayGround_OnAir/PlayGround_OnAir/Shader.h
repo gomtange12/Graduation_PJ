@@ -19,7 +19,7 @@ struct UI_Data
 
 struct CB_HP_INFO
 {
-	float hp;
+	int hp;
 };
 struct CB_SKILL_INFO
 {
@@ -478,17 +478,38 @@ protected:
 
 };
 
-class CSkillEffectUIShader : public CUiShader {
+class CSkillEffectUIShader : public CShader {
 public:
+	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
-	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
-	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
-	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
-	virtual void ReleaseShaderVariables();
-protected:
-	CB_GAMEOBJECT_INFO *m_cbSkillEffect;
-	CB_GAMEOBJECT_INFO *m_cbMappedSkillEffect;
-	ID3D12Resource	   *m_cbResouce = NULL;
 
+
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual void ReleaseShaderVariables();
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
+
+protected:
+
+	CGameObject				**m_ppObjects = 0;
+	int						m_nObjects = 0;
+	CMaterial				*m_pMaterial = NULL;
+};
+
+class CPlayerSkillEffectUIShader : public CShader {
+public:
+	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
+	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
+	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+
+
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual void ReleaseShaderVariables();
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
+
+protected:
+
+	CGameObject				**m_ppObjects = 0;
+	int						m_nObjects = 0;
+	CMaterial				*m_pMaterial = NULL;
 };
