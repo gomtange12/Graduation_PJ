@@ -754,7 +754,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[37]->Rotate(0.0f, 180.0f, 0.0f);
 	//map2
 
-	m_nConcertObjects = 2;
+	m_nConcertObjects = 3;
 	m_ppConcertObjects = new CGameObject*[m_nConcertObjects];
 
 	CLoadedModelInfo *ConcertFloorObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ConcertFloor.bin", NULL, false);
@@ -772,6 +772,15 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppConcertObjects[1]->SetScale(150, 150, 150);
 	m_ppConcertObjects[1]->SetMesh(pMapObject->m_pModelRootObject->m_pMesh);
 	m_ppConcertObjects[1]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo *ptempObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¿»·Î¹Ù´Ú1.bin", NULL, false);
+	m_ppConcertObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[2]->SetChild(ptempObject->m_pModelRootObject, true);
+	m_ppConcertObjects[2]->SetPosition(1600.0f, 0, 1000.0f);
+	m_ppConcertObjects[2]->SetScale(300, 300, 300);
+	m_ppConcertObjects[2]->SetMesh(ptempObject->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[2]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
@@ -1376,6 +1385,11 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 			m_ppShaders[11]->UpdateShaderVariables(pd3dCommandList);
 			m_ppShaders[11]->Render(pd3dCommandList, pCamera);
 		}
+
+		if (m_ppShaders[12])
+		{	
+			m_ppShaders[12]->Render(pd3dCommandList, pCamera);
+		}
 		//if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(pd3dCommandList, pCamera);
 		////if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
 		////cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
@@ -1411,7 +1425,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		}
 		for (int i = 0; i < m_nConcertObjects; i++)
 		{
-			m_ppConcertObjects[i]->Render(pd3dCommandList, pCamera);
+			m_ppConcertObjects[2]->Render(pd3dCommandList, pCamera);
 		}
 		if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
 			if (PLAYER->GetPlayer()->GetPlayerState() == HAPPY) {

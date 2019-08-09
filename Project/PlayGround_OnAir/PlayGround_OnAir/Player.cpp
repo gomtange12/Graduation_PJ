@@ -120,6 +120,9 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	m_pCameraUpdatedContext = NULL;
 	m_PlayerState = PlayerState::IDLE;
 
+
+	
+	
 	if (this != nullptr)
 	{
 		CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -143,6 +146,7 @@ void CPlayer::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsComm
 
 void CPlayer::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 {
+
 }
 
 void CPlayer::ReleaseShaderVariables()
@@ -383,6 +387,7 @@ void CPlayer::Update(float fTimeElapsed)
 		break;
 	case ATTACK_3:
 		m_OnAacting = TRUE;
+		MakeEffect(m_CharacterType);
 		SetTrackAnimationSet(0, ATTACK_3);
 		break;
 	case ATTACK:
@@ -773,7 +778,56 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	//CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
 	m_CharacterType = type;
 	
+	
+
 	SetChild(pPlayerModel->m_pModelRootObject, true);
+	m_EffectObj = new CEffectObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, 1);
+	XMFLOAT3 effectPos{ 0,0,0 };
+	switch (type)
+	{
+	case BASS:
+		FindFrame("BassGuitar_cl")->SetChild(m_EffectObj);
+		m_EffectObj->SetPosition(FindFrame("BassGuitar_cl")->GetPosition());
+		cout << "x: " << m_EffectObj->GetPosition().x << "y: " << m_EffectObj->GetPosition().x << "z: " << m_EffectObj->GetPosition().x << endl;
+
+		break;
+	case GUITAR:
+		FindFrame("ElectricGuitar_st")->SetChild(m_EffectObj);
+		m_EffectObj->SetPosition(FindFrame("ElectricGuitar_st")->GetPosition());
+		cout << "x: " << m_EffectObj->GetPosition().x << "y: " << m_EffectObj->GetPosition().x << "z: " << m_EffectObj->GetPosition().x << endl;
+
+
+		break;
+	case KEYBOARD:
+		FindFrame("keytar")->SetChild(m_EffectObj);
+		m_EffectObj->SetPosition(FindFrame("keytar")->GetPosition());
+		cout << "x: " << m_EffectObj->GetPosition().x << "y: " << m_EffectObj->GetPosition().x << "z: " << m_EffectObj->GetPosition().x << endl;
+
+
+		break;
+	case DRUM:
+		FindFrame("DKFYB_drumstick")->SetChild(m_EffectObj);
+		m_EffectObj->SetPosition(FindFrame("DKFYB_drumstick")->GetPosition());
+		cout << "x: " << m_EffectObj->GetPosition().x << "y: " << m_EffectObj->GetPosition().x << "z: " << m_EffectObj->GetPosition().x << endl;
+
+
+		break;
+	case VOCAL:
+		FindFrame("BoomMic_Cylinder")->SetChild(m_EffectObj);
+		m_EffectObj->SetPosition(FindFrame("BoomMic_Cylinder")->GetPosition());
+		cout << "x: " << m_EffectObj->GetPosition().x << "y: " << m_EffectObj->GetPosition().x << "z: " << m_EffectObj->GetPosition().x << endl;
+
+		
+		break;
+	case NONECHARACTER:
+		break;
+	default:
+		break;
+	}
+
+	m_EffectObj->SetScale(100, 100,100);
+
+
 	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
 	//if(m_pMesh!=nullptr)
 	//this->SetMesh(pPlayerModel->m_pModelRootObject->m_pMesh);
@@ -796,6 +850,8 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 #endif
 	CAnimationCallbackHandler *pAnimationCallbackHandler = new CSoundCallbackHandler();
 	m_pAnimationController->SetAnimationCallbackHandler(1, pAnimationCallbackHandler);
+
+	
 
 	if (this != nullptr)
 	{
@@ -886,6 +942,8 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight{ 0 };// = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad) + 0.0f;
 	XMFLOAT3 xmf3Shift{ 0.0,0.0,0.0 };
+
+
 	//cout<<endl<<"플레이어"<<xmf3PlayerPosition.x<<", "
 	/*int num = 0;
 	switch (SCENEMANAGER->GetSceneType())

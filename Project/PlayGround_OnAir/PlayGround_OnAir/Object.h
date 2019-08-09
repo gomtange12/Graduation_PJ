@@ -608,3 +608,12 @@ public:
 	void SetLookAt(XMFLOAT3& xmf3Target);
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
 };
+class CEffectObject : public CPlaneObject
+{
+public: 
+	CEffectObject(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, int nMat);
+	~CEffectObject();
+	
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
+
+};

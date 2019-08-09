@@ -791,9 +791,9 @@ void CGameFramework::ProcessInput()
 
 				dwDirection |= DIR_RIGHT;
 			}
-			if (pKeysBuffer[0x44] & 0xF0) //스킬키
+			if (pKeysBuffer[0x45] & 0xF0) //스킬키
 			{
-				PLAYER->GetPlayer()->SetPlayerState(ATTACK_3);
+				PLAYER->GetPlayer()->SetPlayerState(RUN_JUMP_ATTAK);
 				CNETWORK->KeyPkt(false, false, true);
 			}
 			//2플레이어
@@ -889,7 +889,11 @@ void CGameFramework::ProcessInput()
 	}
 	//PLAYER->GetPlayer()->SetAllowKey(true);
 	if (PLAYER->GetPlayer() != nullptr)
+	{
+
 		PLAYER->GetPlayer()->Update(m_GameTimer.GetTimeElapsed());
+		//PLAYER->GetPlayer()->m_EffectObj->UPDA
+	}
 	PLAYER->GetOtherPlayer()->Update(m_GameTimer.GetTimeElapsed());
 
 	if (PLAYER->m_pTeamPlayerMap.size() > 0)
@@ -923,7 +927,11 @@ void CGameFramework::AnimateObjects()
 	//SCENEMANAGER->m_MapList[SCENEMANAGER->GetSceneType()]->AnimateObjects(fTimeElapsed);
 
 	if (PLAYER->GetPlayer() != nullptr)
+	{
 		PLAYER->GetPlayer()->Animate(fTimeElapsed);
+	
+
+	}
 	//PLAYER->GetOtherPlayer()->Animate(fTimeElapsed);
 	if (PLAYER->m_pOtherPlayerMap.size() > 0)
 	{
@@ -1039,8 +1047,14 @@ void CGameFramework::FrameAdvance()
 	if (m_pScene)
 		m_pScene->Render(m_pd3dCommandList, m_pCamera);
 
-	if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
-	if (PLAYER->m_pOtherPlayerMap.size() > 0)
+	if (PLAYER->GetPlayer() != NULL)
+	{
+		PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
+	/*	PLAYER->GetPlayer()->m_EffectObj->SetShader(m_pScene->m_ppShaders[12]);
+		PLAYER->GetPlayer()->m_EffectObj->UpdateShaderVariable(m_pd3dCommandList, &PLAYER->GetPlayer()->m_xmf4x4World);
+		PLAYER->GetPlayer()->m_EffectObj->Render(m_pd3dCommandList, m_pCamera);*/
+	}
+		if (PLAYER->m_pOtherPlayerMap.size() > 0)
 	{
 		for (auto&& p : PLAYER->m_pOtherPlayerMap)
 			p->Render(m_pd3dCommandList, m_pCamera);
