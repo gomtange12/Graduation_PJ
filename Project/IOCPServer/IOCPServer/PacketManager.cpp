@@ -216,6 +216,7 @@ void PacketManager::AttackPacKet(int id)
 	pkt.size = sizeof(sc_packet_attack);
 	pkt.type = SC_ATTACK_INFO;
 	pkt.id = id;
+	pkt.hp = objectManager->GetPlayer(id)->hp;
 
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
 	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
@@ -346,6 +347,18 @@ void PacketManager::ClockPacket(int id, int clock) {
 		for (int i = 0; i < TEAM_RNUM; ++i) {
 			SendPacket(ROOMMANAGER->room[roomNum]->m_TeamIds[i], &pkt);
 
+		}
+	}
+}
+void PacketManager::DonaPacket() {
+	sc_packet_dona pkt;
+	pkt.type = SC_DONA;
+	pkt.size = sizeof(sc_packet_dona);
+
+	for (int i = 0; i < MAX_USER; ++i) {
+		if (true == objectManager->GetPlayer(i)->m_connected)
+		{
+			SendChat(objectManager->GetPlayer(i)->m_id, &pkt);
 		}
 	}
 }

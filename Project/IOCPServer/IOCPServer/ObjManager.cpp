@@ -198,7 +198,10 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 	cs_packet_key *pkt = reinterpret_cast<cs_packet_key *>(packet);
 
 	PACKETMANAGER->KeyPacket(id, pkt->jump, pkt->attack , pkt->skill);
+	if (pkt->skill == true)
+	{
 
+	}
 	if (pkt->attack == true)
 	{
 		int roomNum = g_clients[id]->roomNumber;
@@ -216,8 +219,8 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 				g_clients[otherId]->m_xmOOBB.Center = XMFLOAT3(g_clients[otherId]->m_xmf3Position.x, g_clients[otherId]->m_xmf3Position.y, g_clients[otherId]->m_xmf3Position.z);
 
 				PACKETMANAGER->MovePacket(otherId);
-				PACKETMANAGER->AttackPacKet(otherId);
 				--g_clients[otherId]->hp;
+				PACKETMANAGER->AttackPacKet(otherId);
 				if (g_clients[otherId]->hp <= 0) {
 					PACKETMANAGER->DeathPacket(otherId);
 					PACKETMANAGER->ResultPacket(otherId);
@@ -237,8 +240,8 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 						g_clients[otherId]->m_xmOOBB.Center = XMFLOAT3(g_clients[otherId]->m_xmf3Position.x, g_clients[otherId]->m_xmf3Position.y, g_clients[otherId]->m_xmf3Position.z);
 
 						PACKETMANAGER->MovePacket(otherId);
-						PACKETMANAGER->AttackPacKet(otherId);
 						--g_clients[otherId]->hp;
+						PACKETMANAGER->AttackPacKet(otherId);
 						if (g_clients[otherId]->hp <= 0) {
 							g_clients[otherId]->death = true;
 						

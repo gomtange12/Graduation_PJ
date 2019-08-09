@@ -144,6 +144,8 @@ void CGameFramework::CreateDirect2DDevice()
 #endif
 }
 #endif
+//#define FullScreenMode
+
 void CGameFramework::CreateSwapChain()
 {
 	RECT rcClient;
@@ -199,6 +201,23 @@ void CGameFramework::CreateSwapChain()
 	//m_pdxgiSwapChain->GetDesc(&dxgiSwapChainDesc);
 	////SetFullScreenState함수를 호출해주었기 때문에 ResizeBuffers함수를 호출해줘야함.
 	//m_pdxgiSwapChain->ResizeBuffers(m_nSwapChainBuffers, m_nWndClientWidth, m_nWndClientHeight, dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
+
+#ifdef FullScreenMode
+	//전체 모드로 시작
+	hResult = m_pdxgiSwapChain->SetFullscreenState(true, NULL);
+#else
+	hResult = m_pdxgiSwapChain->SetFullscreenState(false, NULL);
+#endif
+	if (hResult == E_FAIL)
+		return;
+	m_pdxgiSwapChain->GetDesc(&dxgiSwapChainDesc);
+	//SetFullScreenState함수를 호출해주었기 때문에 ResizeBuffers함수를 호출해줘야함.
+	m_pdxgiSwapChain->ResizeBuffers(m_nSwapChainBuffers, m_nWndClientWidth, m_nWndClientHeight, dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
+
+
+
+
+
 #endif
 
 	m_nSwapChainBufferIndex = m_pdxgiSwapChain->GetCurrentBackBufferIndex();

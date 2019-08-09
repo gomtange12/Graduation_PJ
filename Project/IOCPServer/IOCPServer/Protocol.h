@@ -35,6 +35,7 @@ constexpr int SC_RESULT_INFO = 18;
 constexpr int SC_DEATH = 19;
 constexpr int SC_CHAT = 20;
 constexpr int SC_CLOCK = 21;
+constexpr int SC_DONA = 22;
 //
 constexpr int CS_MATCHING_PLAYER = 9;
 constexpr int CS_MOVE_STATE_INFO = 10;
@@ -118,6 +119,7 @@ struct sc_packet_attack
 	BYTE size;
 	BYTE type;
 	char id;
+	char hp;
 };
 struct sc_packet_lobby {
 	BYTE size;
@@ -143,6 +145,10 @@ struct sc_packet_clock {
 	BYTE size;
 	BYTE type;
 	char clock;
+};
+struct sc_packet_dona {
+	BYTE size;
+	BYTE type;
 };
 /////////////////////////Å¬¶ó//////////////////////
 struct cs_packet_matching {

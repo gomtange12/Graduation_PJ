@@ -149,9 +149,7 @@ public:
 #define ANIMATION_TYPE_ONCE			0
 #define ANIMATION_TYPE_LOOP			1
 #define ANIMATION_TYPE_PINGPONG		2
-#define ANIMATION_TYPE_DEATH		3
-
-
+#define ANIMATION_TYPE_MOVING		3
 
 
 #define ANIMATION_CALLBACK_EPSILON	0.015f
@@ -599,4 +597,14 @@ public:
 public:
 	
 };
+class CPlaneObject : public CGameObject
+{
+public:
+	CPlaneObject(int nMat);// : CGameObject
+	virtual ~CPlaneObject();
 
+public:
+	virtual void Animate(float fTimeElapsed, std::shared_ptr<CCamera> pCamera);
+	void SetLookAt(XMFLOAT3& xmf3Target);
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
+};

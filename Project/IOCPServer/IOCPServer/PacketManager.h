@@ -28,4 +28,5 @@ public:
 	void DeathPacket(int id);
 	void TwitchChat(std::string &chat);
 	void ClockPacket(int id, int clock);
+	void DonaPacket();
 };

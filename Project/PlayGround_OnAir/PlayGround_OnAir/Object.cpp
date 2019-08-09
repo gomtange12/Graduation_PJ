@@ -1343,10 +1343,6 @@ CAnimationSets *CGameObject::LoadAnimationFromFile(FILE *pInFile, CGameObject *p
 				pAnimationSet->m_nType = ANIMATION_TYPE_MOVING;
 
 			}*/
-			else if (!strcmp(pAnimationSet->m_pstrName, "death") || !strcmp(pAnimationSet->m_pstrName, "Death"))
-			{
-				pAnimationSet->m_nType = ANIMATION_TYPE_DEATH;
-			}
 			else
 			{
 				pAnimationSet->m_nType = ANIMATION_TYPE_ONCE;
@@ -1666,4 +1662,37 @@ void CAngrybotObject::Animate(float fTimeElapsed)
 
 MapObject::MapObject(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 {
+}
+CPlaneObject::CPlaneObject(int nMeshes) : CGameObject(nMeshes)
+{
+}
+
+CPlaneObject::~CPlaneObject()
+{
+}
+
+void CPlaneObject::Animate(float fTimeElapsed, std::shared_ptr<CCamera> pCamera)
+{
+
+}
+
+void CPlaneObject::SetLookAt(XMFLOAT3 & xmf3Target)
+{
+	XMFLOAT3 xmf3Up(0.0f, 1.0f, 0.0f);
+	XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
+	XMFLOAT3 xmf3Look = Vector3::Subtract(xmf3Target, xmf3Position);
+	XMFLOAT3 xmf3Right = Vector3::CrossProduct(xmf3Up, xmf3Look, true);
+
+	m_xmf4x4World._11 = xmf3Right.x; m_xmf4x4World._12 = xmf3Right.y; m_xmf4x4World._13 = xmf3Right.z;
+	m_xmf4x4World._21 = xmf3Up.x; m_xmf4x4World._22 = xmf3Up.y; m_xmf4x4World._23 = xmf3Up.z;
+	m_xmf4x4World._31 = xmf3Look.x;	m_xmf4x4World._32 = xmf3Look.y;	m_xmf4x4World._33 = xmf3Look.z;
+}
+
+void CPlaneObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
+{
+	XMFLOAT3 xmf3CameraPosition = pCamera->GetPosition();
+
+	SetLookAt(xmf3CameraPosition);
+
+	CGameObject::Render(pd3dCommandList, pCamera);
 }
