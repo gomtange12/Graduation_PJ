@@ -45,7 +45,6 @@ void TwitchIRC::Proc() {
 		printf("TwitchIRC Connected..! \n");
 
 		InitSend();
-		//setNonBlocking(1);
 		Run();
 	}
 	else
