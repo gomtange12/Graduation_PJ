@@ -240,7 +240,6 @@ void PacketManager::LobbyPacket(int id)
 
 
 	SendPacket(id, &pkt);
-
 	
 }
 void PacketManager::ResultPacket(int id)

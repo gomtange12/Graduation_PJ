@@ -4,7 +4,7 @@
 #include "CPlayerManager.h"
 #include "CChatManager.h"
 
-
+#define SPAWN 9
 
 
 CNetWork::CNetWork()
@@ -352,20 +352,27 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	}
 	case SC_LOBBY_IN:
 	{
-		sc_packet_lobby *pkt = reinterpret_cast<sc_packet_lobby *>(ptr);
+		if (CNetCGameFramework->m_ready == true) {
+			sc_packet_lobby *pkt = reinterpret_cast<sc_packet_lobby *>(ptr);
 
-		SCENEMANAGER->SetScene(MENUSCENE);
-		PLAYER->GetPlayer()->m_match = false;
-		PLAYER->GetPlayer()->SetPlayerState(IDLE);
-		for (int i = 0; i < 2; ++i) {
-			PLAYER->GetOtherPlayerMap()[i]->m_match = false;
-			PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::IDLE);
-			PLAYER->GetTeamPlayerMap()[i]->m_match = false;
-			PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(IDLE);
+			SCENEMANAGER->SetScene(MENUSCENE);
+			PLAYER->GetPlayer()->m_match = false;
+			PLAYER->GetPlayer()->SetPlayerState(IDLE);
+			PLAYER->GetPlayer()->SetClientNum(-1);
+			PLAYER->GetPlayer()->NumberByPos(SPAWN);
+			for (int i = 0; i < 2; ++i) {
+				PLAYER->GetOtherPlayerMap()[i]->m_match = false;
+				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::IDLE);
+				PLAYER->GetTeamPlayerMap()[i]->m_match = false;
+				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(IDLE);
+				PLAYER->GetTeamPlayerMap()[i]->SetClientNum(-1);
+				PLAYER->GetOtherPlayerMap()[i]->SetClientNum(-1);
+				PLAYER->GetTeamPlayerMap()[i]->NumberByPos(SPAWN);
+				PLAYER->GetOtherPlayerMap()[i]->NumberByPos(SPAWN);
+			}
+			CNetCGameFramework->m_ready = false;
+
 		}
-		CNetCGameFramework->m_ready = false;
-
-
 		break;
 	}
 	case SC_RESULT_INFO:

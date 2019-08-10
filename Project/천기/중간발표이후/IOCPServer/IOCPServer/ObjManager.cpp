@@ -227,7 +227,7 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 				PACKETMANAGER->MovePacket(otherId);
 				g_clients[otherId]->hp = g_clients[otherId]->hp-damage;
 				PACKETMANAGER->AttackPacKet(otherId);
-				if (g_clients[otherId]->hp <= 0) {
+				if (g_clients[otherId]->hp == 0) {
 					PACKETMANAGER->DeathPacket(otherId);
 					PACKETMANAGER->ResultPacket(otherId);
 					dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(otherId, OP_LOBBY, roomNum, GetTickCount() + 4000);
@@ -248,7 +248,7 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 						PACKETMANAGER->MovePacket(otherId);
 						g_clients[otherId]->hp = g_clients[otherId]->hp - damage;
 						PACKETMANAGER->AttackPacKet(otherId);
-						if (g_clients[otherId]->hp <= 0) {
+						if (g_clients[otherId]->hp == 0) {
 							g_clients[otherId]->death = true;
 						
 							PACKETMANAGER->DeathPacket(otherId);
