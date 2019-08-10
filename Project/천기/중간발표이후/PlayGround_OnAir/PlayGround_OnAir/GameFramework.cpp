@@ -793,8 +793,11 @@ void CGameFramework::ProcessInput()
 			}
 			if (pKeysBuffer[0x45] & 0xF0) //스킬키
 			{
-				PLAYER->GetPlayer()->SetPlayerState(RUN_JUMP_ATTAK);
-				CNETWORK->KeyPkt(false, false, true);
+				if (CNETWORK->GetSkillTime() == 0) {
+					PLAYER->GetPlayer()->SetPlayerState(RUN_JUMP_ATTAK);
+					CNETWORK->KeyPkt(false, false, true);
+					
+				}
 			}
 			//2플레이어
 			//if (pKeysBuffer[VK_HANGUL] & 0xF0)

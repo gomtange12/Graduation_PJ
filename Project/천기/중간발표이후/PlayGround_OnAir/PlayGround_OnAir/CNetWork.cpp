@@ -427,8 +427,13 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	case SC_CLOCK:
 	{
 		sc_packet_clock *pkt = reinterpret_cast<sc_packet_clock *>(ptr);
-		m_time = (int)pkt->clock;
-		//cout << (int)pkt->clock << endl;
+		//여기에 들어오면 1초가 지나서 들어온것
+		//m_time++; 
+		if (m_skilCheck == true) {
+			m_skillTime--;
+			if (m_skillTime == 0)
+				m_skilCheck = false;
+		}
 		break;
 	}
 	case SC_DONA:
@@ -484,6 +489,8 @@ void CNetWork::KeyPkt(bool jump, bool attack, bool skill)
 	pkt->attack = attack;
 	pkt->skill = skill;
 	SendPacket();
+	m_skilCheck = true;
+	m_skillTime = 4;
 }
 void CNetWork::LobbyPkt(bool out)
 {

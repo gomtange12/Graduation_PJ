@@ -60,9 +60,7 @@ void RoomManager::SoloRoomMatch(int id)
 								PACKETMANAGER->IngamePacket(room[i]->m_SoloIds[k], i);
 
 								if (k == 1) {
-									room[i]->clock = 0;
-									std::cout << room[i]->clock << std::endl;
-									dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_CLOCK, i, GetTickCount() + 2000);									
+									dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_CLOCK, i, GetTickCount() + 1000);									
 								}
 							}
 						}
@@ -169,8 +167,7 @@ void RoomManager::TeamRoomMatch(int id)
 								PACKETMANAGER->IngamePacket(room[i]->m_TeamIds[k], i);
 
 								if (k == 3) {
-									room[i]->clock = 0;
-									std::cout << room[i]->clock << std::endl;
+									room[i]->clocking = true;
 									dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_CLOCK, i, GetTickCount() + 1000);
 								}
 							}

@@ -247,6 +247,7 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 
 						PACKETMANAGER->MovePacket(otherId);
 						g_clients[otherId]->hp = g_clients[otherId]->hp - damage;
+						std::cout << g_clients[otherId]->hp << std::endl;
 						PACKETMANAGER->AttackPacKet(otherId);
 						if (g_clients[otherId]->hp == 0) {
 							g_clients[otherId]->death = true;
@@ -312,5 +313,5 @@ void ObjManager::LobbyPkt(int id)
 			}
 		}
 	}
-	
+	ROOMMANAGER->room[roomNum]->clocking = false;
 }
