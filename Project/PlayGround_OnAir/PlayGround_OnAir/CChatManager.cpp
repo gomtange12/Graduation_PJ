@@ -64,7 +64,7 @@ void CChatManager::InputChatting(string str, int cSize)
 	
 	//tstring tstr;
 	//되는버젼1
-		cout << "---maegaelength-------------------------------------" << endl;
+		//cout << "---maegaelength-------------------------------------" << endl;
 	//cout << tt.length() << endl;
 	//cout << tt << endl;
 	string s {str};
@@ -73,8 +73,8 @@ void CChatManager::InputChatting(string str, int cSize)
 	//const char* tempS = tt.c_str();
 	//s = tt.c_str();
 	//copy(tempS[0], tempS[strlen(tempS)], s);
-	cout << "---daeiplength-------------------------------------" << endl;
-	cout << s.length() << endl;
+	//cout << "---daeiplength-------------------------------------" << endl;
+	//cout << s.length() << endl;
 	const char* all = s.c_str();
 	size_t len = strlen(all) + 1;
 	wchar_t* t = new wchar_t[len];
@@ -90,10 +90,9 @@ void CChatManager::InputChatting(string str, int cSize)
 	MultiByteToWideChar(CP_ACP, 0, s.c_str(), s.length(), t, chattingLen);
 	t[chattingLen] = '\0';
 	//n = wcslen(wide_string);
-	cout << "----------------------------------------" << endl;
-	wcout  << (UINT32)wcslen(t) << endl;
-	wcout << t << endl;
-
+	//cout << "----------------------------------------" << endl;
+	//wcout  << (UINT32)wcslen(t) << endl;
+	//
 
 	//cout  << strlen(t) << endl;
 	//wstring a;
@@ -171,7 +170,7 @@ void CChatManager::TextChange(char * pszCode)
 	WideCharToMultiByte(CP_ACP, 0, bstrWide, -1, pszAnsi, nLength, NULL, NULL);
 	SysFreeString(bstrWide);
 
-	cout<<"text trans: " << pszAnsi << endl;
+	//cout<<"text trans: " << pszAnsi << endl;
 	//m_tempchatContainer.emplace_back(make_pair(pszAnsi, nLength));
 
 	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -182,8 +181,8 @@ void CChatManager::TextChange(char * pszCode)
 	//const char* tempS = tt.c_str();
 	//s = tt.c_str();
 	//copy(tempS[0], tempS[strlen(tempS)], s);
-	cout << "---daeiplength-------------------------------------" << endl;
-	cout << s.length() << endl;
+	//cout << "---daeiplength-------------------------------------" << endl;
+	//cout << s.length() << endl;
 	const char* all = s.c_str();
 	size_t len = strlen(all) + 1;
 	wchar_t* t = new wchar_t[len];
@@ -199,11 +198,11 @@ void CChatManager::TextChange(char * pszCode)
 	MultiByteToWideChar(CP_ACP, 0, s.c_str(), s.length(), t, chattingLen);
 	t[chattingLen] = '\0';
 	//n = wcslen(wide_string);
-	cout << "----------------------------------------" << endl;
-	wcout << (UINT32)wcslen(t) << endl;
-	wcout << t << endl;
+	//cout << "----------------------------------------" << endl;
+	////wcout << (UINT32)wcslen(t) << endl;
+	//wcout << t << endl;
 
-	cout << "FINAL TRANS" << t << endl;
+	//cout << "FINAL TRANS" << t << endl;
 	m_chatContainer.emplace_back(make_pair(t, (UINT32)wcslen(t)));
 
 }

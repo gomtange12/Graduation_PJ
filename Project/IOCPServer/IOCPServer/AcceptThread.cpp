@@ -48,13 +48,13 @@ void AcceptThread::Proc()
 		ZeroMemory(&clientAddr, sizeof(SOCKADDR_IN));
 
 		clientSocket = WSAAccept(listenSocket, reinterpret_cast<sockaddr *>(&clientAddr), &addrLen, NULL, NULL);
-		std::cout << "Client Accept NUMBER -> : " << USER_NUM++ << std::endl;
+		//std::cout << "Client Accept NUMBER -> : " << USER_NUM++ << std::endl;
 		int flag = 1;
 		setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int));
 	
 		if (clientSocket == INVALID_SOCKET)
 		{
-			std::cout << "Error - Accept Failure\n";
+			//std::cout << "Error - Accept Failure\n";
 			exit(1);
 		}
 
@@ -68,7 +68,7 @@ void AcceptThread::Proc()
 			}
 
 		if (-1 == id) {
-			std::cout << " ==MAX USER== \n";
+			//std::cout << " ==MAX USER== \n";
 			closesocket(clientSocket);
 			continue;
 		}

@@ -30,17 +30,17 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 {
 	if (packet[1] == CS_MATCHING_PLAYER)
 	{
-		std::cout << "Machig Request --- " << std::endl;
+		//std::cout << "Machig Request --- " << std::endl;
 
 		cs_packet_matching *match = reinterpret_cast<cs_packet_matching *>(packet);
 		g_clients[id]->avatar = match->avatar;
 		g_clients[id]->map = match->map;
 		g_clients[id]->mod = match->mod;
 
-		std::cout << "ID : " << id << std::endl;
-		std::cout << "Avatar : " << g_clients[id]->avatar << std::endl;
-		std::cout << "Map : " << g_clients[id]->map << std::endl;
-		std::cout << "Mod : " << g_clients[id]->mod << std::endl;
+		//std::cout << "ID : " << id << std::endl;
+		//std::cout << "Avatar : " << g_clients[id]->avatar << std::endl;
+		//std::cout << "Map : " << g_clients[id]->map << std::endl;
+		//std::cout << "Mod : " << g_clients[id]->mod << std::endl;
 
 		switch (g_clients[id]->map)
 		{
@@ -55,7 +55,7 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 			break;
 		}
 		default:
-			std::wcout << "잘못된 매칭 정보입니다\n";
+			//std::wcout << "잘못된 매칭 정보입니다\n";
 			break;
 		}
 	}
@@ -115,7 +115,7 @@ void ObjManager::ModMatch(int id)
 		break;
 	}
 	default:
-		std::wcout << L"정의되지 않은 패킷 도착!!\n";
+		//std::wcout << L"정의되지 않은 패킷 도착!!\n";
 		break;
 	}
 	
@@ -253,7 +253,7 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 
 						PACKETMANAGER->MovePacket(otherId);
 						g_clients[otherId]->hp = g_clients[otherId]->hp - damage;
-						std::cout << g_clients[otherId]->hp << std::endl;
+						//std::cout << g_clients[otherId]->hp << std::endl;
 						PACKETMANAGER->AttackPacKet(otherId);
 						if (g_clients[otherId]->hp == 0) {
 							g_clients[otherId]->death = true;

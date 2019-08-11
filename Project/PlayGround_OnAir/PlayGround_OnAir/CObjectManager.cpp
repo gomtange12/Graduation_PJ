@@ -72,7 +72,7 @@ void CObjectManager::LoadPlayerResource(ID3D12Device *pd3dDevice, ID3D12Graphics
 	CLoadedModelInfo* keyBoardResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
 	CLoadedModelInfo* DrumResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);
 	CLoadedModelInfo* vocalResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
-	CLoadedModelInfo* bassResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);
+	CLoadedModelInfo* bassResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/basstest2.bin", NULL, true);
 
 	CLoadedModelInfo* otherGuitarResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/guitarTest2.bin", NULL, true);
 	CLoadedModelInfo* otherKeyBoardResource = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/KeyT2.bin", NULL, true);

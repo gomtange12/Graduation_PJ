@@ -53,23 +53,23 @@ void CPlayer::MakeEffect(E_CHARACTERTYPE type)
 	{
 	case BASS:
 		effectPos =  FindFrame("BassGuitar_cl")->GetPosition();
-		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case GUITAR:
 		effectPos = FindFrame("ElectricGuitar_st")->GetPosition();
-		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case KEYBOARD:
 		effectPos = FindFrame("keytar")->GetPosition();
-		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case DRUM:
 		effectPos = FindFrame("DKFYB_drumstick")->GetPosition();
-		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case VOCAL:
 		effectPos = FindFrame("BoomMic_Cylinder")->GetPosition();
-		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case NONECHARACTER:
 		break;
@@ -1069,7 +1069,7 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	else if (type == DRUM)
 		pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);
 	else if (type == BASS)
-		pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);
+		pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest2.bin", NULL, true);
 	else if (type == VOCAL)
 		pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
 	
@@ -1279,14 +1279,14 @@ void COtherPlayers::SetPlayerCharacter(bool isTeam, E_CHARACTERTYPE type, int nu
 {
 
 
-	cout << "num은: " << num << endl;
+	//cout << "num은: " << num << endl;
 	//iter2 += type;
-	cout<<"들어온 타입" << type << endl;
+	//cout<<"들어온 타입" << type << endl;
 	if (isTeam)
 	{
 		//vector<COtherPlayers*>::pointer ptr = PLAYER->m_pTeamPlayerMap()[num];
 		
-		cout <<"전"<< PLAYER->m_pTeamPlayerMap[num] << endl;
+		//cout <<"전"<< PLAYER->m_pTeamPlayerMap[num] << endl;
 		XMFLOAT3 xmPos = PLAYER->m_pTeamPlayerMap[num]->GetPosition();
 		int clientNum = PLAYER->m_pTeamPlayerMap[num]->GetClientNum();
 		E_CHARACTERTYPE type = PLAYER->m_pTeamPlayerMap[num]->GetCharacterType();
@@ -1300,7 +1300,7 @@ void COtherPlayers::SetPlayerCharacter(bool isTeam, E_CHARACTERTYPE type, int nu
 		PLAYER->m_pTeamPlayerMap[num]->SetScale(XMFLOAT3(60, 60, 60));
 
 		//cout << *ptr << "team포인터: " << PLAYER->GetTeamPlayerMap()[num] << endl;
-		cout <<"후"<< PLAYER->m_pTeamPlayerMap[num] << endl;
+		//cout <<"후"<< PLAYER->m_pTeamPlayerMap[num] << endl;
 
 		//CLoadedModelInfo* pModel{ nullptr };
 		//pModel = PLAYER->GetOtherModelResourceFromPool(num, type, isTeam);
@@ -1327,7 +1327,7 @@ void COtherPlayers::SetPlayerCharacter(bool isTeam, E_CHARACTERTYPE type, int nu
 	}
 	else
 	{
-		cout << "전" << PLAYER->m_pOtherPlayerMap[num] << endl;
+		//cout << "전" << PLAYER->m_pOtherPlayerMap[num] << endl;
 		XMFLOAT3 xmPos = PLAYER->m_pOtherPlayerMap[num]->GetPosition();
 		int clientNum = PLAYER->m_pOtherPlayerMap[num]->GetClientNum();
 		E_CHARACTERTYPE type = PLAYER->m_pOtherPlayerMap[num]->GetCharacterType();
@@ -1339,7 +1339,7 @@ void COtherPlayers::SetPlayerCharacter(bool isTeam, E_CHARACTERTYPE type, int nu
 		PLAYER->m_pOtherPlayerMap[num]->SetScale(XMFLOAT3(60, 60, 60));
 
 		//cout << *ptr << "team포인터: " << PLAYER->GetTeamPlayerMap()[num] << endl;
-		cout << "후" << PLAYER->m_pOtherPlayerMap[num] << endl;
+		//cout << "후" << PLAYER->m_pOtherPlayerMap[num] << endl;
 
 
 		//CLoadedModelInfo* pModel{ nullptr };

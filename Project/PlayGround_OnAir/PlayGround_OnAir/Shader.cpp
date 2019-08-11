@@ -2056,7 +2056,7 @@ void CPlayerEffectUIShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, 
 	OnPrepareRender(pd3dCommandList, 0);
 	CShader::Render(pd3dCommandList, pCamera);
 	if (m_pd3dPipelineState) pd3dCommandList->SetPipelineState(m_pd3dPipelineState);
-	else { cout << "¾ø" << endl; }
+	//else { cout << "¾ø" << endl; }
 
 	for (int i = 0; i < m_nObjects; ++i)
 	{

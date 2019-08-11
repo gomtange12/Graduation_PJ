@@ -50,7 +50,7 @@ CGameFramework::CGameFramework()
 	{
 		//m_rcTextRectForChat[i] = D2D1::RectF(0, 0, szRenderTarget.width * 1.5, szRenderTarget.height * (0.5 - (0.12 * i)));
 		//m_rcTextRectForChat[i] = D2D1::RectF(FRAME_BUFFER_WIDTH - 150, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT * 2 - (30 * i));
-		m_rcTextRectForChat[i] = D2D1::RectF(0, 0, FRAME_BUFFER_WIDTH * 0.4, FRAME_BUFFER_HEIGHT * 2 - (30 * i));
+		m_rcTextRectForChat[i] = D2D1::RectF(0, 0, FRAME_BUFFER_WIDTH * 0.3, FRAME_BUFFER_HEIGHT * 2 - (30 * i));
 
 		//std::cout << i << "i: left: " << m_rcTextRectForChat[i].left << " , right" << m_rcTextRectForChat[i].right << " , top" << m_rcTextRectForChat[i].top
 		//	<< " , bottom" << m_rcTextRectForChat[i].bottom << endl;
@@ -418,7 +418,7 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 			::GetCursorPos(&m_LeftCursorPos);
 			::ScreenToClient(hWnd, &m_LeftCursorPos);
 
-			std::cout <<"º¯È¯ÀücursorPos: "<< m_LeftCursorPos.x << ", " << m_LeftCursorPos.y << endl;
+			//std::cout <<"º¯È¯ÀücursorPos: "<< m_LeftCursorPos.x << ", " << m_LeftCursorPos.y << endl;
 			
 
 			if (SCENEMANAGER->GetSceneType() == MENUSCENE)
@@ -434,7 +434,7 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 					if (mode == SOLO || mode == SQUAD)
 					{
 						CNETWORK->mod = mode;
-						cout << "¸ðµå: " << CNETWORK->mod << endl;
+						//cout << "¸ðµå: " << CNETWORK->mod << endl;
 					}
 				}
 
@@ -443,7 +443,7 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 				if (state == PLAYGROUNDMAP || state == CONCERTMAP)
 				{
 					CNETWORK->map = state;
-					cout << "¸Ê: " << CNETWORK->map << endl;
+					//cout << "¸Ê: " << CNETWORK->map << endl;
 				}
 				//E_CHARACTERTYPE type = PLAYER->CheckSceneCharacter(m_LeftCursorPos.x, m_LeftCursorPos.y);
 				//PLAYER->SetCharacterArray(type, num);
@@ -453,7 +453,7 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 					type = PLAYER->CheckSceneCharacter(m_LeftCursorPos);
 					if (type == BASS || type == GUITAR || type == KEYBOARD || type == VOCAL || type == DRUM)
 					{
-						cout << " character type!" << type << endl;
+						//cout << " character type!" << type << endl;
 						PLAYER->ChangePlayer(type, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 						PLAYER->GetPlayer()->SetPosition(XMFLOAT3(2560, 10, 1745));//XMFLOAT3(380.0f, SCENEMANAGER->m_MapList[INGAME]->m_pTerrain->GetHeight(380.0f, 680.0f), 680.0f));
 						
@@ -531,7 +531,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 						CNETWORK->MatchPkt();
 						
 						//m_pCamera = PLAYER->GetPlayer()->GetCamera();
-						cout << "¸ÅÄª!";
+						//cout << "¸ÅÄª!";
 						m_ready = true;
 					}
 					break;
