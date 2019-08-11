@@ -751,7 +751,7 @@ void CGameFramework::ProcessInput()
 	if (GetKeyboardState(pKeysBuffer) && m_pScene)
 		bProcessedByScene = m_pScene->ProcessInput(pKeysBuffer);
 
-	if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::DEATH || PLAYER->GetPlayer()->GetPlayerState() != PlayerState::HAPPY || PLAYER->GetPlayer()->GetPlayerState() != PlayerState::SAD) {
+	if (PLAYER->GetPlayer()->GetPlayerState() != PlayerState::DEATH && PLAYER->GetPlayer()->GetPlayerState() != PlayerState::HAPPY && PLAYER->GetPlayer()->GetPlayerState() != PlayerState::SAD) {
 		if (!bProcessedByScene || PLAYER->GetPlayer()->GetAllowKey() || PLAYER->GetOtherPlayer()->GetAllowKey())
 		{
 			if (pKeysBuffer[VK_RSHIFT] & 0xF0)

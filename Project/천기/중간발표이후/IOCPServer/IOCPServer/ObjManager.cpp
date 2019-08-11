@@ -86,6 +86,11 @@ void ObjManager::ProcessPacket(int id, unsigned char *packet)
 		//LobbyPkt(id, packet);
 		break;
 	}
+	case CS_TIME_OUT:
+	{
+		TimeOut(id);
+		break;
+	}
 	default:
 		break;
 	}
@@ -225,9 +230,10 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 				g_clients[otherId]->m_xmOOBB.Center = XMFLOAT3(g_clients[otherId]->m_xmf3Position.x, g_clients[otherId]->m_xmf3Position.y, g_clients[otherId]->m_xmf3Position.z);
 
 				PACKETMANAGER->MovePacket(otherId);
-				g_clients[otherId]->hp = g_clients[otherId]->hp-damage;
+				g_clients[otherId]->hp = g_clients[otherId]->hp - damage;
 				PACKETMANAGER->AttackPacKet(otherId);
 				if (g_clients[otherId]->hp == 0) {
+					g_clients[otherId]->lose = true;
 					PACKETMANAGER->DeathPacket(otherId);
 					PACKETMANAGER->ResultPacket(otherId);
 					dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(otherId, OP_LOBBY, roomNum, GetTickCount() + 4000);
@@ -314,4 +320,19 @@ void ObjManager::LobbyPkt(int id)
 		}
 	}
 	ROOMMANAGER->room[roomNum]->clocking = false;
+}
+void ObjManager::TimeOut(int id) {
+	int roomNum = g_clients[id]->roomNumber;
+	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+		for (int i = 0; i < SOLO_RNUM; ++i) {
+			g_clients[ROOMMANAGER->room[roomNum]->m_SoloIds[i]]->lose = true;
+		}
+	}
+	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+		for (int i = 0; i < TEAM_RNUM; ++i) {
+			g_clients[ROOMMANAGER->room[roomNum]->m_TeamIds[i]]->lose = true;
+		}
+	}
+	PACKETMANAGER->ResultPacket(id);
+	dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_LOBBY, roomNum, GetTickCount() + 4000);
 }

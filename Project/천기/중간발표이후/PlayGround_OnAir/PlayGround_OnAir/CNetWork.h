@@ -63,4 +63,5 @@ public:
 	
 	void KeyPkt(bool jump, bool attack, bool skill);
 	void LobbyPkt(bool out);
+	void TimeOut();
 };

@@ -114,9 +114,9 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[0]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
 					PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(IDLE);
 					if (i == 0)
-						PLAYER->GetPlayer()->teamNum = BLUETEAM;
+						PLAYER->GetOtherPlayerMap()[0]->teamNum = BLUETEAM;
 					else
-						PLAYER->GetPlayer()->teamNum = REDTEAM;
+						PLAYER->GetOtherPlayerMap()[0]->teamNum = REDTEAM;
 				}
 			}
 		}
@@ -433,7 +433,13 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_clock *pkt = reinterpret_cast<sc_packet_clock *>(ptr);
 		//여기에 들어오면 1초가 지나서 들어온것
-		//m_time++; 
+		m_time++;
+		cout << m_time << endl;
+		if (m_time == 300) {
+			TimeOut();
+			m_time = 0;
+		}
+
 		if (m_skilCheck == true) {
 			m_skillTime--;
 			if (m_skillTime == 0)
@@ -502,6 +508,14 @@ void CNetWork::LobbyPkt(bool out)
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_LOBBY_OUT;
+
+	SendPacket();
+}
+void CNetWork::TimeOut() {
+	cs_packet_time_out  *pkt = reinterpret_cast<cs_packet_time_out *>(send_buffer);
+	send_wsabuf.len = sizeof(pkt);
+	pkt->size = sizeof(pkt);
+	pkt->type = CS_TIME_OUT;
 
 	SendPacket();
 }

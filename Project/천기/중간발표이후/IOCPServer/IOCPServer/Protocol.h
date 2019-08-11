@@ -43,6 +43,7 @@ constexpr int CS_MOVE_STATE_INFO = 10;
 constexpr int CS_ROTE_STATE_INFO = 12;
 constexpr int CS_KEY_INFO = 13;
 constexpr int CS_LOBBY_OUT = 16;
+constexpr int CS_TIME_OUT = 23;
 #pragma pack (push, 1)
 
 //////////////////////¼­¹ö/////////////////////////
@@ -181,4 +182,8 @@ struct cs_packet_lobby_out {
 	BYTE size;
 	BYTE type;
 }; 
+struct cs_packet_time_out {
+	BYTE size;
+	BYTE type;
+};
 #pragma pack(pop)
