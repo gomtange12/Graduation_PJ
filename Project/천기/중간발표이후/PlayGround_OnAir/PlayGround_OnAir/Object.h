@@ -367,7 +367,7 @@ class CGameObject
 {
 private:
 	int								m_nReferences = 0;
-	int								m_Hp;
+	int								m_Hp=8;
 protected:
 	static CGameObject* AllObjectList[MAXOBJECTNUM];
 	static unsigned long ObjIndex;

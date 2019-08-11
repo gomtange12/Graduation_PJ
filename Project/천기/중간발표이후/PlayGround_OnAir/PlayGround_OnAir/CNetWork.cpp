@@ -330,22 +330,24 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	}
 	case SC_ATTACK_INFO: {
 		sc_packet_attack *pkt = reinterpret_cast<sc_packet_attack *>(ptr);
-		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
-			PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
-			PLAYER->GetPlayer()->SetHp(pkt->hp);
-			break;
-		}
-		for (int i = 0; i < 2; ++i) {
-			if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
-				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
-				PLAYER->GetOtherPlayerMap()[i]->SetHp(pkt->hp);
+		if (pkt->hp >= 0) {
+			if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
+				PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
+				PLAYER->GetPlayer()->SetHp(pkt->hp);
 				break;
 			}
-			else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
-				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
-				PLAYER->GetTeamPlayerMap()[i]->SetHp(pkt->hp);
-				break;
+			for (int i = 0; i < 2; ++i) {
+				if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
+					PLAYER->GetOtherPlayerMap()[i]->SetHp(pkt->hp);
+					break;
+				}
+				else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
+					PLAYER->GetTeamPlayerMap()[i]->SetHp(pkt->hp);
+					break;
 
+				}
 			}
 		}
 		break;
@@ -360,6 +362,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 			PLAYER->GetPlayer()->SetPlayerState(IDLE);
 			PLAYER->GetPlayer()->SetClientNum(-1);
 			PLAYER->GetPlayer()->NumberByPos(SPAWN);
+			PLAYER->GetPlayer()->SetHp(8);
 			for (int i = 0; i < 2; ++i) {
 				PLAYER->GetOtherPlayerMap()[i]->m_match = false;
 				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::IDLE);
@@ -369,6 +372,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				PLAYER->GetOtherPlayerMap()[i]->SetClientNum(-1);
 				PLAYER->GetTeamPlayerMap()[i]->NumberByPos(SPAWN);
 				PLAYER->GetOtherPlayerMap()[i]->NumberByPos(SPAWN);
+				PLAYER->GetTeamPlayerMap()[i]->SetHp(8);
+				PLAYER->GetOtherPlayerMap()[i]->SetHp(8);
 			}
 			CNetCGameFramework->m_ready = false;
 
@@ -489,8 +494,7 @@ void CNetWork::KeyPkt(bool jump, bool attack, bool skill)
 	pkt->attack = attack;
 	pkt->skill = skill;
 	SendPacket();
-	m_skilCheck = true;
-	m_skillTime = 4;
+
 }
 void CNetWork::LobbyPkt(bool out)
 {

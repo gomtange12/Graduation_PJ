@@ -41,6 +41,7 @@ public:
 	int GetSkillTime() { return m_skillTime; }
 	void SetSkillTime(int time) { m_skillTime = time; }
 	void SetSkillCheck(bool check) { m_skilCheck = check; }
+	bool GetSkillCheck() { return m_skilCheck; }
 	ModNumber mod = SQUAD;
 	SceneState map = PLAYGROUNDMAP;
 	int myid;
@@ -50,7 +51,7 @@ public:
 
 	void SetGameFrameWork(CGameFramework* CGFramwork) { CNetCGameFramework = CGFramwork; };
 	bool GetCheckPkt() { return m_isCheckPkt; }
-	
+
 	bool GetFirstCheck() const { return firstCheck; }
 	void MakeServer(const HWND& hWnd);
 	void SendPacket();
