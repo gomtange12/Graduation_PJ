@@ -16,6 +16,20 @@ cbuffer cbHpInfo : register(b9)
 	int hpRatio : packoffset(c0);
 };
 
+cbuffer cboneClock : register(b11)
+{
+	int oneSec : packoffset(c0);
+
+};
+cbuffer cbTenClock : register(b12)
+{
+	int teneSec : packoffset(c0);
+};
+cbuffer cbHunClock : register(b13)
+{
+	int hunSec : packoffset(c0);
+};
+
 cbuffer cbSkillCoolDownInfo : register(b10)
 {
 	int coolDown : packoffset(c0);
@@ -251,12 +265,12 @@ VS_TEXTURED_OUTPUT VSTimeBarTextured(uint nVertexID : SV_VertexID)
 	if (nVertexID == 5) { output.position = float4(-1.0f, +0.5f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
 	*/
 	//È­¸é ÀüÃ¼
-	if (nVertexID == 0) { output.position = float4(-0.3f, +0.95f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
-	if (nVertexID == 1) { output.position = float4(+0.3f, +0.95f, 0.0f, 1.0f); output.uv = float2(1.f, 0.f); }
-	if (nVertexID == 2) { output.position = float4(+0.3f, +0.8f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
-	if (nVertexID == 3) { output.position = float4(-0.3f, +0.95f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
-	if (nVertexID == 4) { output.position = float4(+0.3f, +0.8f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
-	if (nVertexID == 5) { output.position = float4(-0.3f, +0.8f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
+	if (nVertexID == 0) { output.position = float4(-0.3f, +0.75f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
+	if (nVertexID == 1) { output.position = float4(+0.3f, +0.75f, 0.0f, 1.0f); output.uv = float2(1.f, 0.f); }
+	if (nVertexID == 2) { output.position = float4(+0.3f, +0.65f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+	if (nVertexID == 3) { output.position = float4(-0.3f, +0.75f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
+	if (nVertexID == 4) { output.position = float4(+0.3f, +0.65f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+	if (nVertexID == 5) { output.position = float4(-0.3f, +0.65f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
 
 	return output;
 
@@ -440,3 +454,68 @@ float4 PSSkillCoolTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //ÇÈ¼¿½¦ÀÌ´õ
 
 }
 
+VS_TEXTURED_OUTPUT VSOneSecTextured(uint nVertexID : SV_VertexID)
+{
+	//VS_TEXTURED_OUTPUT output;
+
+	VS_TEXTURED_OUTPUT output;
+	if (nVertexID == 0) { output.position = float4(0.1f, 0.95f, 0.0f, 1.0f); output.uv = float2(0.1f * oneSec, 0.f);}
+	if (nVertexID == 1) { output.position = float4(0.3f, 0.95f, 0.0f, 1.0f); output.uv = float2(0.1 + (0.1f * oneSec), 0.f); }
+	if (nVertexID == 2) { output.position = float4(0.3f, 0.75f, 0.0f, 1.0f); output.uv = float2(0.1 + (0.1f * oneSec), 1.f); }
+	if (nVertexID == 3) { output.position = float4(0.1f, 0.95f, 0.0f, 1.0f); output.uv = float2(0.1f * oneSec, 0.f); }
+	if (nVertexID == 4) { output.position = float4(0.3f, 0.75f, 0.0f, 1.0f); output.uv = float2(0.1 + (0.1f * oneSec), 1.f); }
+	if (nVertexID == 5) { output.position = float4(0.1f, 0.75f, 0.0f, 1.0f); output.uv = float2(0.1 * oneSec, 1.f); }
+	return output;
+}
+VS_TEXTURED_OUTPUT VSTenSecTextured(uint nVertexID : SV_VertexID)
+{
+	//VS_TEXTURED_OUTPUT output;
+
+	VS_TEXTURED_OUTPUT output;
+	if (nVertexID == 0) { output.position = float4(-0.1f, 0.95f, 0.0f, 1.0f); output.uv = float2(0.1f * teneSec, 0.f);}
+	if (nVertexID == 1) { output.position = float4(0.1f, 0.95f, 0.0f, 1.0f); output.uv = float2(0.1 + (0.1f * teneSec), 0.f); }
+	if (nVertexID == 2) { output.position = float4(0.1f, 0.75f, 0.0f, 1.0f); output.uv = float2(0.1 + (0.1f * teneSec), 1.f); }
+	if (nVertexID == 3) { output.position = float4(-0.1f, 0.95f, 0.0f, 1.0f); output.uv = float2(0.1f * teneSec, 0.f); }
+	if (nVertexID == 4) { output.position = float4(0.1f, 0.75f, 0.0f, 1.0f); output.uv = float2(0.1 + (0.1f * teneSec), 1.f); }
+	if (nVertexID == 5) { output.position = float4(-0.1f, 0.75f, 0.0f, 1.0f); output.uv = float2(0.1 * teneSec, 1.f); }
+	return output;
+}
+VS_TEXTURED_OUTPUT VSHundredSecTextured(uint nVertexID : SV_VertexID)
+{
+	VS_TEXTURED_OUTPUT output;
+	if (nVertexID == 0) { output.position = float4(-0.3f, 0.95f, 0.0f, 1.0f); output.uv = float2(0.1f * hunSec, 0.f); }
+	if (nVertexID == 1) { output.position = float4(-0.1f, 0.95f, 0.0f, 1.0f); output.uv = float2(0.1 + (0.1f * hunSec), 0.f); }
+	if (nVertexID == 2) { output.position = float4(-0.1f, 0.75f, 0.0f, 1.0f); output.uv = float2(0.1 + (0.1f * hunSec), 1.f); }
+	if (nVertexID == 3) { output.position = float4(-0.3f, 0.95f, 0.0f, 1.0f); output.uv = float2(0.1f * hunSec, 0.f); }
+	if (nVertexID == 4) { output.position = float4(-0.1f, 0.75f, 0.0f, 1.0f); output.uv = float2(0.1 + (0.1f * hunSec), 1.f); }
+	if (nVertexID == 5) { output.position = float4(-0.3f, 0.75f, 0.0f, 1.0f); output.uv = float2(0.1 * hunSec, 1.f); }
+	return output;
+}
+float4 PSClockTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //ÇÈ¼¿½¦ÀÌ´õ 
+{
+
+	float4 cColor = gtxtUITexture.Sample(gSamplerState, input.uv);
+
+	if (cColor.a < 0.1) discard;
+	return(cColor);
+
+}
+//
+//float4 PSOneSecTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //ÇÈ¼¿½¦ÀÌ´õ 
+//{
+//
+//	float4 cColor = gtxtUITexture.Sample(gSamplerState, input.uv);
+//
+//	if (cColor.a < 0.1) discard;
+//	return(cColor);
+//
+//}
+//float4 PSTenSceTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //ÇÈ¼¿½¦ÀÌ´õ 
+//{
+//
+//	float4 cColor = gtxtUITexture.Sample(gSamplerState, input.uv);
+//
+//	if (cColor.a < 0.1) discard;
+//	return(cColor);
+//
+//}

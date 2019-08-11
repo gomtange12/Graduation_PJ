@@ -248,7 +248,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 	//m_pPlayGroundTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 
-	m_nShaders = 13;
+	m_nShaders = 15;
 	m_ppShaders = new CShader*[m_nShaders];
 
 	/*CHellicopterObjectsShader *pHellicopterObjectsShader = new CHellicopterObjectsShader();
@@ -326,11 +326,26 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	psSkillCoolUIShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	m_ppShaders[11] = psSkillCoolUIShader;
 
-	CSkillEffectUIShader *pEffectUIShader = new CSkillEffectUIShader();
-	pEffectUIShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	pEffectUIShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
-	m_ppShaders[12] = pEffectUIShader;
-	/*CTexturedShader* pTexturedShader = new CTexturedShader();
+	
+
+	CTimerUIShader *pHunSecShader = new CTimerUIShader();
+	pHunSecShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pHunSecShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
+	pHunSecShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	m_ppShaders[12] = pHunSecShader;
+
+	CTenSecShader *pTenSecShader = new CTenSecShader();
+	pTenSecShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pTenSecShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
+	pTenSecShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	m_ppShaders[13] = pTenSecShader;
+
+	COneSecUIShader *pOneSecShader = new COneSecUIShader();
+	pOneSecShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pOneSecShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
+	pOneSecShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	m_ppShaders[14] = pOneSecShader;
+	/*CTexturedShader* pOneSecShader = new CTexturedShader();
 	pTexturedShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	pTexturedShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
 	m_ppShaders[7] = pTexturedShader;*/
@@ -1369,11 +1384,7 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dRootParameters[9].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[6]);
 	pd3dRootParameters[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-	pd3dRootParameters[10].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pd3dRootParameters[10].DescriptorTable.NumDescriptorRanges = 1;
-	pd3dRootParameters[10].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[7]);
-	pd3dRootParameters[10].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
+	
 	pd3dRootParameters[11].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pd3dRootParameters[11].Descriptor.ShaderRegister = 7; //Skinned Bone Offsets
 	pd3dRootParameters[11].Descriptor.RegisterSpace = 0;
@@ -1384,10 +1395,10 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dRootParameters[12].Descriptor.RegisterSpace = 0;
 	pd3dRootParameters[12].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 
-	pd3dRootParameters[13].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	/*pd3dRootParameters[13].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	pd3dRootParameters[13].DescriptorTable.NumDescriptorRanges = 1;
 	pd3dRootParameters[13].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[8]);
-	pd3dRootParameters[13].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	pd3dRootParameters[13].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;*/
 
 	pd3dRootParameters[14].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	pd3dRootParameters[14].DescriptorTable.NumDescriptorRanges = 1;
@@ -1420,9 +1431,21 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dRootParameters[19].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 	pd3dRootParameters[20].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	pd3dRootParameters[20].Descriptor.ShaderRegister = 11; //Display Players' CharacterType
+	pd3dRootParameters[20].Descriptor.ShaderRegister = 11; //timer
 	pd3dRootParameters[20].Descriptor.RegisterSpace = 0;
 	pd3dRootParameters[20].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	
+	pd3dRootParameters[13].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pd3dRootParameters[13].Descriptor.ShaderRegister = 12; //tEN
+	pd3dRootParameters[13].Descriptor.RegisterSpace = 0;
+	
+	pd3dRootParameters[13].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	pd3dRootParameters[10].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pd3dRootParameters[10].Descriptor.ShaderRegister = 13; //HUN1
+	pd3dRootParameters[10].Descriptor.RegisterSpace = 0;
+	pd3dRootParameters[10].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
 	D3D12_STATIC_SAMPLER_DESC pd3dSamplerDescs[2];
 
 	pd3dSamplerDescs[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
@@ -1743,20 +1766,21 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		}
 		if (m_ppShaders[9]) 
 		{
-			m_ppShaders[9]->UpdateShaderVariables(pd3dCommandList);
-			m_ppShaders[9]->Render(pd3dCommandList, pCamera);
+			if (PLAYER->GetPlayer()->isHeartRender())
+			{
+
+				m_ppShaders[9]->UpdateShaderVariables(pd3dCommandList);
+				m_ppShaders[9]->Render(pd3dCommandList, pCamera);
+			}
+	
 		}
-		if (m_ppShaders[11])
+		for(int i =  11; i < 15;++i)
 		{
-			m_ppShaders[11]->UpdateShaderVariables(pd3dCommandList);
-			m_ppShaders[11]->Render(pd3dCommandList, pCamera);
+			m_ppShaders[i]->UpdateShaderVariables(pd3dCommandList);
+			m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 		}
 
-		if (m_ppShaders[12])
-		{	
-			m_ppShaders[12]->UpdateShaderVariables(pd3dCommandList);
-			m_ppShaders[12]->Render(pd3dCommandList, pCamera);
-		}
+	
 		//if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(pd3dCommandList, pCamera);
 		////if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
 		////cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
@@ -1817,18 +1841,20 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		}
 		if (m_ppShaders[9])
 		{
-			m_ppShaders[9]->UpdateShaderVariables(pd3dCommandList);
-			m_ppShaders[9]->Render(pd3dCommandList, pCamera);
+			
+			if (PLAYER->GetPlayer()->isHeartRender())
+			{
+				m_ppShaders[9]->UpdateShaderVariables(pd3dCommandList);
+				m_ppShaders[9]->Render(pd3dCommandList, pCamera);
+			}
 		}
-		if (m_ppShaders[11])
+		for (int i = 11; i < m_nShaders; ++i)
 		{
-			m_ppShaders[11]->UpdateShaderVariables(pd3dCommandList);
-			m_ppShaders[11]->Render(pd3dCommandList, pCamera);
-		}
-		if (m_ppShaders[12])
-		{
-			//m_ppShaders[12]->UpdateShaderVariables(pd3dCommandList);
-			m_ppShaders[12]->Render(pd3dCommandList, pCamera);
+			if (m_ppShaders[i])
+			{
+				m_ppShaders[i]->UpdateShaderVariables(pd3dCommandList);
+				m_ppShaders[i]->Render(pd3dCommandList, pCamera);
+			}
 		}
 		//if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(pd3dCommandList, pCamera);
 		//if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);

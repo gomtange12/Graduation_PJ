@@ -4,6 +4,16 @@
 #include "CTempScene.h"
 #include "Scene.h"
 #include "GameFramework.h"
+void CSceneManager::SetColock()
+{
+	if (m_Gameclock > 0) m_Gameclock -= 1;
+
+	//cout<<"gameClock" << m_Gameclock << endl;
+	m_hunSec = m_Gameclock / 100;
+
+	m_tenSec = (m_Gameclock % 100) / 10;
+	m_oneSec = m_Gameclock % 10;
+}
 ModNumber CSceneManager::CheckModeButton(const POINT & pos)
 {
 	XMFLOAT2 cursorpos{ 2.0f * (static_cast<float>(pos.x) / static_cast<float>(FRAME_BUFFER_WIDTH)) - 1.0f
@@ -53,7 +63,7 @@ SceneState CSceneManager::CheckMapButton(const POINT & pos)
 CSceneManager::CSceneManager()
 {
 	m_pTempScene = NULL;// std::make_shared<CTempScene>();
-	
+	m_Gameclock = 300;
 	
 }
 

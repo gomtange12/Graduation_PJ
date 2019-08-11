@@ -793,8 +793,12 @@ void CGameFramework::ProcessInput()
 			}
 			if (pKeysBuffer[0x45] & 0xF0) //스킬키
 			{
-				PLAYER->GetPlayer()->SetPlayerState(ATTACK_3);
-				CNETWORK->KeyPkt(false, false, true);
+				if (CNETWORK->GetSkillCheck() == false) {
+					PLAYER->GetPlayer()->SetPlayerState(ATTACK_3);
+					CNETWORK->KeyPkt(false, false, true);
+					CNETWORK->SetSkillCheck(true);
+					CNETWORK->SetSkillTime(4);
+				}
 			}
 			//2플레이어
 			//if (pKeysBuffer[VK_HANGUL] & 0xF0)
@@ -1049,20 +1053,27 @@ void CGameFramework::FrameAdvance()
 
 	if (PLAYER->GetPlayer() != NULL)
 	{
-		PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
+		if(PLAYER->GetPlayer()->GetHP() > 0)
+			PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
 	/*	PLAYER->GetPlayer()->m_EffectObj->SetShader(m_pScene->m_ppShaders[12]);
 		PLAYER->GetPlayer()->m_EffectObj->UpdateShaderVariable(m_pd3dCommandList, &PLAYER->GetPlayer()->m_xmf4x4World);
 		PLAYER->GetPlayer()->m_EffectObj->Render(m_pd3dCommandList, m_pCamera);*/
 	}
 		if (PLAYER->m_pOtherPlayerMap.size() > 0)
 	{
-		for (auto&& p : PLAYER->m_pOtherPlayerMap)
-			p->Render(m_pd3dCommandList, m_pCamera);
+			for (auto&& p : PLAYER->m_pOtherPlayerMap)
+			{
+				if(p->GetHP() > 0)
+					p->Render(m_pd3dCommandList, m_pCamera);
+			}
 	}
 	if (PLAYER->m_pTeamPlayerMap.size() > 0)
 	{
 		for (auto&& p : PLAYER->m_pTeamPlayerMap)
-			p->Render(m_pd3dCommandList, m_pCamera);
+		{
+			if (p->GetHP() > 0)
+				p->Render(m_pd3dCommandList, m_pCamera);
+		}
 	}
 	if (m_pScene)
 	{

@@ -16,6 +16,38 @@ struct UI_Data
 	XMFLOAT4X4 m_xmf4x4Transform;
 	XMFLOAT2 m_uvCoord;
 };
+struct CB_CLOCK_INFO 
+{
+	int oneSec;
+};
+struct CB_TEN_INFO
+{
+	int tenSec;
+};
+struct CB_HUN_INFO
+{
+	int hunSec;
+};
+//struct CB_ONE_INFO
+//{
+//	int oneSec;
+//	//int tenSec;
+//	//int hunSec;
+//};
+//
+//struct CB_TENN_INFO
+//{
+////	int oneSec;
+//	int tenSec;
+//	//int hunSec;
+//};
+//struct CB_HUN_INFO
+//{
+//	//int oneSec;
+//	//int tenSec;
+//	int hunSec;
+//};
+
 
 struct CB_HP_INFO
 {
@@ -411,24 +443,45 @@ public:
 //	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 //
 //};
-class CTimerUIShader : public CUiShader {
-	int m_nObjects{ 0 };
-	CMaterial** m_ppTimerObject;
-	std::map<int, CTexture*>	m_textureMap;
-	std::map<int, CGameObject*> m_MinTextureMap;
-	std::map<int, CGameObject*> m_TenSecTextureMap;
-	std::map<int, CGameObject*> m_OneSecTextureMap;
-	CTexture* m_pTexture = nullptr;
-	CTexture** m_pTimeTexture = nullptr;
-
-	CTexture* m_pColonTexture = nullptr;
-
+class CTimerUIShader : public CUiShader { // 백의자리
 public:
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void ReleaseShaderVariables();
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
-	
+protected:
+	int							m_ObjectCBIndex{ 0 };
+	CB_HUN_INFO				*m_cbClock;
+	ID3D12Resource			*m_cbClockResouce = NULL;
+	CB_HUN_INFO				*m_cbMappeClock = NULL;
+};
+class CTenSecShader : public CTimerUIShader { // 백의자리
+
+public:
+	void CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
+	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	int							m_ObjectCBIndex{ 0 };
+	CB_TEN_INFO				*m_cbClock;
+	ID3D12Resource			*m_cbClockResouce = NULL;
+	CB_TEN_INFO				*m_cbMappeClock = NULL;
+
+
+};
+class COneSecUIShader : public CTimerUIShader { // 백의자리
+
+public:
+	void CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
+	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	CB_CLOCK_INFO				*m_cbClock;
+	ID3D12Resource			*m_cbClockResouce = NULL;
+	CB_CLOCK_INFO				*m_cbMappeClock = NULL;
+
 };
 class CChatUIShader : public CUiShader {
 public:
@@ -478,23 +531,23 @@ protected:
 
 };
 
-class CSkillEffectUIShader : public CShader {
-public:
-	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
-	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
-	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
-
-
-	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
-	virtual void ReleaseShaderVariables();
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
-
-protected:
-
-	CGameObject				**m_ppObjects = 0;
-	int						m_nObjects = 0;
-	CMaterial				*m_pMaterial = NULL;
-};
+//class CSkillEffectUIShader : public CShader {
+//public:
+//	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
+//	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
+//	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+//
+//
+//	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+//	virtual void ReleaseShaderVariables();
+//	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
+//
+//protected:
+//
+//	CGameObject				**m_ppObjects = 0;
+//	int						m_nObjects = 0;
+//	CMaterial				*m_pMaterial = NULL;
+//};
 
 class CPlayerEffectUIShader : public CShader {
 public:

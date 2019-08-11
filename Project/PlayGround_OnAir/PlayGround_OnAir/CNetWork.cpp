@@ -429,6 +429,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		sc_packet_clock *pkt = reinterpret_cast<sc_packet_clock *>(ptr);
 		//여기에 들어오면 1초가 지나서 들어온것
 		//m_time++; 
+
+		SCENEMANAGER->SetColock();
 		if (m_skilCheck == true) {
 			m_skillTime--;
 			if (m_skillTime == 0)
@@ -489,8 +491,7 @@ void CNetWork::KeyPkt(bool jump, bool attack, bool skill)
 	pkt->attack = attack;
 	pkt->skill = skill;
 	SendPacket();
-	m_skilCheck = true;
-	m_skillTime = 4;
+
 }
 void CNetWork::LobbyPkt(bool out)
 {

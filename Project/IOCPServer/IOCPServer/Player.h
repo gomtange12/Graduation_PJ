@@ -22,7 +22,7 @@ public:
 
 	int m_id;
 	int roomNumber = 0;
-	int hp = 6;
+	int hp = 8;
 	int posN = 0;
 public:
 	XMFLOAT3					m_xmf3Position = XMFLOAT3(2560, 10, 1745);

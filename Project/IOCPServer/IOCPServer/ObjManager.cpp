@@ -207,7 +207,7 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 			damage = 1;
 		}
 		else {
-			damageLength = 240.0f;
+			damageLength = 140.0f;
 			damage = 2;
 		}
 		int roomNum = g_clients[id]->roomNumber;
@@ -291,7 +291,7 @@ void ObjManager::LobbyPkt(int id)
 					g_clients[ids]->death = false;
 					g_clients[ids]->lose = false;
 					g_clients[ids]->m_match = false;
-					g_clients[ids]->hp = 6;
+					g_clients[ids]->hp = 8;
 				}
 			}
 		}
@@ -308,7 +308,7 @@ void ObjManager::LobbyPkt(int id)
 					g_clients[ids]->death = false;
 					g_clients[ids]->lose = false;
 					g_clients[ids]->m_match = false;
-					g_clients[ids]->hp = 6;
+					g_clients[ids]->hp = 8;
 				}
 			}
 		}
