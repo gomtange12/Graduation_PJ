@@ -356,7 +356,7 @@ void PacketManager::DonaPacket() {
 	for (int i = 0; i < MAX_USER; ++i) {
 		if (true == objectManager->GetPlayer(i)->m_connected)
 		{
-			SendChat(objectManager->GetPlayer(i)->m_id, &pkt);
+			SendPacket(objectManager->GetPlayer(i)->m_id, &pkt);
 		}
 	}
 }

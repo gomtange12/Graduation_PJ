@@ -450,7 +450,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	case SC_DONA:
 	{
 		sc_packet_dona *pkt = reinterpret_cast<sc_packet_dona *>(ptr);
-		cout << "도네이션이 들어옴" << endl;
+		m_time = m_time - 10;
 		break;
 	}
 	default:
