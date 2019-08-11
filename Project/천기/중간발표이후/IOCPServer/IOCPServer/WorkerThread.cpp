@@ -99,7 +99,6 @@ void WorkerThread::Proc()
 			if (ROOMMANAGER->room[over->roomNum]->clocking == true) {
 				std::cout << over->roomNum << " : ROOM CLOCK SYNC" << std::endl;
 				PACKETMANAGER->ClockPacket(over->id);
-				std::cout << ROOMMANAGER->room[over->roomNum]->clock  << std::endl;
 				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(over->id, OP_CLOCK, over->roomNum, GetTickCount() + 1000);
 			}
 				delete over;

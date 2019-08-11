@@ -764,6 +764,7 @@ void CTexturedRectMesh::Render(ID3D12GraphicsCommandList * pd3dCommandList, int 
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
 	OnPreRender(pd3dCommandList, nullptr);
 	pd3dCommandList->DrawInstanced(m_nVertices, 1, m_nOffset, 0);
+
 }
 
 CTexturedRectMesh::CTexturedRectMesh(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, float fWidth, float fHeight, float fDepth, float fxPosition, float fyPosition, float fzPosition)

@@ -288,7 +288,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				break;
 			}
 			if (pkt->skill == true) {
-				PLAYER->GetPlayer()->SetPlayerState(RUN_JUMP_ATTAK);
+				PLAYER->GetPlayer()->SetPlayerState(ATTACK_3);
 				break;
 			}
 
@@ -305,7 +305,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(ATTACK);
 					break;
 					if (pkt->skill == true) {
-						PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(RUN_JUMP_ATTAK);
+						PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(ATTACK_3);
 						break;
 					}
 				}
@@ -321,7 +321,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					break;
 				}
 				if (pkt->skill == true) {
-					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(RUN_JUMP_ATTAK);
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(ATTACK_3);
 					break;
 				}
 			}

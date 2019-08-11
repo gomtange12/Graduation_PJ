@@ -68,7 +68,9 @@ protected:
 	CMaterial				*m_pMaterial = NULL;
 
 public:
-	CEffectObject*				m_EffectObj = nullptr;
+	CEffectObject*				m_basicSkillObj = nullptr;
+	CEffectObject*				m_eSkillObj = nullptr;
+
 	XMFLOAT3 GetEffectPos() { return m_EffectPos; }
 	void SetEffextPos(XMFLOAT3 pos) { m_EffectPos = pos; }
 	void MakeEffect(E_CHARACTERTYPE type);

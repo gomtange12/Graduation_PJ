@@ -149,7 +149,8 @@ public:
 #define ANIMATION_TYPE_ONCE			0
 #define ANIMATION_TYPE_LOOP			1
 #define ANIMATION_TYPE_PINGPONG		2
-#define ANIMATION_TYPE_MOVING		3
+
+#define ANIMATION_TYPE_DEATH		3
 
 
 #define ANIMATION_CALLBACK_EPSILON	0.015f
@@ -611,7 +612,7 @@ public:
 class CEffectObject : public CPlaneObject
 {
 public: 
-	CEffectObject(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, int nMat);
+	CEffectObject(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, E_EFFECTTYPE type, int nMat);
 	~CEffectObject();
 	
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
