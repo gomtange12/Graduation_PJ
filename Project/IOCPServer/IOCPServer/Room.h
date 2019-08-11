@@ -10,7 +10,7 @@ public:
 	int mod;
 	int map;
 	bool m_full;
-	int clock;
+	bool clocking;
 public:
 	Room();
 	~Room();

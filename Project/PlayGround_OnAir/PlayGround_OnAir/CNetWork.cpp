@@ -4,7 +4,7 @@
 #include "CPlayerManager.h"
 #include "CChatManager.h"
 
-
+#define SPAWN 9
 
 
 CNetWork::CNetWork()
@@ -101,6 +101,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 					PLAYER->GetPlayer()->SetClientNum(myid);
 					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
+					PLAYER->GetPlayer()->SetPlayerState(IDLE);
 					if(i==0)
 						PLAYER->GetPlayer()->teamNum = BLUETEAM;
 					else
@@ -111,6 +112,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[0]->SetClientNum(paket->ids[i]);
 					PLAYER->GetOtherPlayerMap()[0]->NumberByPos(paket->posN[i]);
 					PLAYER->GetOtherPlayerMap()[0]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
+					PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(IDLE);
 					if (i == 0)
 						PLAYER->GetPlayer()->teamNum = BLUETEAM;
 					else
@@ -132,7 +134,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetPlayer()->SetRoomNum(paket->roomNum);
 						PLAYER->GetPlayer()->SetClientNum(myid);
 						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
-
+						PLAYER->GetPlayer()->SetPlayerState(IDLE);
 					}
 				}
 
@@ -142,6 +144,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetTeamPlayerMap()[i]->NumberByPos(paket->posN[i]);
 						PLAYER->GetTeamPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
 						PLAYER->GetTeamPlayerMap()[i]->teamNum = BLUETEAM;
+						PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(IDLE);
 						break;
 					}
 				}
@@ -150,6 +153,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i + 2]);
 					PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i + 2]);
 					PLAYER->GetOtherPlayerMap()[i]->teamNum = REDTEAM;
+					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(IDLE);
+
 				}
 			}
 			else {
@@ -159,6 +164,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetPlayer()->SetClientNum(myid);
 						PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
 						PLAYER->GetPlayer()->teamNum = REDTEAM;
+						PLAYER->GetPlayer()->SetPlayerState(IDLE);
 					}
 				}
 
@@ -168,6 +174,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetTeamPlayerMap()[0]->NumberByPos(paket->posN[i]);
 						PLAYER->GetTeamPlayerMap()[0]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
 						PLAYER->GetTeamPlayerMap()[0]->teamNum = REDTEAM;
+						PLAYER->GetTeamPlayerMap()[0]->SetPlayerState(IDLE);
 						break;
 					}
 				}
@@ -178,6 +185,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[i]->NumberByPos(paket->posN[i]);
 					PLAYER->GetOtherPlayerMap()[i]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
 					PLAYER->GetOtherPlayerMap()[i]->teamNum = BLUETEAM;
+					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(IDLE);
 				}
 
 			}
@@ -280,7 +288,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				break;
 			}
 			if (pkt->skill == true) {
-				PLAYER->GetPlayer()->SetPlayerState(ATTACK);
+				PLAYER->GetPlayer()->SetPlayerState(ATTACK_3);
 				break;
 			}
 
@@ -297,7 +305,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(ATTACK);
 					break;
 					if (pkt->skill == true) {
-						PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(ATTACK);
+						PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(ATTACK_3);
 						break;
 					}
 				}
@@ -313,7 +321,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					break;
 				}
 				if (pkt->skill == true) {
-					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(ATTACK);
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(ATTACK_3);
 					break;
 				}
 			}
@@ -344,20 +352,27 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	}
 	case SC_LOBBY_IN:
 	{
-		sc_packet_lobby *pkt = reinterpret_cast<sc_packet_lobby *>(ptr);
+		if (CNetCGameFramework->m_ready == true) {
+			sc_packet_lobby *pkt = reinterpret_cast<sc_packet_lobby *>(ptr);
 
-		SCENEMANAGER->SetScene(MENUSCENE);
-		PLAYER->GetPlayer()->m_match = false;
-		PLAYER->GetPlayer()->SetPlayerState(IDLE);
-		for (int i = 0; i < 2; ++i) {
-			PLAYER->GetOtherPlayerMap()[i]->m_match = false;
-			PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::IDLE);
-			PLAYER->GetTeamPlayerMap()[i]->m_match = false;
-			PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(IDLE);
+			SCENEMANAGER->SetScene(MENUSCENE);
+			PLAYER->GetPlayer()->m_match = false;
+			PLAYER->GetPlayer()->SetPlayerState(IDLE);
+			PLAYER->GetPlayer()->SetClientNum(-1);
+			PLAYER->GetPlayer()->NumberByPos(SPAWN);
+			for (int i = 0; i < 2; ++i) {
+				PLAYER->GetOtherPlayerMap()[i]->m_match = false;
+				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::IDLE);
+				PLAYER->GetTeamPlayerMap()[i]->m_match = false;
+				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(IDLE);
+				PLAYER->GetTeamPlayerMap()[i]->SetClientNum(-1);
+				PLAYER->GetOtherPlayerMap()[i]->SetClientNum(-1);
+				PLAYER->GetTeamPlayerMap()[i]->NumberByPos(SPAWN);
+				PLAYER->GetOtherPlayerMap()[i]->NumberByPos(SPAWN);
+			}
+			CNetCGameFramework->m_ready = false;
+
 		}
-		CNetCGameFramework->m_ready = false;
-
-
 		break;
 	}
 	case SC_RESULT_INFO:
@@ -412,8 +427,13 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	case SC_CLOCK:
 	{
 		sc_packet_clock *pkt = reinterpret_cast<sc_packet_clock *>(ptr);
-		m_time = (int)pkt->clock;
-		//cout << (int)pkt->clock << endl;
+		//여기에 들어오면 1초가 지나서 들어온것
+		//m_time++; 
+		if (m_skilCheck == true) {
+			m_skillTime--;
+			if (m_skillTime == 0)
+				m_skilCheck = false;
+		}
 		break;
 	}
 	case SC_DONA:
@@ -469,6 +489,8 @@ void CNetWork::KeyPkt(bool jump, bool attack, bool skill)
 	pkt->attack = attack;
 	pkt->skill = skill;
 	SendPacket();
+	m_skilCheck = true;
+	m_skillTime = 4;
 }
 void CNetWork::LobbyPkt(bool out)
 {

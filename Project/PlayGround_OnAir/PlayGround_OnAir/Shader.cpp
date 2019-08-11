@@ -1743,7 +1743,7 @@ void CHPUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12Graphic
 void CHPUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 
-	m_cbHp->hp = 3;//PLAYER->GetPlayer()->GetHP();
+	m_cbHp->hp = PLAYER->GetPlayer()->GetHP();
 
 	//cout << "hp: " << m_cbHp->hp << endl;
 	UINT ncbElementBytes = ((sizeof(CB_HP_INFO) + 255) & ~255);
@@ -1784,7 +1784,7 @@ void CChatUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComman
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 
 	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/chatBg.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/BG.dds", 0);
 
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
 
@@ -1836,19 +1836,7 @@ void CTimerUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComma
 
 }
 
-D3D12_SHADER_BYTECODE CAllPlayersUIShader::CreatePixelShader()
-{
-	return D3D12_SHADER_BYTECODE();
-}
 
-D3D12_SHADER_BYTECODE CAllPlayersUIShader::CreateVertexShader()
-{
-	return D3D12_SHADER_BYTECODE();
-}
-
-void CAllPlayersUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
-{
-}
 
 D3D12_SHADER_BYTECODE CSkillCoolDownUIShader::CreatePixelShader()
 {
@@ -1886,7 +1874,7 @@ void CSkillCoolDownUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID
 void CSkillCoolDownUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	
-	m_cbSkillCool->Cooldown = 1;// PLAYER->GetPlayer()->GetSkillCount();
+	m_cbSkillCool->Cooldown = CNETWORK->GetSkillTime();// PLAYER->GetPlayer()->GetSkillCount();
 	//cout << "updateshaderVar: " << m_cbSkillCool->Cooldown << endl;
 	UINT ncbElementBytes = ((sizeof(CB_SKILL_INFO) + 255) & ~255);
 
@@ -1922,19 +1910,7 @@ D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreateVertexShader()
 
 D3D12_INPUT_LAYOUT_DESC CSkillEffectUIShader::CreateInputLayout()
 {
-	//UINT nInputElementDescs = 2;
-	//D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
-
-	//pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	//pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 };
-
-	//D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
-	//d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
-	//d3dInputLayoutDesc.NumElements = nInputElementDescs;
-
-	//return(d3dInputLayoutDesc);
-
-
+	
 	UINT nInputElementDescs = 2;
 	D3D12_INPUT_ELEMENT_DESC* pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
 
@@ -1954,7 +1930,7 @@ void CSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12Graphic
 	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 
 
-	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/남R_기타_L.dds", 0);
+	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/coin.dds", 0);
 
 
 	m_nObjects = 1;
@@ -1966,15 +1942,18 @@ void CSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12Graphic
 
 	m_ppObjects = new CGameObject*[m_nObjects];
 
-
+	cout << "x: " << m_ppObjects[0]->m_xmf4x4World._41 << "y: " << m_ppObjects[0]->m_xmf4x4World._42 << "z: " << m_ppObjects[0]->m_xmf4x4World._43 << endl;
 	m_ppObjects[0] = new CPlaneObject(1);
 	m_ppObjects[0]->SetMaterial(0, m_pMaterial);
-	m_ppObjects[0]->SetPosition(1900, 10, 1300.0f);
-	m_ppObjects[0]->SetMesh(pEffectMesh);
-	m_ppObjects[0]->SetScale(100, 100, 100);
-	//pPlaneObject->SetScale(100, 100, 100);
+	m_ppObjects[0]->Rotate(0, 0, 90);
+	m_ppObjects[0]->SetPosition(1900, 10.1, 1300.0f);
 
-	CScene::CreateShaderResourceViews(pd3dDevice, pTexture, 16, false);
+	m_ppObjects[0]->SetMesh(pEffectMesh);
+	m_ppObjects[0]->SetScale(10, 10, 10);
+	//pPlaneObject->SetScale(100, 100, 100);
+	cout << "x: " << m_ppObjects[0]->m_xmf4x4World._41 << "y: " << m_ppObjects[0]->m_xmf4x4World._42 << "z: " << m_ppObjects[0]->m_xmf4x4World._43 << endl;
+
+	CScene::CreateShaderResourceViews(pd3dDevice, pTexture, 16, true);
 
 
 }
@@ -2016,35 +1995,24 @@ void CSkillEffectUIShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, s
 	else { cout << "없" << endl; }
 
 	for (int i = 0; i < m_nObjects; ++i)
-		reinterpret_cast<CPlaneObject*>(m_ppObjects[i])->Render(pd3dCommandList, pCamera);
+		m_ppObjects[i]->Render(pd3dCommandList, pCamera);
 }
 
 
 
 //player skill
-D3D12_SHADER_BYTECODE CPlayerSkillEffectUIShader::CreatePixelShader()
+D3D12_SHADER_BYTECODE CPlayerEffectUIShader::CreatePixelShader()
 {
 	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSEffectTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE CPlayerSkillEffectUIShader::CreateVertexShader()
+D3D12_SHADER_BYTECODE CPlayerEffectUIShader::CreateVertexShader()
 {
 	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSEffectTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
 }
 
-D3D12_INPUT_LAYOUT_DESC CPlayerSkillEffectUIShader::CreateInputLayout()
+D3D12_INPUT_LAYOUT_DESC CPlayerEffectUIShader::CreateInputLayout()
 {
-	//UINT nInputElementDescs = 2;
-	//D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
-
-	//pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	//pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 };
-
-	//D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
-	//d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
-	//d3dInputLayoutDesc.NumElements = nInputElementDescs;
-
-	//return(d3dInputLayoutDesc);
 
 
 	UINT nInputElementDescs = 2;
@@ -2061,12 +2029,14 @@ D3D12_INPUT_LAYOUT_DESC CPlayerSkillEffectUIShader::CreateInputLayout()
 }
 
 
-void CPlayerSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+void CPlayerEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature,E_EFFECTTYPE type,  void * pContext)
 {
 	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 
 
-	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/남R_기타_L.dds", 0);
+	
+	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
+	
 
 
 	m_nObjects = 1;
@@ -2081,7 +2051,7 @@ void CPlayerSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12G
 
 	m_ppObjects[0] = new CPlaneObject(1);
 	m_ppObjects[0]->SetMaterial(0, m_pMaterial);
-	m_ppObjects[0]->SetPosition(1900, 10, 1300.0f);
+	//m_ppObjects[0]->SetPosition(PLAYER->GetPlayer()->GetPosition().x, PLAYER->GetPlayer()->GetPosition().y, PLAYER->GetPlayer()->GetPosition().z);
 	m_ppObjects[0]->SetMesh(pEffectMesh);
 	m_ppObjects[0]->SetScale(10, 10, 10);
 	//pPlaneObject->SetScale(100, 100, 100);
@@ -2092,7 +2062,7 @@ void CPlayerSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12G
 }
 
 
-void CPlayerSkillEffectUIShader::ReleaseShaderVariables()
+void CPlayerEffectUIShader::ReleaseShaderVariables()
 {
 
 }
@@ -2120,7 +2090,7 @@ void CPlayerSkillEffectUIShader::ReleaseShaderVariables()
 //	return d3dDepthStencilDesc;
 //
 //}
-void CPlayerSkillEffectUIShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
+void CPlayerEffectUIShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
 {
 	OnPrepareRender(pd3dCommandList, 0);
 	CShader::Render(pd3dCommandList, pCamera);

@@ -144,7 +144,6 @@ struct sc_packet_chat {
 struct sc_packet_clock {
 	BYTE size;
 	BYTE type;
-	char clock;
 };
 struct sc_packet_dona {
 	BYTE size;

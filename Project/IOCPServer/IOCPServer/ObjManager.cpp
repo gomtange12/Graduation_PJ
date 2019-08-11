@@ -198,12 +198,18 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 	cs_packet_key *pkt = reinterpret_cast<cs_packet_key *>(packet);
 
 	PACKETMANAGER->KeyPacket(id, pkt->jump, pkt->attack , pkt->skill);
-	if (pkt->skill == true)
+	float damageLength = 0.0f;
+	int damage = 0;
+	if (pkt->skill == true || pkt->attack == true)
 	{
-
-	}
-	if (pkt->attack == true)
-	{
+		if (pkt->attack == true) {
+			damageLength = 140.0f;
+			damage = 1;
+		}
+		else {
+			damageLength = 240.0f;
+			damage = 2;
+		}
 		int roomNum = g_clients[id]->roomNumber;
 		int otherId;
 
@@ -213,15 +219,15 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 					otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
 			}
 			float fLength = sqrtf(pow(g_clients[id]->m_xmf3Position.x - g_clients[otherId]->m_xmf3Position.x, 2) + pow(g_clients[id]->m_xmf3Position.z - g_clients[otherId]->m_xmf3Position.z, 2));
-			if (fLength <= 140.0f) {
+			if (fLength <= damageLength) {
 				XMFLOAT3 xmf3Shift = Vector3::Add(XMFLOAT3(0, 0, 0), g_clients[id]->m_xmf3Look, 40.f);
 				g_clients[otherId]->move(xmf3Shift, true);
 				g_clients[otherId]->m_xmOOBB.Center = XMFLOAT3(g_clients[otherId]->m_xmf3Position.x, g_clients[otherId]->m_xmf3Position.y, g_clients[otherId]->m_xmf3Position.z);
 
 				PACKETMANAGER->MovePacket(otherId);
-				--g_clients[otherId]->hp;
+				g_clients[otherId]->hp = g_clients[otherId]->hp-damage;
 				PACKETMANAGER->AttackPacKet(otherId);
-				if (g_clients[otherId]->hp <= 0) {
+				if (g_clients[otherId]->hp == 0) {
 					PACKETMANAGER->DeathPacket(otherId);
 					PACKETMANAGER->ResultPacket(otherId);
 					dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(otherId, OP_LOBBY, roomNum, GetTickCount() + 4000);
@@ -234,15 +240,16 @@ void ObjManager::KeyPkt(int id, unsigned char *packet)
 					otherId = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
 
 					float fLength = sqrtf(pow(g_clients[id]->m_xmf3Position.x - g_clients[otherId]->m_xmf3Position.x, 2) + pow(g_clients[id]->m_xmf3Position.z - g_clients[otherId]->m_xmf3Position.z, 2));
-					if (fLength <= 140.0f) {
+					if (fLength <= damageLength) {
 						XMFLOAT3 xmf3Shift = Vector3::Add(XMFLOAT3(0, 0, 0), g_clients[id]->m_xmf3Look, 40.f);
 						g_clients[otherId]->move(xmf3Shift, true);
 						g_clients[otherId]->m_xmOOBB.Center = XMFLOAT3(g_clients[otherId]->m_xmf3Position.x, g_clients[otherId]->m_xmf3Position.y, g_clients[otherId]->m_xmf3Position.z);
 
 						PACKETMANAGER->MovePacket(otherId);
-						--g_clients[otherId]->hp;
+						g_clients[otherId]->hp = g_clients[otherId]->hp - damage;
+						std::cout << g_clients[otherId]->hp << std::endl;
 						PACKETMANAGER->AttackPacKet(otherId);
-						if (g_clients[otherId]->hp <= 0) {
+						if (g_clients[otherId]->hp == 0) {
 							g_clients[otherId]->death = true;
 						
 							PACKETMANAGER->DeathPacket(otherId);
@@ -306,5 +313,5 @@ void ObjManager::LobbyPkt(int id)
 			}
 		}
 	}
-	
+	ROOMMANAGER->room[roomNum]->clocking = false;
 }

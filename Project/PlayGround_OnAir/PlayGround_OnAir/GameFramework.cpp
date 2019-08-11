@@ -49,14 +49,14 @@ CGameFramework::CGameFramework()
 	for (int i = 0; i < 10; ++i)
 	{
 		//m_rcTextRectForChat[i] = D2D1::RectF(0, 0, szRenderTarget.width * 1.5, szRenderTarget.height * (0.5 - (0.12 * i)));
-		m_rcTextRectForChat[i] = D2D1::RectF(FRAME_BUFFER_WIDTH - 150, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT * 2 - (30 * i));
+		//m_rcTextRectForChat[i] = D2D1::RectF(FRAME_BUFFER_WIDTH - 150, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT * 2 - (30 * i));
+		m_rcTextRectForChat[i] = D2D1::RectF(0, 0, FRAME_BUFFER_WIDTH * 0.4, FRAME_BUFFER_HEIGHT * 2 - (30 * i));
 
 		//std::cout << i << "i: left: " << m_rcTextRectForChat[i].left << " , right" << m_rcTextRectForChat[i].right << " , top" << m_rcTextRectForChat[i].top
 		//	<< " , bottom" << m_rcTextRectForChat[i].bottom << endl;
 	}
 
-	 m_rcClockText = D2D1::RectF(FRAME_BUFFER_WIDTH * 0.4 , 0 , FRAME_BUFFER_WIDTH * 0.6, FRAME_BUFFER_HEIGHT * 0.2);
-
+	
 	_tcscpy_s(m_pszFrameRate, _T("PlayGround ("));
 }
 
@@ -793,7 +793,7 @@ void CGameFramework::ProcessInput()
 			}
 			if (pKeysBuffer[0x45] & 0xF0) //스킬키
 			{
-				PLAYER->GetPlayer()->SetPlayerState(RUN_JUMP_ATTAK);
+				PLAYER->GetPlayer()->SetPlayerState(ATTACK_3);
 				CNETWORK->KeyPkt(false, false, true);
 			}
 			//2플레이어

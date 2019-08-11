@@ -27,6 +27,6 @@ public:
 	void ResultPacket(int id);
 	void DeathPacket(int id);
 	void TwitchChat(std::string &chat);
-	void ClockPacket(int id, int clock);
+	void ClockPacket(int id);
 	void DonaPacket();
 };

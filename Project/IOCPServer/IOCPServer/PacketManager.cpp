@@ -240,7 +240,6 @@ void PacketManager::LobbyPacket(int id)
 
 
 	SendPacket(id, &pkt);
-
 	
 }
 void PacketManager::ResultPacket(int id)
@@ -330,11 +329,10 @@ void PacketManager::TwitchChat(std::string &chat) {
 		}
 	}
 }
-void PacketManager::ClockPacket(int id, int clock) {
+void PacketManager::ClockPacket(int id) {
 	sc_packet_clock pkt;
 	pkt.type = SC_CLOCK;
 	pkt.size = sizeof(sc_packet_clock);
-	pkt.clock = clock;
 	
 	int roomNum = objectManager->GetPlayer(id)->roomNumber;
 	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {

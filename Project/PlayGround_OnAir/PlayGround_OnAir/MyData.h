@@ -20,3 +20,9 @@ enum OBJTYPE {
 	STATICOBJ,
 	DYNAMICOBJ
 };
+
+enum E_EFFECTTYPE
+{
+	BASIC,
+	ESKILL
+};

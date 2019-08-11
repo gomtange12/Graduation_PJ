@@ -33,9 +33,14 @@ private:
 
 	CGameFramework*			CNetCGameFramework;
 	int		m_time;
+	int     m_skillTime = 0;
+	bool	m_skilCheck = false;
 	bool	m_isCheckPkt  =  false;
 public:
 	int GetTime() { return m_time; }
+	int GetSkillTime() { return m_skillTime; }
+	void SetSkillTime(int time) { m_skillTime = time; }
+	void SetSkillCheck(bool check) { m_skilCheck = check; }
 	ModNumber mod = SQUAD;
 	SceneState map = PLAYGROUNDMAP;
 	int myid;

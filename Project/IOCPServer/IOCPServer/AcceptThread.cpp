@@ -49,6 +49,9 @@ void AcceptThread::Proc()
 
 		clientSocket = WSAAccept(listenSocket, reinterpret_cast<sockaddr *>(&clientAddr), &addrLen, NULL, NULL);
 		std::cout << "Client Accept NUMBER -> : " << USER_NUM++ << std::endl;
+		int flag = 1;
+		setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int));
+	
 		if (clientSocket == INVALID_SOCKET)
 		{
 			std::cout << "Error - Accept Failure\n";
