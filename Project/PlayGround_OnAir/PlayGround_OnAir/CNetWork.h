@@ -48,10 +48,10 @@ public:
 
 	CNetWork();
 	~CNetWork();
-	
+
 	void SetGameFrameWork(CGameFramework* CGFramwork) { CNetCGameFramework = CGFramwork; };
 	bool GetCheckPkt() { return m_isCheckPkt; }
-	
+
 	bool GetFirstCheck() const { return firstCheck; }
 	void MakeServer(const HWND& hWnd);
 	void SendPacket();
@@ -63,4 +63,5 @@ public:
 	
 	void KeyPkt(bool jump, bool attack, bool skill);
 	void LobbyPkt(bool out);
+	void TimeOut();
 };

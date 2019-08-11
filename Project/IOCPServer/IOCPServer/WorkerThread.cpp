@@ -90,14 +90,14 @@ void WorkerThread::Proc()
 		}
 		else if (OP_LOBBY == over->m_todo) {
 			if (ROOMMANAGER->room[over->roomNum]->m_full == true) {
-				std::cout << over->roomNum << " : GO TO LOBBY" << std::endl;
+				//std::cout << over->roomNum << " : GO TO LOBBY" << std::endl;
 				objectManager->LobbyPkt(over->id);
 			}
 				delete over;
 		}
 		else if (OP_CLOCK == over->m_todo) {
 			if (ROOMMANAGER->room[over->roomNum]->clocking == true) {
-				std::cout << over->roomNum << " : ROOM CLOCK SYNC" << std::endl;
+				//std::cout << over->roomNum << " : ROOM CLOCK SYNC" << std::endl;
 				PACKETMANAGER->ClockPacket(over->id);
 				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(over->id, OP_CLOCK, over->roomNum, GetTickCount() + 1000);
 			}

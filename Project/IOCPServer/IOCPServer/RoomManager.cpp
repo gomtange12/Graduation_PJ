@@ -60,6 +60,7 @@ void RoomManager::SoloRoomMatch(int id)
 								PACKETMANAGER->IngamePacket(room[i]->m_SoloIds[k], i);
 
 								if (k == 1) {
+									room[i]->clocking = true;
 									dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_CLOCK, i, GetTickCount() + 1000);									
 								}
 							}

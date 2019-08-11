@@ -114,9 +114,9 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetOtherPlayerMap()[0]->SetCharacterType((E_CHARACTERTYPE)paket->avatar[i]);
 					PLAYER->GetOtherPlayerMap()[0]->SetPlayerState(IDLE);
 					if (i == 0)
-						PLAYER->GetPlayer()->teamNum = BLUETEAM;
+						PLAYER->GetOtherPlayerMap()[0]->teamNum = BLUETEAM;
 					else
-						PLAYER->GetPlayer()->teamNum = REDTEAM;
+						PLAYER->GetOtherPlayerMap()[0]->teamNum = REDTEAM;
 				}
 			}
 		}
@@ -330,22 +330,24 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	}
 	case SC_ATTACK_INFO: {
 		sc_packet_attack *pkt = reinterpret_cast<sc_packet_attack *>(ptr);
-		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
-			PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
-			PLAYER->GetPlayer()->SetHp(pkt->hp);
-			break;
-		}
-		for (int i = 0; i < 2; ++i) {
-			if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
-				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
-				PLAYER->GetOtherPlayerMap()[i]->SetHp(pkt->hp);
+		if (pkt->hp >= 0) {
+			if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
+				PLAYER->GetPlayer()->SetPlayerState(PlayerState::STUN);
+				PLAYER->GetPlayer()->SetHp(pkt->hp);
 				break;
 			}
-			else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
-				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
-				PLAYER->GetTeamPlayerMap()[i]->SetHp(pkt->hp);
-				break;
+			for (int i = 0; i < 2; ++i) {
+				if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
+					PLAYER->GetOtherPlayerMap()[i]->SetHp(pkt->hp);
+					break;
+				}
+				else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
+					PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::STUN);
+					PLAYER->GetTeamPlayerMap()[i]->SetHp(pkt->hp);
+					break;
 
+				}
 			}
 		}
 		break;
@@ -360,6 +362,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 			PLAYER->GetPlayer()->SetPlayerState(IDLE);
 			PLAYER->GetPlayer()->SetClientNum(-1);
 			PLAYER->GetPlayer()->NumberByPos(SPAWN);
+			PLAYER->GetPlayer()->SetHp(8);
 			for (int i = 0; i < 2; ++i) {
 				PLAYER->GetOtherPlayerMap()[i]->m_match = false;
 				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::IDLE);
@@ -369,6 +372,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				PLAYER->GetOtherPlayerMap()[i]->SetClientNum(-1);
 				PLAYER->GetTeamPlayerMap()[i]->NumberByPos(SPAWN);
 				PLAYER->GetOtherPlayerMap()[i]->NumberByPos(SPAWN);
+				PLAYER->GetTeamPlayerMap()[i]->SetHp(8);
+				PLAYER->GetOtherPlayerMap()[i]->SetHp(8);
 			}
 			CNetCGameFramework->m_ready = false;
 
@@ -428,20 +433,25 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_clock *pkt = reinterpret_cast<sc_packet_clock *>(ptr);
 		//여기에 들어오면 1초가 지나서 들어온것
-		//m_time++; 
+		m_time++;
+		cout << m_time << endl;
+		if (m_time == 300) {
+			TimeOut();
+			m_time = 0;
+		}
 
-		SCENEMANAGER->SetColock();
 		if (m_skilCheck == true) {
 			m_skillTime--;
 			if (m_skillTime == 0)
 				m_skilCheck = false;
 		}
+		SCENEMANAGER->SetColock();
 		break;
 	}
 	case SC_DONA:
 	{
 		sc_packet_dona *pkt = reinterpret_cast<sc_packet_dona *>(ptr);
-		cout << "도네이션이 들어옴" << endl;
+		m_time = m_time - 10;
 		break;
 	}
 	default:
@@ -499,6 +509,14 @@ void CNetWork::LobbyPkt(bool out)
 	send_wsabuf.len = sizeof(pkt);
 	pkt->size = sizeof(pkt);
 	pkt->type = CS_LOBBY_OUT;
+
+	SendPacket();
+}
+void CNetWork::TimeOut() {
+	cs_packet_time_out  *pkt = reinterpret_cast<cs_packet_time_out *>(send_buffer);
+	send_wsabuf.len = sizeof(pkt);
+	pkt->size = sizeof(pkt);
+	pkt->type = CS_TIME_OUT;
 
 	SendPacket();
 }
