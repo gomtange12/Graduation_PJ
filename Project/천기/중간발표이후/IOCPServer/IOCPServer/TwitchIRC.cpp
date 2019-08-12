@@ -24,7 +24,7 @@ void TwitchIRC::Proc() {
 		memset(&line[0], 0, sizeof(line));
 	}
 	WSAStartup(MAKEWORD(2, 2), &wsaData);
-	hostAdd = gethostbyname(config[0].c_str());
+	hostAdd = gethostbyname("irc.chat.twitch.tv");
 
 	int i = 0;
 	while (hostAdd->h_addr_list[i] != 0)
@@ -37,7 +37,7 @@ void TwitchIRC::Proc() {
 
 	ZeroMemory(&ServerAddr, sizeof(SOCKADDR_IN));
 	ServerAddr.sin_family = AF_INET;
-	ServerAddr.sin_port = htons(atoi(config[1].c_str()));
+	ServerAddr.sin_port = htons(6667);
 	ServerAddr.sin_addr.s_addr = inet_addr(ipaddr);
 
 	if (connect(sock, (struct sockaddr *)&ServerAddr, sizeof(ServerAddr)) == 0)
@@ -77,7 +77,7 @@ void TwitchIRC::Run()
 				stripMessage(pkt, name, message);
 				
 				
-				//std::cout << "Chat: " << chat << std::endl;
+				std::cout << "Chat: " << chat << std::endl;
 				pkt.resize(0);
 			}
 			if (pkt.find("PING") != std::string::npos) {
