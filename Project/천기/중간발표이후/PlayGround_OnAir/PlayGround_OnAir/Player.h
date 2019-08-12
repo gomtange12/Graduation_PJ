@@ -47,7 +47,7 @@ protected:
 
 	//for 서버로 플레이어 식별
 
-	XMFLOAT3					prePosition =XMFLOAT3(0.f, 0.f, 0.f);
+	XMFLOAT3					prePosition = XMFLOAT3(0.f, 0.f, 0.f);
 	int							m_PlayerID = -1;
 	int							m_JoinRoomNum = -1;
 	bool						m_playerCollision = false;
@@ -55,7 +55,7 @@ protected:
 	float m_HeightForCollide{ 0 };
 
 	bool                        m_IsPlayerInConcert = true;
-	bool						XZcollision=false;
+	bool						XZcollision = false;
 	bool						m_isAnimationOver{ false };
 	E_CHARACTERTYPE                m_CharacterType;
 	bool						m_isSkillOn = false;
@@ -66,8 +66,11 @@ protected:
 	bool						m_RenderEffect = false;
 
 	CMaterial				*m_pMaterial = NULL;
-
+	bool						m_HeartHp{ true };
 public:
+
+	bool isHeartRender() { return m_HeartHp; }
+	void SetHeartRender(bool heart) { m_HeartHp = heart; }
 	CEffectObject*				m_basicSkillObj = nullptr;
 	CEffectObject*				m_eSkillObj = nullptr;
 

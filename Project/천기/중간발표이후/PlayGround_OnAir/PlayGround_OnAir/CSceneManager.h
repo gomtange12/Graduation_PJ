@@ -13,13 +13,23 @@ class CSceneManager : public CSingleTonBase<CSceneManager>
 	SceneState m_SceneType = MENUSCENE;
 	bool m_isModeSelected = false;
 	bool m_isMapSelected = false;
+	int m_Gameclock{ 300 };
+
+	int m_oneSec{ 0 };
+	int m_tenSec{ 0 };
+	int m_hunSec{ 0 };
 
 public:
+	int  GetOneSec() { return m_oneSec; }
+	int  GetTenSec() { return m_tenSec; }
+	int  GetHunSec() { return m_hunSec; }
+
+	int  GetGameClock() { return m_Gameclock; }
 	bool GetSelectedMap() { return m_isMapSelected; }
 	bool GetSelectedMode() { return m_isModeSelected; }
 	void SetSelectedMode(bool mode) { m_isModeSelected = mode; }
 	void SetSelectedMap(bool map) { m_isMapSelected = map; }
-	
+	void SetColock(bool dona);
 	ModNumber CheckModeButton(const POINT& pos);
 	SceneState CheckMapButton(const POINT& pos);
 

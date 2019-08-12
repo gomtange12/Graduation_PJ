@@ -12,33 +12,33 @@ E_CHARACTERTYPE CPlayerManager::CheckSceneCharacter(const POINT& pos)
 	XMFLOAT2 cursorpos{  2.0f * (static_cast<float>(pos.x) / static_cast<float>(FRAME_BUFFER_WIDTH)) - 1.0f
 					, -(2.0f * (static_cast<float>(pos.y) / static_cast<float>(FRAME_BUFFER_HEIGHT)) - 1.0f) };
 
-	std::cout << "변환후cursorPos: " << cursorpos.x << ", " << cursorpos.y << endl;
+	//std::cout << "변환후cursorPos: " << cursorpos.x << ", " << cursorpos.y << endl;
 
 	if (cursorpos.x > 0.30 && cursorpos.x < 0.50 && cursorpos.y>-0.15 && cursorpos.y < 0.1)
 	{
-		cout << "드럼 선택" << endl;
+		//cout << "드럼 선택" << endl;
 		return DRUM;
 	}
 	else if (cursorpos.x > 0.59 && cursorpos.x < 0.75 && cursorpos.y>-0.15 && cursorpos.y < 0.1)
 	{
-		cout << "키보드 선택" << endl;
+		//cout << "키보드 선택" << endl;
 
 		return KEYBOARD;
 	}
 	else if (cursorpos.x > 0.30 && cursorpos.x < 0.50 && cursorpos.y>-0.47 && cursorpos.y < -0.15)
 	{
-		cout << "베이스 선택" << endl;
+		//cout << "베이스 선택" << endl;
 
 		return  BASS;
 	}
 	else if (cursorpos.x > 0.59 && cursorpos.x < 0.75 && cursorpos.y>-0.47 && cursorpos.y < -0.15)
 	{
-		cout << "보컬 선택" << endl;
+		//cout << "보컬 선택" << endl;
 		return VOCAL;
 	}
 	else if (cursorpos.x > 0.45 && cursorpos.x < 0.65 && cursorpos.y>-0.8 && cursorpos.y < -0.55)
 	{
-		cout << "기타 선택" << endl;
+		//cout << "기타 선택" << endl;
 		return GUITAR;
 	}
 	else NONECHARACTER;
@@ -70,7 +70,7 @@ void CPlayerManager::SetOtherModelResource(ID3D12Device * pd3dDevice, ID3D12Grap
 		m_pEnemyGuitarModel[i] = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
 		m_pEnemyKeyboardModel[i] = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
 		m_pEnemyDrumModel[i] = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);;
-		m_pEnemyBassModel[i] = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
+		m_pEnemyBassModel[i] = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest2.bin", NULL, true);;
 		m_pEnemyVocalModel[i] = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
 		
 	}
@@ -79,7 +79,7 @@ void CPlayerManager::SetOtherModelResource(ID3D12Device * pd3dDevice, ID3D12Grap
 	m_pTeamGuitarModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
 	m_pTeamKeyboardModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
 	m_pTeamDrumModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);;
-	m_pTeamBassModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
+	m_pTeamBassModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest2.bin", NULL, true);;
 	m_pTeamVocalModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
 
 }
@@ -236,7 +236,7 @@ void CPlayerManager::ChangePlayer(E_CHARACTERTYPE type, ID3D12Device *pd3dDevice
 	CLoadedModelInfo*         m_pGuitarModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/guitarTest.bin", NULL, true);
 	CLoadedModelInfo*         m_pKeyBoardModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/KeyT.bin", NULL, true);
 	CLoadedModelInfo*         m_pDrumModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);;
-	CLoadedModelInfo*         m_pBassModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);;
+	CLoadedModelInfo*         m_pBassModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest2.bin", NULL, true);;
 	CLoadedModelInfo*         m_pVocalModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
 
 
@@ -334,15 +334,15 @@ void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsC
 		m_pOtherPlayerMap.emplace_back(new COtherPlayers(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, GUITAR, pContext));
 
 
-		m_pTeamPlayerMap[0]->SetPosition(XMFLOAT3(12750, 10, 1745));
-		m_pTeamPlayerMap[1]->SetPosition(XMFLOAT3(12750, 10, 1835));
+		m_pTeamPlayerMap[0]->SetPosition(XMFLOAT3(-1000, 10, -1000));
+		m_pTeamPlayerMap[1]->SetPosition(XMFLOAT3(-1000, 10, -1000));
 		//m_pTeamPlayerMap[1]->SetPosition(XMFLOAT3(12750, 10, 1835));
 		//m_pTeamPlayerMap[2]->SetPosition(XMFLOAT3(2560, 10, 1835));
 		//m_pTeamPlayerMap[2]->SetPosition(XMFLOAT3(12560, 10, 1835));
 
 
-		m_pOtherPlayerMap[0]->SetPosition(XMFLOAT3(1600, 10, 1745));
-		m_pOtherPlayerMap[1]->SetPosition(XMFLOAT3(1350, 10, 1745));
+		m_pOtherPlayerMap[0]->SetPosition(XMFLOAT3(-1000, 10, -1000));
+		m_pOtherPlayerMap[1]->SetPosition(XMFLOAT3(-1000, 10, -1000));
 		//m_pOtherPlayerMap[2]->SetPosition(XMFLOAT3(600, 10, 1835));
 		//m_pOtherPlayerMap[3]->SetPosition(XMFLOAT3(350, 10, 1835));
 		//m_pOtherPlayerMap[2]->SetPosition(XMFLOAT3(11600, 10, 1835));

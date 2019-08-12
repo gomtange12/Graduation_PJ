@@ -31,7 +31,7 @@ void RoomManager::SoloRoomMatch(int id)
 						{
 							room[i]->m_full = true;
 				
-							std::cout << "RoomNumber : " << RNumber << " ----> Machig Success" << " ::SOLO MOD"<< std::endl;
+							//std::cout << "RoomNumber : " << RNumber << " ----> Machig Success" << " ::SOLO MOD"<< std::endl;
 							Room* soloRooms = new Room; //풀방이니 미리 다음방 생성
 							soloRooms->RoomNumber = ++RNumber;
 							soloRooms->mod = SOLO;
@@ -94,7 +94,7 @@ void RoomManager::TeamRoomMatch(int id)
 						{
 							room[i]->m_full = true;
 
-							std::cout << "RoomNumber : " << RNumber << " ----> Machig Success" << " ::TEAM MOD" << std::endl;
+							//std::cout << "RoomNumber : " << RNumber << " ----> Machig Success" << " ::TEAM MOD" << std::endl;
 							Room* teamRooms = new Room; //풀방이니 미리 다음방 생성
 							teamRooms->RoomNumber = ++RNumber;
 							teamRooms->mod = SQUAD; 

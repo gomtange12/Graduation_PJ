@@ -4,6 +4,22 @@
 #include "CTempScene.h"
 #include "Scene.h"
 #include "GameFramework.h"
+void CSceneManager::SetColock(bool dona)
+{	
+	if (dona == true) {
+		m_Gameclock += 10;
+	}
+	else {
+		if (m_Gameclock > 0)
+			m_Gameclock -= 1;
+	}
+
+	//cout<<"gameClock" << m_Gameclock << endl;
+	m_hunSec = m_Gameclock / 100;
+
+	m_tenSec = (m_Gameclock % 100) / 10;
+	m_oneSec = m_Gameclock % 10;
+}
 ModNumber CSceneManager::CheckModeButton(const POINT & pos)
 {
 	XMFLOAT2 cursorpos{ 2.0f * (static_cast<float>(pos.x) / static_cast<float>(FRAME_BUFFER_WIDTH)) - 1.0f
@@ -11,14 +27,14 @@ ModNumber CSceneManager::CheckModeButton(const POINT & pos)
 
 	if (cursorpos.x > 0.25 && cursorpos.x < 0.55 && cursorpos.y>0.15 && cursorpos.y < 0.35)
 	{
-		cout << "¼Ö·Î ¼±ÅÃ" << endl;
+		//cout << "¼Ö·Î ¼±ÅÃ" << endl;
 		m_isModeSelected = true;
 
 		return SOLO;
 	}
 	else if (cursorpos.x > 0.55 && cursorpos.x < 0.8 && cursorpos.y>0.15 && cursorpos.y < 0.35)
 	{
-		cout << "µà¿À ¼±ÅÃ" << endl;
+		//cout << "µà¿À ¼±ÅÃ" << endl;
 		m_isModeSelected = true;
 
 		return SQUAD;
@@ -35,13 +51,13 @@ SceneState CSceneManager::CheckMapButton(const POINT & pos)
 
 	if (cursorpos.x > -0.8 && cursorpos.x < -0.3 && cursorpos.y>0.1 && cursorpos.y < 0.35)
 	{
-		cout << "PLAYGROUNDMAP¸Ê ¼±ÅÃ" << endl;
+		//cout << "PLAYGROUNDMAP¸Ê ¼±ÅÃ" << endl;
 		m_isMapSelected = true;
 		return PLAYGROUNDMAP;
 	}
 	else if (cursorpos.x > -0.8 && cursorpos.x < -0.3 && cursorpos.y>-0.75 && cursorpos.y < -0.2)
 	{
-		cout << "CONCERTMAP¸Ê ¼±ÅÃ" << endl;
+		//cout << "CONCERTMAP¸Ê ¼±ÅÃ" << endl;
 		m_isMapSelected = true;
 
 		return CONCERTMAP;
@@ -53,7 +69,7 @@ SceneState CSceneManager::CheckMapButton(const POINT & pos)
 CSceneManager::CSceneManager()
 {
 	m_pTempScene = NULL;// std::make_shared<CTempScene>();
-	
+	m_Gameclock = 300;
 	
 }
 

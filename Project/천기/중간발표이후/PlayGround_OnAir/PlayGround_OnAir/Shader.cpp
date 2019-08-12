@@ -7,6 +7,7 @@
 #include "CNetWork.h"
 #include "Player.h"
 #include "CPlayerManager.h"
+#include "CSceneManager.h"
 
 #include "CBillboardObject.h"
 #include "Scene.h"
@@ -1709,7 +1710,7 @@ void CHPUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandL
 	m_nObjects = 1;
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/hearthpBar.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/heart.dds", 0);
 
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
 
@@ -1743,8 +1744,9 @@ void CHPUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12Graphic
 void CHPUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 
-	m_cbHp->hp = PLAYER->GetPlayer()->GetHP();
-
+	m_cbHp->hp = PLAYER->GetPlayer()->GetHP() - 1 ;
+	if (m_cbHp->hp < 1)
+		PLAYER->GetPlayer()->SetHeartRender(false);
 	//cout << "hp: " << m_cbHp->hp << endl;
 	UINT ncbElementBytes = ((sizeof(CB_HP_INFO) + 255) & ~255);
 
@@ -1810,31 +1812,8 @@ D3D12_BLEND_DESC CChatUIShader::CreateBlendState()
 	return d3dBlendDesc;
 }
 
-void CTimerUIShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
-{
-	//for (int i = 0; i < 10; ++i)
-	//{
-	//	if (CNETWORK->GetTime() % 100 == 0)
-	//		m_pTimeTexture[0]
-	//}
-
-}
-
-D3D12_SHADER_BYTECODE CTimerUIShader::CreatePixelShader()
-{
-	return D3D12_SHADER_BYTECODE();
-}
-
-D3D12_SHADER_BYTECODE CTimerUIShader::CreateVertexShader()
-{
-	return D3D12_SHADER_BYTECODE();
-}
-
-void CTimerUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
-{
 
 
-}
 
 
 
@@ -1898,71 +1877,71 @@ void CSkillCoolDownUIShader::ReleaseShaderVariables()
 
 
 
-D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreatePixelShader()
-{
-	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSEffectTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
-}
-
-D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreateVertexShader()
-{
-	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSEffectTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
-}
-
-D3D12_INPUT_LAYOUT_DESC CSkillEffectUIShader::CreateInputLayout()
-{
-	
-	UINT nInputElementDescs = 2;
-	D3D12_INPUT_ELEMENT_DESC* pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
-
-	pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-
-	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
-	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
-	d3dInputLayoutDesc.NumElements = nInputElementDescs;
-
-	return(d3dInputLayoutDesc);
-}
-
-
-void CSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
-{
-	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
-
-
-	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/coin.dds", 0);
-
-
-	m_nObjects = 1;
-	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 20, 20.f, 0, 0, 0, 0);
-
-
-	m_pMaterial = new CMaterial(1);
-	m_pMaterial->SetTexture(pTexture, 0);
-
-	m_ppObjects = new CGameObject*[m_nObjects];
-
-	cout << "x: " << m_ppObjects[0]->m_xmf4x4World._41 << "y: " << m_ppObjects[0]->m_xmf4x4World._42 << "z: " << m_ppObjects[0]->m_xmf4x4World._43 << endl;
-	m_ppObjects[0] = new CPlaneObject(1);
-	m_ppObjects[0]->SetMaterial(0, m_pMaterial);
-	m_ppObjects[0]->Rotate(0, 0, 90);
-	m_ppObjects[0]->SetPosition(1900, 10.1, 1300.0f);
-
-	m_ppObjects[0]->SetMesh(pEffectMesh);
-	m_ppObjects[0]->SetScale(10, 10, 10);
-	//pPlaneObject->SetScale(100, 100, 100);
-	cout << "x: " << m_ppObjects[0]->m_xmf4x4World._41 << "y: " << m_ppObjects[0]->m_xmf4x4World._42 << "z: " << m_ppObjects[0]->m_xmf4x4World._43 << endl;
-
-	CScene::CreateShaderResourceViews(pd3dDevice, pTexture, 16, true);
-
-
-}
-
-
-void CSkillEffectUIShader::ReleaseShaderVariables()
-{
-
-}
+//D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreatePixelShader()
+//{
+//	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSEffectTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+//}
+//
+//D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreateVertexShader()
+//{
+//	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSEffectTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+//}
+//
+//D3D12_INPUT_LAYOUT_DESC CSkillEffectUIShader::CreateInputLayout()
+//{
+//	
+//	UINT nInputElementDescs = 2;
+//	D3D12_INPUT_ELEMENT_DESC* pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
+//
+//	pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+//	pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+//
+//	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
+//	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
+//	d3dInputLayoutDesc.NumElements = nInputElementDescs;
+//
+//	return(d3dInputLayoutDesc);
+//}
+//
+//
+//void CSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+//{
+//	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+//
+//
+//	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/Leader.dds", 0);
+//
+//
+//	m_nObjects = 1;
+//	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 20, 20.f, 0, 0, 0, 0);
+//
+//
+//	m_pMaterial = new CMaterial(1);
+//	m_pMaterial->SetTexture(pTexture, 0);
+//
+//	m_ppObjects = new CGameObject*[m_nObjects];
+//
+//	cout << "x: " << m_ppObjects[0]->m_xmf4x4World._41 << "y: " << m_ppObjects[0]->m_xmf4x4World._42 << "z: " << m_ppObjects[0]->m_xmf4x4World._43 << endl;
+//	m_ppObjects[0] = new CPlaneObject(1);
+//	m_ppObjects[0]->SetMaterial(0, m_pMaterial);
+//	m_ppObjects[0]->Rotate(0, 0, 90);
+//	m_ppObjects[0]->SetPosition(1900, 10.1, 1300.0f);
+//
+//	m_ppObjects[0]->SetMesh(pEffectMesh);
+//	m_ppObjects[0]->SetScale(10, 10, 10);
+//	//pPlaneObject->SetScale(100, 100, 100);
+//	cout << "x: " << m_ppObjects[0]->m_xmf4x4World._41 << "y: " << m_ppObjects[0]->m_xmf4x4World._42 << "z: " << m_ppObjects[0]->m_xmf4x4World._43 << endl;
+//
+//	CScene::CreateShaderResourceViews(pd3dDevice, pTexture, 16, true);
+//
+//
+//}
+//
+//
+//void CSkillEffectUIShader::ReleaseShaderVariables()
+//{
+//
+//}
 
 //D3D12_DEPTH_STENCIL_DESC CSkillEffectUIShader::CreateDepthStencilState()
 //{
@@ -1987,17 +1966,22 @@ void CSkillEffectUIShader::ReleaseShaderVariables()
 //	return d3dDepthStencilDesc;
 //
 //}
-void CSkillEffectUIShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
-{
-	OnPrepareRender(pd3dCommandList, 0);
-	CShader::Render(pd3dCommandList, pCamera);
-	if (m_pd3dPipelineState) pd3dCommandList->SetPipelineState(m_pd3dPipelineState);
-	else { cout << "없" << endl; }
-
-	for (int i = 0; i < m_nObjects; ++i)
-		m_ppObjects[i]->Render(pd3dCommandList, pCamera);
-}
-
+//void CSkillEffectUIShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
+//{
+//	OnPrepareRender(pd3dCommandList, 0);
+//	CShader::Render(pd3dCommandList, pCamera);
+//	if (m_pd3dPipelineState) pd3dCommandList->SetPipelineState(m_pd3dPipelineState);
+//	else { cout << "없" << endl; }
+//
+//	
+//	for (int i = 0; i < m_nObjects; ++i)
+//	{
+//		m_ppObjects[i]->UpdateTransform(NULL);
+//
+//		m_ppObjects[i]->Render(pd3dCommandList, pCamera);
+//	}
+//}
+//
 
 
 //player skill
@@ -2067,36 +2051,164 @@ void CPlayerEffectUIShader::ReleaseShaderVariables()
 
 }
 
-//D3D12_DEPTH_STENCIL_DESC CSkillEffectUIShader::CreateDepthStencilState()
-//{
-//	//여기
-//	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
-//	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
-//	d3dDepthStencilDesc.DepthEnable = TRUE;
-//	d3dDepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-//	d3dDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
-//	d3dDepthStencilDesc.StencilEnable = FALSE;
-//	d3dDepthStencilDesc.StencilReadMask = 0x00;
-//	d3dDepthStencilDesc.StencilWriteMask = 0x00;
-//	d3dDepthStencilDesc.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
-//	d3dDepthStencilDesc.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
-//	d3dDepthStencilDesc.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
-//	d3dDepthStencilDesc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
-//	d3dDepthStencilDesc.BackFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
-//	d3dDepthStencilDesc.BackFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
-//	d3dDepthStencilDesc.BackFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
-//	d3dDepthStencilDesc.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
-//
-//	return d3dDepthStencilDesc;
-//
-//}
 void CPlayerEffectUIShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
 {
 	OnPrepareRender(pd3dCommandList, 0);
 	CShader::Render(pd3dCommandList, pCamera);
 	if (m_pd3dPipelineState) pd3dCommandList->SetPipelineState(m_pd3dPipelineState);
-	else { cout << "없" << endl; }
+	//else { cout << "없" << endl; }
 
 	for (int i = 0; i < m_nObjects; ++i)
+	{
+		//m_ppObjects[i]
 		reinterpret_cast<CEffectObject*>(m_ppObjects[i])->Render(pd3dCommandList, pCamera);
+	}
+}
+
+D3D12_SHADER_BYTECODE CTenSecShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSTenSecTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+}
+
+void CTenSecShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/numbers.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+	m_cbClock = new CB_TEN_INFO;
+	::ZeroMemory(m_cbClock, sizeof(CB_TEN_INFO));
+
+	m_cbClock->tenSec = 0;
+}
+
+
+
+void CTenSecShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	
+	m_cbClock->tenSec = SCENEMANAGER->GetTenSec();// PLAYER->GetPlayer()->GetSkillCount();
+	//cout << "ten"<< m_cbClock->tenSec << endl;
+//cout << "updateshaderVar: " << m_cbSkillCool->Cooldown << endl;
+	UINT ncbElementBytes = ((sizeof(CB_TEN_INFO) + 255) & ~255);
+
+	CB_TEN_INFO *pbMappedcbSkillInfo = (CB_TEN_INFO *)((UINT8 *)m_cbMappeClock + (0 * ncbElementBytes));
+	::memcpy(m_cbMappeClock, m_cbClock, sizeof(CB_TEN_INFO));
+
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbClockResouce->GetGPUVirtualAddress();// +m_ObjectCBIndex * ncbElementBytes;
+   pd3dCommandList->SetGraphicsRootConstantBufferView(13, d3dGpuVirtualAddress);
+}
+
+
+D3D12_SHADER_BYTECODE COneSecUIShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSOneSecTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+}
+
+void COneSecUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/numbers.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+	m_cbClock = new CB_CLOCK_INFO;
+	::ZeroMemory(m_cbClock, sizeof(CB_CLOCK_INFO));
+
+	m_cbClock->oneSec = 0;
+}
+
+void COneSecUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	m_cbClock->oneSec = SCENEMANAGER->GetOneSec();// PLAYER->GetPlayer()->GetSkillCount();
+//cout << "updateshaderVar: " << m_cbSkillCool->Cooldown << endl;
+	UINT ncbElementBytes = ((sizeof(CB_CLOCK_INFO) + 255) & ~255);
+
+	CB_CLOCK_INFO *pbMappedcbSkillInfo = (CB_CLOCK_INFO *)((UINT8 *)m_cbMappeClock + (0 * ncbElementBytes));
+	::memcpy(m_cbMappeClock, m_cbClock, sizeof(CB_CLOCK_INFO));
+
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbClockResouce->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(20, d3dGpuVirtualAddress);
+}
+
+void COneSecUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_CLOCK_INFO) + 255) & ~255); //256의 배수
+	m_cbClockResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_cbClockResouce->Map(0, NULL, (void **)&m_cbMappeClock);
+}
+
+void CTenSecShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_TEN_INFO) + 255) & ~255); //256의 배수
+	m_cbClockResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_cbClockResouce->Map(0, NULL, (void **)&m_cbMappeClock);
+}
+D3D12_SHADER_BYTECODE CTimerUIShader::CreatePixelShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSClockTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
+
+}
+
+D3D12_SHADER_BYTECODE CTimerUIShader::CreateVertexShader()
+{
+	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSHundredSecTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
+}
+
+void CTimerUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_HUN_INFO) + 255) & ~255); //256의 배수
+	m_cbClockResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_cbClockResouce->Map(0, NULL, (void **)&m_cbMappeClock);
+}
+
+void CTimerUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	m_cbClock->hunSec = SCENEMANAGER->GetHunSec();
+	//cout << "HUN" << m_cbClock->hunSec << endl;
+
+	// PLAYER->GetPlayer()->GetSkillCount();
+//cout << "updateshaderVar: " << m_cbSkillCool->Cooldown << endl;
+	UINT ncbElementBytes = ((sizeof(CB_HUN_INFO) + 255) & ~255);
+
+	CB_HUN_INFO *pbMappedcbSkillInfo = (CB_HUN_INFO *)((UINT8 *)m_cbMappeClock + (0 * ncbElementBytes));
+	::memcpy(m_cbMappeClock, m_cbClock, sizeof(CB_HUN_INFO));
+
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbClockResouce->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(10, d3dGpuVirtualAddress);
+
+}
+
+void CTimerUIShader::ReleaseShaderVariables()
+{
+
+	if (m_cbClockResouce)
+	{
+		m_cbClockResouce->Unmap(0, NULL);
+		m_cbClockResouce->Release();
+	}
+}
+
+void CTimerUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/numbers.dds", 0);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
+
+	m_cbClock = new CB_HUN_INFO;
+	::ZeroMemory(m_cbClock, sizeof(CB_HUN_INFO));
+
+	m_cbClock->hunSec = 0;
+
 }

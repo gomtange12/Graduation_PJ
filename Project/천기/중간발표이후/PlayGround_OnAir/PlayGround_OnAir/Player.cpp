@@ -53,23 +53,23 @@ void CPlayer::MakeEffect(E_CHARACTERTYPE type)
 	{
 	case BASS:
 		effectPos =  FindFrame("BassGuitar_cl")->GetPosition();
-		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case GUITAR:
 		effectPos = FindFrame("ElectricGuitar_st")->GetPosition();
-		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case KEYBOARD:
 		effectPos = FindFrame("keytar")->GetPosition();
-		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case DRUM:
 		effectPos = FindFrame("DKFYB_drumstick")->GetPosition();
-		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case VOCAL:
 		effectPos = FindFrame("BoomMic_Cylinder")->GetPosition();
-		cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
+		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case NONECHARACTER:
 		break;
@@ -78,13 +78,7 @@ void CPlayer::MakeEffect(E_CHARACTERTYPE type)
 	}
 }
 
-void CPlayer::SetSkillCoolDown(int count)
-{
-	m_skillCool = count;
 
-	if (m_skillCool < 1)
-		count = 4;
-}
 
 CPlayer::CPlayer()
 {
@@ -120,9 +114,8 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	m_pCameraUpdatedContext = NULL;
 	m_PlayerState = PlayerState::IDLE;
 
-
-	
-	
+	m_HeartHp = true;
+	m_Hp = 8;
 	if (this != nullptr)
 	{
 		CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -425,7 +418,6 @@ void CPlayer::Update(float fTimeElapsed)
 	m_xmOOBB.Center.y = m_xmf3Position.y + GetBoundingBox().Extents.y;
 	//SetTrackAnimationSet(0, 2);
 
-	
 
 }
 
@@ -625,9 +617,10 @@ void CPlayer::NumberByPos(int num) {
 		break;
 	}
 	case 9: {
-		m_xmf3Position = XMFLOAT3(0, 10, 0);
+		m_xmf3Position = XMFLOAT3(-1000, 10, -1000);
 		break;
 	}
+
 	}
 }
 
@@ -752,7 +745,7 @@ void CSoundCallbackHandler::HandleCallback(void *pCallbackData)
 CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, E_CHARACTERTYPE type, void *pContext)
 	: CPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pContext)
 {
-	/*m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	/*m_xmf3Position = XMFLOAT3(-1000, 10, -1000);
 	m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);
 	m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);
 	m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
@@ -766,6 +759,9 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	m_fPitch = 0.0f;
 	m_fRoll = 0.0f;
 	m_fYaw = 0.0f;*/
+
+	m_xmf3Position = XMFLOAT3(-1000, 10, -1000);
+
 	if (this != nullptr)
 	{
 		m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, 0x00);
@@ -786,53 +782,53 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	
 
 	SetChild(pPlayerModel->m_pModelRootObject, true);
-	m_basicSkillObj = new CEffectObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASIC, 1);
-	m_eSkillObj = new CEffectObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, ESKILL, 1);
+	////m_basicSkillObj = new CEffectObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, BASIC, 1);
+	////m_eSkillObj = new CEffectObject(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, ESKILL, 1);
 
-	XMFLOAT3 effectPos{ 0,0,0 };
-	switch (type)
-	{
-	case BASS:
-		FindFrame("BassGuitar_cl")->SetChild(m_basicSkillObj);
-		m_basicSkillObj->SetPosition(FindFrame("BassGuitar_cl")->GetPosition());
-		cout << "x: " << m_basicSkillObj->GetPosition().x << "y: " << m_basicSkillObj->GetPosition().x << "z: " << m_basicSkillObj->GetPosition().x << endl;
+	//XMFLOAT3 effectPos{ 0,0,0 };
+	//switch (type)
+	//{
+	//case BASS:
+	//	FindFrame("BassGuitar_cl")->SetChild(m_basicSkillObj);
+	//	m_basicSkillObj->SetPosition(FindFrame("BassGuitar_cl")->GetPosition());
+	//	cout << "x: " << m_basicSkillObj->GetPosition().x << "y: " << m_basicSkillObj->GetPosition().x << "z: " << m_basicSkillObj->GetPosition().x << endl;
 
-		break;
-	case GUITAR:
-		FindFrame("ElectricGuitar_st")->SetChild(m_basicSkillObj);
-		m_basicSkillObj->SetPosition(FindFrame("ElectricGuitar_st")->GetPosition());
-		cout << "x: " << m_basicSkillObj->GetPosition().x << "y: " << m_basicSkillObj->GetPosition().x << "z: " << m_basicSkillObj->GetPosition().x << endl;
-
-
-		break;
-	case KEYBOARD:
-		FindFrame("keytar")->SetChild(m_basicSkillObj);
-		m_basicSkillObj->SetPosition(FindFrame("keytar")->GetPosition());
-		cout << "x: " << m_basicSkillObj->GetPosition().x << "y: " << m_basicSkillObj->GetPosition().x << "z: " << m_basicSkillObj->GetPosition().x << endl;
+	//	break;
+	//case GUITAR:
+	//	FindFrame("ElectricGuitar_st")->SetChild(m_basicSkillObj);
+	//	m_basicSkillObj->SetPosition(FindFrame("ElectricGuitar_st")->GetPosition());
+	//	cout << "x: " << m_basicSkillObj->GetPosition().x << "y: " << m_basicSkillObj->GetPosition().x << "z: " << m_basicSkillObj->GetPosition().x << endl;
 
 
-		break;
-	case DRUM:
-		FindFrame("DKFYB_drumstick")->SetChild(m_basicSkillObj);
-		m_basicSkillObj->SetPosition(FindFrame("DKFYB_drumstick")->GetPosition());
-		cout << "x: " << m_basicSkillObj->GetPosition().x << "y: " << m_basicSkillObj->GetPosition().x << "z: " << m_basicSkillObj->GetPosition().x << endl;
+	//	break;
+	//case KEYBOARD:
+	//	FindFrame("keytar")->SetChild(m_basicSkillObj);
+	//	m_basicSkillObj->SetPosition(FindFrame("keytar")->GetPosition());
+	//	cout << "x: " << m_basicSkillObj->GetPosition().x << "y: " << m_basicSkillObj->GetPosition().x << "z: " << m_basicSkillObj->GetPosition().x << endl;
 
 
-		break;
-	case VOCAL:
-		FindFrame("BoomMic_Cylinder")->SetChild(m_basicSkillObj);
-		m_basicSkillObj->SetPosition(FindFrame("BoomMic_Cylinder")->GetPosition());
-		cout << "x: " << m_basicSkillObj->GetPosition().x << "y: " << m_basicSkillObj->GetPosition().x << "z: " << m_basicSkillObj->GetPosition().x << endl;
+	//	break;
+	//case DRUM:
+	//	FindFrame("DKFYB_drumstick")->SetChild(m_basicSkillObj);
+	//	m_basicSkillObj->SetPosition(FindFrame("DKFYB_drumstick")->GetPosition());
+	//	cout << "x: " << m_basicSkillObj->GetPosition().x << "y: " << m_basicSkillObj->GetPosition().x << "z: " << m_basicSkillObj->GetPosition().x << endl;
 
-		
-		break;
-	case NONECHARACTER:
-		break;
-	default:
-		break;
-	}
 
-	m_basicSkillObj->SetScale(10, 10,10);
+	//	break;
+	//case VOCAL:
+	//	FindFrame("BoomMic_Cylinder")->SetChild(m_basicSkillObj);
+	//	m_basicSkillObj->SetPosition(FindFrame("BoomMic_Cylinder")->GetPosition());
+	//	cout << "x: " << m_basicSkillObj->GetPosition().x << "y: " << m_basicSkillObj->GetPosition().x << "z: " << m_basicSkillObj->GetPosition().x << endl;
+
+	//	
+	//	break;
+	//case NONECHARACTER:
+	//	break;
+	//default:
+	//	break;
+	//}
+
+	//m_basicSkillObj->SetScale(10, 10,10);
 
 
 	//int i = pPlayerModel->m_pModelRootObject->GetMeshType();
@@ -1073,7 +1069,7 @@ COtherPlayers::COtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	else if (type == DRUM)
 		pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/DrumTest.bin", NULL, true);
 	else if (type == BASS)
-		pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest.bin", NULL, true);
+		pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/basstest2.bin", NULL, true);
 	else if (type == VOCAL)
 		pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/MicTest.bin", NULL, true);
 	
@@ -1276,19 +1272,21 @@ void COtherPlayers::Update(float fTimeElapsed)
 
 	m_xmOOBB.Center = m_xmf3Position;
 	m_xmOOBB.Center.y = m_xmf3Position.y + GetBoundingBox().Extents.y;
+
+		
 }
 void COtherPlayers::SetPlayerCharacter(bool isTeam, E_CHARACTERTYPE type, int num, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
 
 
-	cout << "num은: " << num << endl;
+	//cout << "num은: " << num << endl;
 	//iter2 += type;
-	cout<<"들어온 타입" << type << endl;
+	//cout<<"들어온 타입" << type << endl;
 	if (isTeam)
 	{
 		//vector<COtherPlayers*>::pointer ptr = PLAYER->m_pTeamPlayerMap()[num];
 		
-		cout <<"전"<< PLAYER->m_pTeamPlayerMap[num] << endl;
+		//cout <<"전"<< PLAYER->m_pTeamPlayerMap[num] << endl;
 		XMFLOAT3 xmPos = PLAYER->m_pTeamPlayerMap[num]->GetPosition();
 		int clientNum = PLAYER->m_pTeamPlayerMap[num]->GetClientNum();
 		E_CHARACTERTYPE type = PLAYER->m_pTeamPlayerMap[num]->GetCharacterType();
@@ -1302,7 +1300,7 @@ void COtherPlayers::SetPlayerCharacter(bool isTeam, E_CHARACTERTYPE type, int nu
 		PLAYER->m_pTeamPlayerMap[num]->SetScale(XMFLOAT3(60, 60, 60));
 
 		//cout << *ptr << "team포인터: " << PLAYER->GetTeamPlayerMap()[num] << endl;
-		cout <<"후"<< PLAYER->m_pTeamPlayerMap[num] << endl;
+		//cout <<"후"<< PLAYER->m_pTeamPlayerMap[num] << endl;
 
 		//CLoadedModelInfo* pModel{ nullptr };
 		//pModel = PLAYER->GetOtherModelResourceFromPool(num, type, isTeam);
@@ -1329,7 +1327,7 @@ void COtherPlayers::SetPlayerCharacter(bool isTeam, E_CHARACTERTYPE type, int nu
 	}
 	else
 	{
-		cout << "전" << PLAYER->m_pOtherPlayerMap[num] << endl;
+		//cout << "전" << PLAYER->m_pOtherPlayerMap[num] << endl;
 		XMFLOAT3 xmPos = PLAYER->m_pOtherPlayerMap[num]->GetPosition();
 		int clientNum = PLAYER->m_pOtherPlayerMap[num]->GetClientNum();
 		E_CHARACTERTYPE type = PLAYER->m_pOtherPlayerMap[num]->GetCharacterType();
@@ -1341,7 +1339,7 @@ void COtherPlayers::SetPlayerCharacter(bool isTeam, E_CHARACTERTYPE type, int nu
 		PLAYER->m_pOtherPlayerMap[num]->SetScale(XMFLOAT3(60, 60, 60));
 
 		//cout << *ptr << "team포인터: " << PLAYER->GetTeamPlayerMap()[num] << endl;
-		cout << "후" << PLAYER->m_pOtherPlayerMap[num] << endl;
+		//cout << "후" << PLAYER->m_pOtherPlayerMap[num] << endl;
 
 
 		//CLoadedModelInfo* pModel{ nullptr };

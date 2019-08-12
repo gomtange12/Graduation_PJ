@@ -421,7 +421,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		//SetConsoleOutputCP(65001);
 		sc_packet_chat *pkt = reinterpret_cast<sc_packet_chat *>(ptr);
-		cout <<"cnet- " << pkt->chat <<endl;
+		//cout <<"cnet- " << pkt->chat <<endl;
 		//cout << sizeof(pkt->chat) << endl;
 		CHATMANAGER->TextChange(pkt->chat);
 		//CHATMANAGER->InputChatting(pkt->chat, pkt->cSize);
@@ -434,7 +434,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		sc_packet_clock *pkt = reinterpret_cast<sc_packet_clock *>(ptr);
 		//여기에 들어오면 1초가 지나서 들어온것
 		m_time++;
-		cout << m_time << endl;
+		//cout << m_time << endl;
 		if (m_time == 300) {
 			TimeOut();
 			m_time = 0;
@@ -445,12 +445,15 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 			if (m_skillTime == 0)
 				m_skilCheck = false;
 		}
+		SCENEMANAGER->SetColock(m_dona);
+		m_dona = false;
 		break;
 	}
 	case SC_DONA:
 	{
 		sc_packet_dona *pkt = reinterpret_cast<sc_packet_dona *>(ptr);
-		m_time = m_time - 10;
+		m_time -= 10;
+		m_dona = true;
 		break;
 	}
 	default:

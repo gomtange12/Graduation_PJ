@@ -115,8 +115,8 @@ void WorkerThread::error_display(const char *msg, int err_no)
 		NULL, err_no,
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		(LPTSTR)&lpMsgBuf, 0, NULL);
-	std::cout << msg;
-	std::wcout << L"에러 " << lpMsgBuf << std::endl;
+	//std::cout << msg;
+//	std::wcout << L"에러 " << lpMsgBuf << std::endl;
 	while (true);
 	LocalFree(lpMsgBuf);
 }
