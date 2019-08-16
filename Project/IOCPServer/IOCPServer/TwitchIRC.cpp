@@ -77,7 +77,7 @@ void TwitchIRC::Run()
 				stripMessage(pkt, name, message);
 				
 				
-				//std::cout << "Chat: " << chat << std::endl;
+				std::cout << "Chat: " << chat << std::endl;
 				pkt.resize(0);
 			}
 			if (pkt.find("PING") != std::string::npos) {
