@@ -248,7 +248,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 	//m_pPlayGroundTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 
-	m_nShaders = 15;
+	m_nShaders = 16;
 	m_ppShaders = new CShader*[m_nShaders];
 
 	/*CHellicopterObjectsShader *pHellicopterObjectsShader = new CHellicopterObjectsShader();
@@ -345,6 +345,11 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	pOneSecShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
 	pOneSecShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	m_ppShaders[14] = pOneSecShader;
+
+	CSkillEffectUIShader *pEffectShader = new CSkillEffectUIShader();
+	pEffectShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	pEffectShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
+	m_ppShaders[15] = pEffectShader;
 	/*CTexturedShader* pOneSecShader = new CTexturedShader();
 	pTexturedShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	pTexturedShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
@@ -1751,7 +1756,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 			}
 	
 		}
-		for(int i =  11; i < 15;++i)
+		for(int i =  11; i < 16;++i)
 		{
 			m_ppShaders[i]->UpdateShaderVariables(pd3dCommandList);
 			m_ppShaders[i]->Render(pd3dCommandList, pCamera);

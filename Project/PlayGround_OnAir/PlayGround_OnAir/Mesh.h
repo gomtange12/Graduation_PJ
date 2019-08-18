@@ -295,5 +295,5 @@ public:
 	XMFLOAT2*                           m_pxmf2TextureCoords0 = nullptr;
 	ID3D12Resource*                     m_pd3dTextureCoord0Buffer = nullptr;
 	ID3D12Resource*                     m_pd3dTextureCoord0UploadBuffer = nullptr;
-	D3D12_VERTEX_BUFFER_VIEW      m_d3dTextureCoord0BufferView;
+	D3D12_VERTEX_BUFFER_VIEW			m_d3dTextureCoord0BufferView;
 };
