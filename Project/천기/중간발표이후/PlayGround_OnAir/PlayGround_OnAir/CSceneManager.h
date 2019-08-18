@@ -29,7 +29,7 @@ public:
 	bool GetSelectedMode() { return m_isModeSelected; }
 	void SetSelectedMode(bool mode) { m_isModeSelected = mode; }
 	void SetSelectedMap(bool map) { m_isMapSelected = map; }
-	void SetColock(bool dona);
+	void SetColock();
 	ModNumber CheckModeButton(const POINT& pos);
 	SceneState CheckMapButton(const POINT& pos);
 

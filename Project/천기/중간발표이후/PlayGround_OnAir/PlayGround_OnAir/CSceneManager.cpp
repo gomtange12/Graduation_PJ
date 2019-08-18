@@ -4,15 +4,9 @@
 #include "CTempScene.h"
 #include "Scene.h"
 #include "GameFramework.h"
-void CSceneManager::SetColock(bool dona)
-{	
-	if (dona == true) {
-		m_Gameclock += 10;
-	}
-	else {
-		if (m_Gameclock > 0)
-			m_Gameclock -= 1;
-	}
+void CSceneManager::SetColock()
+{
+	if (m_Gameclock > 0) m_Gameclock -= 1;
 
 	//cout<<"gameClock" << m_Gameclock << endl;
 	m_hunSec = m_Gameclock / 100;

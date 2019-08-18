@@ -524,20 +524,20 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 				case VK_F2:
 				case VK_F3:
 				case VK_F4:
-					//m_pCamera = PLAYER->GetPlayer()->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
+					m_pCamera = PLAYER->GetPlayer()->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
 					break;
 				case VK_F5: {
-					if (m_ready == false) {
-						CNETWORK->MatchPkt();
-						
+					//if (m_ready == false) {
+						//CNETWORK->MatchPkt();
+						SCENEMANAGER->SetScene(PLAYGROUNDMAP);
 						//m_pCamera = PLAYER->GetPlayer()->GetCamera();
 						//cout << "¸ÅÄª!";
-						m_ready = true;
-					}
+						//m_ready = true;
+					//}
 					break;
 				}
 				case VK_F6:
-					SCENEMANAGER->SetScene(CONCERTMAP);
+					//SCENEMANAGER->SetScene(CONCERTMAP);
 					break;
 				case VK_F7: {
 					CNETWORK->LobbyPkt(true);
@@ -652,7 +652,7 @@ void CGameFramework::OnDestroy()
 
 void CGameFramework::BuildObjects()
 {
-	CNETWORK->MakeServer(m_hWnd);
+	//CNETWORK->MakeServer(m_hWnd);
 	m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
 
 	//SCENEMANAGER->
@@ -721,7 +721,7 @@ void CGameFramework::BuildObjects()
 	//m_pScene->BuildObjectsAfterPlayer(m_pd3dDevice, m_pd3dCommandList);
 	//m_pScene->m_pPlayer = m_pPlayer;// = pPlayer;// = PLAYER->GetInstance()->GetPlayer();
 	m_pCamera = PLAYER->GetPlayer()->GetCamera();
-	CNETWORK->SetGameFrameWork(GetCGameFramework());
+	//CNETWORK->SetGameFrameWork(GetCGameFramework());
 	//m_pCamera->SetMode(THIRD_PERSON_CAMERA);
 
 	m_pd3dCommandList->Close();
@@ -883,8 +883,10 @@ void CGameFramework::ProcessInput()
 				{
 					//PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
 					if(control % 2 ==0){
-						if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN) 
-							CNETWORK->StatePkt(dwDirection);
+						if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN) {
+							
+								//CNETWORK->StatePkt(dwDirection);
+						}
 							
 					}
 					

@@ -33,7 +33,6 @@ private:
 
 	CGameFramework*			CNetCGameFramework;
 	int		m_time;
-	bool	m_dona=false;
 	int     m_skillTime = 0;
 	bool	m_skilCheck = false;
 	bool	m_isCheckPkt  =  false;

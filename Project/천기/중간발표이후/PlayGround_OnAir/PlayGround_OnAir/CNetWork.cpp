@@ -445,15 +445,13 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 			if (m_skillTime == 0)
 				m_skilCheck = false;
 		}
-		SCENEMANAGER->SetColock(m_dona);
-		m_dona = false;
+		SCENEMANAGER->SetColock();
 		break;
 	}
 	case SC_DONA:
 	{
 		sc_packet_dona *pkt = reinterpret_cast<sc_packet_dona *>(ptr);
-		m_time -= 10;
-		m_dona = true;
+		m_time = m_time - 10;
 		break;
 	}
 	default:
