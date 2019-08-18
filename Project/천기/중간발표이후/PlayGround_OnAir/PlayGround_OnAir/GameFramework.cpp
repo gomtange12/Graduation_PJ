@@ -794,12 +794,13 @@ void CGameFramework::ProcessInput()
 			}
 			if (pKeysBuffer[0x45] & 0xF0) //스킬키
 			{
-				if (CNETWORK->GetSkillCheck() == false) {
+				//주석푸셈
+				//if (CNETWORK->GetSkillCheck() == false) {
 					PLAYER->GetPlayer()->SetPlayerState(ATTACK_3);
 					CNETWORK->KeyPkt(false, false, true);
 					CNETWORK->SetSkillCheck(true);
 					CNETWORK->SetSkillTime(4);
-				}
+				//}
 			}
 			//2플레이어
 			//if (pKeysBuffer[VK_HANGUL] & 0xF0)
@@ -884,7 +885,7 @@ void CGameFramework::ProcessInput()
 					//PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
 					if(control % 2 ==0){
 						if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN) {
-							
+							PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
 								//CNETWORK->StatePkt(dwDirection);
 						}
 							
