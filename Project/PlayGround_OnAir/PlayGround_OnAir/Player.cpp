@@ -123,6 +123,30 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 		SetPlayerUpdatedContext(pContext);
 		SetCameraUpdatedContext(pContext);
 	}
+
+
+	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+
+	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/³²R_±âÅ¸_L.dds", 0);
+
+
+	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 90, 90.f, 0, 0, 0, 0);
+
+
+	CShader* pShader = new CSkillEffectUIShader();
+	pShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	CMaterial* pMaterial = new CMaterial(1);
+	pMaterial->SetTexture(pTexture, 0);
+	m_pEffectObject = new CPlaneObject(1);
+	m_pEffectObject->SetMaterial(0, pMaterial);
+	m_pEffectObject->SetPosition(2550, 90, 1745);
+	m_pEffectObject->SetMesh(pEffectMesh);
+	m_pEffectObject->SetScale(100, 100, 100);
+	m_pEffectObject->SetShader(0, pShader);
+	//pPlaneObject->SetScale(100, 100, 100);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, pTexture, 16, false);
 }
 
 CPlayer::~CPlayer()
@@ -578,6 +602,9 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr
 {
 	DWORD nCameraMode = (pCamera) ? pCamera->GetMode() : 0x00;
 	if (nCameraMode == THIRD_PERSON_CAMERA) CGameObject::Render(pd3dCommandList, pCamera);
+
+	
+	m_pEffectObject->Render(pd3dCommandList, pCamera);
 }
 void CPlayer::NumberByPos(int num) {
 

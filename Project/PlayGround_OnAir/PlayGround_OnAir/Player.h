@@ -67,6 +67,13 @@ protected:
 
 	CMaterial				*m_pMaterial = NULL;
 	bool						m_HeartHp{ true };
+
+
+	//////////
+	CGameObject* m_pEffectObject = nullptr;
+
+	//
+
 public:
 
 	bool isHeartRender() { return m_HeartHp; }
