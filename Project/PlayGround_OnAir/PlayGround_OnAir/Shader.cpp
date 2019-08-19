@@ -1928,14 +1928,12 @@ void CSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12Graphic
 	//m_ppObjects[0]->SetPosition(1900, 10.1, 1300.0f);
 	m_ppObjects[0]->SetPosition(350, 10, 1745);
 	m_ppObjects[0]->SetMesh(pEffectMesh);
-	m_ppObjects[0]->SetScale(10, 10, 10);
+	m_ppObjects[0]->SetScale(100, 100, 100);
 	//pPlaneObject->SetScale(100, 100, 100);
-	cout << "x: " << m_ppObjects[0]->m_xmf4x4World._41 << "y: " << m_ppObjects[0]->m_xmf4x4World._42 << "z: " << m_ppObjects[0]->m_xmf4x4World._43 << endl;
-
+	
 	CScene::CreateShaderResourceViews(pd3dDevice, pTexture, 16, true);
 
-	CreateShaderVariables(pd3dDevice, pd3dCommandList);
-
+	
 }
 
 
@@ -1969,15 +1967,15 @@ void CSkillEffectUIShader::ReleaseShaderVariables()
 //}
 void CSkillEffectUIShader::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
 {
-	//OnPrepareRender(pd3dCommandList, 0);
+	OnPrepareRender(pd3dCommandList, 0);
 	CShader::Render(pd3dCommandList, pCamera);
-	//if (m_pd3dPipelineState) pd3dCommandList->SetPipelineState(m_pd3dPipelineState);
-	//else { cout << "¾ø" << endl; }
+	if (m_pd3dPipelineState) pd3dCommandList->SetPipelineState(m_pd3dPipelineState);
+	else { cout << "¾ø" << endl; }
 
 	
 	for (int i = 0; i < m_nObjects; ++i)
 	{
-		//m_ppObjects[i]->UpdateTransform(NULL);
+		m_ppObjects[i]->UpdateTransform(NULL);
 		m_ppObjects[i]->Render(pd3dCommandList, pCamera);
 	}
 }
