@@ -42,14 +42,14 @@ void TwitchIRC::Proc() {
 
 	if (connect(sock, (struct sockaddr *)&ServerAddr, sizeof(ServerAddr)) == 0)
 	{
-		//printf("TwitchIRC Connected..! \n");
+		std::cout << "TwitchIRC Connected..! \n" << std::endl;
 
 		InitSend();
 		Run();
 	}
 	else
 	{
-		printf("Failed to connect!\n");
+		std::cout << "Failed to connect!\n" << std::endl;
 	}
 }
 

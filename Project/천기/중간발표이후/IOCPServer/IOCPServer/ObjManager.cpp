@@ -30,17 +30,17 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 {
 	if (packet[1] == CS_MATCHING_PLAYER)
 	{
-		//std::cout << "Machig Request --- " << std::endl;
+		std::cout << "Machig Request --- " << std::endl;
 
 		cs_packet_matching *match = reinterpret_cast<cs_packet_matching *>(packet);
 		g_clients[id]->avatar = match->avatar;
 		g_clients[id]->map = match->map;
 		g_clients[id]->mod = match->mod;
 
-		//std::cout << "ID : " << id << std::endl;
-		//std::cout << "Avatar : " << g_clients[id]->avatar << std::endl;
-		//std::cout << "Map : " << g_clients[id]->map << std::endl;
-		//std::cout << "Mod : " << g_clients[id]->mod << std::endl;
+		std::cout << "ID : " << id << std::endl;
+		std::cout << "Avatar : " << g_clients[id]->avatar << std::endl;
+		std::cout << "Map : " << g_clients[id]->map << std::endl;
+		std::cout << "Mod : " << g_clients[id]->mod << std::endl;
 
 		switch (g_clients[id]->map)
 		{
@@ -51,11 +51,11 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 		}
 		case CONCERTMAP:
 		{
-			ModMatch(id);
+			//ModMatch(id);
 			break;
 		}
 		default:
-			//std::wcout << "잘못된 매칭 정보입니다\n";
+			std::wcout << "잘못된 매칭 정보입니다\n";
 			break;
 		}
 	}
@@ -115,7 +115,7 @@ void ObjManager::ModMatch(int id)
 		break;
 	}
 	default:
-		//std::wcout << L"정의되지 않은 패킷 도착!!\n";
+		std::wcout << L"정의되지 않은 패킷 도착!!\n";
 		break;
 	}
 	
@@ -145,7 +145,7 @@ void ObjManager::MovePkt(int id, unsigned char *packet)
 	}
 	PACKETMANAGER->MovePacket(id);
 	
-	//dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_MOVE, GetTickCount()+100);	
+
 }
 void ObjManager::RotePkt(int id, unsigned char *packet)
 {
@@ -175,26 +175,18 @@ bool ObjManager::collisionPlayerByPlayer(int id)
 			if (id != ROOMMANAGER->room[roomNum]->m_SoloIds[i]) {
 				otherId = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
 				if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //충돌!
-				{
-					//PACKETMANAGER->CollisionPacket(id, otherId);
 					return true;
-				}
 			}
 		}
-
 	}
 	else {
 		for (int i = 0; i < TEAM_RNUM; ++i) {
 			if (id != ROOMMANAGER->room[roomNum]->m_TeamIds[i]) {
 				otherId = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
 				if (g_clients[id]->m_xmOOBB.Contains(g_clients[otherId]->m_xmOOBB)) //충돌!
-				{
-					//PACKETMANAGER->CollisionPacket(id, otherId);
 					return true;
-				}
 			}
 		}
-
 	}
 	return false;		
 }
@@ -298,6 +290,7 @@ void ObjManager::LobbyPkt(int id)
 					g_clients[ids]->lose = false;
 					g_clients[ids]->m_match = false;
 					g_clients[ids]->hp = 8;
+					ROOMMANAGER->room[roomNum]->m_SoloIds[i] = -1;
 				}
 			}
 		}
@@ -315,13 +308,16 @@ void ObjManager::LobbyPkt(int id)
 					g_clients[ids]->lose = false;
 					g_clients[ids]->m_match = false;
 					g_clients[ids]->hp = 8;
+					ROOMMANAGER->room[roomNum]->m_TeamIds[i] = -1;
 				}
 			}
 		}
 	}
 	ROOMMANAGER->room[roomNum]->clocking = false;
+	
 }
-void ObjManager::TimeOut(int id) {
+void ObjManager::TimeOut(int id) 
+{
 	int roomNum = g_clients[id]->roomNumber;
 	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
 		for (int i = 0; i < SOLO_RNUM; ++i) {
