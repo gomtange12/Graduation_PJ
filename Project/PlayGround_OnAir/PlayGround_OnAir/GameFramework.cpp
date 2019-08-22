@@ -937,7 +937,7 @@ void CGameFramework::AnimateObjects()
 	if (PLAYER->GetPlayer() != nullptr)
 	{
 		PLAYER->GetPlayer()->Animate(fTimeElapsed);
-	
+		PLAYER->GetPlayer()->m_pEffectObject->Animate(fTimeElapsed);
 
 	}
 	//PLAYER->GetOtherPlayer()->Animate(fTimeElapsed);

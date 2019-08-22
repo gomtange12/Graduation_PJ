@@ -324,7 +324,7 @@ float4 PSEffectTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //«»ºøΩ¶¿Ã¥ı
 
 	float4 cColor = gtxtUITexture.Sample(gSamplerState, input.uv);
 
-	//if (cColor.a < 0.1) discard;
+	if (cColor.a < 0.1) discard;
 	return(cColor);
 
 }

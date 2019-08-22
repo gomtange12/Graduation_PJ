@@ -125,35 +125,49 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	}
 
 
-	CTexture* pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+	pBasicTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 
 
-	pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/³²R_±âÅ¸_L.dds", 0);
+	pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
 
 
-	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 90, 90.f, 0, 0, 0, 0);
+	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 200, 350.f, 0, 0, 0, 0);
 
-
-	CShader* pShader = new CSkillEffectUIShader();
+	pShader = new CSkillEffectUIShader();
 	pShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
 	CMaterial* pMaterial = new CMaterial(1);
-	pMaterial->SetTexture(pTexture, 0);
+	pMaterial->SetTexture(pBasicTexture, 0);
 	m_pEffectObject = new CPlaneObject(1);
 	m_pEffectObject->SetMaterial(0, pMaterial);
 	m_pEffectObject->SetPosition(2550, 90, 1745);
 	m_pEffectObject->SetMesh(pEffectMesh);
-	m_pEffectObject->SetScale(100, 100, 100);
 	m_pEffectObject->SetShader(0, pShader);
-	//pPlaneObject->SetScale(100, 100, 100);
 
-	CScene::CreateShaderResourceViews(pd3dDevice, pTexture, 16, false);
+
+	pSkillTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+	pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/eSkill.dds", 0);
+
+	CTexturedRectMesh* pSkillEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 90, 90.f, 0, 0, 0, 0);
+
+	CShader* pSkillShader = new CSkillEffectUIShader();
+	pSkillShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	
+	CMaterial* pSkillMaterial = new CMaterial(1);
+	pSkillMaterial->SetTexture(pSkillTexture, 0);
+	m_pSkillObject = new CPlaneObject(1);
+	m_pSkillObject->SetMaterial(0, pSkillMaterial);
+	m_pSkillObject->SetPosition(2550, 90, 1745);
+	m_pSkillObject->SetMesh(pSkillEffectMesh);
+	m_pSkillObject->SetShader(0, pSkillShader);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, pBasicTexture, 16, false);
+	CScene::CreateShaderResourceViews(pd3dDevice, pSkillTexture, 16, false);
 }
 
 CPlayer::~CPlayer()
 {
 	ReleaseShaderVariables();
 
-	//if (m_pCamera) delete m_pCamera;
 }
 
 void CPlayer::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
@@ -411,6 +425,7 @@ void CPlayer::Update(float fTimeElapsed)
 	case ATTACK:
 		m_OnAacting = TRUE;
 		SetTrackAnimationSet(0, ATTACK);
+		m_basicEffectRender = true;
 		break;
 	case HAPPY:
 		m_OnAacting = TRUE;

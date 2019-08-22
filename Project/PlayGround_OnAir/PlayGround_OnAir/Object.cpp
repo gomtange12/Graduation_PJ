@@ -1690,14 +1690,23 @@ CPlaneObject::~CPlaneObject()
 }
 
 
-void CPlaneObject::Animate(float fTimeElapsed, std::shared_ptr<CCamera> pCamera)
+void CPlaneObject::Animate(float fTimeElapsed)
 {
+	//int n = 1;
+	//XMFLOAT3 pos = Vector3::Add(PLAYER->GetPlayer()->GetPosition(), Vector3::ScalarProduct(PLAYER->GetPlayer()->GetLookVector(), 55 * frame++));
 
 }
 
 void CPlaneObject::SetLookAt(XMFLOAT3 & xmf3Target)
 {
-	XMFLOAT3 pos = Vector3::Add(PLAYER->GetPlayer()->GetPosition(), Vector3::ScalarProduct( PLAYER->GetPlayer()->GetLookVector(), 35));
+	XMFLOAT3 pos = Vector3::Add(PLAYER->GetPlayer()->GetPosition(), Vector3::ScalarProduct( PLAYER->GetPlayer()->GetLookVector(), frame++));
+	//XMFLOAT3 pos = PLAYER->GetPlayer()->FindFrame("")->
+	pos.y += 40;
+	if (frame > 90)
+	{
+		frame = 0;
+		PLAYER->GetPlayer()->SetBasicEfectOn(false);
+	}
 	SetPosition(pos);
 	
 	XMFLOAT3 xmf3Up = { 0.0f, 1.0f, 0.0f };
@@ -1713,20 +1722,21 @@ void CPlaneObject::SetLookAt(XMFLOAT3 & xmf3Target)
 
 void CPlaneObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
 {
-	XMFLOAT3 xmf3CameraPosition = pCamera->GetPosition();
+	if (PLAYER->GetPlayer()->GetBasicEffetOn())
+	{
+		XMFLOAT3 xmf3CameraPosition = pCamera->GetPosition();
 
-	SetLookAt(xmf3CameraPosition);
+		SetLookAt(xmf3CameraPosition);
 
-	CGameObject::Render(pd3dCommandList, pCamera);
-	//cout << "Update x: " << this->m_xmf4x4World._41 << "y: " << this->m_xmf4x4World._42 << "z: " << this->m_xmf4x4World._43 << endl;
+		CGameObject::Render(pd3dCommandList, pCamera);
+	}
+
 
 }
 
 CEffectObject::CEffectObject(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, E_EFFECTTYPE type, int nMat) : CPlaneObject(nMat)
 {
-	CPlayerEffectUIShader* pPlayerSkillShader = new CPlayerEffectUIShader();
-	pPlayerSkillShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-	pPlayerSkillShader->BuildObjects(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, type, NULL);
+
 	
 }
 

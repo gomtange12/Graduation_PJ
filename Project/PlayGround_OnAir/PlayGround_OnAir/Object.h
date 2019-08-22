@@ -601,12 +601,14 @@ public:
 };
 class CPlaneObject : public CGameObject
 {
+	int frame{ 0 };
 public:
 	CPlaneObject(int nMat);// : CGameObject
 	virtual ~CPlaneObject();
 
 public:
-	virtual void Animate(float fTimeElapsed, std::shared_ptr<CCamera> pCamera);
+	void SetFrame(int n) { frame = n; }
+	virtual void Animate(float fTimeElapsed);
 	void SetLookAt(XMFLOAT3& xmf3Target);
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
 };
