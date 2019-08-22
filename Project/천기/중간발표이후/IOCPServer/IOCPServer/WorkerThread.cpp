@@ -97,7 +97,6 @@ void WorkerThread::Proc()
 		}
 		else if (OP_CLOCK == over->m_todo) {
 			if (ROOMMANAGER->room[over->roomNum]->clocking == true) {
-				//std::cout << over->roomNum << " : ROOM CLOCK SYNC" << std::endl;
 				PACKETMANAGER->ClockPacket(over->id);
 				dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(over->id, OP_CLOCK, over->roomNum, GetTickCount() + 1000);
 			}
@@ -115,8 +114,8 @@ void WorkerThread::error_display(const char *msg, int err_no)
 		NULL, err_no,
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		(LPTSTR)&lpMsgBuf, 0, NULL);
-	//std::cout << msg;
-//	std::wcout << L"에러 " << lpMsgBuf << std::endl;
+	std::cout << msg;
+	std::wcout << L"에러 " << lpMsgBuf << std::endl;
 	while (true);
 	LocalFree(lpMsgBuf);
 }
