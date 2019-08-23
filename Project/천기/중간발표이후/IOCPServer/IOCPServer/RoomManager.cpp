@@ -6,6 +6,7 @@
 
 RoomManager::RoomManager()
 {
+	room.reserve(4);
 }
 
 RoomManager::~RoomManager()
@@ -13,12 +14,12 @@ RoomManager::~RoomManager()
 }
 void RoomManager::SoloRoomMatch(int id) 
 {
-	if (room.size() <= RNumber) {//盖贸澜 规积己
+	//if (room.size() <= RNumber) {//盖贸澜 规积己
 		Room* soloRooms = new Room;
 		soloRooms->RoomNumber = RNumber;
 		soloRooms->mod = SOLO;
 		room.emplace_back(soloRooms);
-	}
+	//}
 
 	//后规阑 茫澜
 	for (int i = 0; i < room.size(); ++i) {
@@ -72,12 +73,12 @@ void RoomManager::SoloRoomMatch(int id)
 }
 void RoomManager::TeamRoomMatch(int id)
 {
-	if (room.size() <= RNumber) {//盖贸澜 规积己
+	//if (room.size() <= RNumber) {
 		Room* teamRooms = new Room;
 		teamRooms->RoomNumber = RNumber;
 		teamRooms->mod = SQUAD;
 		room.emplace_back(teamRooms);
-	}
+	//}
 	
 	//后规阑 茫澜
 	for (int i = 0; i < room.size(); ++i) {
