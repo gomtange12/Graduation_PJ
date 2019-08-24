@@ -1059,9 +1059,7 @@ void CGameFramework::FrameAdvance()
 	{
 		if(PLAYER->GetPlayer()->GetHP() > 0)
 			PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
-	/*	PLAYER->GetPlayer()->m_EffectObj->SetShader(m_pScene->m_ppShaders[12]);
-		PLAYER->GetPlayer()->m_EffectObj->UpdateShaderVariable(m_pd3dCommandList, &PLAYER->GetPlayer()->m_xmf4x4World);
-		PLAYER->GetPlayer()->m_EffectObj->Render(m_pd3dCommandList, m_pCamera);*/
+
 	}
 		if (PLAYER->m_pOtherPlayerMap.size() > 0)
 	{

@@ -4,7 +4,6 @@ Texture2D gtxtTexture : register(t14);
 #include "Shaders.hlsl"
 Texture2D gtxtUITexture : register(t15);
 Texture2D gtxtSkillUITexture : register(t16);
-
 SamplerState gSamplerState : register(s0);
 cbuffer cbUIInfo : register(b5)
 {
@@ -33,6 +32,10 @@ cbuffer cbHunClock : register(b13)
 cbuffer cbSkillCoolDownInfo : register(b10)
 {
 	int coolDown : packoffset(c0);
+};
+cbuffer cbSpriteInfo : register(b14)
+{
+	int spriteTime : packoffset(c0);
 };
 //SamplerState gClampSamplerState : register(s1);
 struct VS_TEXTURED_INPUT
@@ -65,7 +68,7 @@ VS_TEXTURED_OUTPUT VSTextured(VS_TEXTURED_INPUT input)
 #endif
 	output.uv = input.uv;*/
 
-	return(output);
+
 }
 float4 PSTextured(VS_TEXTURED_OUTPUT input, uint nPrimitiveID : SV_PrimitiveID) : SV_TARGET //«»ºøΩ¶¿Ã¥ı 
 {
@@ -315,8 +318,9 @@ VS_TEXTURED_OUTPUT VSEffectTextured(VS_TEXTURED_INPUT input, uint nVertexID : SV
 
 	VS_TEXTURED_OUTPUT output;
 	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
-	output.uv = input.uv;
-
+	//output.uv = input.uv;
+	output.uv.x = (spriteTime /1 + (spriteTime / 1 * spriteTime);
+	output.uv.y = input.uv.y;
 	return (output);
 }
 float4 PSEffectTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //«»ºøΩ¶¿Ã¥ı 

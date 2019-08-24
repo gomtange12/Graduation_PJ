@@ -7,6 +7,8 @@
 
 #include "Object.h"
 #include "Camera.h"
+class CScene;
+
 struct VS_VB_INSTANCE
 {
 	XMFLOAT4X4 m_xmf4x4Transform;
@@ -28,27 +30,11 @@ struct CB_HUN_INFO
 {
 	int hunSec;
 };
-//struct CB_ONE_INFO
-//{
-//	int oneSec;
-//	//int tenSec;
-//	//int hunSec;
-//};
-//
-//struct CB_TENN_INFO
-//{
-////	int oneSec;
-//	int tenSec;
-//	//int hunSec;
-//};
-//struct CB_HUN_INFO
-//{
-//	//int oneSec;
-//	//int tenSec;
-//	int hunSec;
-//};
 
-
+struct CB_SPRITE_TIME
+{
+	int xPos;
+};
 struct CB_HP_INFO
 {
 	int hp;
@@ -57,7 +43,6 @@ struct CB_SKILL_INFO
 {
 	int Cooldown;
 };
-class CScene;
 class CShader
 {
 public:
@@ -412,7 +397,7 @@ public:
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 
-	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, void *pContext = NULL);
 
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
 	CGameObject **m_ppBillBoardObj;
@@ -424,14 +409,14 @@ class CWinUIShader : public CUiShader {
 public:
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
-	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, void *pContext = NULL);
 
 };
 class CLoseUIShader : public CUiShader {
 public:
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
-	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, void *pContext = NULL);
 
 };
 
@@ -445,21 +430,21 @@ public:
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 protected:
 	int							m_ObjectCBIndex{ 0 };
-	CB_HUN_INFO				*m_cbClock;
-	ID3D12Resource			*m_cbClockResouce = NULL;
-	CB_HUN_INFO				*m_cbMappeClock = NULL;
+	CB_HUN_INFO					*m_cbClock;
+	ID3D12Resource				*m_cbClockResouce = NULL;
+	CB_HUN_INFO					*m_cbMappeClock = NULL;
 };
 class CTenSecShader : public CTimerUIShader { // 백의자리
 
 public:
-	void CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
+	void CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 	int							m_ObjectCBIndex{ 0 };
-	CB_TEN_INFO				*m_cbClock;
-	ID3D12Resource			*m_cbClockResouce = NULL;
-	CB_TEN_INFO				*m_cbMappeClock = NULL;
+	CB_TEN_INFO					*m_cbClock;
+	ID3D12Resource				*m_cbClockResouce = NULL;
+	CB_TEN_INFO					*m_cbMappeClock = NULL;
 
 
 };
@@ -475,30 +460,25 @@ public:
 	CB_CLOCK_INFO				*m_cbMappeClock = NULL;
 
 };
+
 class CChatUIShader : public CUiShader {
 public:
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	virtual D3D12_BLEND_DESC CreateBlendState();
-
 };
-
-
 class CHPUIShader : public CUiShader
 {
 public:
 	CHPUIShader();
 	~CHPUIShader();
-
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void ReleaseShaderVariables();
-	//virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
-
 protected:
 	CGameObject				**m_ppObjects = 0;
 	int m_nObjects{ 0 };
@@ -528,6 +508,13 @@ public:
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+
+	CB_SPRITE_TIME*	 m_cbSprite = nullptr;
+	CB_SPRITE_TIME*	 m_cbMappedSprite = nullptr;
+	ID3D12Resource*  m_cbResouce = NULL;
+
 };
 
 
@@ -537,14 +524,11 @@ public:
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
-
-
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, E_EFFECTTYPE type, void *pContext = NULL);
 	virtual void ReleaseShaderVariables();
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
 
 protected:
-
 	CGameObject				**m_ppObjects = 0;
 	int						m_nObjects = 0;
 	CMaterial				*m_pMaterial = NULL;

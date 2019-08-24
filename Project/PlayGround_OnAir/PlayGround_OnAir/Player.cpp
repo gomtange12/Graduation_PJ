@@ -126,12 +126,8 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 
 
 	pBasicTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
-
-
-	pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
-
-
-	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 200, 350.f, 0, 0, 0, 0);
+	pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
+	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 150, 250.f, 0, 0, 0, 0);
 
 	pShader = new CSkillEffectUIShader();
 	pShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
@@ -146,12 +142,9 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 
 	pSkillTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 	pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/eSkill.dds", 0);
-
 	CTexturedRectMesh* pSkillEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 90, 90.f, 0, 0, 0, 0);
-
 	CShader* pSkillShader = new CSkillEffectUIShader();
 	pSkillShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-	
 	CMaterial* pSkillMaterial = new CMaterial(1);
 	pSkillMaterial->SetTexture(pSkillTexture, 0);
 	m_pSkillObject = new CPlaneObject(1);
@@ -161,7 +154,7 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	m_pSkillObject->SetShader(0, pSkillShader);
 
 	CScene::CreateShaderResourceViews(pd3dDevice, pBasicTexture, 16, false);
-	CScene::CreateShaderResourceViews(pd3dDevice, pSkillTexture, 16, false);
+	CScene::CreateShaderResourceViews(pd3dDevice, pSkillTexture, 15, false);
 }
 
 CPlayer::~CPlayer()
