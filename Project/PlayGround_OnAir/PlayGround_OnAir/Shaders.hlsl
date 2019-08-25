@@ -42,7 +42,7 @@ Texture2D gtxtNormalTexture : register(t8);
 Texture2D gtxtMetallicTexture : register(t9);
 Texture2D gtxtEmissionTexture : register(t10);
 Texture2D gtxtDetailAlbedoTexture : register(t11);
-Texture2D gtxtDetailNormalTexture : register(t12);
+Texture2D gtxtShadowTexture : register(t12);
 
 SamplerState gssWrap : register(s0);
 
@@ -178,7 +178,49 @@ struct VS_TERRAIN_OUTPUT
 	float2 uv0 : TEXCOORD0;
 	float2 uv1 : TEXCOORD1;
 };
+struct VS_SHADOW_OUT
+{
+	float4 position : SV_POSITION;
+	float2 uv : TEXCOORD;
+};
+//VS_SHADOW_OUT VSSkiningShadow(VS_SKINNED_STANDARD_INPUT input) {
+//
+//	VS_SHADOW_OUT output = (VS_SHADOW_OUT)0.f;
+//
+//	float3 posL = float3(0.0f, 0.0f, 0.0f);
+//
+//	float weights[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+//	weights[0] = input.weights.x;
+//	weights[1] = input.weights.y;
+//	weights[2] = input.weights.z;
+//	weights[3] = 1.0f - weights[0] - weights[1] - weights[2];
+//
+//	if (input.index[0] == 0 && input.index[1] == 0 && input.weights.x == 0 && input.weights.y == 0)
+//		posL = input.position;
+//	else {
+//		for (int i = 0; i < 4; ++i) {
+//			posL += weights[i] * mul(float4(input.position, 1.0f),
+//				gmtxBoneTransforms[input.index[i]]).xyz;
+//
+//		}
+//	}
+//	float3 posW = mul(float4(posL, 1.0f), gmtxObjectWorld).xyz;
+//	output.position = mul(float4(posW, 1.0f), gmtxViewProjection);
+//	output.uv = input.uv;
+//
+//	return output;
+//}
 
+//VS_SHADOW_OUT VSModelShadow(VS_STANDARD_OUTPUT input) {
+//
+//	VS_SHADOW_OUT output = (VS_SHADOW_OUT)0.f;
+//
+//	float3 posW = (float3)mul(float4(input.position, 1.0f), gmtxGameObject);
+//	output.position = mul(float4(posW, 1.0f), gmtxViewProjection);
+//	output.uv = input.uv;
+//
+//	return output;
+//}
 VS_TERRAIN_OUTPUT VSTerrain(VS_TERRAIN_INPUT input)
 {
 	VS_TERRAIN_OUTPUT output;
@@ -233,4 +275,5 @@ float4 PSSkyBox(VS_SKYBOX_CUBEMAP_OUTPUT input) : SV_TARGET
 
 	return(cColor);
 }
-////0322
+
+

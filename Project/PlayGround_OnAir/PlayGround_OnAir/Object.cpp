@@ -1699,16 +1699,36 @@ void CPlaneObject::Animate(float fTimeElapsed)
 
 void CPlaneObject::SetLookAt(XMFLOAT3 & xmf3Target)
 {
-	XMFLOAT3 pos = Vector3::Add(PLAYER->GetPlayer()->GetPosition(), Vector3::ScalarProduct( PLAYER->GetPlayer()->GetLookVector(), frame++));
-	//XMFLOAT3 pos = PLAYER->GetPlayer()->FindFrame("")->
-	pos.y += 40;
-	if (frame > 90)
+
+	if (m_Effecttype == BASIC)
 	{
-		frame = 0;
-		PLAYER->GetPlayer()->SetBasicEfectOn(false);
+		XMFLOAT3 pos = Vector3::Add(m_pPlayer->GetEffectPos(), Vector3::ScalarProduct(m_pPlayer->GetLookVector(), frame++));
+		pos.y += 40;
+		if (frame > 100)
+		{
+			frame = 0;
+			m_pPlayer->SetBasicEfectOn(false);
+		}
+		SetPosition(pos);
 	}
-	SetPosition(pos);
+
+	//if (m_Effecttype == ESKILL)
+	{
+		XMFLOAT3 pos = Vector3::Add(m_pPlayer->GetPosition(), Vector3::ScalarProduct(m_pPlayer->GetLookVector(), frame++));
+		pos.x += 40;
+		pos.z += 20;
+		pos.y += 60;
+
+
+		if (frame > 100)
+		{
+			frame = 0;
+			m_pPlayer->SetSkillEfectOn(false);
+		}
+		SetPosition(pos);
+	}
 	
+
 	XMFLOAT3 xmf3Up = { 0.0f, 1.0f, 0.0f };
 	XMFLOAT3 xmf3Position(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
 	XMFLOAT3 xmf3Look = Vector3::Subtract(xmf3Target, xmf3Position);
@@ -1722,22 +1742,16 @@ void CPlaneObject::SetLookAt(XMFLOAT3 & xmf3Target)
 
 void CPlaneObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
 {
-	if (PLAYER->GetPlayer()->GetBasicEffetOn())
-	{
-		XMFLOAT3 xmf3CameraPosition = pCamera->GetPosition();
 
-		SetLookAt(xmf3CameraPosition);
-
-		CGameObject::Render(pd3dCommandList, pCamera);
-	}
+	XMFLOAT3 xmf3CameraPosition = pCamera->GetPosition();
+	SetLookAt(xmf3CameraPosition);
+	CGameObject::Render(pd3dCommandList, pCamera);
 
 
 }
 
 CEffectObject::CEffectObject(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, E_EFFECTTYPE type, int nMat) : CPlaneObject(nMat)
 {
-
-	
 }
 
 CEffectObject::~CEffectObject()
@@ -1747,7 +1761,10 @@ CEffectObject::~CEffectObject()
 
 void CEffectObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, std::shared_ptr<CCamera> pCamera)
 {
-	//cout << "그려짐" << endl;
-	//프레임구조로 되어있을거니까 무기에 셋차일드
-	CPlaneObject::Render(pd3dCommandList, pCamera);
+	if (m_pPlayer->GetSkillEffetOn())
+	{
+		XMFLOAT3 xmf3CameraPosition = pCamera->GetPosition();
+		SetLookAt(xmf3CameraPosition);
+		CGameObject::Render(pd3dCommandList, pCamera);
+	}
 }

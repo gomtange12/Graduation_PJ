@@ -371,9 +371,11 @@ protected:
 	static CGameObject* AllObjectList[MAXOBJECTNUM];
 	static unsigned long ObjIndex;
 	int								m_Hp;
+	E_EFFECTTYPE m_Effecttype;
 
 
 	unsigned long myIdx;
+	CPlayer* m_pPlayer = nullptr;
 
 public:
 	void AddRef();
@@ -385,6 +387,9 @@ public:
     virtual ~CGameObject();
 
 public:
+public:
+	void SetEffectType(E_EFFECTTYPE type) { type = m_Effecttype; }
+	void SetPlayer(CPlayer* player) { m_pPlayer = player; }
 	//static int m_ObjectState;
 	float							m_BoundScale{ 60 };
 	OBJTYPE							m_ObjType;
@@ -606,7 +611,6 @@ public:
 	CPlaneObject(int nMat);// : CGameObject
 	virtual ~CPlaneObject();
 
-public:
 	void SetFrame(int n) { frame = n; }
 	virtual void Animate(float fTimeElapsed);
 	void SetLookAt(XMFLOAT3& xmf3Target);

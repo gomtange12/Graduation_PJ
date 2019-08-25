@@ -122,7 +122,6 @@ public:
 	const DWORD& GetDirection() { return dwDirection; }
 	void SetDirection(DWORD dir) { dwDirection = dir; }
 	void SetCollimdeBox() {
-		//if ( != nullptr)
 		SetOOBB(GetPosition(), XMFLOAT3(0.5, 0.5, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	};
 	XMFLOAT3 GetPrePosition() { return(prePosition); }

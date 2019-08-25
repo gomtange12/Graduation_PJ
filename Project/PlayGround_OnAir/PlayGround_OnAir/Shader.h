@@ -511,12 +511,14 @@ public:
 	//virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	//virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 
-	CB_SPRITE_TIME*	 m_cbSprite = nullptr;
+	/*CB_SPRITE_TIME*	 m_cbSprite = nullptr;
 	CB_SPRITE_TIME*	 m_cbMappedSprite = nullptr;
-	ID3D12Resource*  m_cbResouce = NULL;
+	ID3D12Resource*  m_cbResouce = NULL;*/
 
 };
-
+class CESkillEffectShader : public CSkillEffectUIShader
+{
+};
 
 
 class CPlayerEffectUIShader : public CShader {

@@ -10,7 +10,6 @@ void CSceneManager::SetColock()
 
 	//cout<<"gameClock" << m_Gameclock << endl;
 	m_hunSec = m_Gameclock / 100;
-
 	m_tenSec = (m_Gameclock % 100) / 10;
 	m_oneSec = m_Gameclock % 10;
 }
@@ -74,5 +73,6 @@ CSceneManager::~CSceneManager()
 
 void CSceneManager::SetScene(SceneState state)
 {
+
 	m_SceneType = state;
 }
