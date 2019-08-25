@@ -314,12 +314,10 @@ float4 PSWinTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //«»ºøΩ¶¿Ã¥ı
 ////effect
 VS_TEXTURED_OUTPUT VSEffectTextured(VS_TEXTURED_INPUT input, uint nVertexID : SV_VertexID)
 {
-
-
 	VS_TEXTURED_OUTPUT output;
 	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
 	//output.uv = input.uv;
-	output.uv.x = (spriteTime /1 + (spriteTime / 1 * spriteTime);
+	output.uv.x = (spriteTime /1 + (spriteTime / 1 * spriteTime));
 	output.uv.y = input.uv.y;
 	return (output);
 }
