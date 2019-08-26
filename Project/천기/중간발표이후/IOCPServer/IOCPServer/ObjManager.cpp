@@ -290,6 +290,10 @@ void ObjManager::LobbyPkt(int id)
 					g_clients[ids]->lose = false;
 					g_clients[ids]->m_match = false;
 					g_clients[ids]->hp = 8;
+					g_clients[ids]->avatar = -1;
+					g_clients[ids]->mod = -1;
+					g_clients[ids]->map = -1;
+					g_clients[ids]->state = -1;
 					ROOMMANAGER->room[roomNum]->m_SoloIds[i] = -1;
 				}
 			}
@@ -308,6 +312,10 @@ void ObjManager::LobbyPkt(int id)
 					g_clients[ids]->lose = false;
 					g_clients[ids]->m_match = false;
 					g_clients[ids]->hp = 8;
+					g_clients[ids]->avatar = -1;
+					g_clients[ids]->mod = -1;
+					g_clients[ids]->map = -1;
+					g_clients[ids]->state = -1;
 					ROOMMANAGER->room[roomNum]->m_TeamIds[i] = -1;
 				}
 			}
