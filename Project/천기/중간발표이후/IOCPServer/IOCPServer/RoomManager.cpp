@@ -6,7 +6,7 @@
 
 RoomManager::RoomManager()
 {
-	room.reserve(4);
+	
 }
 
 RoomManager::~RoomManager()
@@ -14,12 +14,12 @@ RoomManager::~RoomManager()
 }
 void RoomManager::SoloRoomMatch(int id) 
 {
-	//if (room.size() <= RNumber) {//맨처음 방생성
-		Room* soloRooms = new Room;
-		soloRooms->RoomNumber = RNumber;
-		soloRooms->mod = SOLO;
-		room.emplace_back(soloRooms);
-	//}
+	
+	Room* soloRooms = new Room;
+	soloRooms->RoomNumber = RNumber;
+	soloRooms->mod = SOLO;
+	room.push_back(soloRooms);
+	
 
 	//빈방을 찾음
 	for (int i = 0; i < room.size(); ++i) {
@@ -31,9 +31,7 @@ void RoomManager::SoloRoomMatch(int id)
 						if (j == SOLO_RNUM - 1)//풀방이면
 						{
 							room[i]->m_full = true;
-							
-
-							
+							room[i]->mod  = SOLO;
 							//// 매칭 디폴트값
 							//objectManager->GetPlayer(room[i]->m_SoloIds[0])->avatar = GUITAR;
 							objectManager->GetPlayer(room[i]->m_SoloIds[0])->posN = 1;
@@ -53,7 +51,7 @@ void RoomManager::SoloRoomMatch(int id)
 							for (int k = 0; k < SOLO_RNUM; ++k) {
 								objectManager->GetPlayer(room[i]->m_SoloIds[k])->roomNumber = i;
 								objectManager->GetPlayer(room[i]->m_SoloIds[k])->m_match = true;
-								PACKETMANAGER->IngamePacket(room[i]->m_SoloIds[k], i);
+								PACKETMANAGER->IngamePacket(room[i]->m_SoloIds[k] , SOLO);
 								++RNumber;
 								if (k == 1) {
 									room[i]->clocking = true;
@@ -73,12 +71,12 @@ void RoomManager::SoloRoomMatch(int id)
 }
 void RoomManager::TeamRoomMatch(int id)
 {
-	//if (room.size() <= RNumber) {
-		Room* teamRooms = new Room;
-		teamRooms->RoomNumber = RNumber;
-		teamRooms->mod = SQUAD;
-		room.emplace_back(teamRooms);
-	//}
+	
+	Room* teamRooms = new Room;
+	teamRooms->RoomNumber = RNumber;
+	teamRooms->mod = SQUAD;
+	room.push_back(teamRooms);
+	
 	
 	//빈방을 찾음
 	for (int i = 0; i < room.size(); ++i) {
@@ -90,7 +88,7 @@ void RoomManager::TeamRoomMatch(int id)
 						if (j == TEAM_RNUM - 1)//풀방이면
 						{
 							room[i]->m_full = true;
-
+							room[i]->mod = SQUAD;
 							//// 매칭 디폴트값
 							
 							//objectManager->GetPlayer(room[i]->m_TeamIds[0])->avatar = GUITAR;
@@ -154,7 +152,7 @@ void RoomManager::TeamRoomMatch(int id)
 							for (int k = 0; k < TEAM_RNUM; ++k) {
 								objectManager->GetPlayer(room[i]->m_TeamIds[k])->roomNumber = i;
 								objectManager->GetPlayer(room[i]->m_TeamIds[k])->m_match = true;
-								PACKETMANAGER->IngamePacket(room[i]->m_TeamIds[k], i);
+								PACKETMANAGER->IngamePacket(room[i]->m_TeamIds[k], SQUAD);
 								++RNumber;
 
 								if (k == 3) {

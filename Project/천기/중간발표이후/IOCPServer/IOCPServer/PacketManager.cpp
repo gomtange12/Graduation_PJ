@@ -82,32 +82,32 @@ void PacketManager::ClientDisconnect(int id)
 	closesocket(objectManager->GetPlayer(id)->m_socket);
 	objectManager->GetPlayer(id)->m_connected = false;	
 }
-void PacketManager::IngamePacket(int id, int roomNum) {
+void PacketManager::IngamePacket(int id, int mod) {
 	//해당 채널 매칭된 클라 모두에게
-
+	int roomNum = objectManager->GetPlayer(id)->roomNumber;
 	sc_packet_scene pkt;
 	pkt.size = sizeof(sc_packet_scene);
 	pkt.type = SC_SCENE;
-	pkt.sceneNum = objectManager->GetPlayer(pkt.ids[id])->map;
+	pkt.sceneNum = objectManager->GetPlayer(id)->map;
 	//pkt.roomNum = roomNum;
-	pkt.mod = ROOMMANAGER->room[roomNum]->mod;
+	pkt.mod = mod;
 
 	
-	if (ROOMMANAGER->room[roomNum]->mod == SOLO) {
+	if (mod == SOLO) {
 		for (int i = 0; i < SOLO_RNUM; ++i) 
 		{
 			pkt.ids[i] = ROOMMANAGER->room[roomNum]->m_SoloIds[i];
-			pkt.posN[i] = objectManager->GetPlayer(pkt.ids[i])->posN;
-			pkt.avatar[i] = objectManager->GetPlayer(pkt.ids[i])->avatar;
+			pkt.posN[i] = objectManager->GetPlayer(ROOMMANAGER->room[roomNum]->m_SoloIds[i])->posN;
+			pkt.avatar[i] = objectManager->GetPlayer(ROOMMANAGER->room[roomNum]->m_SoloIds[i])->avatar;
 		}
 		SendPacket(id, &pkt);
 	}
-	else if (ROOMMANAGER->room[roomNum]->mod = SQUAD) {
+	else if (mod = SQUAD) {
 		for (int i = 0; i < TEAM_RNUM; ++i)
 		{
 			pkt.ids[i] = ROOMMANAGER->room[roomNum]->m_TeamIds[i];
-			pkt.posN[i] = objectManager->GetPlayer(pkt.ids[i])->posN;
-			pkt.avatar[i] = objectManager->GetPlayer(pkt.ids[i])->avatar;
+			pkt.posN[i] = objectManager->GetPlayer(ROOMMANAGER->room[roomNum]->m_TeamIds[i])->posN;
+			pkt.avatar[i] = objectManager->GetPlayer(ROOMMANAGER->room[roomNum]->m_TeamIds[i])->avatar;
 		}	
 		SendPacket(id, &pkt);	
 	}
@@ -320,7 +320,7 @@ void PacketManager::TwitchChat(std::string &chat) {
 	pkt.type = SC_CHAT;
 	pkt.size = chat.size();
 	pkt.cSize = chat.size();
-	//std::cout << "chat size : " << chat.size() << std::endl;
+	
 	strcpy(pkt.chat, chat.c_str());
 	for (int i = 0; i < MAX_USER; ++i) {
 		if (true == objectManager->GetPlayer(i)->m_connected) {
