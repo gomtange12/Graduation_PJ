@@ -18,6 +18,12 @@ struct UI_Data
 	XMFLOAT4X4 m_xmf4x4Transform;
 	XMFLOAT2 m_uvCoord;
 };
+struct CB_TEMP_CLOCK_INFO
+{
+	int oneSec;
+	int tenSec;
+	int hunSec;
+};
 struct CB_CLOCK_INFO 
 {
 	int oneSec;

@@ -1463,15 +1463,14 @@ void CTenSecShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComman
 void CTenSecShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	
-	m_cbClock->tenSec = SCENEMANAGER->GetTenSec();// PLAYER->GetPlayer()->GetSkillCount();
-	//cout << "ten"<< m_cbClock->tenSec << endl;
-//cout << "updateshaderVar: " << m_cbSkillCool->Cooldown << endl;
+	m_cbClock->tenSec = SCENEMANAGER->GetTenSec();
+
 	UINT ncbElementBytes = ((sizeof(CB_TEN_INFO) + 255) & ~255);
 
-	CB_TEN_INFO *pbMappedcbSkillInfo = (CB_TEN_INFO *)((UINT8 *)m_cbMappeClock + (0 * ncbElementBytes));
+	CB_TEN_INFO *pbMappedcbSkillInfo = (CB_TEN_INFO *)((UINT8 *)m_cbMappeClock);// +(i * ncbElementBytes));
 	::memcpy(m_cbMappeClock, m_cbClock, sizeof(CB_TEN_INFO));
 
-	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbClockResouce->GetGPUVirtualAddress();// +m_ObjectCBIndex * ncbElementBytes;
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbClockResouce->GetGPUVirtualAddress();// +Index * ncbElementBytes;
    pd3dCommandList->SetGraphicsRootConstantBufferView(13, d3dGpuVirtualAddress);
 }
 

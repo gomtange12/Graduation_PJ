@@ -76,6 +76,9 @@
     <Filter Include="소스 파일\Chatting">
       <UniqueIdentifier>{c97d75fc-8185-4c5a-ba18-3e19706fd89f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\ObjectManager\ShadowMap">
+      <UniqueIdentifier>{7d4b8b0f-8255-41a2-8b46-3a85db0c669b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -162,6 +165,9 @@
     <ClInclude Include="CChatManager.h">
       <Filter>소스 파일\Chatting</Filter>
     </ClInclude>
+    <ClInclude Include="CShadowMap.h">
+      <Filter>소스 파일\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Player.cpp">
@@ -235,6 +241,9 @@
     </ClCompile>
     <ClCompile Include="CChatManager.cpp">
       <Filter>소스 파일\Chatting</Filter>
+    </ClCompile>
+    <ClCompile Include="CShadowMap.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
