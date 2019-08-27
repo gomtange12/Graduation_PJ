@@ -494,14 +494,18 @@ public:
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
-	//virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
-	//virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	//virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void ReleaseShaderVariables();
 
-	/*CB_SPRITE_TIME*	 m_cbSprite = nullptr;
-	CB_SPRITE_TIME*	 m_cbMappedSprite = nullptr;
-	ID3D12Resource*  m_cbResouce = NULL;*/
+	int						m_xSpritePos;
+	int						m_xMaxSpritePos;
 
-	CB_SPRITE_TIME*			m_cbSprite;
+	int						m_ySpritePos;
+	int						m_yMaxSpritePos;
+protected:
+
 	ID3D12Resource*			m_cbResouce = NULL;
 	CB_SPRITE_TIME*			m_cbMappedSprite = NULL;
 

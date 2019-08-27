@@ -20,16 +20,13 @@ cbuffer cbTempClock : register(b12)
 	int teneSec;
 	int hun;
 };
-cbuffer cbHunClock : register(b13)
-{
-	int hunSec : packoffset(c0);
-};
+
 
 cbuffer cbSkillCoolDownInfo : register(b10)
 {
 	int coolDown : packoffset(c0);
 };
-cbuffer cbSpriteInfo : register(b11)
+cbuffer cbSpriteInfo : register(b13)
 {
 	int spriteXTime;
 	int spriteTTime;
