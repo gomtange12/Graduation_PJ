@@ -8,7 +8,6 @@ void CSceneManager::SetColock()
 {
 	if (m_Gameclock > 0) m_Gameclock -= 1;
 
-	//cout<<"gameClock" << m_Gameclock << endl;
 	m_hunSec = m_Gameclock / 100;
 	m_tenSec = (m_Gameclock % 100) / 10;
 	m_oneSec = m_Gameclock % 10;

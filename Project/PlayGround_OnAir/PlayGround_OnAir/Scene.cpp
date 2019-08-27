@@ -783,16 +783,6 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects = new CGameObject*[m_nPlayGroundObjects];
 	
 	
-	
-	/*CLoadedModelInfo *pPlayerModel = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/KeytarTest.bin", NULL, true);
-	m_ppPlayGroundObjects[0] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppPlayGroundObjects[0]->SetChild(pPlayerModel->m_pModelRootObject, true);
-	m_ppPlayGroundObjects[0]->m_pAnimationController = new CAnimationController(1, pPlayerModel->m_pAnimationSets);
-	m_ppPlayGroundObjects[0]->m_pAnimationController->SetTrackAnimationSet(0, 1);
-	m_ppPlayGroundObjects[0]->m_pAnimationController->SetTrackWeight(0, 0.5f);
-	m_ppPlayGroundObjects[0]->m_pSkinningBoneTransforms = new CSkinningBoneTransforms(pd3dDevice, pd3dCommandList, pPlayerModel);
-	m_ppPlayGroundObjects[0]->SetPosition(0.0f, 20, 440.0f);
-	m_ppPlayGroundObjects[0]->SetScale(50.0f, 50.0f, 50.0f);*/
 	CLoadedModelInfo *Floor = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Floor.bin", NULL, false);
 	m_ppPlayGroundObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppPlayGroundObjects[0]->SetChild(Floor->m_pModelRootObject, true);
@@ -1130,18 +1120,27 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	CLoadedModelInfo * bottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/bottom.bin", NULL, false);
 	m_ppConcertObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppConcertObjects[1]->SetChild(ConcertFloorObject->m_pModelRootObject, true);
-	m_ppConcertObjects[1]->SetPosition(1500.0f, 10, 1000.0f);
-	m_ppConcertObjects[1]->SetScale(150, 150, 150);
+	m_ppConcertObjects[1]->SetPosition(2660, 10, 1280.0f);
+	m_ppConcertObjects[1]->SetScale(250, 250, 250);
 	m_ppConcertObjects[1]->SetMesh(ConcertFloorObject->m_pModelRootObject->m_pMesh);
 	m_ppConcertObjects[1]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo * bluebottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/blue_bottom2.bin", NULL, false);
 	m_ppConcertObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppConcertObjects[2]->SetChild(ConcertFloorObject->m_pModelRootObject, true);
+	m_ppConcertObjects[2]->SetPosition(2560, 30, 1745.0f);
+	m_ppConcertObjects[2]->SetScale(150, 150, 150);
+	m_ppConcertObjects[2]->SetMesh(ConcertFloorObject->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[2]->SetOOBB(m_ppConcertObjects[2]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	/*CLoadedModelInfo * redbottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/blue_bottom2.bin", NULL, false);
+	m_ppConcertObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[2]->SetChild(ConcertFloorObject->m_pModelRootObject, true);
 	m_ppConcertObjects[2]->SetPosition(1500.0f, 10, 1000.0f);
 	m_ppConcertObjects[2]->SetScale(150, 150, 150);
 	m_ppConcertObjects[2]->SetMesh(ConcertFloorObject->m_pModelRootObject->m_pMesh);
-	m_ppConcertObjects[2]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[2]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));*/
+
 
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -1365,10 +1364,10 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dRootParameters[8].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[5]);
 	pd3dRootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-	pd3dRootParameters[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pd3dRootParameters[9].DescriptorTable.NumDescriptorRanges = 1;
-	pd3dRootParameters[9].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[6]);
-	pd3dRootParameters[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	pd3dRootParameters[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pd3dRootParameters[9].Descriptor.ShaderRegister = 14; //HUN1
+	pd3dRootParameters[9].Descriptor.RegisterSpace = 0;
+	pd3dRootParameters[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 	pd3dRootParameters[10].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pd3dRootParameters[10].Descriptor.ShaderRegister = 13; //HUN1
@@ -1421,15 +1420,15 @@ ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevic
 	pd3dRootParameters[19].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 	pd3dRootParameters[20].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	pd3dRootParameters[20].Descriptor.ShaderRegister = 11; //timer
+	pd3dRootParameters[20].Descriptor.ShaderRegister = 11; //Sprite
 	pd3dRootParameters[20].Descriptor.RegisterSpace = 0;
 	pd3dRootParameters[20].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	
 	//pd3dRootParameters[21].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//pd3dRootParameters[21].Descriptor.ShaderRegister = 14; //SPRITE
+	//pd3dRootParameters[21].Descriptor.ShaderRegister = 14; //SPRIT
 	//pd3dRootParameters[21].Descriptor.RegisterSpace = 0;
 	//pd3dRootParameters[21].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	
+	//
 
 	D3D12_STATIC_SAMPLER_DESC pd3dSamplerDescs[2];
 

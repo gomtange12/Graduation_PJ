@@ -606,9 +606,9 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr
 	DWORD nCameraMode = (pCamera) ? pCamera->GetMode() : 0x00;
 	if (nCameraMode == THIRD_PERSON_CAMERA) 
 		CGameObject::Render(pd3dCommandList, pCamera);
-	if (m_basicEffectRender)
+	if (m_PlayerState == ATTACK)
 		m_pEffectObject->Render(pd3dCommandList, pCamera);
-	if(m_skillEffectRender)
+	if(m_PlayerState == ATTACK_3)
 		m_pSkillObject->Render(pd3dCommandList, pCamera);
 }
 void CPlayer::NumberByPos(int num) {
