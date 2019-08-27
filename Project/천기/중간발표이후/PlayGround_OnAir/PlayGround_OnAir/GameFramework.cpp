@@ -537,7 +537,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 					break;
 				}
 				case VK_F6:
-					SCENEMANAGER->SetScene(PLAYGROUNDMAP);
+					//SCENEMANAGER->SetScene(CONCERTMAP);
 					break;
 				case VK_F7: {
 					CNETWORK->LobbyPkt(true);
@@ -794,7 +794,7 @@ void CGameFramework::ProcessInput()
 			}
 			if (pKeysBuffer[0x45] & 0xF0) //½ºÅ³Å°
 			{
-				
+				//ÁÖ¼®Çª¼À
 				if (CNETWORK->GetSkillCheck() == false) {
 					PLAYER->GetPlayer()->SetPlayerState(ATTACK_3);
 					CNETWORK->KeyPkt(false, false, true);
@@ -885,7 +885,7 @@ void CGameFramework::ProcessInput()
 					//PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
 					if(control % 2 ==0){
 						if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN) {
-							//PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
+							PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
 								CNETWORK->StatePkt(dwDirection);
 						}
 							
@@ -937,7 +937,7 @@ void CGameFramework::AnimateObjects()
 	if (PLAYER->GetPlayer() != nullptr)
 	{
 		PLAYER->GetPlayer()->Animate(fTimeElapsed);
-	
+		PLAYER->GetPlayer()->m_pEffectObject->Animate(fTimeElapsed);
 
 	}
 	//PLAYER->GetOtherPlayer()->Animate(fTimeElapsed);
@@ -1059,9 +1059,7 @@ void CGameFramework::FrameAdvance()
 	{
 		if(PLAYER->GetPlayer()->GetHP() > 0)
 			PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
-	/*	PLAYER->GetPlayer()->m_EffectObj->SetShader(m_pScene->m_ppShaders[12]);
-		PLAYER->GetPlayer()->m_EffectObj->UpdateShaderVariable(m_pd3dCommandList, &PLAYER->GetPlayer()->m_xmf4x4World);
-		PLAYER->GetPlayer()->m_EffectObj->Render(m_pd3dCommandList, m_pCamera);*/
+
 	}
 		if (PLAYER->m_pOtherPlayerMap.size() > 0)
 	{

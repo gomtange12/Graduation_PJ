@@ -371,9 +371,11 @@ protected:
 	static CGameObject* AllObjectList[MAXOBJECTNUM];
 	static unsigned long ObjIndex;
 	int								m_Hp;
+	E_EFFECTTYPE m_Effecttype;
 
 
 	unsigned long myIdx;
+	CPlayer* m_pPlayer = nullptr;
 
 public:
 	void AddRef();
@@ -385,6 +387,9 @@ public:
     virtual ~CGameObject();
 
 public:
+public:
+	void SetEffectType(E_EFFECTTYPE type) { type = m_Effecttype; }
+	void SetPlayer(CPlayer* player) { m_pPlayer = player; }
 	//static int m_ObjectState;
 	float							m_BoundScale{ 60 };
 	OBJTYPE							m_ObjType;
@@ -601,12 +606,13 @@ public:
 };
 class CPlaneObject : public CGameObject
 {
+	int frame{ 0 };
 public:
 	CPlaneObject(int nMat);// : CGameObject
 	virtual ~CPlaneObject();
 
-public:
-	virtual void Animate(float fTimeElapsed, std::shared_ptr<CCamera> pCamera);
+	void SetFrame(int n) { frame = n; }
+	virtual void Animate(float fTimeElapsed);
 	void SetLookAt(XMFLOAT3& xmf3Target);
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera = NULL);
 };

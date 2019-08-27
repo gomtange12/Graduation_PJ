@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "Object.h"
 #include "Shader.h"
 #include "CObjectManager.h"
 #include "CSceneManager.h"
@@ -45,36 +46,33 @@
 
 
 
+class CPlaneObject;
 
 void CPlayer::MakeEffect(E_CHARACTERTYPE type)
 {
-	XMFLOAT3 effectPos{ 0,0,0 };
 	switch (type)
 	{
 	case BASS:
-		effectPos =  FindFrame("BassGuitar_cl")->GetPosition();
+		m_EffectPos =  FindFrame("BassGuitar_cl")->GetPosition();
 		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case GUITAR:
-		effectPos = FindFrame("ElectricGuitar_st")->GetPosition();
+		m_EffectPos = FindFrame("ElectricGuitar_st")->GetPosition();
 		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case KEYBOARD:
-		effectPos = FindFrame("keytar")->GetPosition();
+		m_EffectPos = FindFrame("keytar")->GetPosition();
 		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case DRUM:
-		effectPos = FindFrame("DKFYB_drumstick")->GetPosition();
+		m_EffectPos = FindFrame("DKFYB_drumstick")->GetPosition();
 		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
 	case VOCAL:
-		effectPos = FindFrame("BoomMic_Cylinder")->GetPosition();
+		m_EffectPos = FindFrame("BoomMic_Cylinder")->GetPosition();
 		//cout << "x: " << effectPos.x << "y: " << effectPos.y << "z: " << effectPos.z << endl;
 		break;
-	case NONECHARACTER:
-		break;
-	default:
-		break;
+
 	}
 }
 
@@ -89,11 +87,6 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 {
 	//if(PLAYER->GetPlayer()!=NULL)
 	m_pCamera = std::make_shared<CCamera>();
-	//m_pCamera->Rotate(90, 0, 0);
-	//m_pCamera = ChangeCamera(/*SPACESHIP_CAMERA*/THIRD_PERSON_CAMERA, 0.0f);
-	//11m_pCamera->SetMode(THIRD_PERSON_CAMERA);
-	//m_pCamera->GenerateProjectionMatrix()
-	///m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
 
 	m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);
@@ -119,17 +112,49 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	if (this != nullptr)
 	{
 		CreateShaderVariables(pd3dDevice, pd3dCommandList);
-
 		SetPlayerUpdatedContext(pContext);
 		SetCameraUpdatedContext(pContext);
 	}
+
+	//MakeEffect(m_CharacterType);
+	pBasicTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+	pSkillTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+	pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
+	pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
+	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 150, 250.f, 0, 0, 0, 0);
+
+	pShader = new CSkillEffectUIShader();
+	pShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	CMaterial* pMaterial = new CMaterial(1);
+	pMaterial->SetTexture(pBasicTexture, 0);
+	m_pEffectObject = new CPlaneObject(1);
+	m_pEffectObject->SetPlayer(this);
+	m_pEffectObject->SetEffectType(BASIC);
+	m_pEffectObject->SetMaterial(0, pMaterial);
+	m_pEffectObject->SetMesh(pEffectMesh);
+	m_pEffectObject->SetShader(0, pShader);
+
+
+	CTexturedRectMesh* pSkillEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 90, 90.f, 0, 0, 0, 0);
+	CShader* pSkillShader = new CESkillEffectShader();
+	pSkillShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	CMaterial* pSkillMaterial = new CMaterial(1);
+	pSkillMaterial->SetTexture(pSkillTexture, 0);
+	m_pSkillObject = new CPlaneObject(1);
+	m_pSkillObject->SetPlayer(this);
+	m_pSkillObject->SetEffectType(ESKILL);
+	m_pSkillObject->SetMaterial(0, pSkillMaterial);
+	m_pSkillObject->SetMesh(pSkillEffectMesh);
+	m_pSkillObject->SetShader(0, pSkillShader);
+
+	CScene::CreateShaderResourceViews(pd3dDevice, pBasicTexture, 16, false);
+	CScene::CreateShaderResourceViews(pd3dDevice, pSkillTexture, 16, false);
 }
 
 CPlayer::~CPlayer()
 {
 	ReleaseShaderVariables();
 
-	//if (m_pCamera) delete m_pCamera;
 }
 
 void CPlayer::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
@@ -255,7 +280,6 @@ void CPlayer::Rotate(float x, float y, float z)
 void CPlayer::SetPlayCrashMap(bool isCrash)
 {
 	m_isCrashMap = isCrash;
-
 }
 
 void CPlayer::Update(float fTimeElapsed)
@@ -381,12 +405,15 @@ void CPlayer::Update(float fTimeElapsed)
 		break;
 	case ATTACK_3:
 		m_OnAacting = TRUE;
-		MakeEffect(m_CharacterType);
+		//MakeEffect(m_CharacterType);
 		SetTrackAnimationSet(0, ATTACK_3);
+		m_skillEffectRender = true;
+
 		break;
 	case ATTACK:
 		m_OnAacting = TRUE;
 		SetTrackAnimationSet(0, ATTACK);
+		m_basicEffectRender = true;
 		break;
 	case HAPPY:
 		m_OnAacting = TRUE;
@@ -577,7 +604,12 @@ void CPlayer::OnPrepareRender()
 void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera)
 {
 	DWORD nCameraMode = (pCamera) ? pCamera->GetMode() : 0x00;
-	if (nCameraMode == THIRD_PERSON_CAMERA) CGameObject::Render(pd3dCommandList, pCamera);
+	if (nCameraMode == THIRD_PERSON_CAMERA) 
+		CGameObject::Render(pd3dCommandList, pCamera);
+	if (m_basicEffectRender)
+		m_pEffectObject->Render(pd3dCommandList, pCamera);
+	if(m_skillEffectRender)
+		m_pSkillObject->Render(pd3dCommandList, pCamera);
 }
 void CPlayer::NumberByPos(int num) {
 
@@ -736,9 +768,9 @@ void CSoundCallbackHandler::HandleCallback(void *pCallbackData)
 	OutputDebugString(pstrDebug);
 #endif
 #ifdef _WITH_SOUND_RESOURCE
-	// PlaySound(pWavName, ::ghAppInstance, SND_RESOURCE | SND_ASYNC);
+	 PlaySound(pWavName, ::ghAppInstance, SND_RESOURCE | SND_ASYNC);
 #else
-	//PlaySound(pWavName, NULL, SND_FILENAME | SND_ASYNC);
+	PlaySound(pWavName, NULL, SND_FILENAME | SND_ASYNC);
 #endif
 }
 
@@ -850,6 +882,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Sound/Footstep01.wav"));
 	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Sound/Footstep02.wav"));
 	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Sound/Footstep03.wav"));
+
 #endif
 	CAnimationCallbackHandler *pAnimationCallbackHandler = new CSoundCallbackHandler();
 	m_pAnimationController->SetAnimationCallbackHandler(1, pAnimationCallbackHandler);

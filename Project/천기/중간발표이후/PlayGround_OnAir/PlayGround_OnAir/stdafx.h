@@ -280,6 +280,8 @@ namespace Vector3
 	{
 		return(TransformCoord(xmf3Vector, XMLoadFloat4x4(&xmmtx4x4Matrix)));
 	}
+
+
 }
 
 namespace Vector4

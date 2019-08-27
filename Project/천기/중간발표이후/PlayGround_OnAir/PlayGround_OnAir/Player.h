@@ -53,6 +53,8 @@ protected:
 	bool						m_playerCollision = false;
 
 	float m_HeightForCollide{ 0 };
+	bool						m_basicEffectRender = false;
+	bool						m_skillEffectRender = false;
 
 	bool                        m_IsPlayerInConcert = true;
 	bool						XZcollision = false;
@@ -67,7 +69,22 @@ protected:
 
 	CMaterial				*m_pMaterial = NULL;
 	bool						m_HeartHp{ true };
+	CShader* pShader = nullptr;
+
+	//////////
+
+	CTexture* pBasicTexture;
+	CTexture* pSkillTexture;
+
+	//
+
 public:
+	CGameObject* m_pEffectObject = nullptr;
+	CGameObject* m_pSkillObject = nullptr;
+	bool GetBasicEffetOn() { return m_basicEffectRender; }
+	bool GetSkillEffetOn() { return m_skillEffectRender; }
+	void SetBasicEfectOn(bool skillOn) { m_basicEffectRender = skillOn; }
+	void SetSkillEfectOn(bool skillOn) { m_skillEffectRender = skillOn; }
 
 	bool isHeartRender() { return m_HeartHp; }
 	void SetHeartRender(bool heart) { m_HeartHp = heart; }
@@ -105,7 +122,6 @@ public:
 	const DWORD& GetDirection() { return dwDirection; }
 	void SetDirection(DWORD dir) { dwDirection = dir; }
 	void SetCollimdeBox() {
-		//if ( != nullptr)
 		SetOOBB(GetPosition(), XMFLOAT3(0.5, 0.5, 1), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f));
 	};
 	XMFLOAT3 GetPrePosition() { return(prePosition); }

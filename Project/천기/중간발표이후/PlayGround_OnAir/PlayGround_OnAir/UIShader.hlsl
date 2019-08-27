@@ -4,7 +4,6 @@ Texture2D gtxtTexture : register(t14);
 #include "Shaders.hlsl"
 Texture2D gtxtUITexture : register(t15);
 Texture2D gtxtSkillUITexture : register(t16);
-
 SamplerState gSamplerState : register(s0);
 cbuffer cbUIInfo : register(b5)
 {
@@ -33,6 +32,10 @@ cbuffer cbHunClock : register(b13)
 cbuffer cbSkillCoolDownInfo : register(b10)
 {
 	int coolDown : packoffset(c0);
+};
+cbuffer cbSpriteInfo : register(b14)
+{
+	int spriteTime : packoffset(c0);
 };
 //SamplerState gClampSamplerState : register(s1);
 struct VS_TEXTURED_INPUT
@@ -65,7 +68,7 @@ VS_TEXTURED_OUTPUT VSTextured(VS_TEXTURED_INPUT input)
 #endif
 	output.uv = input.uv;*/
 
-	return(output);
+
 }
 float4 PSTextured(VS_TEXTURED_OUTPUT input, uint nPrimitiveID : SV_PrimitiveID) : SV_TARGET //«»ºøΩ¶¿Ã¥ı 
 {
@@ -311,28 +314,19 @@ float4 PSWinTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //«»ºøΩ¶¿Ã¥ı
 ////effect
 VS_TEXTURED_OUTPUT VSEffectTextured(VS_TEXTURED_INPUT input, uint nVertexID : SV_VertexID)
 {
-	/*VS_TEXTURED_OUTPUT output;
-
-	if (nVertexID == 0) { output.position = float4(-0.5f, +0.5f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
-	if (nVertexID == 1) { output.position = float4(+0.5f, +0.5f, 0.0f, 1.0f); output.uv = float2(1.f, 0.f); }
-	if (nVertexID == 2) { output.position = float4(+0.5f, -0.5f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
-	if (nVertexID == 3) { output.position = float4(-0.5f, +0.5f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
-	if (nVertexID == 4) { output.position = float4(+0.5f, -0.5f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
-	if (nVertexID == 5) { output.position = float4(-0.5f, -0.5f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
-	return output;*/
-
 	VS_TEXTURED_OUTPUT output;
 	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
 	output.uv = input.uv;
-
+	//output.uv.x = (spriteTime /1 + (spriteTime / 1 * spriteTime));
+	//output.uv.y = input.uv.y;
 	return (output);
 }
 float4 PSEffectTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //«»ºøΩ¶¿Ã¥ı 
 {
 
-	float4 cColor = float4(1,0,0,1);// gtxtUITexture.Sample(gSamplerState, input.uv);
+	float4 cColor = gtxtUITexture.Sample(gSamplerState, input.uv);
 
-	//if (cColor.a < 0.1) discard;
+	if (cColor.a < 0.1) discard;
 	return(cColor);
 
 }

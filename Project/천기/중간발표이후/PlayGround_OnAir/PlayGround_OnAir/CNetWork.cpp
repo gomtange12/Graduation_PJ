@@ -78,7 +78,6 @@ void CNetWork::ReadPacket(SOCKET sock)
 }
 void CNetWork::ProcessPacket(unsigned char *ptr)
 {
-	static bool first_time = true;
 	switch (ptr[1])
 	{
 	case SC_LOGIN_OK:
@@ -86,7 +85,6 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		sc_packet_login_ok *packet =
 			reinterpret_cast<sc_packet_login_ok *>(ptr);
 		myid = packet->id;
-		//firstCheck = packet->check;
 		break;
 	}
 	case SC_SCENE:
@@ -403,15 +401,15 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_death *pkt = reinterpret_cast<sc_packet_death *>(ptr);
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
-			PLAYER->GetPlayer()->SetPlayerState(DEATH);
+			PLAYER->GetPlayer()->SetPlayerState(SAD);
 		}
 		for (int i = 0; i < 2; ++i) {
 			if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
-				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::DEATH);
+				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::SAD);
 				break;
 			}
 			else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
-				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::DEATH);
+				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::SAD);
 				break;
 			}
 		}
@@ -451,7 +449,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	case SC_DONA:
 	{
 		sc_packet_dona *pkt = reinterpret_cast<sc_packet_dona *>(ptr);
-		m_time = m_time - 10;
+		SCENEMANAGER->recvDonation();
 		break;
 	}
 	default:

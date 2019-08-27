@@ -381,29 +381,7 @@ void CPlayerManager::MakeOtherPlayers(ID3D12Device * pd3dDevice, ID3D12GraphicsC
 //}
 void CPlayerManager::AddPlayer(CTerrainPlayer* playerObj, E_PLAYERTYPE objType, E_CHARACTERTYPE charactertype)
 {
-	//0418 플레이어가 지금 프레임워크단에 존재해서 그걸 자리를 옮기든 뺴든해서
-	// 고를 수 있게 만들어야함
-	//auto iter = m_PlayerMap.find(objType);
-	//if (iter != m_PlayerMap.end()) //있으면 리스트에 넣음
-	//{
-	//	//obj->SetPosition(xmf, yPos);
-	//	//obj->SetSize(size);
-	//	//obj->SetType(objType);
-	//	//obj->SetHp(20);//temp
-	//	playerObj->SetPosition(XMFLOAT3(100, 150, 200));
-	//	m_PlayerMap[objType].push_back(playerObj);
-	//	m_PlayerMap[objType].begin();
-	//}
-	//else //없으면 리스트를 만들어서 넣음
-	//{
-	//	//obj->SetPos(xPos, yPos);
-	//	//obj->SetSize(size);
-	//	//obj->SetType(objType);
-	//	//obj->SetHp(20);
-	//	m_vecPlayerList.push_back(playerObj);
-	//	m_PlayerMap.insert(std::make_pair(objType, m_vecPlayerList));
 
-	//}
 }
 
 void CPlayerManager::SetOtherPlayerResource(int num, E_CHARACTERTYPE type, bool isTeam)
