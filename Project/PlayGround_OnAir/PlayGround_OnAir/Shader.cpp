@@ -1345,21 +1345,27 @@ void CSkillEffectUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3
 {
 	//if (m_pd3dPipelineState) pd3dCommandList->SetPipelineState(m_pd3dPipelineState);
 
-	CShader::UpdateShaderVariables(pd3dCommandList);
-	if (m_ySpritePos < m_yMaxSpritePos)
-		m_ySpritePos += 1;
-	else m_ySpritePos = 0;
-
-	if (m_xSpritePos < m_xMaxSpritePos)
-		m_xSpritePos += 1;
-	else m_xSpritePos = 0;
-
+	//CShader::UpdateShaderVariables(pd3dCommandList);
+	//if (m_ySpritePos < m_yMaxSpritePos)
+	//	m_ySpritePos += 1;
+	//else m_ySpritePos = 0;
+	//
+	//if (m_xSpritePos < m_xMaxSpritePos)
+	//	m_xSpritePos += 1;
+	//else m_xSpritePos = 0;
+	m_cbMappedSprite->xPos=0;
+	m_cbMappedSprite->yPos=1;
+	m_cbMappedSprite->maxX=1;
+	m_cbMappedSprite->maxY=1;
 
 	UINT ncbElementBytes = ((sizeof(CB_SPRITE_TIME) + 255) & ~255);
 
 	CB_SPRITE_TIME *pbMappedcbSkillInfo = (CB_SPRITE_TIME *)((UINT8 *)m_cbMappedSprite);// +(0 * ncbElementBytes));
 	::memcpy(&m_cbMappedSprite->xPos, &m_xSpritePos, sizeof(int));
 	::memcpy(&m_cbMappedSprite->yPos, &m_ySpritePos, sizeof(int));
+	::memcpy(&m_cbMappedSprite->maxX, &m_xMaxSpritePos, sizeof(int));
+	::memcpy(&m_cbMappedSprite->maxY, &m_yMaxSpritePos, sizeof(int));
+
 
 
 	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbResouce->GetGPUVirtualAddress();
