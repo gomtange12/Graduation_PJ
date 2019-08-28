@@ -13,12 +13,17 @@ RoomManager::~RoomManager()
 {
 }
 void RoomManager::SoloRoomMatch(int id) 
-{
-	
-	Room* soloRooms = new Room;
-	soloRooms->RoomNumber = RNumber;
-	soloRooms->mod = SOLO;
-	room.push_back(soloRooms);
+{ 
+	std::cout << "∑ÎΩŒ¿Ã¡Ó : " << room.size() << std::endl;
+	++soloCount;
+	if (soloCount == 1) {
+		Room* soloRooms = new Room;
+		soloRooms->RoomNumber = RNumber;
+		soloRooms->mod = SOLO;
+		room.push_back(soloRooms);
+	}
+	else if(soloCount == 2)
+		soloCount = 0;
 	
 
 	//∫ÛπÊ¿ª √£¿Ω
@@ -71,11 +76,16 @@ void RoomManager::SoloRoomMatch(int id)
 }
 void RoomManager::TeamRoomMatch(int id)
 {
-	
-	Room* teamRooms = new Room;
-	teamRooms->RoomNumber = RNumber;
-	teamRooms->mod = SQUAD;
-	room.push_back(teamRooms);
+	std::cout << "∑ÎΩŒ¿Ã¡Ó : " << room.size() << std::endl;
+	++teamCount;
+	if (teamCount == 1) {
+		Room* teamRooms = new Room;
+		teamRooms->RoomNumber = RNumber;
+		teamRooms->mod = SQUAD;
+		room.push_back(teamRooms);
+	}
+	else if (teamCount == 4)
+		teamCount = 0;
 	
 	
 	//∫ÛπÊ¿ª √£¿Ω
