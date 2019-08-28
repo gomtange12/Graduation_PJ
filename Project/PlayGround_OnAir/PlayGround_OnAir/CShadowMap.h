@@ -1,16 +1,42 @@
 #pragma once
-class CShadowMap
+class CShadowMap : public CSingleTonBase<CShadowMap>
 {
-	D3D12_VIEWPORT m_ViewPort;
-	D3D12_RECT	m_ScissorRect;
+	CShadowMap(ID3D12Device* device,
+		UINT width, UINT height);
 
-	UINT m_Width = 0;
-	UINT m_Height = 0;
-	DXGI_FORMAT m_Format = DXGI_FORMAT_R24G8_TYPELESS;
-	ID3D12Resource* m_ShadowMap = nullptr;
-public:
+	CShadowMap(const CShadowMap& rhs) = delete;
+	CShadowMap& operator=(const CShadowMap& rhs) = delete;
+	~CShadowMap() = default;
 
-	CShadowMap();
-	~CShadowMap();
+	UINT Width()const;
+	UINT Height()const;
+	ID3D12Resource* Resource();
+	//CD3DX12_GPU_DESCRIPTOR_HANDLE Srv()const;
+	//CD3DX12_CPU_DESCRIPTOR_HANDLE Dsv()const;
+
+	D3D12_VIEWPORT Viewport()const;
+	D3D12_RECT ScissorRect()const;
+
+	//void BuildDescriptors(
+	//	CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuSrv,
+	//	CD3DX12_GPU_DESCRIPTOR_HANDLE hGpuSrv,
+	//	CD3DX12_CPU_DESCRIPTOR_HANDLE hCpuDsv);
+
+private:
+	void BuildDescriptors();
+	void BuildResource();
+
+private:
+	ID3D12Device* md3dDevice = nullptr;
+
+	D3D12_VIEWPORT mViewport;
+	D3D12_RECT mScissorRect;
+
+	UINT mWidth = 0;
+	UINT mHeight = 0;
+	DXGI_FORMAT mFormat = DXGI_FORMAT_R24G8_TYPELESS;
+
+	
+	Microsoft::WRL::ComPtr<ID3D12Resource> mShadowMap = nullptr;
 };
 

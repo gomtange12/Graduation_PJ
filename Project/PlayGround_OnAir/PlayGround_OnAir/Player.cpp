@@ -119,12 +119,33 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	//MakeEffect(m_CharacterType);
 	pBasicTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 	pSkillTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+
+	switch (m_CharacterType)
+	{
+	case BASS:
+
+		break;
+	case GUITAR:
+
+		break;
+	case DRUM:
+
+		break;
+	case KEYBOARD:
+
+		break;
+	case VOCAL:
+
+		break;
+	}
 	pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
 	pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
+	
 	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 150, 250.f, 0, 0, 0, 0);
 
 	pShader = new CSkillEffectUIShader();
 	pShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	pShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	CMaterial* pMaterial = new CMaterial(1);
 	pMaterial->SetTexture(pBasicTexture, 0);
 	m_pEffectObject = new CPlaneObject(1);
@@ -606,9 +627,9 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr
 	DWORD nCameraMode = (pCamera) ? pCamera->GetMode() : 0x00;
 	if (nCameraMode == THIRD_PERSON_CAMERA) 
 		CGameObject::Render(pd3dCommandList, pCamera);
-	if (m_basicEffectRender)
+	if (m_PlayerState == ATTACK)
 		m_pEffectObject->Render(pd3dCommandList, pCamera);
-	if(m_skillEffectRender)
+	if(m_PlayerState == ATTACK_3)
 		m_pSkillObject->Render(pd3dCommandList, pCamera);
 }
 void CPlayer::NumberByPos(int num) {

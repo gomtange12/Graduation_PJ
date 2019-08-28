@@ -1317,35 +1317,37 @@ D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreateVertexShader()
 {
 	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSEffectTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
 }
-//
-//void CSkillEffectUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
-//{
-//	m_cbSprite = new CB_SPRITE_TIME;
-//	::ZeroMemory(m_cbSprite, sizeof(CB_SPRITE_TIME));
-//
-//	m_cbSprite->xPos = 0;
-//
-//	UINT ncbElementBytes = ((sizeof(CB_SPRITE_TIME) + 255) & ~255); //256의 배수
-//	m_cbResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
-//
-//	m_cbResouce->Map(0, NULL, (void **)&m_cbMappedSprite);
-//}
+void CSkillEffectUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_SPRITE_TIME) + 255) & ~255); //256의 배수
+	m_cbResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+	m_cbResouce->Map(0, NULL, (void **)&m_cbMappedSprite);
+}
+void CSkillEffectUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	m_xSpritePos += 1;
+	m_xSpritePos += 2;
+	if (m_xMaxSpritePos > m_xMaxSpritePos) m_xSpritePos = 0;
+	if (m_yMaxSpritePos > m_yMaxSpritePos) m_ySpritePos = 0;
 
-//void CSkillEffectUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
-//{
-//	m_cbSprite->xPos = 2;// PLAYER->GetPlayer()->GetSkillCount();
-//	//cout << "ten"<< m_cbClock->tenSec << endl;
-////cout << "updateshaderVar: " << m_cbSkillCool->Cooldown << endl;
-//	UINT ncbElementBytes = ((sizeof(CB_SPRITE_TIME) + 255) & ~255);
-//
-//	CB_SPRITE_TIME *pbMappedcbSkillInfo = (CB_SPRITE_TIME *)((UINT8 *)m_cbMappedSprite + (ncbElementBytes));
-//	::memcpy(m_cbMappedSprite, m_cbSprite, sizeof(CB_SPRITE_TIME));
-//
-//	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbResouce->GetGPUVirtualAddress();// +m_ObjectCBIndex * ncbElementBytes;
-//	pd3dCommandList->SetGraphicsRootConstantBufferView(21, d3dGpuVirtualAddress);
-//
-//
-//}
+	UINT ncbElementBytes = ((sizeof(CB_SPRITE_TIME) + 255) & ~255);
+
+	::memcpy(&m_cbMappedSprite->xPos, &m_xSpritePos, sizeof(int));
+	::memcpy(&m_cbMappedSprite->yPos, &m_ySpritePos, sizeof(int));
+
+
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbResouce->GetGPUVirtualAddress();// +3 * ncbElementBytes;
+	pd3dCommandList->SetGraphicsRootConstantBufferView(10, d3dGpuVirtualAddress);
+}
+void CSkillEffectUIShader::ReleaseShaderVariables()
+{
+	if (m_cbResouce)
+	{
+		m_cbResouce->Unmap(0, NULL);
+		m_cbResouce->Release();
+	}
+}
+
 
 D3D12_INPUT_LAYOUT_DESC CSkillEffectUIShader::CreateInputLayout()
 {
@@ -1452,29 +1454,33 @@ void CTenSecShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComman
 
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
 
-	m_cbClock = new CB_TEN_INFO;
-	::ZeroMemory(m_cbClock, sizeof(CB_TEN_INFO));
+	m_cbMappeClock = new CB_TEMP_CLOCK_INFO;
+	::ZeroMemory(m_cbMappeClock, sizeof(CB_TEMP_CLOCK_INFO));
 
-	m_cbClock->tenSec = 0;
+	m_cbMappeClock->tenSec = 3;
 }
 
 
 
 void CTenSecShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	
-	m_cbClock->tenSec = SCENEMANAGER->GetTenSec();
+	n = SCENEMANAGER->GetTenSec();
+	UINT ncbElementBytes = ((sizeof(CB_TEMP_CLOCK_INFO) + 255) & ~255);
 
-	UINT ncbElementBytes = ((sizeof(CB_TEN_INFO) + 255) & ~255);
+	::memcpy(&m_cbMappeClock->tenSec, &n, sizeof(int));
 
-	CB_TEN_INFO *pbMappedcbSkillInfo = (CB_TEN_INFO *)((UINT8 *)m_cbMappeClock);// +(i * ncbElementBytes));
-	::memcpy(m_cbMappeClock, m_cbClock, sizeof(CB_TEN_INFO));
-
-	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbClockResouce->GetGPUVirtualAddress();// +Index * ncbElementBytes;
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbClockResouce->GetGPUVirtualAddress();// +3 * ncbElementBytes;
    pd3dCommandList->SetGraphicsRootConstantBufferView(13, d3dGpuVirtualAddress);
 }
 
 
+void CTenSecShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_TEMP_CLOCK_INFO) + 255) & ~255); //256의 배수
+	m_cbClockResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_cbClockResouce->Map(0, NULL, (void **)&m_cbMappeClock);
+}
 D3D12_SHADER_BYTECODE COneSecUIShader::CreateVertexShader()
 {
 	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSOneSecTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
@@ -1483,46 +1489,37 @@ D3D12_SHADER_BYTECODE COneSecUIShader::CreateVertexShader()
 void COneSecUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
-
-	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	
 	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/numbers.dds", 0);
 
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
 
-	m_cbClock = new CB_CLOCK_INFO;
-	::ZeroMemory(m_cbClock, sizeof(CB_CLOCK_INFO));
-
-	m_cbClock->oneSec = 0;
+	m_cbMappeClock = new CB_TEMP_CLOCK_INFO;
+	::ZeroMemory(m_cbMappeClock, sizeof(CB_TEMP_CLOCK_INFO));
 }
 
 void COneSecUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	m_cbClock->oneSec = SCENEMANAGER->GetOneSec();// PLAYER->GetPlayer()->GetSkillCount();
-//cout << "updateshaderVar: " << m_cbSkillCool->Cooldown << endl;
-	UINT ncbElementBytes = ((sizeof(CB_CLOCK_INFO) + 255) & ~255);
+	
+	n = SCENEMANAGER->GetOneSec();
+	UINT ncbElementBytes = ((sizeof(CB_TEMP_CLOCK_INFO) + 255) & ~255);
 
-	CB_CLOCK_INFO *pbMappedcbSkillInfo = (CB_CLOCK_INFO *)((UINT8 *)m_cbMappeClock + (0 * ncbElementBytes));
-	::memcpy(m_cbMappeClock, m_cbClock, sizeof(CB_CLOCK_INFO));
+	::memcpy(&m_cbMappeClock->oneSec, &n, sizeof(int));
 
 	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbClockResouce->GetGPUVirtualAddress();
-	pd3dCommandList->SetGraphicsRootConstantBufferView(20, d3dGpuVirtualAddress);
+	pd3dCommandList->SetGraphicsRootConstantBufferView(13, d3dGpuVirtualAddress);
+
+
 }
 
 void COneSecUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	UINT ncbElementBytes = ((sizeof(CB_CLOCK_INFO) + 255) & ~255); //256의 배수
+	UINT ncbElementBytes = ((sizeof(CB_TEMP_CLOCK_INFO) + 255) & ~255); //256의 배수
 	m_cbClockResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
 	m_cbClockResouce->Map(0, NULL, (void **)&m_cbMappeClock);
 }
 
-void CTenSecShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	UINT ncbElementBytes = ((sizeof(CB_TEN_INFO) + 255) & ~255); //256의 배수
-	m_cbClockResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
-
-	m_cbClockResouce->Map(0, NULL, (void **)&m_cbMappeClock);
-}
 D3D12_SHADER_BYTECODE CTimerUIShader::CreatePixelShader()
 {
 	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "PSClockTextured", "ps_5_1", &m_pd3dPixelShaderBlob));
@@ -1536,7 +1533,7 @@ D3D12_SHADER_BYTECODE CTimerUIShader::CreateVertexShader()
 
 void CTimerUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	UINT ncbElementBytes = ((sizeof(CB_HUN_INFO) + 255) & ~255); //256의 배수
+	UINT ncbElementBytes = ((sizeof(CB_TEMP_CLOCK_INFO) + 255) & ~255); //256의 배수
 	m_cbClockResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
 	m_cbClockResouce->Map(0, NULL, (void **)&m_cbMappeClock);
@@ -1544,24 +1541,18 @@ void CTimerUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12Grap
 
 void CTimerUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	m_cbClock->hunSec = SCENEMANAGER->GetHunSec();
-	//cout << "HUN" << m_cbClock->hunSec << endl;
+	n = SCENEMANAGER->GetHunSec();
+	UINT ncbElementBytes = ((sizeof(CB_TEMP_CLOCK_INFO) + 255) & ~255);
 
-	// PLAYER->GetPlayer()->GetSkillCount();
-//cout << "updateshaderVar: " << m_cbSkillCool->Cooldown << endl;
-	UINT ncbElementBytes = ((sizeof(CB_HUN_INFO) + 255) & ~255);
-
-	CB_HUN_INFO *pbMappedcbSkillInfo = (CB_HUN_INFO *)((UINT8 *)m_cbMappeClock + (0 * ncbElementBytes));
-	::memcpy(m_cbMappeClock, m_cbClock, sizeof(CB_HUN_INFO));
+	::memcpy(&m_cbMappeClock->hunSec, &n, sizeof(int));
 
 	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbClockResouce->GetGPUVirtualAddress();
-	pd3dCommandList->SetGraphicsRootConstantBufferView(10, d3dGpuVirtualAddress);
+	pd3dCommandList->SetGraphicsRootConstantBufferView(13, d3dGpuVirtualAddress);
 
 }
 
 void CTimerUIShader::ReleaseShaderVariables()
 {
-
 	if (m_cbClockResouce)
 	{
 		m_cbClockResouce->Unmap(0, NULL);
@@ -1572,15 +1563,35 @@ void CTimerUIShader::ReleaseShaderVariables()
 void CTimerUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
-
-	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
+	
 	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/numbers.dds", 0);
 
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
 
-	m_cbClock = new CB_HUN_INFO;
-	::ZeroMemory(m_cbClock, sizeof(CB_HUN_INFO));
+	m_cbMappeClock = new CB_TEMP_CLOCK_INFO;
+	::ZeroMemory(m_cbMappeClock, sizeof(CB_TEMP_CLOCK_INFO));
 
-	m_cbClock->hunSec = 0;
+}
+
+void CESkillEffectShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	UINT ncbElementBytes = ((sizeof(CB_SPRITE_TIME) + 255) & ~255); //256의 배수
+	m_cbResouce = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_cbResouce->Map(0, NULL, (void **)&m_cbMappedSprite);
+}
+
+void CESkillEffectShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	m_cbSprite->xPos = 3;
+	m_cbSprite->yPos = 3;
+
+	UINT ncbElementBytes = ((sizeof(CB_SPRITE_TIME) + 255) & ~255);
+
+	CB_SPRITE_TIME *pbMappedcbSprite = (CB_SPRITE_TIME *)((UINT8 *)m_cbMappedSprite);// +(i * ncbElementBytes));
+	::memcpy(m_cbMappedSprite, m_cbSprite, sizeof(CB_SPRITE_TIME));
+
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbResouce->GetGPUVirtualAddress();// +Index * ncbElementBytes;
+	pd3dCommandList->SetGraphicsRootConstantBufferView(13, d3dGpuVirtualAddress);
 
 }
