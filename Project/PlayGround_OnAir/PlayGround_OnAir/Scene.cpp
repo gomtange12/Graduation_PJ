@@ -250,7 +250,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_pTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 	//m_pPlayGroundTerrain = new CHeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Terrain/Map1.raw"), 257, 257, xmf3Scale, xmf4Color);
 
-	m_nShaders = 16;
+	m_nShaders = 15;
 	m_ppShaders = new CShader*[m_nShaders];
 
 	/*CHellicopterObjectsShader *pHellicopterObjectsShader = new CHellicopterObjectsShader();
@@ -348,10 +348,10 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	pOneSecShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	m_ppShaders[14] = pOneSecShader;
 
-	CSkillEffectUIShader *pEffectShader = new CSkillEffectUIShader();
-	pEffectShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	pEffectShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
-	m_ppShaders[15] = pEffectShader;
+	//CSkillEffectUIShader *pEffectShader = new CSkillEffectUIShader();
+	//pEffectShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	////pEffectShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
+	//m_ppShaders[15] = pEffectShader;
 	/*CTexturedShader* pOneSecShader = new CTexturedShader();
 	pTexturedShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	pTexturedShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
@@ -1106,32 +1106,40 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	//m_ppPlayGroundObjects[37]->SetOOBB(m_ppPlayGroundObjects[37]->GetPosition(), Vector3::ScalarProduct(m_ppPlayGroundObjects[37]->m_pMesh->GetAABBExtents(), 20 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_ppPlayGroundObjects[37]->Rotate(0.0f, 180.0f, 0.0f);//map2
 
-	m_nConcertObjects = 3;
+	m_nConcertObjects = 4;
 	m_ppConcertObjects = new CGameObject*[m_nConcertObjects];
 
-	CLoadedModelInfo *ConcertFloorObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/bottom2.bin", NULL, false);
+	CLoadedModelInfo *BackGround = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/BackGround.bin", NULL, false);
 	m_ppConcertObjects[0] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppConcertObjects[0]->SetChild(ConcertFloorObject->m_pModelRootObject, true);
+	m_ppConcertObjects[0]->SetChild(BackGround->m_pModelRootObject, true);
 	m_ppConcertObjects[0]->SetPosition(1500.0f, 0, 1000.0f);
 	m_ppConcertObjects[0]->SetScale(150, 150, 150);
-	m_ppConcertObjects[0]->SetMesh(ConcertFloorObject->m_pModelRootObject->m_pMesh);
-	m_ppConcertObjects[0]->SetOOBB(m_ppConcertObjects[0]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[0]->m_pMesh->GetAABBExtents(), 150 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[0]->SetMesh(BackGround->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[0]->SetOOBB(m_ppConcertObjects[0]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[0]->m_pMesh->GetAABBExtents(), 150 * PG_objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo * bottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/bottom.bin", NULL, false);
+	CLoadedModelInfo *ConcertFloorObject = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/bottom2.bin", NULL, false);
 	m_ppConcertObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppConcertObjects[1]->SetChild(ConcertFloorObject->m_pModelRootObject, true);
-	m_ppConcertObjects[1]->SetPosition(2660, 10, 1280.0f);
-	m_ppConcertObjects[1]->SetScale(250, 250, 250);
+	m_ppConcertObjects[1]->SetPosition(1500.0f, 0, 1000.0f);
+	m_ppConcertObjects[1]->SetScale(150, 150, 150);
 	m_ppConcertObjects[1]->SetMesh(ConcertFloorObject->m_pModelRootObject->m_pMesh);
-	m_ppConcertObjects[1]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[1]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * PG_objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * bottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/bottom.bin", NULL, false);
+	m_ppConcertObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[2]->SetChild(bottom->m_pModelRootObject, true);
+	m_ppConcertObjects[2]->SetPosition(1500.0f, 00, 1000.0f);
+	m_ppConcertObjects[2]->SetScale(150, 150, 150);
+	m_ppConcertObjects[2]->SetMesh(bottom->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[2]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * PG_objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo * bluebottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/blue_bottom2.bin", NULL, false);
-	m_ppConcertObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppConcertObjects[2]->SetChild(ConcertFloorObject->m_pModelRootObject, true);
-	m_ppConcertObjects[2]->SetPosition(2560, 30, 1745.0f);
-	m_ppConcertObjects[2]->SetScale(150, 150, 150);
-	m_ppConcertObjects[2]->SetMesh(ConcertFloorObject->m_pModelRootObject->m_pMesh);
-	m_ppConcertObjects[2]->SetOOBB(m_ppConcertObjects[2]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[3] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[3]->SetChild(bluebottom->m_pModelRootObject, true);
+	m_ppConcertObjects[3]->SetPosition(1500.0f, 10, 1000.0f);
+	m_ppConcertObjects[3]->SetScale(150, 150, 150);
+	m_ppConcertObjects[3]->SetMesh(bluebottom->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[3]->SetOOBB(m_ppConcertObjects[3]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[2]->m_pMesh->GetAABBExtents(), 150 * PG_objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	/*CLoadedModelInfo * redbottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/blue_bottom2.bin", NULL, false);
 	m_ppConcertObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -1142,6 +1150,8 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppConcertObjects[2]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));*/
 
 
+	//CSoundCallbackHandler* pSound = new CSoundCallbackHandler();
+	//pSound->HandleCallback(_T("Sound/Special_Ed.mp3"));
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
@@ -1710,9 +1720,12 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		//m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
 
 		if (m_ppShaders[2])
+		{
 			m_ppShaders[2]->Render(pd3dCommandList, pCamera);
+		}
 		//if (m_ppShaders[10])
 		//	m_ppShaders[10]->Render(pd3dCommandList, pCamera);
+
 		break;
 	case PLAYGROUNDMAP:
 		for (int i = 0; i < m_nPlayGroundObjects; i++)
@@ -1757,7 +1770,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 			}
 	
 		}
-		for(int i =  11; i < 16;++i)
+		for(int i =  11; i < 15;++i)
 		{
 			m_ppShaders[i]->UpdateShaderVariables(pd3dCommandList);
 			m_ppShaders[i]->Render(pd3dCommandList, pCamera);

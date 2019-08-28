@@ -10,6 +10,7 @@
 #include "Object.h"
 #include "Camera.h"
 
+class CSkillEffectUIShader;
 class CPlayer : public CGameObject
 {
 protected:
@@ -67,9 +68,9 @@ protected:
 	XMFLOAT3					m_EffectPos{ 0,0,0 };
 	bool						m_RenderEffect = false;
 
-	CMaterial				*m_pMaterial = NULL;
+	CMaterial					*m_pMaterial = NULL;
 	bool						m_HeartHp{ true };
-	CShader* pShader = nullptr;
+	CSkillEffectUIShader		*pShader = nullptr;
 
 	//////////
 
@@ -77,6 +78,10 @@ protected:
 	CTexture* pSkillTexture;
 
 	//
+	int							m_basicXsprite;
+	int							m_basicYsprite;
+	int							m_skillXsprite;
+	int							m_skillYsprite;
 
 public:
 	CGameObject* m_pEffectObject = nullptr;

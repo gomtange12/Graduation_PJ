@@ -20,7 +20,11 @@ cbuffer cbTempClock : register(b12)
 	int teneSec;
 	int hun;
 };
-
+cbuffer cbCharacter : register(b14)
+{
+	int characterNum;
+	int isAlive;
+}
 
 cbuffer cbSkillCoolDownInfo : register(b10)
 {
@@ -30,6 +34,8 @@ cbuffer cbSpriteInfo : register(b13)
 {
 	int spriteXTime;
 	int spriteTTime;
+	int maxX;
+	int maxY;
 
 };
 //SamplerState gClampSamplerState : register(s1);
@@ -311,8 +317,22 @@ VS_TEXTURED_OUTPUT VSEffectTextured(VS_TEXTURED_INPUT input, uint nVertexID : SV
 {
 	VS_TEXTURED_OUTPUT output;
 	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
-	output.uv = input.uv;
-	//output.uv.x = (spriteTime /1 + (spriteTime / 1 * spriteTime));
+	//output.uv = input.uv;
+
+	/*if (nVertexID == 0) output.uv = float2(0.5, 0.f);
+	if (nVertexID == 1) output.uv = float2(0.5, 0.f);
+	if (nVertexID == 2) output.uv = float2(0.5, 1.f);
+	if (nVertexID == 3) output.uv = float2(0.5, 0.f);
+	if (nVertexID == 4) output.uv = float2(0.5, 1.f);
+	if (nVertexID == 5) output.uv = float2(0.5, 1.f);*/
+
+	if (nVertexID == 0) output.uv = float2(spriteXTime / 1 * spriteXTime, 0.f);
+	if (nVertexID == 1) output.uv = float2(spriteXTime / 1 + (spriteXTime / 1 * spriteXTime), 0.f);
+	if (nVertexID == 2) output.uv = float2(spriteXTime / 1 + (spriteXTime / 1 * spriteXTime), 1.f);
+	if (nVertexID == 3) output.uv = float2(spriteXTime / 1 * spriteXTime, 0.f);
+	if (nVertexID == 4) output.uv = float2(spriteXTime / 1 + (spriteXTime / 1 * spriteXTime), 1.f);
+	if (nVertexID == 5) output.uv = float2(spriteXTime / 1 * spriteXTime, 1.f);
+	//output.uv.x = ( 1/spriteXTime  + (spriteXTime / 1 * spriteXTime));
 	//output.uv.y = input.uv.y;
 	return (output);
 }

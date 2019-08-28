@@ -72,6 +72,12 @@ CSceneManager::~CSceneManager()
 
 void CSceneManager::SetScene(SceneState state)
 {
-
 	m_SceneType = state;
+	if(state == MENUSCENE)
+		PlaySound(L"Sound/MENU.wav", NULL, SND_FILENAME | SND_ASYNC);
+	if(state == PLAYGROUNDMAP)
+		PlaySound(L"Sound/INGAME.wav", NULL,  SND_ASYNC | SND_NOSTOP );
+
+		//	SCENEMANAGER->SetMunuMusicOn(false);
+		
 }

@@ -28,6 +28,9 @@ struct CB_SPRITE_TIME
 {
 	int xPos;
 	int yPos;
+	int maxX;
+	int maxY;
+
 };
 struct CB_HP_INFO
 {
@@ -36,6 +39,13 @@ struct CB_HP_INFO
 struct CB_SKILL_INFO
 {
 	int Cooldown;
+};
+
+struct CB_CHARACTER_INFO
+{
+	int characterNum;
+	int alive;
+
 };
 class CShader
 {
@@ -78,6 +88,11 @@ public:
 	virtual void AnimateObjects(float fTimeElapsed) { }
 	virtual void ReleaseObjects() { }
 
+	int						m_xSpritePos;
+	int						m_xMaxSpritePos;
+
+	int						m_ySpritePos;
+	int						m_yMaxSpritePos;
 protected:
 	ID3DBlob							*m_pd3dVertexShaderBlob = NULL;
 	ID3DBlob							*m_pd3dPixelShaderBlob = NULL;
@@ -494,7 +509,7 @@ public:
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
-	//virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual void BuildObjects(int xPos, int yPos, int maxXpos, int maxYpos, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature,  void *pContext = NULL);
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void ReleaseShaderVariables();
@@ -504,17 +519,24 @@ public:
 
 	int						m_ySpritePos;
 	int						m_yMaxSpritePos;
-protected:
-
+	CB_SPRITE_TIME*			m_cbSprite = NULL;
 	ID3D12Resource*			m_cbResouce = NULL;
 	CB_SPRITE_TIME*			m_cbMappedSprite = NULL;
 
 };
 class CESkillEffectShader : public CSkillEffectUIShader
 {
-	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	/*virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void ReleaseShaderVariables();
+	int						m_xSpritePos;
+	int						m_xMaxSpritePos;
 
+	int						m_ySpritePos;
+	int						m_yMaxSpritePos;
+
+	ID3D12Resource*			m_cbResouce = NULL;
+	CB_SPRITE_TIME*			m_cbMappedSprite = NULL;*/
 };
 
 

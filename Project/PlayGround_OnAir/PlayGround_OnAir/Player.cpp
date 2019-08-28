@@ -145,8 +145,15 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 
 	pShader = new CSkillEffectUIShader();
 	pShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-	pShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	CMaterial* pMaterial = new CMaterial(1);
+	pShader->BuildObjects(1,1,1,1, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL);
+	//pShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pShader->m_xSpritePos = 2;
+	pShader->m_ySpritePos = 2;
+	pShader->m_xMaxSpritePos = 2;
+	pShader->m_yMaxSpritePos = 2;
+
+	//pShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	CMaterial* pMaterial = new CMaterial(1); 
 	pMaterial->SetTexture(pBasicTexture, 0);
 	m_pEffectObject = new CPlaneObject(1);
 	m_pEffectObject->SetPlayer(this);
@@ -159,6 +166,8 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	CTexturedRectMesh* pSkillEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 90, 90.f, 0, 0, 0, 0);
 	CShader* pSkillShader = new CESkillEffectShader();
 	pSkillShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+//	pSkillShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+
 	CMaterial* pSkillMaterial = new CMaterial(1);
 	pSkillMaterial->SetTexture(pSkillTexture, 0);
 	m_pSkillObject = new CPlaneObject(1);
