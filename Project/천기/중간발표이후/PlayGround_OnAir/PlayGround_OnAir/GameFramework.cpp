@@ -882,14 +882,16 @@ void CGameFramework::ProcessInput()
 				}
 				if (dwDirection)
 				{
-					//PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
-					if(control % 2 ==0){
+					//PLAYER->GetPlayer()->Move(dwDirection,6.25,true);
+					//if(control % 2 ==0){
 						if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN) {
-							PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
+							if (PLAYER->GetPlayer()->GetCollisionState() == false)
+							{
 								CNETWORK->StatePkt(dwDirection);
+							}
 						}
 							
-					}
+					//}
 					
 				}
 			}

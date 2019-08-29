@@ -14,7 +14,7 @@ RoomManager::~RoomManager()
 }
 void RoomManager::SoloRoomMatch(int id) 
 { 
-	std::cout << "·ë½ÎÀÌÁî : " << room.size() << std::endl;
+	
 	++soloCount;
 	if (soloCount == 1) {
 		Room* soloRooms = new Room;
@@ -76,7 +76,7 @@ void RoomManager::SoloRoomMatch(int id)
 }
 void RoomManager::TeamRoomMatch(int id)
 {
-	std::cout << "·ë½ÎÀÌÁî : " << room.size() << std::endl;
+	
 	++teamCount;
 	if (teamCount == 1) {
 		Room* teamRooms = new Room;

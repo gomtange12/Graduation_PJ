@@ -329,7 +329,9 @@ void CPlayer::Update(float fTimeElapsed)
 	if (PLAYER->GetPlayer()->IsPlayerCrashMap() == false) {
 		if (PLAYER->GetPlayer()->GetCollisionState() == true)
 		{
-			PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), PLAYER->GetPlayer()->GetLookVector(), -12.25f));
+			XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
+			xmf3Shift = Vector3::Add(XMFLOAT3(0, 0, 0), PLAYER->GetPlayer()->GetLookVector(), -6.25f);
+			PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), xmf3Shift));
 			PLAYER->GetPlayer()->SetCollisionState(false);
 		}
 	}
@@ -347,7 +349,7 @@ void CPlayer::Update(float fTimeElapsed)
 	if (fLength > m_fMaxVelocityY) m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
 
 	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(m_xmf3Velocity, fTimeElapsed, false);
-	//Move(xmf3Velocity, false);
+	Move(xmf3Velocity, false);
 
 	if (m_pPlayerUpdatedContext)
 		OnPlayerUpdateCallback(fTimeElapsed);
@@ -1245,7 +1247,9 @@ void COtherPlayers::Update(float fTimeElapsed)
 	if (PLAYER->GetOtherPlayer()->IsPlayerCrashMap() == false) {
 		if (PLAYER->GetOtherPlayer()->GetCollisionState() == true)
 		{
-			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(XMFLOAT3(0, 0, 0), PLAYER->GetOtherPlayer()->GetLookVector(), -12.25f));
+			XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
+			xmf3Shift = Vector3::Add(XMFLOAT3(0, 0, 0), PLAYER->GetOtherPlayer()->GetLookVector(), -6.25f);
+			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), xmf3Shift));
 
 			PLAYER->GetOtherPlayer()->SetCollisionState(false);
 

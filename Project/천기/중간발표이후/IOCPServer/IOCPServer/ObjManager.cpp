@@ -127,7 +127,7 @@ void ObjManager::MovePkt(int id, unsigned char *packet)
 	
 	Player* player = g_clients[id];
 	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
-	float fDistance = 12.25f;
+	float fDistance = 6.25f;
 
 	if (DIR_FORWARD & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Look, fDistance);}
 	if (DIR_BACKWARD & pkt->state) { xmf3Shift = Vector3::Add(xmf3Shift, player->m_xmf3Look, -fDistance);}
@@ -295,6 +295,7 @@ void ObjManager::LobbyPkt(int id)
 					g_clients[ids]->map = -1;
 					g_clients[ids]->state = -1;
 					ROOMMANAGER->room[roomNum]->m_SoloIds[i] = -1;
+					
 				}
 			}
 		}
@@ -317,12 +318,13 @@ void ObjManager::LobbyPkt(int id)
 					g_clients[ids]->map = -1;
 					g_clients[ids]->state = -1;
 					ROOMMANAGER->room[roomNum]->m_TeamIds[i] = -1;
+					
 				}
 			}
 		}
 	}
 	ROOMMANAGER->room[roomNum]->clocking = false;
-	
+	ROOMMANAGER->room[roomNum]->m_full = false;
 }
 void ObjManager::TimeOut(int id) 
 {
