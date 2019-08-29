@@ -1318,18 +1318,20 @@ D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreateVertexShader()
 	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSEffectTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
 }
 
-void CSkillEffectUIShader::BuildObjects(int xPos, int yPos, int maxXpos, int maxYpos, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+void CSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
 	//CShader::BuildObjects(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL);
-	/*m_cbSprite = new CB_SPRITE_TIME;
-	::ZeroMemory(m_cbSprite, sizeof(CB_SPRITE_TIME));*/
+	m_cbSprite = new CB_SPRITE_TIME;
+	::ZeroMemory(m_cbSprite, sizeof(CB_SPRITE_TIME));
 
-	m_xSpritePos = xPos;
-	m_ySpritePos = yPos;
+	//m_xSpritePos = xPos;
+	//m_ySpritePos = yPos;
+	m_cbSprite->xPos = 1;
+	m_cbSprite->maxX = 7;
 
-	m_xMaxSpritePos = maxXpos;
-	m_yMaxSpritePos = maxYpos;
-	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	//m_xMaxSpritePos = maxXpos;
+	//m_yMaxSpritePos = maxYpos;
+	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
 }
 
@@ -1353,18 +1355,27 @@ void CSkillEffectUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3
 	//if (m_xSpritePos < m_xMaxSpritePos)
 	//	m_xSpritePos += 1;
 	//else m_xSpritePos = 0;
-	m_cbMappedSprite->xPos=0;
-	m_cbMappedSprite->yPos=1;
-	m_cbMappedSprite->maxX=1;
-	m_cbMappedSprite->maxY=1;
+	//m_xSpritePos = 0;
+	//m_ySpritePos = 0;
+	//m_xMaxSpritePos = 1;
+	//m_yMaxSpritePos = 1;
+
+	if (n < m_cbSprite->maxX) n += 1; 
+	else n = 0;
+
+
+	
+	//m_cbSprite->xPos=1;
+	m_cbSprite->xPos = n;
 
 	UINT ncbElementBytes = ((sizeof(CB_SPRITE_TIME) + 255) & ~255);
 
-	CB_SPRITE_TIME *pbMappedcbSkillInfo = (CB_SPRITE_TIME *)((UINT8 *)m_cbMappedSprite);// +(0 * ncbElementBytes));
-	::memcpy(&m_cbMappedSprite->xPos, &m_xSpritePos, sizeof(int));
+	::memcpy(m_cbMappedSprite, m_cbSprite, sizeof(CB_SPRITE_TIME));
+
+	/*::memcpy(&m_cbMappedSprite->xPos, &m_xSpritePos, sizeof(int));
 	::memcpy(&m_cbMappedSprite->yPos, &m_ySpritePos, sizeof(int));
 	::memcpy(&m_cbMappedSprite->maxX, &m_xMaxSpritePos, sizeof(int));
-	::memcpy(&m_cbMappedSprite->maxY, &m_yMaxSpritePos, sizeof(int));
+	::memcpy(&m_cbMappedSprite->maxY, &m_yMaxSpritePos, sizeof(int));*/
 
 
 

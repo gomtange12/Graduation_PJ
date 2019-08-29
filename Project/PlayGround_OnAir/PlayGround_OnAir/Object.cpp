@@ -1689,6 +1689,11 @@ CPlaneObject::~CPlaneObject()
 {
 }
 
+//void CPlaneObject::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+//{
+//
+//}
+
 
 void CPlaneObject::Animate(float fTimeElapsed)
 {

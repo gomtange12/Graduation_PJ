@@ -120,37 +120,48 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	pBasicTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 	pSkillTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 
-	switch (m_CharacterType)
+	/*switch (m_CharacterType)
 	{
 	case BASS:
+		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
+		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
+		m_basicXsprite = 1;
+		m_basicXsprite = 1;
 
 		break;
 	case GUITAR:
+		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
+		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/guitarEffect.dds", 0);
 
 		break;
 	case DRUM:
+		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
+		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
 
 		break;
 	case KEYBOARD:
+		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
+		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
 
 		break;
 	case VOCAL:
-
+		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
+		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
 		break;
-	}
-	pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
+	}*/
+	pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/vocal.dds", 0);
 	pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
 	
-	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 150, 250.f, 0, 0, 0, 0);
+	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 200, 200.f, 0, 0, 0, 0);
 
 	pShader = new CSkillEffectUIShader();
 	pShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-	pShader->BuildObjects(1,1,1,1, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL);
+	pShader->BuildObjects(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL);
 	//pShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	pShader->m_xSpritePos = 2;
+	/*pShader->m_xSpritePos = 2;
 	pShader->m_ySpritePos = 2;
 	pShader->m_xMaxSpritePos = 2;
-	pShader->m_yMaxSpritePos = 2;
+	pShader->m_yMaxSpritePos = 2;*/
 
 	//pShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	CMaterial* pMaterial = new CMaterial(1); 
@@ -164,9 +175,10 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 
 
 	CTexturedRectMesh* pSkillEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 90, 90.f, 0, 0, 0, 0);
-	CShader* pSkillShader = new CESkillEffectShader();
+	pSkillShader = new CESkillEffectShader();
 	pSkillShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-//	pSkillShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pSkillShader->BuildObjects(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL);
+	//	pSkillShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
 	CMaterial* pSkillMaterial = new CMaterial(1);
 	pSkillMaterial->SetTexture(pSkillTexture, 0);
@@ -633,13 +645,25 @@ void CPlayer::OnPrepareRender()
 
 void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera)
 {
+
 	DWORD nCameraMode = (pCamera) ? pCamera->GetMode() : 0x00;
 	if (nCameraMode == THIRD_PERSON_CAMERA) 
 		CGameObject::Render(pd3dCommandList, pCamera);
 	if (m_PlayerState == ATTACK)
+	{
+		if(pShader)
+			pShader->UpdateShaderVariables(pd3dCommandList);
+		//m_pEffectObject->UpdateShaderVariables(pd3dCommandList);
 		m_pEffectObject->Render(pd3dCommandList, pCamera);
-	if(m_PlayerState == ATTACK_3)
+	}
+	if (m_PlayerState == ATTACK_3)
+	{
+		//m_pSkillObject->UpdateShaderVariables(pd3dCommandList);
+
+		if (pSkillShader)
+			pSkillShader->UpdateShaderVariables(pd3dCommandList);
 		m_pSkillObject->Render(pd3dCommandList, pCamera);
+	}
 }
 void CPlayer::NumberByPos(int num) {
 

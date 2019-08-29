@@ -76,7 +76,7 @@ protected:
 
 	CTexture* pBasicTexture;
 	CTexture* pSkillTexture;
-
+	CShader* pSkillShader = nullptr;
 	//
 	int							m_basicXsprite;
 	int							m_basicYsprite;

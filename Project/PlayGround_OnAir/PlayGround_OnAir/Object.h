@@ -426,10 +426,10 @@ public:
 	//virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<CCamera> pCamera);
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera, UINT uInstances); //for render
 
-	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void ReleaseShaderVariables();
 
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT4X4 *pxmf4x4World);
 	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, CMaterial *pMaterial);
 
@@ -610,6 +610,7 @@ class CPlaneObject : public CGameObject
 public:
 	CPlaneObject(int nMat);// : CGameObject
 	virtual ~CPlaneObject();
+	//virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 
 	void SetFrame(int n) { frame = n; }
 	virtual void Animate(float fTimeElapsed);

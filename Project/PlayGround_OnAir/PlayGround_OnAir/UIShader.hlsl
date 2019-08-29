@@ -33,7 +33,7 @@ cbuffer cbSkillCoolDownInfo : register(b10)
 cbuffer cbSpriteInfo : register(b13)
 {
 	int spriteXTime;
-	int spriteTTime;
+	int spriteYTime;
 	int maxX;
 	int maxY;
 
@@ -317,32 +317,12 @@ VS_TEXTURED_OUTPUT VSEffectTextured(VS_TEXTURED_INPUT input, uint nVertexID : SV
 {
 	VS_TEXTURED_OUTPUT output;
 	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
-	//output.uv = input.uv;
-
-	/*if (nVertexID == 0) output.uv = float2(0.5, 0.f);
-	if (nVertexID == 1) output.uv = float2(0.5, 0.f);
-	if (nVertexID == 2) output.uv = float2(0.5, 1.f);
-	if (nVertexID == 3) output.uv = float2(0.5, 0.f);
-	if (nVertexID == 4) output.uv = float2(0.5, 1.f);
-	if (nVertexID == 5) output.uv = float2(0.5, 1.f);*/
-
-	/*if (nVertexID == 0) output.uv = float2(1 / spriteXTime  * spriteXTime, 0.f);
-	if (nVertexID == 1) output.uv = float2(1 / spriteXTime  + ((1 / spriteXTime)* spriteXTime), 0.f);
-	if (nVertexID == 2) output.uv = float2(1 / spriteXTime  + ((1 / spriteXTime)* spriteXTime), 1.f);
-	if (nVertexID == 3) output.uv = float2(1 / spriteXTime  * spriteXTime, 0.f);
-	if (nVertexID == 4) output.uv = float2(1 / spriteXTime  + ((1 / spriteXTime) * spriteXTime), 1.f);
-	if (nVertexID == 5) output.uv = float2(1 / spriteXTime  * spriteXTime, 1.f);*/
 
 
-	if (nVertexID == 0) { output.uv = float2(1 / spriteXTime * spriteXTime, 0.f); }
-	if (nVertexID == 1) { output.uv = float2(1 / spriteXTime + (1 / spriteXTime * spriteXTime), 0.f); }
-	if (nVertexID == 2) { output.uv = float2(1 / spriteXTime + (1 / spriteXTime * spriteXTime), 1.f); }
-	if (nVertexID == 3) { output.uv = float2(1 / spriteXTime * spriteXTime, 0.f); }
-	if (nVertexID == 4) { output.uv = float2(1 / spriteXTime + (1 / spriteXTime * spriteXTime), 1.f); }
-	if (nVertexID == 5) { output.uv = float2(1 / spriteXTime * spriteXTime, 1.f); }
+	output.uv. x = input.uv * spriteXTime / maxX;
+	output.uv.y = input.uv.y;
 
-	//output.uv.x = ( 1/spriteXTime  + (spriteXTime / 1 * spriteXTime));
-	//output.uv.y = input.uv.y;
+
 	return (output);
 }
 float4 PSEffectTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //«»ºøΩ¶¿Ã¥ı 
