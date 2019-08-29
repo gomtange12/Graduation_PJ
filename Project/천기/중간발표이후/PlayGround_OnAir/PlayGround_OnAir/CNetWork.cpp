@@ -100,7 +100,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetPlayer()->SetClientNum(myid);
 					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
 					PLAYER->GetPlayer()->SetPlayerState(IDLE);
-					if(i==0)
+					if (i == 0)
 						PLAYER->GetPlayer()->teamNum = BLUETEAM;
 					else
 						PLAYER->GetPlayer()->teamNum = REDTEAM;
@@ -423,8 +423,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		//cout << sizeof(pkt->chat) << endl;
 		CHATMANAGER->TextChange(pkt->chat);
 		//CHATMANAGER->InputChatting(pkt->chat, pkt->cSize);
-		ZeroMemory(packet_buffer,sizeof(packet_buffer));
-		
+		ZeroMemory(packet_buffer, sizeof(packet_buffer));
+
 		break;
 	}
 	case SC_CLOCK:

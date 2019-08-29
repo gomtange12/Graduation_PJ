@@ -39,6 +39,8 @@ void AcceptThread::Proc()
 
 	objectManager = ObjManager::GET_INSTANCE()->GetObjectManager();
 
+	
+
 	while (1)
 	{
 		SOCKADDR_IN clientAddr;
@@ -49,7 +51,7 @@ void AcceptThread::Proc()
 		userNum++;
 		std::cout << "Client Accept NUMBER -> : " << userNum << std::endl;
 		int flag = 1;
-		setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int));
+		setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(flag));
 	
 		if (clientSocket == INVALID_SOCKET)
 		{

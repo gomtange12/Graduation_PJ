@@ -24,22 +24,13 @@ struct CB_TEMP_CLOCK_INFO
 	int tenSec;
 	int hunSec;
 };
-struct CB_CLOCK_INFO 
-{
-	int oneSec;
-};
-struct CB_TEN_INFO
-{
-	int tenSec;
-};
-struct CB_HUN_INFO
-{
-	int hunSec;
-};
-
 struct CB_SPRITE_TIME
 {
 	int xPos;
+	int yPos;
+	int maxX;
+	int maxY;
+
 };
 struct CB_HP_INFO
 {
@@ -48,6 +39,13 @@ struct CB_HP_INFO
 struct CB_SKILL_INFO
 {
 	int Cooldown;
+};
+
+struct CB_CHARACTER_INFO
+{
+	int characterNum;
+	int alive;
+
 };
 class CShader
 {
@@ -90,6 +88,11 @@ public:
 	virtual void AnimateObjects(float fTimeElapsed) { }
 	virtual void ReleaseObjects() { }
 
+	int						m_xSpritePos;
+	int						m_xMaxSpritePos;
+
+	int						m_ySpritePos;
+	int						m_yMaxSpritePos;
 protected:
 	ID3DBlob							*m_pd3dVertexShaderBlob = NULL;
 	ID3DBlob							*m_pd3dPixelShaderBlob = NULL;
@@ -426,7 +429,7 @@ public:
 
 };
 
-class CTimerUIShader : public CUiShader { // 백의자리
+class CTimerUIShader : public CUiShader { // 천의자리
 public:
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
@@ -436,9 +439,9 @@ public:
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 protected:
 	int							m_ObjectCBIndex{ 0 };
-	CB_HUN_INFO					*m_cbClock;
 	ID3D12Resource				*m_cbClockResouce = NULL;
-	CB_HUN_INFO					*m_cbMappeClock = NULL;
+	CB_TEMP_CLOCK_INFO			*m_cbMappeClock = NULL;
+	int							n{ 0 };
 };
 class CTenSecShader : public CTimerUIShader { // 백의자리
 
@@ -447,23 +450,15 @@ public:
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
-	int							m_ObjectCBIndex{ 0 };
-	CB_TEN_INFO					*m_cbClock;
-	ID3D12Resource				*m_cbClockResouce = NULL;
-	CB_TEN_INFO					*m_cbMappeClock = NULL;
-
 
 };
-class COneSecUIShader : public CTimerUIShader { // 백의자리
+class COneSecUIShader : public CTimerUIShader { // 일의자리
 
 public:
 	void CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
-	CB_CLOCK_INFO				*m_cbClock;
-	ID3D12Resource			*m_cbClockResouce = NULL;
-	CB_CLOCK_INFO				*m_cbMappeClock = NULL;
 
 };
 
@@ -514,16 +509,34 @@ public:
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader();
-	//virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
-	//virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature,  void *pContext = NULL);
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void ReleaseShaderVariables();
+	int n{ 0 };
+	int						m_xSpritePos;
+	int						m_xMaxSpritePos;
 
-	/*CB_SPRITE_TIME*	 m_cbSprite = nullptr;
-	CB_SPRITE_TIME*	 m_cbMappedSprite = nullptr;
-	ID3D12Resource*  m_cbResouce = NULL;*/
+	int						m_ySpritePos;
+	int						m_yMaxSpritePos;
+	CB_SPRITE_TIME*			m_cbSprite = NULL;
+	ID3D12Resource*			m_cbResouce = NULL;
+	CB_SPRITE_TIME*			m_cbMappedSprite = NULL;
 
 };
 class CESkillEffectShader : public CSkillEffectUIShader
 {
+	/*virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void ReleaseShaderVariables();
+	int						m_xSpritePos;
+	int						m_xMaxSpritePos;
+
+	int						m_ySpritePos;
+	int						m_yMaxSpritePos;
+
+	ID3D12Resource*			m_cbResouce = NULL;
+	CB_SPRITE_TIME*			m_cbMappedSprite = NULL;*/
 };
 
 

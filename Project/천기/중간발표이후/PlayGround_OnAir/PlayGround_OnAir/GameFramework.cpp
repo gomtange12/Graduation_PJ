@@ -537,7 +537,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 					break;
 				}
 				case VK_F6:
-					//SCENEMANAGER->SetScene(CONCERTMAP);
+					SCENEMANAGER->SetScene(CONCERTMAP);
 					break;
 				case VK_F7: {
 					CNETWORK->LobbyPkt(true);
@@ -1169,6 +1169,9 @@ void CGameFramework::FrameAdvance()
 	m_pdxgiSwapChain->Present(0, 0);
 #endif
 #endif
+	
+	
+
 
 //	m_nSwapChainBufferIndex = m_pdxgiSwapChain->GetCurrentBackBufferIndex();
 	MoveToNextFrame();

@@ -18,11 +18,19 @@ class CSceneManager : public CSingleTonBase<CSceneManager>
 	int m_oneSec{ 0 };
 	int m_tenSec{ 0 };
 	int m_hunSec{ 0 };
+	bool m_playMenuMusic = true;
+	bool m_playIngameMusic = true;
 
 public:
-	int  GetOneSec() { return m_oneSec; }
-	int  GetTenSec() { return m_tenSec; }
-	int  GetHunSec() { return m_hunSec; }
+	void SetMunuMusicOn(bool on) { m_playMenuMusic = on; }
+	void SetIngameMusicOn(bool on) { m_playIngameMusic = on; }
+
+	bool GetMenuMusicOn() { return m_playMenuMusic; }
+	bool GetIngameMusicOn() { return m_playIngameMusic; }
+
+	int  GetOneSec() const { return m_oneSec; }
+	int  GetTenSec() const { return m_tenSec; }
+	int  GetHunSec() const { return m_hunSec; }
 
 	void recvDonation() { m_Gameclock += 10; }
 	int  GetGameClock() { return m_Gameclock; }

@@ -104,9 +104,11 @@ public:
 
 	int									m_nUIObjects = 0;
 	CGameObject							**m_ppUIObjects = NULL;
-
+	
+	bool m_WholeMapRender = true;
 
 public:
+	
 	int									m_nPlayGroundObjects = 0;
 	CGameObject							**m_ppPlayGroundObjects = NULL;
 
