@@ -9,6 +9,7 @@
 #include "CIngameScene.h"
 #include "CObjectManager.h"
 #include "CNetWork.h"
+#include "CSoundManager.h"
 #include "CChatManager.h"
 #include <tchar.h>
  
@@ -479,32 +480,28 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 			break;
 	}
 }
-void CGameFramework::ChangePlayerCharacter()
+void CGameFramework::ChangePlayerCharacter(bool isSolo)
 {
-	//cout << "pckChecked" << endl;
-	//if (PLAYER->GetOtherPlayerMap().size() > 0)
+
+	if (!isSolo)
 	{
-		for(int i = 0 ; i <2 ; ++i)
+
+		for (int i = 0; i < 2; ++i)
 		{
-			//cout << "맵사이즈" << PLAYER->GetOtherPlayerMap().size() << endl;
 			PLAYER->m_pOtherPlayerMap[i]->SetPlayerCharacter(false, PLAYER->m_pOtherPlayerMap[i]->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-			//클라넘버, 
-			//cout << PLAYER->m_pOtherPlayerMap[i]->GetClientNum() << ": enemyChecked, type:" << PLAYER->m_pOtherPlayerMap[i]->GetCharacterType() << endl;
+		}
+		for (int i = 0; i < 2; ++i)
+		{
+			if (PLAYER->m_pTeamPlayerMap[i]->GetClientNum() != -1)
+			{
+				PLAYER->m_pTeamPlayerMap[i]->SetPlayerCharacter(true, PLAYER->m_pTeamPlayerMap[i]->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+			}
 		}
 	}
-	//if (PLAYER->GetTeamPlayerMap().size() > 0)
-	{
-			for(int i = 0 ; i<2 ; ++i)
-			{
-			//cout << "맵사이즈" << PLAYER->GetTeamPlayerMap().size() << endl;
+	else
+		PLAYER->m_pOtherPlayerMap[0]->SetPlayerCharacter(false, PLAYER->m_pOtherPlayerMap[0]->GetCharacterType(), 0, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 
-			if (PLAYER->m_pTeamPlayerMap[i]->GetClientNum() != -1) {
-				PLAYER->m_pTeamPlayerMap[i]->SetPlayerCharacter(true, PLAYER->m_pTeamPlayerMap[i]->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-				//cout << PLAYER->m_pTeamPlayerMap[i]->GetClientNum() << ": TeamChecked, type:" << PLAYER->m_pTeamPlayerMap[i]->GetCharacterType() << endl;
-			}
-			}
-
-	}
+	
 	
 }
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
@@ -655,6 +652,8 @@ void CGameFramework::BuildObjects()
 	CNETWORK->MakeServer(m_hWnd);
 	m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
 
+
+
 	//SCENEMANAGER->
 	m_pScene = new CScene();
 	if (m_pScene)
@@ -665,7 +664,9 @@ void CGameFramework::BuildObjects()
 	OBJECTMANAGER->LoadPlayerResource(m_pd3dDevice, m_pd3dCommandList,m_pScene->GetGraphicsRootSignature());
 	PLAYER->SetOtherPlayerResourceFromPool(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	PLAYER->SetOtherModelResource(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+	SOUNDMANAGER->Initialize();
 
+	SOUNDMANAGER->LoadSound();
 	
 	//SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
 //SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
@@ -1063,7 +1064,7 @@ void CGameFramework::FrameAdvance()
 			PLAYER->GetPlayer()->Render(m_pd3dCommandList, m_pCamera);
 
 	}
-		if (PLAYER->m_pOtherPlayerMap.size() > 0)
+	if (PLAYER->m_pOtherPlayerMap.size() > 0)
 	{
 			for (auto&& p : PLAYER->m_pOtherPlayerMap)
 			{
@@ -1079,11 +1080,7 @@ void CGameFramework::FrameAdvance()
 				p->Render(m_pd3dCommandList, m_pCamera);
 		}
 	}
-	if (m_pScene)
-	{
-		if(m_pScene->m_ppShaders[10])
-			m_pScene->m_ppShaders[10]->Render(m_pd3dCommandList, m_pCamera);
-	}
+
 #ifdef _WITH_PLAYER_TOP
 	m_pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 #endif
@@ -1173,7 +1170,11 @@ void CGameFramework::FrameAdvance()
 #endif
 	
 	
-
+	if (m_pScene)
+	{
+		if(m_pScene->m_ppShaders[10])
+			m_pScene->m_ppShaders[10]->Render(m_pd3dCommandList, m_pCamera);
+	}
 
 //	m_nSwapChainBufferIndex = m_pdxgiSwapChain->GetCurrentBackBufferIndex();
 	MoveToNextFrame();

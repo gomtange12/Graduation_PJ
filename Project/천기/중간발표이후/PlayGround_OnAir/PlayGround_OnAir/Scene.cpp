@@ -12,7 +12,7 @@
 #define PG_objScale 2.54
 #define CONCERTScaale 2.54 * 50
 #define objScale 6.47
-#define CONCERTMAPSCALSE 6.47
+#define CONCERTScale 250
 
 ID3D12DescriptorHeap *CScene::m_pd3dCbvSrvDescriptorHeap = NULL;
 
@@ -610,7 +610,6 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppPlayGroundObjects[22]->SetMesh(Stage_Speaker_4->m_pModelRootObject->m_pMesh);
 	m_ppPlayGroundObjects[22]->SetOOBB(XMFLOAT3(1265.0f, 20, 185.0f), XMFLOAT3(m_ppPlayGroundObjects[22]->m_pMesh->GetAABBExtents().x * objScale * 17, 140, m_ppPlayGroundObjects[22]->m_pMesh->GetAABBExtents().z * objScale * 12), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	//영민여기까지
 	///////////조명
 	CLoadedModelInfo *RSpot_1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵1/Spot_1.bin", NULL, false);
 	m_ppPlayGroundObjects[23] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -736,7 +735,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 
 	
 
-	m_nConcertObjects = 3;
+	m_nConcertObjects = 12;
 	m_ppConcertObjects = new CGameObject*[m_nConcertObjects];
 
 	CLoadedModelInfo *BackGround = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/ALL_PIECES.bin", NULL, false);
@@ -745,7 +744,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppConcertObjects[0]->SetPosition(1500.0f, 350, 1000.0f);
 	m_ppConcertObjects[0]->SetScale(250, 250, 250);
 	m_ppConcertObjects[0]->SetMesh(BackGround->m_pModelRootObject->m_pMesh);
-	m_ppConcertObjects[0]->SetOOBB(m_ppConcertObjects[0]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[0]->m_pMesh->GetAABBExtents(), 150 * PG_objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	//m_ppConcertObjects[0]->SetOOBB(m_ppConcertObjects[0]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[0]->m_pMesh->GetAABBExtents(), 150 * PG_objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo * bottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/bottom.bin", NULL, false);
 	m_ppConcertObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -758,20 +757,86 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	CLoadedModelInfo * bluebottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/blue_bottom2.bin", NULL, false);
 	m_ppConcertObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppConcertObjects[2]->SetChild(bluebottom->m_pModelRootObject, true);
-	m_ppConcertObjects[2]->SetPosition(1500.0f, 10, 1000.0f);
+	m_ppConcertObjects[2]->SetPosition(1500.0f, 60, -1100.0f);
 	m_ppConcertObjects[2]->SetScale(250, 250, 250);
 	m_ppConcertObjects[2]->SetMesh(bluebottom->m_pModelRootObject->m_pMesh);
-	m_ppConcertObjects[2]->SetOOBB(m_ppConcertObjects[2]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[2]->m_pMesh->GetAABBExtents(), 150 * PG_objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	//m_ppConcertObjects[2]->SetOOBB(m_ppConcertObjects[2]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[2]->m_pMesh->GetAABBExtents(), 100 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	//m_ppConcertObjects[2]->SetOOBB(XMFLOAT3(1500.0f, 40, -1100.0f), XMFLOAT3(m_ppConcertObjects[2]->m_pMesh->GetAABBExtents().x * CONCERTScale, m_ppConcertObjects[2]->m_pMesh->GetAABBExtents().z * CONCERTScale * 40,80 ), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	/*CLoadedModelInfo * redbottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/blue_bottom2.bin", NULL, false);
-	m_ppConcertObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppConcertObjects[2]->SetChild(ConcertFloorObject->m_pModelRootObject, true);
-	m_ppConcertObjects[2]->SetPosition(1500.0f, 10, 1000.0f);
-	m_ppConcertObjects[2]->SetScale(150, 150, 150);
-	m_ppConcertObjects[2]->SetMesh(ConcertFloorObject->m_pModelRootObject->m_pMesh);
-	m_ppConcertObjects[2]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));*/
+	CLoadedModelInfo * bluerespawn = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/blue_bottom1.bin", NULL, false);
+	m_ppConcertObjects[3] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[3]->SetChild(bluerespawn->m_pModelRootObject, true);
+	m_ppConcertObjects[3]->SetPosition(1500.0f, 30, -950.0f);
+	m_ppConcertObjects[3]->SetScale(250, 250, 250);
+	m_ppConcertObjects[3]->SetMesh(bluerespawn->m_pModelRootObject->m_pMesh);
+	//m_ppConcertObjects[3]->SetOOBB(m_ppConcertObjects[3]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[3]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
+	CLoadedModelInfo * Pillar1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/맵2기둥.bin", NULL, false);
+	m_ppConcertObjects[4] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[4]->SetChild(Pillar1->m_pModelRootObject, true);
+	m_ppConcertObjects[4]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[4]->SetScale(250, 250, 250);
+	m_ppConcertObjects[4]->SetMesh(Pillar1->m_pModelRootObject->m_pMesh);
+	//m_ppConcertObjects[4]->SetOOBB(m_ppConcertObjects[4]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[4]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
+	CLoadedModelInfo * Pillar2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/맵2기둥.bin", NULL, false);
+	m_ppConcertObjects[5] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[5]->SetChild(Pillar2->m_pModelRootObject, true);
+	m_ppConcertObjects[5]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[5]->SetScale(250, 250, 250);
+	m_ppConcertObjects[5]->SetMesh(Pillar2->m_pModelRootObject->m_pMesh);
+	//m_ppConcertObjects[5]->SetOOBB(m_ppConcertObjects[5]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[5]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * Front_Speaker1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루스피커.bin", NULL, false);
+	m_ppConcertObjects[6] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[6]->SetChild(Front_Speaker1->m_pModelRootObject, true);
+	m_ppConcertObjects[6]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[6]->SetScale(250, 250, 250);
+	m_ppConcertObjects[6]->SetMesh(Front_Speaker1->m_pModelRootObject->m_pMesh);
+	//m_ppConcertObjects[6]->SetOOBB(m_ppConcertObjects[6]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[6]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * Front_Speaker2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루스피커.bin", NULL, false);
+	m_ppConcertObjects[7] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[7]->SetChild(Front_Speaker2->m_pModelRootObject, true);
+	m_ppConcertObjects[7]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[7]->SetScale(250, 250, 250);
+	m_ppConcertObjects[7]->SetMesh(Front_Speaker2->m_pModelRootObject->m_pMesh);
+	//m_ppConcertObjects[7]->SetOOBB(m_ppConcertObjects[7]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[7]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_Stage_Speaker1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[8] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[8]->SetChild(C_Stage_Speaker1->m_pModelRootObject, true);
+	m_ppConcertObjects[8]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[8]->SetScale(250, 250, 250);
+	m_ppConcertObjects[8]->SetMesh(C_Stage_Speaker1->m_pModelRootObject->m_pMesh);
+	//m_ppConcertObjects[8]->SetOOBB(m_ppConcertObjects[8]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[8]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_Stage_Speaker2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[9] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[9]->SetChild(C_Stage_Speaker2->m_pModelRootObject, true);
+	m_ppConcertObjects[9]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[9]->SetScale(250, 250, 250);
+	m_ppConcertObjects[9]->SetMesh(C_Stage_Speaker2->m_pModelRootObject->m_pMesh);
+	//m_ppConcertObjects[9]->SetOOBB(m_ppConcertObjects[9]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[9]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_Stage_Speaker3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[10] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[10]->SetChild(C_Stage_Speaker3->m_pModelRootObject, true);
+	m_ppConcertObjects[10]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[10]->SetScale(250, 250, 250);
+	m_ppConcertObjects[10]->SetMesh(C_Stage_Speaker3->m_pModelRootObject->m_pMesh);
+	//m_ppConcertObjects[10]->SetOOBB(m_ppConcertObjects[10]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[10]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_Stage_Speaker4 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[11] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[11]->SetChild(C_Stage_Speaker4->m_pModelRootObject, true);
+	m_ppConcertObjects[11]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[11]->SetScale(250, 250, 250);
+	m_ppConcertObjects[11]->SetMesh(C_Stage_Speaker4->m_pModelRootObject->m_pMesh);
+	//m_ppConcertObjects[11]->SetOOBB(m_ppConcertObjects[11]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[11]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	
+	
+	
 	//CSoundCallbackHandler* pSound = new CSoundCallbackHandler();
 	//pSound->HandleCallback(_T("Sound/Special_Ed.mp3"));
 
@@ -1316,40 +1381,15 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 	pCamera->SetViewportsAndScissorRects(pd3dCommandList);
 	pCamera->UpdateShaderVariables(pd3dCommandList);
 	UpdateShaderVariables(pd3dCommandList);
-	//billboardobj->UpdateShaderVariable(pd3dCommandList);
 
-//	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
-//	pd3dCommandList->SetGraphicsRootConstantBufferView(2, d3dcbLightsGpuVirtualAddress); //Lights
-//
-//	if (m_pSkyBox) m_pSkyBox->Render(pd3dCommandList, pCamera);
-//	
-//	//if (m_pTerrain) m_pTerrain->Render(pd3dCommandList, pCamera);
-//
-//	for (int i = 0; i < m_nGameObjects; i++)
-//	{
-//		if (m_ppGameObjects[i])
-//		{
-////			m_ppGameObjects[i]->Animate(m_fElapsedTime);
-//			m_ppGameObjects[i]->UpdateTransform(NULL);
-//			//if (m_MapNum == 0)
-//			{
-//				m_ppGameObjects[i]->Render(pd3dCommandList, pCamera);
-//			}
-//		}
-//	}
-	
-	
 	switch (SCENEMANAGER->GetSceneType())
 	{
 	case MENUSCENE:
-		//m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
 
 		if (m_ppShaders[2])
 		{
 			m_ppShaders[2]->Render(pd3dCommandList, pCamera);
 		}
-		//if (m_ppShaders[10])
-		//	m_ppShaders[10]->Render(pd3dCommandList, pCamera);
 
 		break;
 	case PLAYGROUNDMAP:
@@ -1395,39 +1435,15 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 			}
 	
 		}
-		for(int i =  11; i < 15;++i)
+		for(int i =  11; i < m_nShaders;++i)
 		{
-			m_ppShaders[i]->UpdateShaderVariables(pd3dCommandList);
-			m_ppShaders[i]->Render(pd3dCommandList, pCamera);
+			if (m_ppShaders[i])
+			{
+				m_ppShaders[i]->UpdateShaderVariables(pd3dCommandList);
+				m_ppShaders[i]->Render(pd3dCommandList, pCamera);
+			}
 		}
-
-	
-		//if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(pd3dCommandList, pCamera);
-		////if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
-		////cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
-		//if (PLAYER->m_pOtherPlayerMap.size() > 0)
-		//{
-
-		//	for (auto&& p : PLAYER->m_pOtherPlayerMap)
-		//		p->Render(pd3dCommandList, pCamera);
-
-		//}
-		//if (PLAYER->m_pTeamPlayerMap.size() > 0)
-		//{
-
-		//	for (auto&& p : PLAYER->m_pTeamPlayerMap)
-		//		p->Render(pd3dCommandList, pCamera);
-
-		//}
-		//if (m_ppShaders[10])
-		//	m_ppShaders[10]->Render(pd3dCommandList, pCamera);
-		//if (m_ppShaders[10])
-		//	m_ppShaders[10]->Render(pd3dCommandList, pCamera);
-		//PLAYER->GetOtherPlayer()->Render(pd3dCommandList, pCamera);
-		//m_ppGameObjects[0]->Render(pd3dCommandList, pCamera);
-		//if (m_ppShaders[3]) m_ppShaders[3]->Render(pd3dCommandList, pCamera);
-
-		//	m_ppGameObjects[1]->Render(pd3dCommandList, pCamera);
+		
 		break;
 
 	case CONCERTMAP:
@@ -1477,7 +1493,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 				m_ppShaders[9]->Render(pd3dCommandList, pCamera);
 			}
 		}
-		for (int i = 10; i < m_nShaders; ++i)
+		for (int i = 11; i < m_nShaders; ++i)
 		{
 			if (m_ppShaders[i])
 			{
@@ -1485,78 +1501,11 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 				m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 			}
 		}
-		//if (PLAYER->GetPlayer() != NULL) PLAYER->GetPlayer()->Render(pd3dCommandList, pCamera);
-		//if (PLAYER->GetOtherPlayer() != NULL) PLAYER->GetOtherPlayer()->Render(m_pd3dCommandList, m_pCamera);
-		//cout << "X: " << PLAYER->GetOtherPlayer()->GetPosition().x << "Y: " << PLAYER->GetOtherPlayer()->GetPosition().y << "Z: " << PLAYER->GetOtherPlayer()->GetPosition().z << endl;
-		/*if (PLAYER->m_pOtherPlayerMap.size() > 0)
-		{
-
-			for (auto&& p : PLAYER->m_pOtherPlayerMap)
-				p->Render(pd3dCommandList, pCamera);
-
-		}
-		if (PLAYER->m_pTeamPlayerMap.size() > 0)
-		{
-
-			for (auto&& p : PLAYER->m_pTeamPlayerMap)
-				p->Render(pd3dCommandList, pCamera);
-
-		}*/
-		//if (m_ppShaders[10])
-		//	m_ppShaders[10]->Render(pd3dCommandList, pCamera);
 		break;
 	}
-
-	//if (m_ppShaders[10])
-	//	m_ppShaders[10]->Render(pd3dCommandList, pCamera);
-	//if (billboardobj)
-	//{
-	//	//billboardobj->SetLookAt(pCamera->GetPosition());
-	//	billboardobj->Render(pd3dCommandList, pCamera);
-	//}
-	//m_ppGameObjects[2]->Render(pd3dCommandList, pCamera);
-
-	/*if (m_ppGameObjects[SCENEMANAGER->GetSceneType()])
-		m_ppGameObjects[SCENEMANAGER->GetSceneType()]->Render(pd3dCommandList, pCamera);*/
-		//XMFLOAT3 pos = PLAYER->GetPlayer()->GetPosition();
-		//XMFLOAT3 MAPpos = m_ppGameObjects[0]->GetPosition();
-		//XMFLOAT3 otherplayerpos = m_ppGameObjects[2]->GetPosition();
-
-		/*for (auto p = PLAYER->m_vecPlayerList.begin(); p!= PLAYER->m_vecPlayerList.end(); ++p)
-		{
-			(*p)->Render(pd3dCommandList, pCamera);
-		}*/
-		/*for (int i = 0; i < PLAYER->GetPlayerMap()[ENEMY].size(); ++i)
-		{
-			PLAYER->GetPlayerMap()[ENEMY][i]->Render(pd3dCommandList, pCamera);
-		}*/
-		/*for (int i = 0; i < OBJECTMANAGER->GetObjlist[MAP].size(); ++i)
-		{
-
-			for (auto iter = OBJECTMANAGER->GetObjlist[MAP]->begin(); iter != OBJECTMANAGER->GetObjlist[MAP].end(); ++iter)
-			{
-
-			}
-		}*/
-		//for (int i = 0; i < m_nShaders; i++) if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
-		//CheckObjectByObjectCollisions();
-
 }
-void CScene::CheckObjectByObjectCollisions() {
-	//체크는되는듯한데 왜 중단점이 안되지?
-
-	//for (int i = 1; i < m_nPlayGroundObjects; i++)
-	//{
-	////   if (m_ppPlayGroundObjects[i])
-	////   {
-	//   m_ppPlayGroundObjects[i]->Animate(m_fElapsedTime);
-	//m_ppPlayGroundObjects[i]->UpdateTransform(NULL);
-	//m_ppPlayGroundObjects[i]->GetBoundingBox().Center = m_ppPlayGroundObjects[i]->GetPosition();
-	////   }
-	//}
-	//static BoundingOrientedBox box = PLAYER->GetPlayer()->GetBoundingBox();
-	//
-
+void CScene::CheckObjectByObjectCollisions() 
+{
 	int num = 0;
 	int num2 = 0;
 
@@ -1571,11 +1520,6 @@ void CScene::CheckObjectByObjectCollisions() {
 
 				if (m_ppPlayGroundObjects[i]->GetBoundingBox().Intersects(PLAYER->GetPlayer()->GetBoundingBox()))
 				{
-					//PLAYER->GetPlayer()->SetPosition()
-					//PLAYER->GetPlayer()->SetAllowKey(false);
-					//PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0,0,0));
-
-					//PLAYER->GetPlayer()->SetCollideNum(i);
 					if (m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.y + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.y <= PLAYER->GetPlayer()->GetBoundingBox().Center.y - PLAYER->GetPlayer()->GetBoundingBox().Extents.y + 10)
 					{
 						PLAYER->GetPlayer()->SetHeight(m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.y + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.y);
@@ -1593,102 +1537,67 @@ void CScene::CheckObjectByObjectCollisions() {
 
 				if (m_ppPlayGroundObjects[i]->GetBoundingBox().Intersects(PLAYER->GetOtherPlayer()->GetBoundingBox()))
 				{
-					//PLAYER->GetPlayer()->SetPosition()
-					//PLAYER->GetPlayer()->SetAllowKey(false);
-					//PLAYER->GetPlayer()->SetVelocity(XMFLOAT3(0,0,0));
-
-					//PLAYER->GetPlayer()->SetCollideNum(i);
 					if (m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.y + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.y <= PLAYER->GetOtherPlayer()->GetBoundingBox().Center.y - PLAYER->GetOtherPlayer()->GetBoundingBox().Extents.y + 10)
 					{
 						PLAYER->GetOtherPlayer()->SetHeight(m_ppPlayGroundObjects[i]->GetBoundingBox().Extents.y + m_ppPlayGroundObjects[i]->GetBoundingBox().Center.y);
 						PLAYER->GetOtherPlayer()->SetPlayCrashMap(true);
 						PLAYER->GetOtherPlayer()->SetCollisionState(false);
-
 						num2++;
 					}
-
 				}
 				if (m_ppPlayGroundObjects[i]->GetBoundingBox().Contains(PLAYER->GetOtherPlayer()->GetBoundingBox()))
 				{
 					PLAYER->GetOtherPlayer()->SetCollisionState(true);
 				}
-
 			}
 		}
 		if (num == 0)
 		{
 			PLAYER->GetPlayer()->SetPlayCrashMap(false);
-
-		}
-		if (num2 == 0)
-		{
-			PLAYER->GetOtherPlayer()->SetPlayCrashMap(false);
-
 		}
 		break;
 	case CONCERTMAP:
-
-		if (m_ppConcertObjects[0])
+		for (int i = 1; i < m_nConcertObjects; i++)
 		{
-
-			BoundingOrientedBox playerbox = PLAYER->GetPlayer()->GetBoundingBox();
-
-			if (m_ppConcertObjects[1]->GetBoundingBox().Contains(PLAYER->GetPlayer()->GetBoundingBox()))
+			if (m_ppConcertObjects[i])
 			{
-				//std::cout << "익스텐트 곱하게하기" << m_ppConcertObjects[0]->GetBoundingBox().Extents.y * objScale * 100 << std::endl;
-				//std::cout << "와이값" << m_ppConcertObjects[0]->GetBoundingBox().Extents.y + m_ppConcertObjects[0]->GetBoundingBox().Center.y << std::endl;
-				//std::cout << "플레이어 센터값" << PLAYER->GetPlayer()->GetBoundingBox().Center.y - PLAYER->GetPlayer()->GetBoundingBox().Extents.y + 10 << std::endl;
-			
-				PLAYER->GetPlayer()->SetPlayerInConocert(true);
-				//\for(int i =0 )
-				if (m_ppConcertObjects[1]->GetBoundingBox().Intersects(PLAYER->GetPlayer()->GetBoundingBox()))
+				if (i == 1)
 				{
-					if (m_ppConcertObjects[1]->GetBoundingBox().Extents.y + m_ppConcertObjects[1]->GetBoundingBox().Center.y <= PLAYER->GetPlayer()->GetBoundingBox().Center.y - PLAYER->GetPlayer()->GetBoundingBox().Extents.y + 10)
+					if (m_ppConcertObjects[1]->GetBoundingBox().Contains(PLAYER->GetPlayer()->GetBoundingBox()))
 					{
-						PLAYER->GetPlayer()->SetHeight(m_ppConcertObjects[1]->GetBoundingBox().Extents.y + m_ppConcertObjects[2]->GetBoundingBox().Center.y);
+						cout << "무대 안" << endl;
+						PLAYER->GetPlayer()->SetHeight(m_ppConcertObjects[i]->GetBoundingBox().Extents.y + m_ppConcertObjects[i]->GetBoundingBox().Center.y);
+
+
+					}
+				}
+
+				if (m_ppConcertObjects[i]->GetBoundingBox().Intersects(PLAYER->GetPlayer()->GetBoundingBox()))
+				{
+					if (m_ppConcertObjects[i]->GetBoundingBox().Extents.y + m_ppConcertObjects[i]->GetBoundingBox().Center.y <= PLAYER->GetPlayer()->GetBoundingBox().Center.y - PLAYER->GetPlayer()->GetBoundingBox().Extents.y + 10)
+					{
+						PLAYER->GetPlayer()->SetHeight(m_ppConcertObjects[i]->GetBoundingBox().Extents.y + m_ppConcertObjects[i]->GetBoundingBox().Center.y);
+						cout << i << "번째 옵젝" << endl;
 						PLAYER->GetPlayer()->SetPlayCrashMap(true);
+						PLAYER->GetPlayer()->SetCollisionState(false);
+
 						num++;
 					}
+
 				}
-			}
-			else if (!m_ppConcertObjects[0]->GetBoundingBox().Contains(PLAYER->GetPlayer()->GetBoundingBox()))
-			{ //이 안에 오브젝트 충돌을 넣어야할수도
-				PLAYER->GetPlayer()->SetPlayerInConocert(false);
-			}
-		}
-		if (num == 0)
-			PLAYER->GetPlayer()->SetPlayCrashMap(false);
-		break;
-		if (m_ppConcertObjects[0])
-		{
-
-			BoundingOrientedBox playerbox = PLAYER->GetOtherPlayer()->GetBoundingBox();
-
-			if (m_ppConcertObjects[0]->GetBoundingBox().Contains(PLAYER->GetOtherPlayer()->GetBoundingBox()))
-			{
-				//std::cout << "익스텐트 곱하게하기" << m_ppConcertObjects[0]->GetBoundingBox().Extents.y * objScale * 100 << std::endl;
-				//std::cout << "와이값" << m_ppConcertObjects[0]->GetBoundingBox().Extents.y + m_ppConcertObjects[0]->GetBoundingBox().Center.y << std::endl;
-				//std::cout << "플레이어 센터값" << PLAYER->GetOtherPlayer()->GetBoundingBox().Center.y - PLAYER->GetOtherPlayer()->GetBoundingBox().Extents.y + 10 << std::endl;
-				//이 안에 오브젝트 충돌을 넣어야할수도
-				PLAYER->GetOtherPlayer()->SetPlayerInConocert(true);
-				if (m_ppConcertObjects[0]->GetBoundingBox().Intersects(PLAYER->GetOtherPlayer()->GetBoundingBox()))
+				if (m_ppConcertObjects[i]->GetBoundingBox().Contains(PLAYER->GetPlayer()->GetBoundingBox()))
 				{
-					if (m_ppConcertObjects[0]->GetBoundingBox().Extents.y + m_ppConcertObjects[0]->GetBoundingBox().Center.y <= PLAYER->GetOtherPlayer()->GetBoundingBox().Center.y - PLAYER->GetOtherPlayer()->GetBoundingBox().Extents.y + 10)
-					{
-						PLAYER->GetOtherPlayer()->SetHeight(m_ppConcertObjects[0]->GetBoundingBox().Extents.y + m_ppConcertObjects[0]->GetBoundingBox().Center.y);
-						PLAYER->GetOtherPlayer()->SetPlayCrashMap(true);
-						num++;
-					}
+					PLAYER->GetPlayer()->SetCollisionState(true);
 				}
-			}
-			else if (!m_ppConcertObjects[0]->GetBoundingBox().Contains(PLAYER->GetOtherPlayer()->GetBoundingBox()))
-			{ //이 안에 오브젝트 충돌을 넣어야할수도
-				PLAYER->GetOtherPlayer()->SetPlayerInConocert(false);
 			}
 		}
 		if (num == 0)
-			PLAYER->GetOtherPlayer()->SetPlayCrashMap(false);
-		break;
+		{
+			PLAYER->GetPlayer()->SetPlayCrashMap(false);
+
+		}
+
+	break;
 	}
 
 

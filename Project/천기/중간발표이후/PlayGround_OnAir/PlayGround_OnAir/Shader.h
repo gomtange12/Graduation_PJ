@@ -26,7 +26,9 @@ struct CB_TEMP_CLOCK_INFO
 };
 struct CB_SPRITE_TIME
 {
-	int xPos;
+	float alpha;
+	float xPos;
+	//int xPos;
 	int yPos;
 	int maxX;
 	int maxY;
@@ -513,10 +515,13 @@ public:
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void ReleaseShaderVariables();
-	int n{ 0 };
+	virtual D3D12_BLEND_DESC CreateBlendState();
+
+	float n{ 0 };
 	int						m_xSpritePos;
 	int						m_xMaxSpritePos;
-
+	float					fAlphaTimeAcc{ 0 };
+	float					fAlphaTime = 1;
 	int						m_ySpritePos;
 	int						m_yMaxSpritePos;
 	CB_SPRITE_TIME*			m_cbSprite = NULL;
@@ -526,17 +531,11 @@ public:
 };
 class CESkillEffectShader : public CSkillEffectUIShader
 {
-	/*virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void ReleaseShaderVariables();
-	int						m_xSpritePos;
-	int						m_xMaxSpritePos;
 
-	int						m_ySpritePos;
-	int						m_yMaxSpritePos;
-
-	ID3D12Resource*			m_cbResouce = NULL;
-	CB_SPRITE_TIME*			m_cbMappedSprite = NULL;*/
 };
 
 

@@ -3,48 +3,9 @@
 #include "Object.h"
 #include "Shader.h"
 #include "CObjectManager.h"
+#include "CSoundManager.h"
 #include "CSceneManager.h"
 #include "CNetWork.h"
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// CPlayer
-//int CPlayer::m_PlayeState = IDLE;
-
-//CPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL)
-//{
-//   //m_pCamera = std::make_shared<CCamera>();
-//   m_pCamera = ChangeCamera(THIRD_PERSON_CAMERA, 0.0f);
-//
-//   //m_pCamera = ChangeCamera(/*SPACESHIP_CAMERA*/THIRD_PERSON_CAMERA, 0.0f);
-//   //m_pCamera->SetMode(THIRD_PERSON_CAMERA);
-//   //m_pCamera->GenerateProjectionMatrix()
-//   ///m_pCamera->GenerateProjectionMatrix(1.01f, 5000.0f, ASPECT_RATIO, 60.0f);
-//
-//   m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
-//   m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);
-//   m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);
-//   m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
-//
-//   m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-//   m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-//   m_fMaxVelocityXZ = 0.0f;
-//   m_fMaxVelocityY = 0.0f;
-//   m_fFriction = 0.0f;
-//
-//   m_fPitch = 0.0f;
-//   m_fRoll = 0.0f;
-//   m_fYaw = 0.0f;
-//
-//   m_pPlayerUpdatedContext = NULL;
-//   m_pCameraUpdatedContext = NULL;
-//   m_PlayerState = PlayerState::IDLE;
-//   CreateShaderVariables(pd3dDevice, pd3dCommandList);
-//
-//   SetPlayerUpdatedContext(pContext);
-//   SetCameraUpdatedContext(pContext);
-//}
-
-
-
 
 class CPlaneObject;
 
@@ -149,10 +110,10 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
 		break;
 	}*/
-	pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/vocal.dds", 0);
-	pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
+	pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/effect_002.dds", 0);
+	pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/blood_hit_08.dds", 0);
 	
-	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 200, 200.f, 0, 0, 0, 0);
+	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 200, 200, 0, 0, 0, 0);
 
 	pShader = new CSkillEffectUIShader();
 	pShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
@@ -174,7 +135,7 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	m_pEffectObject->SetShader(0, pShader);
 
 
-	CTexturedRectMesh* pSkillEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 90, 90.f, 0, 0, 0, 0);
+	CTexturedRectMesh* pSkillEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 200, 200.f, 0, 0, 0, 0);
 	pSkillShader = new CESkillEffectShader();
 	pSkillShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
 	pSkillShader->BuildObjects(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL);
@@ -448,16 +409,20 @@ void CPlayer::Update(float fTimeElapsed)
 		SetTrackAnimationSet(0, RUN_JUMP_ATTAK);
 		break;
 	case ATTACK_3:
+		m_skillEffectRender = true;
 		m_OnAacting = TRUE;
 		//MakeEffect(m_CharacterType);
 		SetTrackAnimationSet(0, ATTACK_3);
-		m_skillEffectRender = true;
+		//SOUNDMANAGER->playSound(SKILL_SOUND, SKILL_SOUND);
 
 		break;
 	case ATTACK:
+		m_basicEffectRender = true;
 		m_OnAacting = TRUE;
 		SetTrackAnimationSet(0, ATTACK);
-		m_basicEffectRender = true;
+		//SOUNDMANAGER->playSound(ATTACK_SOUND, ATTACK_SOUND);
+		//SOUNDMANAGER->playSound(SKILL_SOUND, SKILL_SOUND);
+
 		break;
 	case HAPPY:
 		m_OnAacting = TRUE;
@@ -651,16 +616,18 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr
 	DWORD nCameraMode = (pCamera) ? pCamera->GetMode() : 0x00;
 	if (nCameraMode == THIRD_PERSON_CAMERA) 
 		CGameObject::Render(pd3dCommandList, pCamera);
-	if (m_PlayerState == ATTACK)
-	{
-		if(pShader)
-			pShader->UpdateShaderVariables(pd3dCommandList);
+	
 		//m_pEffectObject->UpdateShaderVariables(pd3dCommandList);
+		//m_pSkillObject->UpdateShaderVariables(pd3dCommandList);
+	
+	if (m_PlayerState ==  ATTACK)
+	{
+		if (pShader)
+			pShader->UpdateShaderVariables(pd3dCommandList);
 		m_pEffectObject->Render(pd3dCommandList, pCamera);
 	}
 	if (m_PlayerState == ATTACK_3)
 	{
-		//m_pSkillObject->UpdateShaderVariables(pd3dCommandList);
 
 		if (pSkillShader)
 			pSkillShader->UpdateShaderVariables(pd3dCommandList);
@@ -1056,6 +1023,8 @@ void CTerrainPlayer::OnPlayerUpdateCallback(float fTimeElapsed)
 	}
 	else {
 		fHeight = 10;
+		//if (SCENEMANAGER->GetSceneType() == CONCERTMAP)
+		//	fHeight = 0;
 	}
 
 
