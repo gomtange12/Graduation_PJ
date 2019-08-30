@@ -32,6 +32,7 @@ public:
 	int  GetTenSec() const { return m_tenSec; }
 	int  GetHunSec() const { return m_hunSec; }
 
+	void recvDonation() { m_Gameclock += 10; }
 	int  GetGameClock() { return m_Gameclock; }
 	bool GetSelectedMap() { return m_isMapSelected; }
 	bool GetSelectedMode() { return m_isModeSelected; }

@@ -26,20 +26,20 @@ void AcceptThread::Proc()
 		printf("Error - Invalid socket\n");
 		exit(1);
 	}
-
-	// 서버정보 객체설정	
 	ZeroMemory(&serverAddr, 0, sizeof(SOCKADDR_IN));
 	serverAddr.sin_family = AF_INET;
 	serverAddr.sin_port = htons(SERVER_PORT);
 	serverAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
 
-	// 2. 소켓설정
+
 	::bind(listenSocket, reinterpret_cast<sockaddr *>(&serverAddr), sizeof(SOCKADDR_IN));
 
-	// 3. 수신대기열생성
+
 	listen(listenSocket, 5);
 
 	objectManager = ObjManager::GET_INSTANCE()->GetObjectManager();
+
+	
 
 	while (1)
 	{
@@ -48,14 +48,14 @@ void AcceptThread::Proc()
 		ZeroMemory(&clientAddr, sizeof(SOCKADDR_IN));
 
 		clientSocket = WSAAccept(listenSocket, reinterpret_cast<sockaddr *>(&clientAddr), &addrLen, NULL, NULL);
-		USER_NUM++;
-		std::cout << "Client Accept NUMBER -> : " << USER_NUM << std::endl;
+		userNum++;
+		std::cout << "Client Accept NUMBER -> : " << userNum << std::endl;
 		int flag = 1;
-		setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int));
+		setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(flag));
 	
 		if (clientSocket == INVALID_SOCKET)
 		{
-			//std::cout << "Error - Accept Failure\n";
+			std::cout << "Error - Accept Failure\n";
 			exit(1);
 		}
 
@@ -69,7 +69,7 @@ void AcceptThread::Proc()
 			}
 
 		if (-1 == id) {
-			//std::cout << " ==MAX USER== \n";
+			std::cout << " ==MAX USER== \n";
 			closesocket(clientSocket);
 			continue;
 		}

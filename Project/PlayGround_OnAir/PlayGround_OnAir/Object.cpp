@@ -402,9 +402,13 @@ void CAnimationSet::SetPosition(float& fTrackPosition, float& oncePosition)
 			{
 				p->SetAniOver(true);
 			}
+
+
 			if (PLAYER->GetPlayer()->GetAniOver())
-				PLAYER->GetPlayer()->SetPlayerState(IDLE);
-			
+			{
+				
+				PLAYER->GetPlayer()->SetPlayerState(IDLE);	
+			}
 			for (auto&& p : PLAYER->GetTeamPlayerMap())
 			{
 				if (p->GetAniOver())
@@ -1707,12 +1711,21 @@ void CPlaneObject::SetLookAt(XMFLOAT3 & xmf3Target)
 
 	if (m_Effecttype == BASIC)
 	{
+		Rotate(20, 0, 0);
 		XMFLOAT3 pos = Vector3::Add(m_pPlayer->GetEffectPos(), Vector3::ScalarProduct(m_pPlayer->GetLookVector(), frame++));
 		pos.y += 40;
 		if (frame > 100)
 		{
 			frame = 0;
-			m_pPlayer->SetBasicEfectOn(false);
+			m_pPlayer->SetSkillEfectOn(false);
+
+			m_pPlayer->pShader->n = 0;
+			m_pPlayer->pShader->m_cbSprite->xPos = 0;
+			m_pPlayer->pShader->m_cbSprite->alpha = 0;
+			m_pPlayer->pShader->fAlphaTimeAcc = 0;
+
+
+			//m_pPlayer->SetBasicEfectOn(false);
 		}
 		SetPosition(pos);
 	}
@@ -1722,13 +1735,23 @@ void CPlaneObject::SetLookAt(XMFLOAT3 & xmf3Target)
 		XMFLOAT3 pos = Vector3::Add(m_pPlayer->GetPosition(), Vector3::ScalarProduct(m_pPlayer->GetLookVector(), frame++));
 		pos.x += 40;
 		pos.z += 20;
-		pos.y += 60;
+		pos.y += 90;
 
 
 		if (frame > 100)
 		{
 			frame = 0;
 			m_pPlayer->SetSkillEfectOn(false);
+			m_pPlayer->pShader->n = 0;
+			m_pPlayer->pShader->m_cbSprite->xPos = 0;
+			m_pPlayer->pShader->m_cbSprite->alpha = 0;
+			m_pPlayer->pShader->fAlphaTimeAcc = 0;
+
+			m_pPlayer->SetSkillEfectOn(false);
+			m_pPlayer->pSkillShader->n = 0;
+			m_pPlayer->pSkillShader->m_cbSprite->xPos = 0;
+			m_pPlayer->pSkillShader->m_cbSprite->alpha = 0;
+			m_pPlayer->pSkillShader->fAlphaTimeAcc = 0;
 		}
 		SetPosition(pos);
 	}

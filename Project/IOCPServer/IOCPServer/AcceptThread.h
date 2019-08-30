@@ -12,7 +12,7 @@ private:
 	SOCKADDR_IN serverAddr;
 	SOCKET clientSocket;
 
-	int USER_NUM = 0;
+	int userNum = 0;
 public:
 
 	explicit AcceptThread();

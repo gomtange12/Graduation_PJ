@@ -107,7 +107,7 @@ extern ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice
 #define OBJECTMANAGER	 CObjectManager::GetInstance()
 #define CNETWORK	CNetWork::GetInstance()
 #define CHATMANAGER	CChatManager::GetInstance()
-
+#define SOUNDMANAGER CSoundManager::GetInstance()
 #define MAXOBJECTNUM 100
 #define   WM_SOCKET            WM_USER + 1
 
@@ -162,6 +162,16 @@ enum Result {
 	LOSE,
 	WIN,
 	ING
+};
+enum E_SOUND
+{
+	MENU_SOUND = 0,
+	INGAME_SOUND,
+	CHOICE_SOUND,
+	ATTACK_SOUND,
+	SKILL_SOUND,
+	WIN_SOUND,
+	LOSE_SOUND
 };
 inline std::wstring AnsiToWString(const std::string& str)
 {

@@ -42,14 +42,14 @@ void TwitchIRC::Proc() {
 
 	if (connect(sock, (struct sockaddr *)&ServerAddr, sizeof(ServerAddr)) == 0)
 	{
-		//printf("TwitchIRC Connected..! \n");
+		std::cout << "TwitchIRC Connected..! \n" << std::endl;
 
 		InitSend();
 		Run();
 	}
 	else
 	{
-		printf("Failed to connect!\n");
+		std::cout << "Failed to connect!\n" << std::endl;
 	}
 }
 
@@ -111,7 +111,7 @@ void TwitchIRC::stripMessage(std::string incoming, std::string &username, std::s
 		SIZE_T dona = incoming.find("donation");
 		if (dona == 278) {//278이면 도네이션보낸것
 			PACKETMANAGER->DonaPacket();
-			//std::cout << "donation" << std::endl;
+			std::cout << "donation recv" << std::endl;
 		}
 	
 	}

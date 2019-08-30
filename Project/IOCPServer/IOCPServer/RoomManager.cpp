@@ -6,19 +6,25 @@
 
 RoomManager::RoomManager()
 {
+	
 }
 
 RoomManager::~RoomManager()
 {
 }
 void RoomManager::SoloRoomMatch(int id) 
-{
-	if (room.size() == 0) {//맨처음 방생성
+{ 
+	
+	++soloCount;
+	if (soloCount == 1) {
 		Room* soloRooms = new Room;
 		soloRooms->RoomNumber = RNumber;
 		soloRooms->mod = SOLO;
-		room.emplace_back(soloRooms);
+		room.push_back(soloRooms);
 	}
+	else if(soloCount == 2)
+		soloCount = 0;
+	
 
 	//빈방을 찾음
 	for (int i = 0; i < room.size(); ++i) {
@@ -30,13 +36,7 @@ void RoomManager::SoloRoomMatch(int id)
 						if (j == SOLO_RNUM - 1)//풀방이면
 						{
 							room[i]->m_full = true;
-				
-							//std::cout << "RoomNumber : " << RNumber << " ----> Machig Success" << " ::SOLO MOD"<< std::endl;
-							Room* soloRooms = new Room; //풀방이니 미리 다음방 생성
-							soloRooms->RoomNumber = ++RNumber;
-							soloRooms->mod = SOLO;
-							room.emplace_back(soloRooms);
-							
+							room[i]->mod  = SOLO;
 							//// 매칭 디폴트값
 							//objectManager->GetPlayer(room[i]->m_SoloIds[0])->avatar = GUITAR;
 							objectManager->GetPlayer(room[i]->m_SoloIds[0])->posN = 1;
@@ -56,9 +56,8 @@ void RoomManager::SoloRoomMatch(int id)
 							for (int k = 0; k < SOLO_RNUM; ++k) {
 								objectManager->GetPlayer(room[i]->m_SoloIds[k])->roomNumber = i;
 								objectManager->GetPlayer(room[i]->m_SoloIds[k])->m_match = true;
-
-								PACKETMANAGER->IngamePacket(room[i]->m_SoloIds[k], i);
-
+								PACKETMANAGER->IngamePacket(room[i]->m_SoloIds[k] , SOLO);
+								++RNumber;
 								if (k == 1) {
 									room[i]->clocking = true;
 									dynamic_cast<TimerThread*>(THREADMANAGER->FindThread(TIMER_TH))->AddTimer(id, OP_CLOCK, i, GetTickCount() + 1000);									
@@ -72,17 +71,23 @@ void RoomManager::SoloRoomMatch(int id)
 			break;
 		}
 	}
-
+	
 	
 }
 void RoomManager::TeamRoomMatch(int id)
 {
-	if (room.size() == 0) {//맨처음 방생성
+	
+	++teamCount;
+	if (teamCount == 1) {
 		Room* teamRooms = new Room;
 		teamRooms->RoomNumber = RNumber;
 		teamRooms->mod = SQUAD;
-		room.emplace_back(teamRooms);
+		room.push_back(teamRooms);
 	}
+	else if (teamCount == 4)
+		teamCount = 0;
+	
+	
 	//빈방을 찾음
 	for (int i = 0; i < room.size(); ++i) {
 		if (room[i]->m_full == false) {
@@ -93,14 +98,7 @@ void RoomManager::TeamRoomMatch(int id)
 						if (j == TEAM_RNUM - 1)//풀방이면
 						{
 							room[i]->m_full = true;
-
-							//std::cout << "RoomNumber : " << RNumber << " ----> Machig Success" << " ::TEAM MOD" << std::endl;
-							Room* teamRooms = new Room; //풀방이니 미리 다음방 생성
-							teamRooms->RoomNumber = ++RNumber;
-							teamRooms->mod = SQUAD; 
-							//teamRooms->map = objectManager->GetPlayer(room[i]->m_TeamIds[0])->map;
-							room.emplace_back(teamRooms);
-
+							room[i]->mod = SQUAD;
 							//// 매칭 디폴트값
 							
 							//objectManager->GetPlayer(room[i]->m_TeamIds[0])->avatar = GUITAR;
@@ -164,8 +162,8 @@ void RoomManager::TeamRoomMatch(int id)
 							for (int k = 0; k < TEAM_RNUM; ++k) {
 								objectManager->GetPlayer(room[i]->m_TeamIds[k])->roomNumber = i;
 								objectManager->GetPlayer(room[i]->m_TeamIds[k])->m_match = true;
-
-								PACKETMANAGER->IngamePacket(room[i]->m_TeamIds[k], i);
+								PACKETMANAGER->IngamePacket(room[i]->m_TeamIds[k], SQUAD);
+								++RNumber;
 
 								if (k == 3) {
 									room[i]->clocking = true;

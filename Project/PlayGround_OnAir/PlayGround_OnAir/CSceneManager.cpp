@@ -4,6 +4,7 @@
 #include "CTempScene.h"
 #include "Scene.h"
 #include "GameFramework.h"
+#include "CSoundManager.h"
 void CSceneManager::SetColock()
 {
 	if (m_Gameclock > 0) m_Gameclock -= 1;
@@ -62,7 +63,9 @@ CSceneManager::CSceneManager()
 {
 	m_pTempScene = NULL;// std::make_shared<CTempScene>();
 	m_Gameclock = 300;
+
 	
+	SOUNDMANAGER->playSound(MENU_SOUND, MENU_SOUND);
 }
 
 
@@ -75,10 +78,11 @@ void CSceneManager::SetScene(SceneState state)
 	//int n = 0;
 	
 	m_SceneType = state;
-	if(state == MENUSCENE)
-		PlaySound(L"Sound/MENU.wav", NULL, SND_FILENAME | SND_ASYNC);
-	if(state == PLAYGROUNDMAP)
-		PlaySound(L"Sound/INGAME.wav", NULL ,  SND_ASYNC | SND_NOSTOP);
+	//if(state == MENUSCENE)
+	//	PlaySound(L"Sound/MENU.wav", NULL, SND_FILENAME | SND_ASYNC);
+	if (state == PLAYGROUNDMAP|| state == CONCERTMAP)
+		SOUNDMANAGER->playSound(INGAME_SOUND, INGAME_SOUND);
+		//PlaySound(L"Sound/INGAME.wav", NULL ,  SND_ASYNC | SND_NOSTOP);
 
 		//	SCENEMANAGER->SetMunuMusicOn(false);
 		

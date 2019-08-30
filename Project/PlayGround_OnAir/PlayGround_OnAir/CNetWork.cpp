@@ -78,7 +78,6 @@ void CNetWork::ReadPacket(SOCKET sock)
 }
 void CNetWork::ProcessPacket(unsigned char *ptr)
 {
-	static bool first_time = true;
 	switch (ptr[1])
 	{
 	case SC_LOGIN_OK:
@@ -86,7 +85,6 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		sc_packet_login_ok *packet =
 			reinterpret_cast<sc_packet_login_ok *>(ptr);
 		myid = packet->id;
-		//firstCheck = packet->check;
 		break;
 	}
 	case SC_SCENE:
@@ -102,7 +100,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 					PLAYER->GetPlayer()->SetClientNum(myid);
 					PLAYER->GetPlayer()->NumberByPos(paket->posN[i]);
 					PLAYER->GetPlayer()->SetPlayerState(IDLE);
-					if(i==0)
+					if (i == 0)
 						PLAYER->GetPlayer()->teamNum = BLUETEAM;
 					else
 						PLAYER->GetPlayer()->teamNum = REDTEAM;
@@ -119,6 +117,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 						PLAYER->GetOtherPlayerMap()[0]->teamNum = REDTEAM;
 				}
 			}
+			CNetCGameFramework->ChangePlayerCharacter(true);
+
 		}
 		else if (paket->mod = SQUAD) {
 			//ÆÀ¸ðµå¸é
@@ -189,9 +189,9 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 				}
 
 			}
+		CNetCGameFramework->ChangePlayerCharacter(false);
 		}
 		PLAYER->GetPlayer()->SetOOBB(PLAYER->GetPlayer()->GetPosition(), XMFLOAT3(25, 10, 25), XMFLOAT4(0, 0, 0, 1));
-		CNetCGameFramework->ChangePlayerCharacter();
 
 		PLAYER->GetPlayer()->m_match = true;
 		CNetCGameFramework->SetCamera(PLAYER->GetPlayer()->GetCamera());
@@ -403,15 +403,15 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_death *pkt = reinterpret_cast<sc_packet_death *>(ptr);
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
-			PLAYER->GetPlayer()->SetPlayerState(DEATH);
+			PLAYER->GetPlayer()->SetPlayerState(SAD);
 		}
 		for (int i = 0; i < 2; ++i) {
 			if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
-				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::DEATH);
+				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::SAD);
 				break;
 			}
 			else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
-				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::DEATH);
+				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::SAD);
 				break;
 			}
 		}
@@ -425,8 +425,8 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 		//cout << sizeof(pkt->chat) << endl;
 		CHATMANAGER->TextChange(pkt->chat);
 		//CHATMANAGER->InputChatting(pkt->chat, pkt->cSize);
-		ZeroMemory(packet_buffer,sizeof(packet_buffer));
-		
+		ZeroMemory(packet_buffer, sizeof(packet_buffer));
+
 		break;
 	}
 	case SC_CLOCK:
@@ -451,7 +451,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	case SC_DONA:
 	{
 		sc_packet_dona *pkt = reinterpret_cast<sc_packet_dona *>(ptr);
-		m_time = m_time - 10;
+		SCENEMANAGER->recvDonation();
 		break;
 	}
 	default:

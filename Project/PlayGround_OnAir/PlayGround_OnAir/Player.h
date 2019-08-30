@@ -70,13 +70,11 @@ protected:
 
 	CMaterial					*m_pMaterial = NULL;
 	bool						m_HeartHp{ true };
-	CSkillEffectUIShader		*pShader = nullptr;
 
 	//////////
 
 	CTexture* pBasicTexture;
 	CTexture* pSkillTexture;
-	CShader* pSkillShader = nullptr;
 	//
 	int							m_basicXsprite;
 	int							m_basicYsprite;
@@ -84,6 +82,8 @@ protected:
 	int							m_skillYsprite;
 
 public:
+	CSkillEffectUIShader*		pShader = nullptr;
+	CSkillEffectUIShader*		pSkillShader = nullptr;
 	CGameObject* m_pEffectObject = nullptr;
 	CGameObject* m_pSkillObject = nullptr;
 	bool GetBasicEffetOn() { return m_basicEffectRender; }

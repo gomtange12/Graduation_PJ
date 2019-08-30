@@ -11,7 +11,8 @@ public:
 	//나중에 시간이 생긴다면 바꾸자.
 	ObjManager* objectManager = OBJMANAGER->GetObjectManager();
 
-	
+	int soloCount = 0;
+	int teamCount = 0;
 	int RNumber = 0;
 public:
 	RoomManager();

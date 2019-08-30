@@ -9,6 +9,7 @@
 #include "CIngameScene.h"
 #include "CObjectManager.h"
 #include "CNetWork.h"
+#include "CSoundManager.h"
 #include "CChatManager.h"
 #include <tchar.h>
  
@@ -479,32 +480,28 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 			break;
 	}
 }
-void CGameFramework::ChangePlayerCharacter()
+void CGameFramework::ChangePlayerCharacter(bool isSolo)
 {
-	//cout << "pckChecked" << endl;
-	//if (PLAYER->GetOtherPlayerMap().size() > 0)
+
+	if (!isSolo)
 	{
-		for(int i = 0 ; i <2 ; ++i)
+
+		for (int i = 0; i < 2; ++i)
 		{
-			//cout << "¸Ê»çÀÌÁî" << PLAYER->GetOtherPlayerMap().size() << endl;
 			PLAYER->m_pOtherPlayerMap[i]->SetPlayerCharacter(false, PLAYER->m_pOtherPlayerMap[i]->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-			//Å¬¶ó³Ñ¹ö, 
-			//cout << PLAYER->m_pOtherPlayerMap[i]->GetClientNum() << ": enemyChecked, type:" << PLAYER->m_pOtherPlayerMap[i]->GetCharacterType() << endl;
+		}
+		for (int i = 0; i < 2; ++i)
+		{
+			if (PLAYER->m_pTeamPlayerMap[i]->GetClientNum() != -1)
+			{
+				PLAYER->m_pTeamPlayerMap[i]->SetPlayerCharacter(true, PLAYER->m_pTeamPlayerMap[i]->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+			}
 		}
 	}
-	//if (PLAYER->GetTeamPlayerMap().size() > 0)
-	{
-			for(int i = 0 ; i<2 ; ++i)
-			{
-			//cout << "¸Ê»çÀÌÁî" << PLAYER->GetTeamPlayerMap().size() << endl;
+	else
+		PLAYER->m_pOtherPlayerMap[0]->SetPlayerCharacter(false, PLAYER->m_pOtherPlayerMap[0]->GetCharacterType(), 0, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 
-			if (PLAYER->m_pTeamPlayerMap[i]->GetClientNum() != -1) {
-				PLAYER->m_pTeamPlayerMap[i]->SetPlayerCharacter(true, PLAYER->m_pTeamPlayerMap[i]->GetCharacterType(), i, m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
-				//cout << PLAYER->m_pTeamPlayerMap[i]->GetClientNum() << ": TeamChecked, type:" << PLAYER->m_pTeamPlayerMap[i]->GetCharacterType() << endl;
-			}
-			}
-
-	}
+	
 	
 }
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
@@ -527,13 +524,13 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 					m_pCamera = PLAYER->GetPlayer()->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
 					break;
 				case VK_F5: {
-					//if (m_ready == false) {
-						//CNETWORK->MatchPkt();
-						SCENEMANAGER->SetScene(PLAYGROUNDMAP);
-						//m_pCamera = PLAYER->GetPlayer()->GetCamera();
+					if (m_ready == false) {
+						CNETWORK->MatchPkt();
+						//SCENEMANAGER->SetScene(PLAYGROUNDMAP);
+						m_pCamera = PLAYER->GetPlayer()->GetCamera();
 						//cout << "¸ÅÄª!";
-						//m_ready = true;
-					//}
+						m_ready = true;
+					}
 					break;
 				}
 				case VK_F6:
@@ -652,8 +649,10 @@ void CGameFramework::OnDestroy()
 
 void CGameFramework::BuildObjects()
 {
-	//CNETWORK->MakeServer(m_hWnd);
+	CNETWORK->MakeServer(m_hWnd);
 	m_pd3dCommandList->Reset(m_pd3dCommandAllocator, NULL);
+
+
 
 	//SCENEMANAGER->
 	m_pScene = new CScene();
@@ -665,7 +664,9 @@ void CGameFramework::BuildObjects()
 	OBJECTMANAGER->LoadPlayerResource(m_pd3dDevice, m_pd3dCommandList,m_pScene->GetGraphicsRootSignature());
 	PLAYER->SetOtherPlayerResourceFromPool(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
 	PLAYER->SetOtherModelResource(m_pd3dDevice, m_pd3dCommandList, m_pScene->GetGraphicsRootSignature(), m_pScene->m_pTerrain);
+	SOUNDMANAGER->Initialize();
 
+	SOUNDMANAGER->LoadSound();
 	
 	//SCENEMANAGER->m_MapList[MENUSCENE] = new CMenuScene();
 //SCENEMANAGER->m_MapList[INGAME] = new CInGameScene();
@@ -721,7 +722,7 @@ void CGameFramework::BuildObjects()
 	//m_pScene->BuildObjectsAfterPlayer(m_pd3dDevice, m_pd3dCommandList);
 	//m_pScene->m_pPlayer = m_pPlayer;// = pPlayer;// = PLAYER->GetInstance()->GetPlayer();
 	m_pCamera = PLAYER->GetPlayer()->GetCamera();
-	//CNETWORK->SetGameFrameWork(GetCGameFramework());
+	CNETWORK->SetGameFrameWork(GetCGameFramework());
 	//m_pCamera->SetMode(THIRD_PERSON_CAMERA);
 
 	m_pd3dCommandList->Close();
@@ -795,12 +796,12 @@ void CGameFramework::ProcessInput()
 			if (pKeysBuffer[0x45] & 0xF0) //½ºÅ³Å°
 			{
 				//ÁÖ¼®Çª¼À
-				//if (CNETWORK->GetSkillCheck() == false) {
+				if (CNETWORK->GetSkillCheck() == false) {
 					PLAYER->GetPlayer()->SetPlayerState(ATTACK_3);
 					CNETWORK->KeyPkt(false, false, true);
 					CNETWORK->SetSkillCheck(true);
 					CNETWORK->SetSkillTime(4);
-				//}
+				}
 			}
 			//2ÇÃ·¹ÀÌ¾î
 			//if (pKeysBuffer[VK_HANGUL] & 0xF0)
@@ -882,14 +883,16 @@ void CGameFramework::ProcessInput()
 				}
 				if (dwDirection)
 				{
-					//PLAYER->GetPlayer()->Move(dwDirection,12.25,true);
-					if(control % 2 ==0){
+					//PLAYER->GetPlayer()->Move(dwDirection,6.25,true);
+					//if(control % 2 ==0){
 						if (PLAYER->GetPlayer()->GetPlayerState() == IDLE || PLAYER->GetPlayer()->GetPlayerState() == RUN) {
-							PLAYER->GetPlayer()->Move(dwDirection, 12.25f, true);
-								//CNETWORK->StatePkt(dwDirection);
+							if (PLAYER->GetPlayer()->GetCollisionState() == false)
+							{
+								CNETWORK->StatePkt(dwDirection);
+							}
 						}
 							
-					}
+					//}
 					
 				}
 			}

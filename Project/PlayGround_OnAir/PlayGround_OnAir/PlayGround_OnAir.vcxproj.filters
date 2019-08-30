@@ -168,6 +168,9 @@
     <ClInclude Include="CShadowMap.h">
       <Filter>소스 파일\ObjectManager\ShadowMap</Filter>
     </ClInclude>
+    <ClInclude Include="CSoundManager.h">
+      <Filter>소스 파일\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Player.cpp">
@@ -244,6 +247,9 @@
     </ClCompile>
     <ClCompile Include="CShadowMap.cpp">
       <Filter>소스 파일\ObjectManager\ShadowMap</Filter>
+    </ClCompile>
+    <ClCompile Include="CSoundManager.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
