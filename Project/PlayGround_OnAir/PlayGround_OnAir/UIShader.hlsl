@@ -399,18 +399,42 @@ float4 PSHPTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //«»ºøΩ¶¿Ã¥ı
 
 //chat
 
+//VS_TEXTURED_OUTPUT VSChatTextured(uint nVertexID : SV_VertexID)
+//{
+//	VS_TEXTURED_OUTPUT output;
+//
+//	if (nVertexID == 0) { output.position = float4(-1.0f,  0.f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
+//	if (nVertexID == 1) { output.position = float4(-0.6f,  0.0f, 0.0f, 1.0f); output.uv = float2(1.f, 0.f); }
+//	if (nVertexID == 2) { output.position = float4(-0.6f, 0.0f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+//	if (nVertexID == 3) { output.position = float4(-1.0f,  0.0f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
+//	if (nVertexID == 4) { output.position = float4(-0.6f, 0.0f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+//	if (nVertexID == 5) { output.position = float4(-1.0f,  0.0f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
+//	return output;
+//
+//}
+//float4 PSChatTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //«»ºøΩ¶¿Ã¥ı 
+//{
+//
+//	float4 cColor = gtxtUITexture.Sample(gSamplerState, input.uv);
+//
+//	//cColor.a = 0.01;
+//	if (cColor.a < 0.1) discard;
+//	return(cColor);
+//
+//}
+
 VS_TEXTURED_OUTPUT VSChatTextured(uint nVertexID : SV_VertexID)
 {
 	VS_TEXTURED_OUTPUT output;
 
-	if (nVertexID == 0) { output.position = float4(-1.0f,  0.f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
-	if (nVertexID == 1) { output.position = float4(-0.6f,  0.0f, 0.0f, 1.0f); output.uv = float2(1.f, 0.f); }
-	if (nVertexID == 2) { output.position = float4(-0.6f, 0.0f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
-	if (nVertexID == 3) { output.position = float4(-1.0f,  0.0f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
-	if (nVertexID == 4) { output.position = float4(-0.6f, 0.0f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
-	if (nVertexID == 5) { output.position = float4(-1.0f,  0.0f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
-	return output;
+	if (nVertexID == 0) { output.position = float4(-1.0f, -0.1f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
+	if (nVertexID == 1) { output.position = float4(-0.6f, -0.1f, 0.0f, 1.0f); output.uv = float2(1.f, 0.f); }
+	if (nVertexID == 2) { output.position = float4(-0.6f, -1.0f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+	if (nVertexID == 3) { output.position = float4(-1.0f, -0.1f, 0.0f, 1.0f); output.uv = float2(0.f, 0.f); }
+	if (nVertexID == 4) { output.position = float4(-0.6f, -1.0f, 0.0f, 1.0f); output.uv = float2(1.f, 1.f); }
+	if (nVertexID == 5) { output.position = float4(-1.0f, -1.0f, 0.0f, 1.0f); output.uv = float2(0.f, 1.f); }
 
+	return output;
 }
 float4 PSChatTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET //«»ºøΩ¶¿Ã¥ı 
 {

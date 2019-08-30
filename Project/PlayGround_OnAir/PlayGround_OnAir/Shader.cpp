@@ -1216,7 +1216,6 @@ void CChatUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComman
 
 	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 
-	//m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/cbka0-bdgu5.dds", 0);
 	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/BG.dds", 0);
 
 	CScene::CreateShaderResourceViews(pd3dDevice, m_pTexture, 16, false);
@@ -1353,11 +1352,9 @@ void CSkillEffectUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3
 	if (n > 1)
 	{
 		m_cbSprite->xPos += 1;
-		//m_cbSprite->yPos += 1;
-
 		n = 0;
-	}
-	//m_cbSprite->xPos += 0.1;
+	}	
+	
 	if (m_cbSprite->xPos > m_cbSprite->maxX)
 	{
 		m_cbSprite->xPos = 0;
