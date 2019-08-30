@@ -735,7 +735,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 
 	
 
-	m_nConcertObjects = 12;
+	m_nConcertObjects = 50;
 	m_ppConcertObjects = new CGameObject*[m_nConcertObjects];
 
 	CLoadedModelInfo *BackGround = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/ALL_PIECES.bin", NULL, false);
@@ -744,7 +744,7 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppConcertObjects[0]->SetPosition(1500.0f, 350, 1000.0f);
 	m_ppConcertObjects[0]->SetScale(250, 250, 250);
 	m_ppConcertObjects[0]->SetMesh(BackGround->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[0]->SetOOBB(m_ppConcertObjects[0]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[0]->m_pMesh->GetAABBExtents(), 150 * PG_objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[0]->SetOOBB(m_ppConcertObjects[0]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[0]->m_pMesh->GetAABBExtents(), 150 * PG_objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo * bottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/bottom.bin", NULL, false);
 	m_ppConcertObjects[1] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -752,93 +752,351 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppConcertObjects[1]->SetPosition(1500.0f, -40, 1000.0f);
 	m_ppConcertObjects[1]->SetScale(250, 250, 250);
 	m_ppConcertObjects[1]->SetMesh(bottom->m_pModelRootObject->m_pMesh);
-	m_ppConcertObjects[1]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * PG_objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	//m_ppConcertObjects[1]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * PG_objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo * bluebottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/blue_bottom2.bin", NULL, false);
 	m_ppConcertObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppConcertObjects[2]->SetChild(bluebottom->m_pModelRootObject, true);
-	m_ppConcertObjects[2]->SetPosition(1500.0f, 60, -1100.0f);
 	m_ppConcertObjects[2]->SetScale(250, 250, 250);
 	m_ppConcertObjects[2]->SetMesh(bluebottom->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[2]->SetOOBB(m_ppConcertObjects[2]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[2]->m_pMesh->GetAABBExtents(), 100 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
-	//m_ppConcertObjects[2]->SetOOBB(XMFLOAT3(1500.0f, 40, -1100.0f), XMFLOAT3(m_ppConcertObjects[2]->m_pMesh->GetAABBExtents().x * CONCERTScale, m_ppConcertObjects[2]->m_pMesh->GetAABBExtents().z * CONCERTScale * 40,80 ), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	//m_ppConcertObjects[2]->SetOOBB(XMFLOAT3(1500.0f, 40, -1100.0f), XMFLOAT3(m_ppConcertObjects[2]->m_pMesh->GetAABBExtents().x * CONCERTScale, 35, m_ppConcertObjects[2]->m_pMesh->GetAABBExtents().z * CONCERTScale*16), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo * bluerespawn = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/blue_bottom1.bin", NULL, false);
 	m_ppConcertObjects[3] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppConcertObjects[3]->SetChild(bluerespawn->m_pModelRootObject, true);
-	m_ppConcertObjects[3]->SetPosition(1500.0f, 30, -950.0f);
 	m_ppConcertObjects[3]->SetScale(250, 250, 250);
 	m_ppConcertObjects[3]->SetMesh(bluerespawn->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[3]->SetOOBB(m_ppConcertObjects[3]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[3]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	//m_ppConcertObjects[3]->SetOOBB(XMFLOAT3(1500.0f, 30, -940.0f), XMFLOAT3(m_ppConcertObjects[3]->m_pMesh->GetAABBExtents().x * CONCERTScale, 35, m_ppConcertObjects[3]->m_pMesh->GetAABBExtents().z * CONCERTScale*16), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo * Pillar1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/맵2기둥.bin", NULL, false);
+	CLoadedModelInfo * B_Pillar1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/맵2기둥.bin", NULL, false);
 	m_ppConcertObjects[4] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppConcertObjects[4]->SetChild(Pillar1->m_pModelRootObject, true);
-	m_ppConcertObjects[4]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[4]->SetChild(B_Pillar1->m_pModelRootObject, true);
 	m_ppConcertObjects[4]->SetScale(250, 250, 250);
-	m_ppConcertObjects[4]->SetMesh(Pillar1->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[4]->SetOOBB(m_ppConcertObjects[4]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[4]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[4]->SetMesh(B_Pillar1->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[4]->SetOOBB(XMFLOAT3(2150.0f, 20, -470.0f), XMFLOAT3(m_ppConcertObjects[4]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[4]->m_pMesh->GetAABBExtents().z * 25), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo * Pillar2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/맵2기둥.bin", NULL, false);
+	CLoadedModelInfo * B_Pillar2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/맵2기둥.bin", NULL, false);
 	m_ppConcertObjects[5] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppConcertObjects[5]->SetChild(Pillar2->m_pModelRootObject, true);
-	m_ppConcertObjects[5]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[5]->SetChild(B_Pillar2->m_pModelRootObject, true);
 	m_ppConcertObjects[5]->SetScale(250, 250, 250);
-	m_ppConcertObjects[5]->SetMesh(Pillar2->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[5]->SetOOBB(m_ppConcertObjects[5]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[5]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[5]->SetMesh(B_Pillar2->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[5]->SetOOBB(XMFLOAT3(850.0f, 20, -470.0f), XMFLOAT3(m_ppConcertObjects[4]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[4]->m_pMesh->GetAABBExtents().z * 25), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo * Front_Speaker1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루스피커.bin", NULL, false);
+	CLoadedModelInfo * B_Front_Speaker1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루스피커.bin", NULL, false);
 	m_ppConcertObjects[6] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppConcertObjects[6]->SetChild(Front_Speaker1->m_pModelRootObject, true);
-	m_ppConcertObjects[6]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[6]->SetChild(B_Front_Speaker1->m_pModelRootObject, true);
 	m_ppConcertObjects[6]->SetScale(250, 250, 250);
-	m_ppConcertObjects[6]->SetMesh(Front_Speaker1->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[6]->SetOOBB(m_ppConcertObjects[6]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[6]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[6]->SetMesh(B_Front_Speaker1->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[6]->SetOOBB(XMFLOAT3(850.0f, 30, -350.0f), XMFLOAT3(m_ppConcertObjects[6]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[6]->m_pMesh->GetAABBExtents().z * 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo * Front_Speaker2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루스피커.bin", NULL, false);
+	CLoadedModelInfo * B_Front_Speaker2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루스피커.bin", NULL, false);
 	m_ppConcertObjects[7] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppConcertObjects[7]->SetChild(Front_Speaker2->m_pModelRootObject, true);
-	m_ppConcertObjects[7]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[7]->SetChild(B_Front_Speaker2->m_pModelRootObject, true);
 	m_ppConcertObjects[7]->SetScale(250, 250, 250);
-	m_ppConcertObjects[7]->SetMesh(Front_Speaker2->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[7]->SetOOBB(m_ppConcertObjects[7]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[7]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[7]->SetMesh(B_Front_Speaker2->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[7]->SetOOBB(XMFLOAT3(2150.0f, 150, -350.0f), XMFLOAT3(m_ppConcertObjects[7]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[7]->m_pMesh->GetAABBExtents().z * 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo * C_Stage_Speaker1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	CLoadedModelInfo * C_B_Stage_Speaker1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
 	m_ppConcertObjects[8] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppConcertObjects[8]->SetChild(C_Stage_Speaker1->m_pModelRootObject, true);
-	m_ppConcertObjects[8]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[8]->SetChild(C_B_Stage_Speaker1->m_pModelRootObject, true);
 	m_ppConcertObjects[8]->SetScale(250, 250, 250);
-	m_ppConcertObjects[8]->SetMesh(C_Stage_Speaker1->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[8]->SetOOBB(m_ppConcertObjects[8]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[8]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[8]->SetMesh(C_B_Stage_Speaker1->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[8]->SetOOBB(XMFLOAT3(2020.0f, 180, -1060.0f), XMFLOAT3(m_ppConcertObjects[8]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[8]->m_pMesh->GetAABBExtents().z * 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo * C_Stage_Speaker2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	CLoadedModelInfo * C_B_Stage_Speaker2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
 	m_ppConcertObjects[9] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppConcertObjects[9]->SetChild(C_Stage_Speaker2->m_pModelRootObject, true);
-	m_ppConcertObjects[9]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[9]->SetChild(C_B_Stage_Speaker2->m_pModelRootObject, true);
 	m_ppConcertObjects[9]->SetScale(250, 250, 250);
-	m_ppConcertObjects[9]->SetMesh(C_Stage_Speaker2->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[9]->SetOOBB(m_ppConcertObjects[9]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[9]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[9]->SetMesh(C_B_Stage_Speaker2->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[9]->SetOOBB(XMFLOAT3(1880.0f, 180, -1110.0f), XMFLOAT3(m_ppConcertObjects[9]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[9]->m_pMesh->GetAABBExtents().z * 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo * C_Stage_Speaker3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	CLoadedModelInfo * C_B_Stage_Speaker3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
 	m_ppConcertObjects[10] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppConcertObjects[10]->SetChild(C_Stage_Speaker3->m_pModelRootObject, true);
-	m_ppConcertObjects[10]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[10]->SetChild(C_B_Stage_Speaker3->m_pModelRootObject, true);
 	m_ppConcertObjects[10]->SetScale(250, 250, 250);
-	m_ppConcertObjects[10]->SetMesh(C_Stage_Speaker3->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[10]->SetOOBB(m_ppConcertObjects[10]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[10]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[10]->SetMesh(C_B_Stage_Speaker3->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[10]->SetOOBB(XMFLOAT3(980.0f, 180, -1060.0f), XMFLOAT3(m_ppConcertObjects[10]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[10]->m_pMesh->GetAABBExtents().z * 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	CLoadedModelInfo * C_Stage_Speaker4 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	CLoadedModelInfo * C_B_Stage_Speaker4 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
 	m_ppConcertObjects[11] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_ppConcertObjects[11]->SetChild(C_Stage_Speaker4->m_pModelRootObject, true);
-	m_ppConcertObjects[11]->SetPosition(1000.0f, 30, 1000.0f);
+	m_ppConcertObjects[11]->SetChild(C_B_Stage_Speaker4->m_pModelRootObject, true);
 	m_ppConcertObjects[11]->SetScale(250, 250, 250);
-	m_ppConcertObjects[11]->SetMesh(C_Stage_Speaker4->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[11]->SetOOBB(m_ppConcertObjects[11]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[11]->m_pMesh->GetAABBExtents(), 150 * CONCERTScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
-	
-	
-	
-	//CSoundCallbackHandler* pSound = new CSoundCallbackHandler();
-	//pSound->HandleCallback(_T("Sound/Special_Ed.mp3"));
+	m_ppConcertObjects[11]->SetMesh(C_B_Stage_Speaker4->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[11]->SetOOBB(XMFLOAT3(1120.0f, 180, -1110.0f), XMFLOAT3(m_ppConcertObjects[11]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[11]->m_pMesh->GetAABBExtents().z * 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+
+	//RED
+	CLoadedModelInfo * redbottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/blue_bottom2.bin", NULL, false);
+	m_ppConcertObjects[12] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[12]->SetChild(redbottom->m_pModelRootObject, true);
+	m_ppConcertObjects[12]->SetScale(250, 250, 250);
+	m_ppConcertObjects[12]->SetMesh(redbottom->m_pModelRootObject->m_pMesh);
+	//m_ppConcertObjects[12]->SetOOBB(XMFLOAT3(1500.0f, 40, 3100.0f), XMFLOAT3(m_ppConcertObjects[12]->m_pMesh->GetAABBExtents().x * CONCERTScale, 35, m_ppConcertObjects[12]->m_pMesh->GetAABBExtents().z * CONCERTScale*16), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * redrespawn = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/blue_bottom1.bin", NULL, false);
+	m_ppConcertObjects[13] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[13]->SetChild(bluerespawn->m_pModelRootObject, true);
+	m_ppConcertObjects[13]->SetScale(250, 250, 250);
+	m_ppConcertObjects[13]->SetMesh(redrespawn->m_pModelRootObject->m_pMesh);
+	//m_ppConcertObjects[13]->SetOOBB(XMFLOAT3(1500.0f, 30, 2940.0f), XMFLOAT3(m_ppConcertObjects[13]->m_pMesh->GetAABBExtents().x * CONCERTScale, 35, m_ppConcertObjects[13]->m_pMesh->GetAABBExtents().z * CONCERTScale*16), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * R_Pillar1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/맵2기둥.bin", NULL, false);
+	m_ppConcertObjects[14] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[14]->SetChild(R_Pillar1->m_pModelRootObject, true);
+	m_ppConcertObjects[14]->SetScale(250, 250, 250);
+	m_ppConcertObjects[14]->SetMesh(R_Pillar1->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[14]->SetOOBB(XMFLOAT3(2150.0f, 20, 2470.0f), XMFLOAT3(m_ppConcertObjects[14]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[14]->m_pMesh->GetAABBExtents().z * 25), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * R_Pillar2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/맵2기둥.bin", NULL, false);
+	m_ppConcertObjects[15] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[15]->SetChild(R_Pillar2->m_pModelRootObject, true);
+	m_ppConcertObjects[15]->SetScale(250, 250, 250);
+	m_ppConcertObjects[15]->SetMesh(R_Pillar2->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[15]->SetOOBB(XMFLOAT3(850.0f, 20, 2470.0f), XMFLOAT3(m_ppConcertObjects[14]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[14]->m_pMesh->GetAABBExtents().z * 25), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * R_Front_Speaker1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루스피커.bin", NULL, false);
+	m_ppConcertObjects[16] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[16]->SetChild(R_Front_Speaker1->m_pModelRootObject, true);
+	m_ppConcertObjects[16]->SetScale(250, 250, 250);
+	m_ppConcertObjects[16]->SetMesh(R_Front_Speaker1->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[16]->SetOOBB(XMFLOAT3(850.0f, 30, 2350.0f), XMFLOAT3(m_ppConcertObjects[16]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[16]->m_pMesh->GetAABBExtents().z * 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * R_Front_Speaker2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루스피커.bin", NULL, false);
+	m_ppConcertObjects[17] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[17]->SetChild(R_Front_Speaker2->m_pModelRootObject, true);
+	m_ppConcertObjects[17]->SetScale(250, 250, 250);
+	m_ppConcertObjects[17]->SetMesh(R_Front_Speaker2->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[17]->SetOOBB(XMFLOAT3(2150.0f, 150, 2350.0f), XMFLOAT3(m_ppConcertObjects[17]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[17]->m_pMesh->GetAABBExtents().z * 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_R_Stage_Speaker1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[18] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[18]->SetChild(C_R_Stage_Speaker1->m_pModelRootObject, true);
+	m_ppConcertObjects[18]->SetScale(250, 250, 250);
+	m_ppConcertObjects[18]->SetMesh(C_R_Stage_Speaker1->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[18]->SetOOBB(XMFLOAT3(2020.0f, 180, 3060.0f), XMFLOAT3(m_ppConcertObjects[18]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[18]->m_pMesh->GetAABBExtents().z * 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_R_Stage_Speaker2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[19] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[19]->SetChild(C_R_Stage_Speaker2->m_pModelRootObject, true);
+	m_ppConcertObjects[19]->SetScale(250, 250, 250);
+	m_ppConcertObjects[19]->SetMesh(C_R_Stage_Speaker2->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[19]->SetOOBB(XMFLOAT3(1880.0f, 180, 3110.0f), XMFLOAT3(m_ppConcertObjects[19]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[19]->m_pMesh->GetAABBExtents().z * 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_R_Stage_Speaker3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[20] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[20]->SetChild(C_R_Stage_Speaker3->m_pModelRootObject, true);
+	m_ppConcertObjects[20]->SetScale(250, 250, 250);
+	m_ppConcertObjects[20]->SetMesh(C_R_Stage_Speaker3->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[20]->SetOOBB(XMFLOAT3(980.0f, 180, 3060.0f), XMFLOAT3(m_ppConcertObjects[20]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[20]->m_pMesh->GetAABBExtents().z * 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_R_Stage_Speaker4 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[21] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[21]->SetChild(C_R_Stage_Speaker4->m_pModelRootObject, true);
+	m_ppConcertObjects[21]->SetScale(250, 250, 250);
+	m_ppConcertObjects[21]->SetMesh(C_R_Stage_Speaker4->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[21]->SetOOBB(XMFLOAT3(1120.0f, 180, 3110.0f), XMFLOAT3(m_ppConcertObjects[21]->m_pMesh->GetAABBExtents().x * 280, 200, m_ppConcertObjects[21]->m_pMesh->GetAABBExtents().z * 160), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+
+	// RED 작은 스피커들
+	CLoadedModelInfo * C_R_Small_Speaker1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[22] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[22]->SetChild(C_R_Small_Speaker1->m_pModelRootObject, true);
+	m_ppConcertObjects[22]->SetScale(250, 250, 250);
+	m_ppConcertObjects[22]->SetMesh(C_R_Small_Speaker1->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[22]->SetOOBB(XMFLOAT3(2020.0f, 30, 2670.0f), XMFLOAT3(70, 50, 30), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_R_Small_Speaker2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[23] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[23]->SetChild(C_R_Small_Speaker2->m_pModelRootObject, true);
+	m_ppConcertObjects[23]->SetScale(250, 250, 250);
+	m_ppConcertObjects[23]->SetMesh(C_R_Small_Speaker2->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[23]->SetOOBB(XMFLOAT3(1740.0f, 30, 2670.0f), XMFLOAT3(70, 50, 30), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_R_Small_Speaker3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[24] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[24]->SetChild(C_R_Small_Speaker3->m_pModelRootObject, true);
+	m_ppConcertObjects[24]->SetScale(250, 250, 250);
+	m_ppConcertObjects[24]->SetMesh(C_R_Small_Speaker3->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[24]->SetOOBB(XMFLOAT3(980.0f, 30, 2670.0f), XMFLOAT3(70, 50, 30), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_R_Small_Speaker4 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[25] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[25]->SetChild(C_R_Small_Speaker4->m_pModelRootObject, true);
+	m_ppConcertObjects[25]->SetScale(250, 250, 250);
+	m_ppConcertObjects[25]->SetMesh(C_R_Small_Speaker4->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[25]->SetOOBB(XMFLOAT3(1260.0f, 30, 2670.0f), XMFLOAT3(70, 50, 30), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_R_Small_Speaker5 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[26] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[26]->SetChild(C_R_Small_Speaker5->m_pModelRootObject, true);
+	m_ppConcertObjects[26]->SetScale(250, 250, 250);
+	m_ppConcertObjects[26]->SetMesh(C_R_Small_Speaker5->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[26]->SetOOBB(XMFLOAT3(1770.0f, 10, 1900.0f), XMFLOAT3(30, 35, 60), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_R_Small_Speaker6 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[27] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[27]->SetChild(C_R_Small_Speaker6->m_pModelRootObject, true);
+	m_ppConcertObjects[27]->SetScale(250, 250, 250);
+	m_ppConcertObjects[27]->SetMesh(C_R_Small_Speaker6->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[27]->SetOOBB(XMFLOAT3(1770.0f, 10, 2220.0f), XMFLOAT3(30, 35, 60), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_R_Small_Speaker7 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[28] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[28]->SetChild(C_R_Small_Speaker7->m_pModelRootObject, true);
+	m_ppConcertObjects[28]->SetScale(250, 250, 250);
+	m_ppConcertObjects[28]->SetMesh(C_R_Small_Speaker7->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[28]->SetOOBB(XMFLOAT3(1230.0f, 10, 1900.0f), XMFLOAT3(30, 35, 60), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_R_Small_Speaker8 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[29] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[29]->SetChild(C_R_Small_Speaker8->m_pModelRootObject, true);
+	m_ppConcertObjects[29]->SetScale(250, 250, 250);
+	m_ppConcertObjects[29]->SetMesh(C_R_Small_Speaker8->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[29]->SetOOBB(XMFLOAT3(1230.0f, 10, 2220.0f), XMFLOAT3(30, 35, 60), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+
+	//BLUE 작은 스피커들
+	CLoadedModelInfo * C_B_Small_Speaker1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[30] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[30]->SetChild(C_B_Small_Speaker1->m_pModelRootObject, true);
+	m_ppConcertObjects[30]->SetScale(250, 250, 250);
+	m_ppConcertObjects[30]->SetMesh(C_B_Small_Speaker1->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[30]->SetOOBB(XMFLOAT3(2020.0f, 30, -670.0f), XMFLOAT3(70, 50, 30), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_B_Small_Speaker2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[31] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[31]->SetChild(C_B_Small_Speaker2->m_pModelRootObject, true);
+	m_ppConcertObjects[31]->SetScale(250, 250, 250);
+	m_ppConcertObjects[31]->SetMesh(C_B_Small_Speaker2->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[31]->SetOOBB(XMFLOAT3(1740.0f, 30, -670.0f), XMFLOAT3(70, 50, 30), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_B_Small_Speaker3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[32] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[32]->SetChild(C_B_Small_Speaker3->m_pModelRootObject, true);
+	m_ppConcertObjects[32]->SetScale(250, 250, 250);
+	m_ppConcertObjects[32]->SetMesh(C_B_Small_Speaker3->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[32]->SetOOBB(XMFLOAT3(980.0f, 30, -670.0f), XMFLOAT3(70, 50, 30), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_B_Small_Speaker4 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[33] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[33]->SetChild(C_B_Small_Speaker4->m_pModelRootObject, true);
+	m_ppConcertObjects[33]->SetScale(250, 250, 250);
+	m_ppConcertObjects[33]->SetMesh(C_B_Small_Speaker4->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[33]->SetOOBB(XMFLOAT3(1260.0f, 30, -670.0f), XMFLOAT3(70, 50, 30), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_B_Small_Speaker5 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[34] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[34]->SetChild(C_B_Small_Speaker5->m_pModelRootObject, true);
+	m_ppConcertObjects[34]->SetScale(250, 250, 250);
+	m_ppConcertObjects[34]->SetMesh(C_B_Small_Speaker5->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[34]->SetOOBB(XMFLOAT3(1770.0f, 10, 100.0f), XMFLOAT3(30, 35, 60), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_B_Small_Speaker6 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[35] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[35]->SetChild(C_B_Small_Speaker6->m_pModelRootObject, true);
+	m_ppConcertObjects[35]->SetScale(250, 250, 250);
+	m_ppConcertObjects[35]->SetMesh(C_B_Small_Speaker6->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[35]->SetOOBB(XMFLOAT3(1770.0f, 10, -220.0f), XMFLOAT3(30, 35, 60), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_B_Small_Speaker7 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[36] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[36]->SetChild(C_B_Small_Speaker7->m_pModelRootObject, true);
+	m_ppConcertObjects[36]->SetScale(250, 250, 250);
+	m_ppConcertObjects[36]->SetMesh(C_B_Small_Speaker7->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[36]->SetOOBB(XMFLOAT3(1230.0f, 10, 100.0f), XMFLOAT3(30, 35, 60), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_B_Small_Speaker8 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[37] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[37]->SetChild(C_B_Small_Speaker8->m_pModelRootObject, true);
+	m_ppConcertObjects[37]->SetScale(250, 250, 250);
+	m_ppConcertObjects[37]->SetMesh(C_B_Small_Speaker8->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[37]->SetOOBB(XMFLOAT3(1230.0f, 10, -220.0f), XMFLOAT3(30, 35, 60), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+
+	//가운데 스피커들
+	CLoadedModelInfo * C_M_Small_Speaker1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[38] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[38]->SetChild(C_M_Small_Speaker1->m_pModelRootObject, true);
+	m_ppConcertObjects[38]->SetScale(250, 250, 250);
+	m_ppConcertObjects[38]->SetMesh(C_M_Small_Speaker1->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[38]->SetOOBB(XMFLOAT3(1860.0f, 10, 1530.0f), XMFLOAT3(70, 35, 50), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_M_Small_Speaker2 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[39] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[39]->SetChild(C_M_Small_Speaker2->m_pModelRootObject, true);
+	m_ppConcertObjects[39]->SetScale(250, 250, 250);
+	m_ppConcertObjects[39]->SetMesh(C_M_Small_Speaker2->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[39]->SetOOBB(XMFLOAT3(2060.0f, 10, 1360.0f), XMFLOAT3(60, 35, 60), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_M_Small_Speaker3 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[40] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[40]->SetChild(C_M_Small_Speaker3->m_pModelRootObject, true);
+	m_ppConcertObjects[40]->SetScale(250, 250, 250);
+	m_ppConcertObjects[40]->SetMesh(C_M_Small_Speaker3->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[40]->SetOOBB(XMFLOAT3(2150.0f, 10, 1150.0f), XMFLOAT3(30, 35, 70), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_M_Small_Speaker4 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[41] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[41]->SetChild(C_M_Small_Speaker4->m_pModelRootObject, true);
+	m_ppConcertObjects[41]->SetScale(250, 250, 250);
+	m_ppConcertObjects[41]->SetMesh(C_M_Small_Speaker4->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[41]->SetOOBB(XMFLOAT3(1140.0f, 10, 1530.0f), XMFLOAT3(70, 35, 50), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_M_Small_Speaker5 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[42] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[42]->SetChild(C_M_Small_Speaker5->m_pModelRootObject, true);
+	m_ppConcertObjects[42]->SetScale(250, 250, 250);
+	m_ppConcertObjects[42]->SetMesh(C_M_Small_Speaker5->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[42]->SetOOBB(XMFLOAT3(940.0f, 10, 1360.0f), XMFLOAT3(60, 35, 60), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_M_Small_Speaker6 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[43] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[43]->SetChild(C_M_Small_Speaker6->m_pModelRootObject, true);
+	m_ppConcertObjects[43]->SetScale(250, 250, 250);
+	m_ppConcertObjects[43]->SetMesh(C_M_Small_Speaker6->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[43]->SetOOBB(XMFLOAT3(850.0f, 10, 1150.0f), XMFLOAT3(30, 35, 70), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_M_Small_Speaker7 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[44] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[44]->SetChild(C_M_Small_Speaker7->m_pModelRootObject, true);
+	m_ppConcertObjects[44]->SetScale(250, 250, 250);
+	m_ppConcertObjects[44]->SetMesh(C_M_Small_Speaker7->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[44]->SetOOBB(XMFLOAT3(1860.0f, 10, 470.0f), XMFLOAT3(70, 35, 50), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_M_Small_Speaker8 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[45] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[45]->SetChild(C_M_Small_Speaker8->m_pModelRootObject, true);
+	m_ppConcertObjects[45]->SetScale(250, 250, 250);
+	m_ppConcertObjects[45]->SetMesh(C_M_Small_Speaker8->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[45]->SetOOBB(XMFLOAT3(2060.0f, 10, 640.0f), XMFLOAT3(60, 35, 60), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_M_Small_Speaker9 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[46] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[46]->SetChild(C_M_Small_Speaker9->m_pModelRootObject, true);
+	m_ppConcertObjects[46]->SetScale(250, 250, 250);
+	m_ppConcertObjects[46]->SetMesh(C_M_Small_Speaker9->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[46]->SetOOBB(XMFLOAT3(2150.0f, 10, 850.0f), XMFLOAT3(30, 35, 70), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_M_Small_Speaker10 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[47] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[47]->SetChild(C_M_Small_Speaker10->m_pModelRootObject, true);
+	m_ppConcertObjects[47]->SetScale(250, 250, 250);
+	m_ppConcertObjects[47]->SetMesh(C_M_Small_Speaker4->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[47]->SetOOBB(XMFLOAT3(1140.0f, 10, 470.0f), XMFLOAT3(70, 35, 50), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_M_Small_Speaker11 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[48] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[48]->SetChild(C_M_Small_Speaker11->m_pModelRootObject, true);
+	m_ppConcertObjects[48]->SetScale(250, 250, 250);
+	m_ppConcertObjects[48]->SetMesh(C_M_Small_Speaker11->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[48]->SetOOBB(XMFLOAT3(940.0f, 10, 640.0f), XMFLOAT3(60, 35, 60), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+	CLoadedModelInfo * C_M_Small_Speaker12 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/맵2/블루직각스피커.bin", NULL, false);
+	m_ppConcertObjects[49] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_ppConcertObjects[49]->SetChild(C_M_Small_Speaker12->m_pModelRootObject, true);
+	m_ppConcertObjects[49]->SetScale(250, 250, 250);
+	m_ppConcertObjects[49]->SetMesh(C_M_Small_Speaker12->m_pModelRootObject->m_pMesh);
+	m_ppConcertObjects[49]->SetOOBB(XMFLOAT3(850.0f, 10, 850.0f), XMFLOAT3(30, 35, 70), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
@@ -846,7 +1104,14 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	if (Floor_Slide) delete Floor_Slide;
 	if (Floor_Stage) delete Floor_Stage;
 	if (Slide) delete Slide;
+	if (Respawn_Blue) delete Respawn_Blue;
+	if (Respawn_Red) delete Respawn_Red;
+
+	
+	if (LeftSeeSaw) delete LeftSeeSaw;
 	if (RightSeeSaw) delete RightSeeSaw;
+
+
 	if (Slide_Speaker_3) delete Slide_Speaker_3;
 	if (Slide_Speaker_1) delete Slide_Speaker_1;
 	if (Stage) delete Stage;
@@ -861,8 +1126,6 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	if (Street_Lamp_2) delete Street_Lamp_2;
 	if (Stage_Speaker_1) delete Stage_Speaker_1;
 	if (Stage_Speaker_2) delete Stage_Speaker_2;
-
-
 	if (Stage_Speaker_3) delete Stage_Speaker_3;
 	if (Stage_Speaker_4) delete Stage_Speaker_4;
 
@@ -885,8 +1148,58 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	if (St_Spot_1) delete St_Spot_1;
 	if (St_Spot_2) delete St_Spot_2;
 
-	//if (pMapObject) delete pMapObject;
-	//if (pPlayGroundMapObject) delete pPlayGroundMapObject;
+
+	//맵2
+
+	if (BackGround) delete BackGround;
+	if (bottom) delete bottom;
+	if (bluerespawn) delete bluerespawn;
+	if (B_Pillar1) delete B_Pillar1;
+	if (B_Pillar2) delete B_Pillar2;
+	if (B_Front_Speaker1) delete B_Front_Speaker1;
+	if (B_Front_Speaker2) delete B_Front_Speaker2;
+	if (C_B_Stage_Speaker1) delete C_B_Stage_Speaker1;
+	if (C_B_Stage_Speaker2) delete C_B_Stage_Speaker2;
+	if (C_B_Stage_Speaker3) delete C_B_Stage_Speaker3;
+	if (C_B_Stage_Speaker4) delete C_B_Stage_Speaker4;
+	if (redbottom) delete redbottom;
+	if (redrespawn) delete redrespawn;
+	if (R_Pillar1) delete R_Pillar1;
+	if (R_Pillar2) delete R_Pillar2;
+	if (R_Front_Speaker1) delete R_Front_Speaker1;
+	if (R_Front_Speaker2) delete R_Front_Speaker2;
+	if (C_R_Stage_Speaker1) delete C_R_Stage_Speaker1;
+	if (C_R_Stage_Speaker2) delete C_R_Stage_Speaker2;
+	if (C_R_Stage_Speaker3) delete C_R_Stage_Speaker3;
+	if (C_R_Stage_Speaker4) delete C_R_Stage_Speaker4;
+	if (C_R_Small_Speaker1) delete C_R_Small_Speaker1;
+	if (C_R_Small_Speaker2) delete C_R_Small_Speaker2;
+	if (C_R_Small_Speaker3) delete C_R_Small_Speaker3;
+	if (C_R_Small_Speaker4) delete C_R_Small_Speaker4;
+	if (C_R_Small_Speaker5) delete C_R_Small_Speaker5;
+	if (C_R_Small_Speaker6) delete C_R_Small_Speaker6;
+	if (C_R_Small_Speaker7) delete C_R_Small_Speaker7;
+	if (C_R_Small_Speaker8) delete C_R_Small_Speaker8;
+	if (C_B_Small_Speaker1) delete C_B_Small_Speaker1;
+	if (C_B_Small_Speaker2) delete C_B_Small_Speaker2;
+	if (C_B_Small_Speaker3) delete C_B_Small_Speaker3;
+	if (C_B_Small_Speaker4) delete C_B_Small_Speaker4;
+	if (C_B_Small_Speaker5) delete C_B_Small_Speaker5;
+	if (C_B_Small_Speaker6) delete C_B_Small_Speaker6;
+	if (C_B_Small_Speaker7) delete C_B_Small_Speaker7;
+	if (C_B_Small_Speaker8) delete C_B_Small_Speaker8;
+	if (C_M_Small_Speaker1) delete C_M_Small_Speaker1;
+	if (C_M_Small_Speaker2) delete C_M_Small_Speaker2;
+	if (C_M_Small_Speaker3) delete C_M_Small_Speaker3;
+	if (C_M_Small_Speaker4) delete C_M_Small_Speaker4;
+	if (C_M_Small_Speaker5) delete C_M_Small_Speaker5;
+	if (C_M_Small_Speaker6) delete C_M_Small_Speaker6;
+	if (C_M_Small_Speaker7) delete C_M_Small_Speaker7;
+	if (C_M_Small_Speaker8) delete C_M_Small_Speaker8;
+	if (C_M_Small_Speaker9) delete C_M_Small_Speaker9;
+	if (C_M_Small_Speaker10) delete C_M_Small_Speaker10;
+	if (C_M_Small_Speaker11) delete C_M_Small_Speaker11;
+	if (C_M_Small_Speaker12) delete C_M_Small_Speaker12;
 
 }
 
@@ -1393,10 +1706,12 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 
 		break;
 	case PLAYGROUNDMAP:
+
 		for (int i = 0; i < m_nPlayGroundObjects; i++)
 		{
 			m_ppPlayGroundObjects[i]->Render(pd3dCommandList, pCamera);
 		}
+		
 		for (int i = 3; i < 7; ++i)
 		{
 			if (i != 5)

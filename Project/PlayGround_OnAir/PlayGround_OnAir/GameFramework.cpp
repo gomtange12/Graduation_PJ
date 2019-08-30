@@ -51,7 +51,7 @@ CGameFramework::CGameFramework()
 	{
 		//m_rcTextRectForChat[i] = D2D1::RectF(0, 0, szRenderTarget.width * 1.5, szRenderTarget.height * (0.5 - (0.12 * i)));
 		//m_rcTextRectForChat[i] = D2D1::RectF(FRAME_BUFFER_WIDTH - 150, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT * 2 - (30 * i));
-		m_rcTextRectForChat[i] = D2D1::RectF(0, 0, FRAME_BUFFER_WIDTH * 0.3, FRAME_BUFFER_HEIGHT * 2 - (30 * i));
+		m_rcTextRectForChat[i] = D2D1::RectF(0, 0, FRAME_BUFFER_WIDTH * 0.4, FRAME_BUFFER_HEIGHT * 2 - (30 * i));
 
 		//std::cout << i << "i: left: " << m_rcTextRectForChat[i].left << " , right" << m_rcTextRectForChat[i].right << " , top" << m_rcTextRectForChat[i].top
 		//	<< " , bottom" << m_rcTextRectForChat[i].bottom << endl;
@@ -119,8 +119,8 @@ void CGameFramework::CreateDirect2DDevice()
 	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0x9ACD32, 1.0f)), &m_pd2dbrBorder);
 
 	hResult = m_pdWriteFactory->CreateTextFormat(L"맑은 고딕체", NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 15.0f, L"en-US", &m_pdwFont);
-	hResult = m_pdwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	hResult = m_pdwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	hResult = m_pdwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER); //여기 채팅창옵션
+	hResult = m_pdwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER); //여기
 	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Beige, 1.0f), &m_pd2dbrText);
 	hResult = m_pdWriteFactory->CreateTextLayout(L"텍스트 레이아웃", 8, m_pdwFont, 4096.0f, 4096.0f, &m_pdwTextLayout);
 
@@ -1080,7 +1080,11 @@ void CGameFramework::FrameAdvance()
 				p->Render(m_pd3dCommandList, m_pCamera);
 		}
 	}
-
+	if (m_pScene)
+	{
+		if(m_pScene->m_ppShaders[10])
+			m_pScene->m_ppShaders[10]->Render(m_pd3dCommandList, m_pCamera);
+	}
 #ifdef _WITH_PLAYER_TOP
 	m_pd3dCommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 #endif
@@ -1170,11 +1174,11 @@ void CGameFramework::FrameAdvance()
 #endif
 	
 	
-	if (m_pScene)
+	/*if (m_pScene)
 	{
 		if(m_pScene->m_ppShaders[10])
 			m_pScene->m_ppShaders[10]->Render(m_pd3dCommandList, m_pCamera);
-	}
+	}*/
 
 //	m_nSwapChainBufferIndex = m_pdxgiSwapChain->GetCurrentBackBufferIndex();
 	MoveToNextFrame();

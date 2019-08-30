@@ -36,6 +36,7 @@ private:
 	int     m_skillTime = 0;
 	bool	m_skilCheck = false;
 	bool	m_isCheckPkt  =  false;
+	string  ip;
 public:
 	int GetTime() { return m_time; }
 	int GetSkillTime() { return m_skillTime; }
@@ -49,6 +50,7 @@ public:
 	CNetWork();
 	~CNetWork();
 
+	void IpSetting();
 	void SetGameFrameWork(CGameFramework* CGFramwork) { CNetCGameFramework = CGFramwork; };
 	bool GetCheckPkt() { return m_isCheckPkt; }
 

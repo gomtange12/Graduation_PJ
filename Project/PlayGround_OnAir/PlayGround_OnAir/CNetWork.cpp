@@ -4,6 +4,7 @@
 #include "CPlayerManager.h"
 #include "CChatManager.h"
 
+
 #define SPAWN 9
 
 
@@ -26,7 +27,8 @@ void CNetWork::MakeServer(const HWND& hWnd)
 	ZeroMemory(&ServerAddr, sizeof(SOCKADDR_IN));
 	ServerAddr.sin_family = AF_INET;
 	ServerAddr.sin_port = htons(SERVER_PORT);
-	ServerAddr.sin_addr.s_addr = inet_addr(IP_ADDR);
+	IpSetting();
+	ServerAddr.sin_addr.s_addr = inet_addr(ip.c_str());
 
 	int Result = WSAConnect(g_mysocket, (sockaddr *)&ServerAddr, sizeof(ServerAddr), NULL, NULL, NULL, NULL);
 
@@ -37,6 +39,14 @@ void CNetWork::MakeServer(const HWND& hWnd)
 	recv_wsabuf.buf = recv_buffer;
 	recv_wsabuf.len = MAX_BUFFER;
 
+}
+void CNetWork::IpSetting() {
+	ifstream in("ip.txt");
+
+	while (!in.eof()) {
+		in >> ip;
+	}
+	
 }
 void CNetWork::SendPacket()
 {
@@ -403,15 +413,15 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_death *pkt = reinterpret_cast<sc_packet_death *>(ptr);
 		if (pkt->id == PLAYER->GetPlayer()->GetClientNum()) {
-			PLAYER->GetPlayer()->SetPlayerState(SAD);
+			PLAYER->GetPlayer()->SetPlayerState(DEATH);
 		}
 		for (int i = 0; i < 2; ++i) {
 			if (pkt->id == PLAYER->GetOtherPlayerMap()[i]->GetClientNum()) {
-				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::SAD);
+				PLAYER->GetOtherPlayerMap()[i]->SetPlayerState(PlayerState::DEATH);
 				break;
 			}
 			else if (pkt->id == PLAYER->GetTeamPlayerMap()[i]->GetClientNum()) {
-				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::SAD);
+				PLAYER->GetTeamPlayerMap()[i]->SetPlayerState(PlayerState::DEATH);
 				break;
 			}
 		}
