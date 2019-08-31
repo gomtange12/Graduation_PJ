@@ -237,7 +237,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 	//
-	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 50, 400); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
+	CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 50, 500); //SuperCobra(17), Gunship(2), Player:Mi24(1), Angrybot()
 	//CreateShaderResourceViews();
 	CMaterial::PrepareShaders(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	//
@@ -1766,18 +1766,14 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		{
 			if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 		}
-		if (m_WholeMapRender)
+		
+		if (m_ppConcertObjects[0])
 		{
-			if (m_ppConcertObjects[0])
-			{
-				m_ppConcertObjects[0]->Render(pd3dCommandList, pCamera);
+			m_ppConcertObjects[0]->Render(pd3dCommandList, pCamera);
 
-			}
 		}
-		for (int i = 1; i <2; i++)
-		{
-			m_ppConcertObjects[i]->Render(pd3dCommandList, pCamera);
-		}
+		
+		
 		if (PLAYER->GetPlayer()->GetClientNum() == CNETWORK->myid) {
 			if (PLAYER->GetPlayer()->GetPlayerState() == HAPPY) {
 				if (m_ppShaders[8])
