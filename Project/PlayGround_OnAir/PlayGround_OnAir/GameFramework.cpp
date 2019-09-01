@@ -119,9 +119,9 @@ void CGameFramework::CreateDirect2DDevice()
 	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(0x9ACD32, 1.0f)), &m_pd2dbrBorder);
 
 	hResult = m_pdWriteFactory->CreateTextFormat(L"맑은 고딕체", NULL, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 15.0f, L"en-US", &m_pdwFont);
-	hResult = m_pdwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER); //여기 채팅창옵션
+	hResult = m_pdwFont->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING); //여기 채팅창옵션
 	hResult = m_pdwFont->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER); //여기
-	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Beige, 1.0f), &m_pd2dbrText);
+	m_pd2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gray, 1.0f), &m_pd2dbrText);
 	hResult = m_pdWriteFactory->CreateTextLayout(L"텍스트 레이아웃", 8, m_pdwFont, 4096.0f, 4096.0f, &m_pdwTextLayout);
 
 #ifdef _WITH_DIRECT2D_IMAGE_EFFECT
