@@ -752,21 +752,21 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppConcertObjects[1]->SetPosition(1500.0f, -40, 1000.0f);
 	m_ppConcertObjects[1]->SetScale(250, 250, 250);
 	m_ppConcertObjects[1]->SetMesh(bottom->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[1]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * PG_objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[1]->SetOOBB(m_ppConcertObjects[1]->GetPosition(), Vector3::ScalarProduct(m_ppConcertObjects[1]->m_pMesh->GetAABBExtents(), 150 * PG_objScale), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo * bluebottom = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/blue_bottom2.bin", NULL, false);
 	m_ppConcertObjects[2] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppConcertObjects[2]->SetChild(bluebottom->m_pModelRootObject, true);
 	m_ppConcertObjects[2]->SetScale(250, 250, 250);
 	m_ppConcertObjects[2]->SetMesh(bluebottom->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[2]->SetOOBB(XMFLOAT3(1500.0f, 40, -1100.0f), XMFLOAT3(m_ppConcertObjects[2]->m_pMesh->GetAABBExtents().x * CONCERTScale, 35, m_ppConcertObjects[2]->m_pMesh->GetAABBExtents().z * CONCERTScale*16), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[2]->SetOOBB(XMFLOAT3(1500.0f, 40, -1100.0f), XMFLOAT3(m_ppConcertObjects[2]->m_pMesh->GetAABBExtents().x * CONCERTScale, 35, m_ppConcertObjects[2]->m_pMesh->GetAABBExtents().z * CONCERTScale*16), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo * bluerespawn = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/blue_bottom1.bin", NULL, false);
 	m_ppConcertObjects[3] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppConcertObjects[3]->SetChild(bluerespawn->m_pModelRootObject, true);
 	m_ppConcertObjects[3]->SetScale(250, 250, 250);
 	m_ppConcertObjects[3]->SetMesh(bluerespawn->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[3]->SetOOBB(XMFLOAT3(1500.0f, 30, -940.0f), XMFLOAT3(m_ppConcertObjects[3]->m_pMesh->GetAABBExtents().x * CONCERTScale, 35, m_ppConcertObjects[3]->m_pMesh->GetAABBExtents().z * CONCERTScale*16), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[3]->SetOOBB(XMFLOAT3(1500.0f, 30, -940.0f), XMFLOAT3(m_ppConcertObjects[3]->m_pMesh->GetAABBExtents().x * CONCERTScale, 35, m_ppConcertObjects[3]->m_pMesh->GetAABBExtents().z * CONCERTScale*16), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo * B_Pillar1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/¸Ê2±âµÕ.bin", NULL, false);
 	m_ppConcertObjects[4] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -831,14 +831,14 @@ m_ppGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);*/
 	m_ppConcertObjects[12]->SetChild(redbottom->m_pModelRootObject, true);
 	m_ppConcertObjects[12]->SetScale(250, 250, 250);
 	m_ppConcertObjects[12]->SetMesh(redbottom->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[12]->SetOOBB(XMFLOAT3(1500.0f, 40, 3100.0f), XMFLOAT3(m_ppConcertObjects[12]->m_pMesh->GetAABBExtents().x * CONCERTScale, 35, m_ppConcertObjects[12]->m_pMesh->GetAABBExtents().z * CONCERTScale*16), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[12]->SetOOBB(XMFLOAT3(1500.0f, 40, 3100.0f), XMFLOAT3(m_ppConcertObjects[12]->m_pMesh->GetAABBExtents().x * CONCERTScale, 35, m_ppConcertObjects[12]->m_pMesh->GetAABBExtents().z * CONCERTScale*16), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo * redrespawn = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/blue_bottom1.bin", NULL, false);
 	m_ppConcertObjects[13] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppConcertObjects[13]->SetChild(bluerespawn->m_pModelRootObject, true);
 	m_ppConcertObjects[13]->SetScale(250, 250, 250);
 	m_ppConcertObjects[13]->SetMesh(redrespawn->m_pModelRootObject->m_pMesh);
-	//m_ppConcertObjects[13]->SetOOBB(XMFLOAT3(1500.0f, 30, 2940.0f), XMFLOAT3(m_ppConcertObjects[13]->m_pMesh->GetAABBExtents().x * CONCERTScale, 35, m_ppConcertObjects[13]->m_pMesh->GetAABBExtents().z * CONCERTScale*16), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_ppConcertObjects[13]->SetOOBB(XMFLOAT3(1500.0f, 30, 2940.0f), XMFLOAT3(m_ppConcertObjects[13]->m_pMesh->GetAABBExtents().x * CONCERTScale, 35, m_ppConcertObjects[13]->m_pMesh->GetAABBExtents().z * CONCERTScale*16), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	CLoadedModelInfo * R_Pillar1 = CGameObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/¸Ê2/¸Ê2±âµÕ.bin", NULL, false);
 	m_ppConcertObjects[14] = new MapObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
