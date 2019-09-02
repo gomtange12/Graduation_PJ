@@ -293,6 +293,7 @@ void CPlayer::Update(float fTimeElapsed)
 			XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
 			xmf3Shift = Vector3::Add(XMFLOAT3(0, 0, 0), PLAYER->GetPlayer()->GetLookVector(), -6.25f);
 			PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), xmf3Shift));
+			
 			PLAYER->GetPlayer()->SetCollisionState(false);
 		}
 	}
@@ -1219,7 +1220,7 @@ void COtherPlayers::Update(float fTimeElapsed)
 			XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
 			xmf3Shift = Vector3::Add(XMFLOAT3(0, 0, 0), PLAYER->GetOtherPlayer()->GetLookVector(), -6.25f);
 			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), xmf3Shift));
-
+		
 			PLAYER->GetOtherPlayer()->SetCollisionState(false);
 
 		}

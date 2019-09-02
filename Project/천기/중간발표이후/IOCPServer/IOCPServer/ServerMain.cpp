@@ -6,6 +6,7 @@
 
 int main()
 {
+
 	OBJMANAGER->ClientInit();
 	
 	IOCPSERVER->InitNetwork();
