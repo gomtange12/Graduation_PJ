@@ -10,6 +10,7 @@ public:
 	int mod;
 	int map;
 	bool m_full;
+	bool m_flag;
 	bool clocking;
 public:
 	Room();

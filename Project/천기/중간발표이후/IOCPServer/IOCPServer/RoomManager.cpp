@@ -28,7 +28,7 @@ void RoomManager::SoloRoomMatch(int id)
 
 	//빈방을 찾음
 	for (int i = 0; i < room.size(); ++i) {
-		if (room[i]->m_full == false) {
+		if (room[i]->m_flag == false) {
 			for (int j = 0; j < SOLO_RNUM; ++j) { //아이디를 넣어줌
 				if (room[i]->m_SoloIds[j] < 0) {
 					if (room[i]->m_SoloIds[j] != id) {
@@ -36,6 +36,7 @@ void RoomManager::SoloRoomMatch(int id)
 						if (j == SOLO_RNUM - 1)//풀방이면
 						{
 							room[i]->m_full = true;
+							room[i]->m_flag = true;
 							room[i]->mod  = SOLO;
 							//// 매칭 디폴트값
 							//objectManager->GetPlayer(room[i]->m_SoloIds[0])->avatar = GUITAR;
@@ -90,13 +91,14 @@ void RoomManager::TeamRoomMatch(int id)
 	
 	//빈방을 찾음
 	for (int i = 0; i < room.size(); ++i) {
-		if (room[i]->m_full == false) {
+		if (room[i]->m_flag == false) {
 			for (int j = 0; j < TEAM_RNUM; ++j) { //아이디를 넣어줌
 				if (room[i]->m_TeamIds[j] < 0) {
 					if (room[i]->m_TeamIds[j] != id) {
 						room[i]->m_TeamIds[j] = id;
 						if (j == TEAM_RNUM - 1)//풀방이면
 						{
+							room[i]->m_flag = true;
 							room[i]->m_full = true;
 							room[i]->mod = SQUAD;
 							//// 매칭 디폴트값

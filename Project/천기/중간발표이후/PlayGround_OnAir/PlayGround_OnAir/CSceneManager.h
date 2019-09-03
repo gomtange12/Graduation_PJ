@@ -34,6 +34,7 @@ public:
 
 	void recvDonation() { m_Gameclock += 10; }
 	int  GetGameClock() { return m_Gameclock; }
+	void ResetClock() { m_Gameclock = 300; }
 	bool GetSelectedMap() { return m_isMapSelected; }
 	bool GetSelectedMode() { return m_isModeSelected; }
 	void SetSelectedMode(bool mode) { m_isModeSelected = mode; }

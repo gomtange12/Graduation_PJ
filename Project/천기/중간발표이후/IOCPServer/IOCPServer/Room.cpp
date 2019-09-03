@@ -4,6 +4,7 @@
 
 Room::Room()
 {
+	m_flag = false;
 	clocking = false;
 	m_full = false;
 	for (int i = 0; i < SOLO_RNUM; ++i) {

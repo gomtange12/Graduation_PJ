@@ -7,6 +7,7 @@
 #include "CSoundManager.h"
 void CSceneManager::SetColock()
 {
+	
 	if (m_Gameclock > 0) m_Gameclock -= 1;
 
 	m_hunSec = m_Gameclock / 100;
