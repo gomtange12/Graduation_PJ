@@ -76,10 +76,14 @@ protected:
 	CTexture* pBasicTexture;
 	CTexture* pSkillTexture;
 	//
-	int							m_basicXsprite;
-	int							m_basicYsprite;
-	int							m_skillXsprite;
-	int							m_skillYsprite;
+	
+	int							m_basicMaxX{ 0 };
+	int							m_skillMaxX{ 0 };
+
+
+	int							m_skillMaxY{ 0 };
+	int							m_basicMaxY{ 0 };
+
 
 public:
 	CSkillEffectUIShader*		pShader = nullptr;

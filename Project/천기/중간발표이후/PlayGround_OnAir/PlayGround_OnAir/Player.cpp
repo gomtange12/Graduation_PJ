@@ -84,47 +84,75 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	/*switch (m_CharacterType)
 	{
 	case BASS:
-		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
-		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
-		m_basicXsprite = 1;
-		m_basicXsprite = 1;
+		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/bassBasic.dds", 0);
+		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/bassSkill.dds", 0);
 
+		m_basicMaxX = 5;
+		m_basicMaxY = 5;
+		m_skillMaxX = 5; 
+		m_skillMaxY = 5;
 		break;
 	case GUITAR:
-		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
-		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/guitarEffect.dds", 0);
+		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/guitarBasic.dds", 0);
+		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/guitarSkill.dds", 0);
 
+		m_basicMaxX = 5;
+		m_basicMaxY = 4;
+		m_skillMaxX = 8;
+		m_skillMaxY = 4;
 		break;
 	case DRUM:
-		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
-		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
+		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/drumBasic.dds", 0);
+		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/drumSkill.dds", 0);
+
+		m_basicMaxX = 5;
+		m_basicMaxY = 5;
+		m_skillMaxX = 4;
+		m_skillMaxY = 4;
 
 		break;
 	case KEYBOARD:
-		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
-		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
+		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/keyBasic.dds", 0);
+		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/keySkill.dds", 0);
 
+		m_basicMaxX = 5;
+		m_basicMaxY = 5;
+		m_skillMaxX = 5;
+		m_skillMaxY = 4;
 		break;
 	case VOCAL:
-		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/B.dds", 0);
-		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/basicSkill.dds", 0);
+		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/vocalBasic.dds", 0);
+		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/vocalSkill.dds", 0);
+
+		m_basicMaxX = 7;
+		m_basicMaxY = 7;
+		m_skillMaxX = 5;
+		m_skillMaxY = 7;
+		break;
+	default: 
+		pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/keyBasic.dds", 0);
+		pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/vocalSkill.dds", 0);
+
+		m_basicMaxX = 7;
+		m_basicMaxY = 7;
+		m_skillMaxX = 5;
+		m_skillMaxY = 7;
 		break;
 	}*/
-	pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/effect_002.dds", 0);
-	pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/blood_hit_08.dds", 0);
-	
-	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 200, 200, 0, 0, 0, 0);
+	pBasicTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/darkness_001.dds", 0);
+	pSkillTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"UI/InGameUI/bassSkill.dds", 0);
+	m_basicMaxX = 5;
+	m_basicMaxY = 6;
+	m_skillMaxX = 5;
+	m_skillMaxY = 5;
+
+
+	CTexturedRectMesh* pEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 150, 150, 0, 0, 0, 0);
 
 	pShader = new CSkillEffectUIShader();
 	pShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-	pShader->BuildObjects(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL);
-	//pShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	/*pShader->m_xSpritePos = 2;
-	pShader->m_ySpritePos = 2;
-	pShader->m_xMaxSpritePos = 2;
-	pShader->m_yMaxSpritePos = 2;*/
-
-	//pShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pShader->BuildObjects(m_basicMaxX,m_basicMaxY,pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL);
+	
 	CMaterial* pMaterial = new CMaterial(1); 
 	pMaterial->SetTexture(pBasicTexture, 0);
 	m_pEffectObject = new CPlaneObject(1);
@@ -138,7 +166,7 @@ CPlayer::CPlayer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	CTexturedRectMesh* pSkillEffectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 200, 200.f, 0, 0, 0, 0);
 	pSkillShader = new CESkillEffectShader();
 	pSkillShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-	pSkillShader->BuildObjects(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL);
+	pSkillShader->BuildObjects(m_skillMaxX,m_skillMaxY,pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL);
 	//	pSkillShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
 	CMaterial* pSkillMaterial = new CMaterial(1);
@@ -293,7 +321,6 @@ void CPlayer::Update(float fTimeElapsed)
 			XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
 			xmf3Shift = Vector3::Add(XMFLOAT3(0, 0, 0), PLAYER->GetPlayer()->GetLookVector(), -6.25f);
 			PLAYER->GetPlayer()->SetPosition(Vector3::Add(PLAYER->GetPlayer()->GetPosition(), xmf3Shift));
-			
 			PLAYER->GetPlayer()->SetCollisionState(false);
 		}
 	}
@@ -903,9 +930,9 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Footstep02"));
 	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Footstep03"));
 #else
-	m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Sound/Footstep01.wav"));
-	m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Sound/Footstep02.wav"));
-	m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Sound/Footstep03.wav"));
+	//m_pAnimationController->SetCallbackKey(1, 0, 0.1f, _T("Sound/Footstep01.wav"));
+	//m_pAnimationController->SetCallbackKey(1, 1, 0.5f, _T("Sound/Footstep02.wav"));
+	//m_pAnimationController->SetCallbackKey(1, 2, 0.9f, _T("Sound/Footstep03.wav"));
 
 #endif
 	CAnimationCallbackHandler *pAnimationCallbackHandler = new CSoundCallbackHandler();
@@ -1220,7 +1247,7 @@ void COtherPlayers::Update(float fTimeElapsed)
 			XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
 			xmf3Shift = Vector3::Add(XMFLOAT3(0, 0, 0), PLAYER->GetOtherPlayer()->GetLookVector(), -6.25f);
 			PLAYER->GetOtherPlayer()->SetPosition(Vector3::Add(PLAYER->GetOtherPlayer()->GetPosition(), xmf3Shift));
-		
+
 			PLAYER->GetOtherPlayer()->SetCollisionState(false);
 
 		}

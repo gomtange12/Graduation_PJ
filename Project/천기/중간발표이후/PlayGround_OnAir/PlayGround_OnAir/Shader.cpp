@@ -1240,6 +1240,23 @@ D3D12_BLEND_DESC CChatUIShader::CreateBlendState()
 	d3dBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
 	return d3dBlendDesc;
+
+	/*D3D12_BLEND_DESC d3dBlendDesc;
+	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
+	d3dBlendDesc.AlphaToCoverageEnable = FALSE;
+	d3dBlendDesc.IndependentBlendEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].BlendEnable = TRUE;
+	d3dBlendDesc.RenderTarget[0].LogicOpEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	d3dBlendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	d3dBlendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	d3dBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	d3dBlendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ONE;
+	d3dBlendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	d3dBlendDesc.RenderTarget[0].LogicOp = D3D12_LOGIC_OP_NOOP;
+	d3dBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	return d3dBlendDesc;*/
 }
 
 
@@ -1283,8 +1300,7 @@ void CSkillCoolDownUIShader::CreateShaderVariables(ID3D12Device * pd3dDevice, ID
 void CSkillCoolDownUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	
-	m_cbSkillCool->Cooldown = CNETWORK->GetSkillTime();// PLAYER->GetPlayer()->GetSkillCount();
-	//cout << "updateshaderVar: " << m_cbSkillCool->Cooldown << endl;
+	m_cbSkillCool->Cooldown = CNETWORK->GetSkillTime();
 	UINT ncbElementBytes = ((sizeof(CB_SKILL_INFO) + 255) & ~255);
 
 	CB_SKILL_INFO *pbMappedcbSkillInfo = (CB_SKILL_INFO *)((UINT8 *)m_cbMappedSkillCool + (0 * ncbElementBytes));
@@ -1317,22 +1333,18 @@ D3D12_SHADER_BYTECODE CSkillEffectUIShader::CreateVertexShader()
 	return(CShader::CompileShaderFromFile(L"UIShader.hlsl", "VSEffectTextured", "vs_5_1", &m_pd3dVertexShaderBlob));
 }
 
-void CSkillEffectUIShader::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+void CSkillEffectUIShader::BuildObjects(int MaxX, int MaxY, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 {
-	//CShader::BuildObjects(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL);
 	m_cbSprite = new CB_SPRITE_TIME;
 	::ZeroMemory(m_cbSprite, sizeof(CB_SPRITE_TIME));
 
-	//m_xSpritePos = xPos;
-	//m_ySpritePos = yPos;
 	m_cbSprite->xPos = 0;
-	m_cbSprite->maxX = 5;
+	m_cbSprite->maxX = MaxX;
 	m_cbSprite->yPos = 0;
-	m_cbSprite->maxY = 5;
+	m_cbSprite->maxY = MaxY;
 	m_cbSprite->alpha = 0.f;
+	fAlphaTime = 0.5;
 
-	//m_xMaxSpritePos = maxXpos;
-	//m_yMaxSpritePos = maxYpos;
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
 }
@@ -1371,19 +1383,11 @@ void CSkillEffectUIShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3
 	if (fAlphaTime < fAlphaTimeAcc)
 	{
 		m_cbSprite->alpha += 0.05;
-		
 	}
 	UINT ncbElementBytes = ((sizeof(CB_SPRITE_TIME) + 255) & ~255);
 
 	cout << m_cbSprite->alpha << endl;
 	::memcpy(m_cbMappedSprite, m_cbSprite, sizeof(CB_SPRITE_TIME));
-
-	/*::memcpy(&m_cbMappedSprite->xPos, &m_xSpritePos, sizeof(int));
-	::memcpy(&m_cbMappedSprite->yPos, &m_ySpritePos, sizeof(int));
-	::memcpy(&m_cbMappedSprite->maxX, &m_xMaxSpritePos, sizeof(int));
-	::memcpy(&m_cbMappedSprite->maxY, &m_yMaxSpritePos, sizeof(int));*/
-
-
 
 	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_cbResouce->GetGPUVirtualAddress();
 	pd3dCommandList->SetGraphicsRootConstantBufferView(10, d3dGpuVirtualAddress);
