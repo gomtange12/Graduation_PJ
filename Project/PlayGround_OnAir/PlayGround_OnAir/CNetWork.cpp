@@ -101,7 +101,7 @@ void CNetWork::ProcessPacket(unsigned char *ptr)
 	{
 		sc_packet_scene *paket = reinterpret_cast<sc_packet_scene *>(ptr);
 		SCENEMANAGER->SetScene(static_cast<SceneState>(paket->sceneNum));
-
+		SCENEMANAGER->ResetClock();
 		//솔로모드면
 		if (paket->mod == SOLO) {
 			for (int i = 0; i < 2; ++i) {

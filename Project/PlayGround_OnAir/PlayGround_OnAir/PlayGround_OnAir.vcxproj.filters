@@ -79,6 +79,9 @@
     <Filter Include="소스 파일\ObjectManager\ShadowMap">
       <UniqueIdentifier>{7d4b8b0f-8255-41a2-8b46-3a85db0c669b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\SoundManager">
+      <UniqueIdentifier>{fe44195f-df65-4a65-8266-73e0e3b2f2af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -169,7 +172,7 @@
       <Filter>소스 파일\ObjectManager\ShadowMap</Filter>
     </ClInclude>
     <ClInclude Include="CSoundManager.h">
-      <Filter>소스 파일\헤더 파일</Filter>
+      <Filter>소스 파일\SoundManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -187,9 +190,6 @@
     </ClCompile>
     <ClCompile Include="CSceneManager.cpp">
       <Filter>소스 파일\SceneManager</Filter>
-    </ClCompile>
-    <ClCompile Include="CTempScene.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CObjectManager.cpp">
       <Filter>소스 파일\ObjectManager</Filter>
@@ -249,7 +249,10 @@
       <Filter>소스 파일\ObjectManager\ShadowMap</Filter>
     </ClCompile>
     <ClCompile Include="CSoundManager.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CTempScene.cpp">
+      <Filter>소스 파일\헤더 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

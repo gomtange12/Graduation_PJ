@@ -22,6 +22,7 @@ class CSceneManager : public CSingleTonBase<CSceneManager>
 	bool m_playIngameMusic = true;
 
 public:
+	void ResetClock() { m_Gameclock = 300; }
 	void SetMunuMusicOn(bool on) { m_playMenuMusic = on; }
 	void SetIngameMusicOn(bool on) { m_playIngameMusic = on; }
 

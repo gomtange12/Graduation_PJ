@@ -26,6 +26,10 @@ void CSoundManager::LoadSound()
 	result = system->createSound("Sound/basicHit.mp3", FMOD_LOOP_OFF, nullptr, &sound[ATTACK_SOUND]);
 	ErrorCheck(result);
 	
+	sound[MENU_SOUND]->setMusicChannelVolume(MENU_SOUND, 0.3);
+	sound[INGAME_SOUND]->setMusicChannelVolume(INGAME_SOUND, 0.3);
+	sound[SKILL_SOUND]->setMusicChannelVolume(SKILL_SOUND, 0.3);
+
 
 }
 

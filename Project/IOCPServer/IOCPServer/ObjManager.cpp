@@ -51,7 +51,7 @@ void ObjManager::MatchProcess(int id, unsigned char *packet)
 		}
 		case CONCERTMAP:
 		{
-			//ModMatch(id);
+			ModMatch(id);
 			break;
 		}
 		default:

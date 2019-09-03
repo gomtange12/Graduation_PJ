@@ -2,8 +2,8 @@
 
 //#define FRAME_BUFFER_WIDTH		1280
 //#define FRAME_BUFFER_HEIGHT		720
-#define FRAME_BUFFER_WIDTH		520
-#define FRAME_BUFFER_HEIGHT		320
+#define FRAME_BUFFER_WIDTH		720
+#define FRAME_BUFFER_HEIGHT		640
 
 #include "Timer.h"
 #include "Player.h"
