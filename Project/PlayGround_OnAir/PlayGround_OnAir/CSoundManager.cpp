@@ -23,12 +23,14 @@ void CSoundManager::LoadSound()
 	ErrorCheck(result);
 	result = system->createSound("Sound/PIANO.wav", FMOD_LOOP_OFF, nullptr, &sound[SKILL_SOUND]);
 	ErrorCheck(result);
-	result = system->createSound("Sound/basicHit.mp3", FMOD_LOOP_OFF, nullptr, &sound[ATTACK_SOUND]);
-	ErrorCheck(result);
+	//result = system->createSound("Sound/Æò.wav", FMOD_DEFAULT, nullptr, &sound[ATTACK_SOUND]);
+	//ErrorCheck(result);
 	
-	sound[MENU_SOUND]->setMusicChannelVolume(MENU_SOUND, 0.3);
-	sound[INGAME_SOUND]->setMusicChannelVolume(INGAME_SOUND, 0.3);
-	sound[SKILL_SOUND]->setMusicChannelVolume(SKILL_SOUND, 0.3);
+	sound[MENU_SOUND]->setMusicChannelVolume(MENU_SOUND, 0.1);
+	sound[INGAME_SOUND]->setMusicChannelVolume(INGAME_SOUND, 0.1);
+	sound[SKILL_SOUND]->setMusicChannelVolume(SKILL_SOUND, 1.0);
+	//sound[ATTACK_SOUND]->setMusicChannelVolume(ATTACK_SOUND, 1.0);
+
 
 
 }

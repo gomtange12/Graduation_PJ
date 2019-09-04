@@ -441,16 +441,15 @@ void CPlayer::Update(float fTimeElapsed)
 		m_OnAacting = TRUE;
 		//MakeEffect(m_CharacterType);
 		SetTrackAnimationSet(0, ATTACK_3);
-		//SOUNDMANAGER->playSound(SKILL_SOUND, SKILL_SOUND);
+		SOUNDMANAGER->playSound(SKILL_SOUND, SKILL_SOUND);
 
 		break;
 	case ATTACK:
 		m_basicEffectRender = true;
 		m_OnAacting = TRUE;
 		SetTrackAnimationSet(0, ATTACK);
-		//SOUNDMANAGER->playSound(ATTACK_SOUND, ATTACK_SOUND);
-		//SOUNDMANAGER->playSound(SKILL_SOUND, SKILL_SOUND);
-
+		SOUNDMANAGER->playSound(SKILL_SOUND, SKILL_SOUND);
+		
 		break;
 	case HAPPY:
 		m_OnAacting = TRUE;

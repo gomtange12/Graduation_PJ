@@ -1636,7 +1636,8 @@ bool CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 		switch (wParam)
 		{
 		case VK_F8:
-			m_WholeMapRender = !m_WholeMapRender;
+			//SCENEMANAGER->SetScene(PLAYGROUNDMAP);
+			//m_WholeMapRender = !m_WholeMapRender;
 			break;
 		case 'W':
 			//PLAYER->GetOtherPlayer()->SetPlayerState(RUN);
@@ -1712,9 +1713,9 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 			m_ppPlayGroundObjects[i]->Render(pd3dCommandList, pCamera);
 		}
 		
-		for (int i = 3; i < 7; ++i)
+		for (int i = 6; i < 7; ++i)
 		{
-			if (i != 5)
+			//if (i != 5)
 			{
 
 				if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
@@ -1762,15 +1763,14 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		break;
 
 	case CONCERTMAP:
-		for (int i = 3; i < 7; ++i)
-		{
-			if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
-		}
 		
 		if (m_ppConcertObjects[0])
 		{
 			m_ppConcertObjects[0]->Render(pd3dCommandList, pCamera);
-
+		}
+		for (int i = 6; i < 7; ++i)
+		{
+			if (m_ppShaders[i]) m_ppShaders[i]->Render(pd3dCommandList, pCamera);
 		}
 		
 		
@@ -1797,12 +1797,12 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, std::shared_ptr<
 		}
 		if (m_ppShaders[9])
 		{
-			
 			if (PLAYER->GetPlayer()->isHeartRender())
 			{
 				m_ppShaders[9]->UpdateShaderVariables(pd3dCommandList);
 				m_ppShaders[9]->Render(pd3dCommandList, pCamera);
 			}
+
 		}
 		for (int i = 11; i < m_nShaders; ++i)
 		{
@@ -1876,7 +1876,7 @@ void CScene::CheckObjectByObjectCollisions()
 				{
 					if (m_ppConcertObjects[1]->GetBoundingBox().Contains(PLAYER->GetPlayer()->GetBoundingBox()))
 					{
-						cout << "무대 안" << endl;
+						//cout << "무대 안" << endl;
 						PLAYER->GetPlayer()->SetHeight(m_ppConcertObjects[i]->GetBoundingBox().Extents.y + m_ppConcertObjects[i]->GetBoundingBox().Center.y);
 
 
@@ -1888,7 +1888,7 @@ void CScene::CheckObjectByObjectCollisions()
 					if (m_ppConcertObjects[i]->GetBoundingBox().Extents.y + m_ppConcertObjects[i]->GetBoundingBox().Center.y <= PLAYER->GetPlayer()->GetBoundingBox().Center.y - PLAYER->GetPlayer()->GetBoundingBox().Extents.y + 10)
 					{
 						PLAYER->GetPlayer()->SetHeight(m_ppConcertObjects[i]->GetBoundingBox().Extents.y + m_ppConcertObjects[i]->GetBoundingBox().Center.y);
-						cout << i << "번째 옵젝" << endl;
+						//cout << i << "번째 옵젝" << endl;
 						PLAYER->GetPlayer()->SetPlayCrashMap(true);
 						PLAYER->GetPlayer()->SetCollisionState(false);
 

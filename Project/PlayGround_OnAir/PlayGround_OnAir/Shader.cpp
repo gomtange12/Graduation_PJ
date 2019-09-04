@@ -1710,7 +1710,7 @@ void CESkillEffectShader::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3d
 	}
 	UINT ncbElementBytes = ((sizeof(CB_SPRITE_TIME) + 255) & ~255);
 
-	cout << m_cbSprite->alpha << endl;
+	//cout << m_cbSprite->alpha << endl;
 	::memcpy(m_cbMappedSprite, m_cbSprite, sizeof(CB_SPRITE_TIME));
 
 	/*::memcpy(&m_cbMappedSprite->xPos, &m_xSpritePos, sizeof(int));

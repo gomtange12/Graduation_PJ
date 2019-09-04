@@ -70,11 +70,11 @@ extern HINSTANCE						ghAppInstance;
 //#ifdef _WITH_DIRECT2D
 //#define _WITH_DIRECT2D_IMAGE_EFFECT
 //#endif
-#ifdef UNICODE
-#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
-#else
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console") 
-#endif
+//#ifdef UNICODE
+//#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
+//#else
+//#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console") 
+//#endif
 
 //#define FRAME_BUFFER_WIDTH		1280
 //#define FRAME_BUFFER_HEIGHT		720

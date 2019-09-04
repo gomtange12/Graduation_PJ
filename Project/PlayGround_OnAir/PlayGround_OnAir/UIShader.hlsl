@@ -374,12 +374,12 @@ VS_TEXTURED_OUTPUT VSHPTextured(uint nVertexID : SV_VertexID)
 	//output.position = float4(input.position.x * hpRatio + (0.5f * hpRatio) - 1.f, input.position.y - 0.75f, input.position.z, 1.0f);
 	//output.uv = input.uv;
 
-	if (nVertexID == 0) { output.position = float4(0.2f, -0.55f, 0.0f, 1.0f); output.uv = float2(0.125f * hpRatio, 0.f); }
-	if (nVertexID == 1) { output.position = float4(0.5f, -0.55f, 0.0f, 1.0f); output.uv = float2(0.125 + (0.125f * hpRatio), 0.f); }
-	if (nVertexID == 2) { output.position = float4(0.5f, -0.95f, 0.0f, 1.0f); output.uv = float2(0.125 + (0.125f * hpRatio), 1.f); }
-	if (nVertexID == 3) { output.position = float4(0.2f, -0.55f, 0.0f, 1.0f); output.uv = float2(0.125f * hpRatio, 0.f); }
-	if (nVertexID == 4) { output.position = float4(0.5f, -0.95f, 0.0f, 1.0f); output.uv = float2(0.125 + (0.125f * hpRatio), 1.f); }
-	if (nVertexID == 5) { output.position = float4(0.2f, -0.95f, 0.0f, 1.0f); output.uv = float2(0.125 * hpRatio, 1.f); }
+	if (nVertexID == 0) { output.position = float4(0.3f, -0.55f, 0.0f, 1.0f); output.uv = float2(0.125f * hpRatio, 0.f); }
+	if (nVertexID == 1) { output.position = float4(0.6f, -0.55f, 0.0f, 1.0f); output.uv = float2(0.125 + (0.125f * hpRatio), 0.f); }
+	if (nVertexID == 2) { output.position = float4(0.6f, -0.95f, 0.0f, 1.0f); output.uv = float2(0.125 + (0.125f * hpRatio), 1.f); }
+	if (nVertexID == 3) { output.position = float4(0.3f, -0.55f, 0.0f, 1.0f); output.uv = float2(0.125f * hpRatio, 0.f); }
+	if (nVertexID == 4) { output.position = float4(0.6f, -0.95f, 0.0f, 1.0f); output.uv = float2(0.125 + (0.125f * hpRatio), 1.f); }
+	if (nVertexID == 5) { output.position = float4(0.3f, -0.95f, 0.0f, 1.0f); output.uv = float2(0.125 * hpRatio, 1.f); }
 
 
 	//output.position = float4(0.7, -0.2, input.position.z, 1.0f);

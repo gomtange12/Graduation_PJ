@@ -65,7 +65,7 @@ CSceneManager::CSceneManager()
 	m_Gameclock = 300;
 
 	
-	//SOUNDMANAGER->playSound(MENU_SOUND, MENU_SOUND);
+	SOUNDMANAGER->playSound(MENU_SOUND, MENU_SOUND);
 }
 
 
@@ -80,8 +80,12 @@ void CSceneManager::SetScene(SceneState state)
 	m_SceneType = state;
 	//if(state == MENUSCENE)
 	//	PlaySound(L"Sound/MENU.wav", NULL, SND_FILENAME | SND_ASYNC);
-	//if (state == PLAYGROUNDMAP|| state == CONCERTMAP)
-	//	SOUNDMANAGER->playSound(INGAME_SOUND, INGAME_SOUND);
+	if (state == PLAYGROUNDMAP || state == CONCERTMAP)
+	{
+		SOUNDMANAGER->StopSound(MENU_SOUND);
+		SOUNDMANAGER->playSound(INGAME_SOUND, INGAME_SOUND);
+
+	}
 		//PlaySound(L"Sound/INGAME.wav", NULL ,  SND_ASYNC | SND_NOSTOP);
 
 		//	SCENEMANAGER->SetMunuMusicOn(false);
